@@ -1,0 +1,62 @@
+Items: {
+	EternalWine: {
+		RestoreLifeText: Mods.MatterRecord.Items.EternalWine.RestoreLifeText
+		DisplayName: Eternal Wine
+		Tooltip: ""
+	}
+
+	TortoiseShell: {
+		DisplayName: Tortoise Shell
+		Tooltip: ""
+	}
+
+	TheoryOfFreedom: {
+		DisplayName: Theory Of Freedom
+		Tooltip: ""
+	}
+
+	TheAdventureofSherlockHolmes: {
+		DisplayName: The Adventureof Sherlock Holmes
+		Tooltip: ""
+	}
+
+	Faust: {
+		DisplayName: Faust
+		Tooltip: ""
+	}
+
+	LittlePrince: {
+		DisplayName: Little Prince
+		Tooltip: ""
+	}
+
+	TheOldManAndTheSea: {
+		DisplayName: The Old Man And The Sea
+		Tooltip: ""
+	}
+
+	ZenithBoulder: {
+		DisplayName: Zenith Boulder
+		Tooltip: ""
+	}
+}
+
+Buffs: {
+	LifeRegenStagnant: {
+		DisplayName: Life Regen Stagnant
+		Description: Mods.MatterRecord.Buffs.LifeRegenStagnant.Description
+	}
+
+	Eternal: {
+		DisplayName: Eternal
+		Description: Mods.MatterRecord.Buffs.Eternal.Description
+	}
+}
+
+Projectiles: {
+	DashingTortoiseShell.DisplayName: Dashing Tortoise Shell
+	TheOldManAndTheSeaBobber.DisplayName: The Old Man And The Sea Bobber
+	ZenithBoulderProjectile.DisplayName: Zenith Boulder Projectile
+}
+
+Tiles.LittlePrinceRose.MapEntry: Little Prince Rose

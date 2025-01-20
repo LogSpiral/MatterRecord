@@ -1,0 +1,113 @@
+Items: {
+	EternalWine: {
+		RestoreLifeText: 恢复生命
+		DisplayName: 永生之酒
+		Tooltip:
+			'''
+			“使人升华，却又引人堕落，除了所谓的神酒，还有什么呢？”
+			借贷生命，初始75，困难模式125，击败月球领主后175
+			伴随短暂的无敌(0.5s / 1.0s / 1.5s)
+			饮用后原先的生命恢复会用于偿还向它所借贷的生命
+			'''
+	}
+
+	TortoiseShell: {
+		DisplayName: 巨型陆龟壳
+		Tooltip:
+			'''
+			“哦我的朋友，有时候看见一只缩头乌龟可千万别嘲讽它”
+			缩进龟壳，蓄力至多3s之后可发射
+
+			伤害与速度和发射角度相关
+			发射角度越大速度越大，伤害越高
+
+			与目标进行美妙弹性碰撞
+			击退能力与相对大小有关(用体积直接代表质量)
+			如果目标体积特别大，你会被弹回去
+			但是如果目标体积没那么大，你会被弹回去一些，而它会被弹飞
+			如果目标体积很小，你把它创飞的同时速度不会受到太大影响
+			当然因为主要是和哥们互创用的
+			质量一样具体表现就是交换速度
+			'''
+	}
+
+	TheoryOfFreedom: {
+		DisplayName: 自由论
+		Tooltip:
+			'''
+			“知道枷锁的性质比用鲜花装饰它们要好”
+			对所有钩爪进行修改，现在它们能抓在半空中
+			代价是甩出钩爪需要消耗1%的生命
+			并且钩住空中的物块不再会恢复飞行值
+			'''
+	}
+
+	TheAdventureofSherlockHolmes: {
+		DisplayName: 福尔摩斯探案集
+		Tooltip:
+			'''
+			拿在手上并打开了大地图时，
+			右键地图可以消耗五金币咨询地图上7x7的位置
+			“只是一些简单的推理罢了，华生医生”
+			'''
+	}
+
+	Faust: {
+		DisplayName: 浮士德
+		Tooltip:
+			'''
+			"我签下契约，追寻那超越凡人的体验，但谁来拯救我的灵魂？"
+			背包内右键点击以激活/取消
+			激活后选取背包内一件物品，可使用售价20倍购买
+			（选择一个物品复制，消耗其售价的20倍）
+			每消费50金币降低1防御
+			'''
+	}
+
+	LittlePrince: {
+		DisplayName: 小王子
+		Tooltip:
+			'''
+			"但是，这就好象剥落的旧树皮一样，
+			旧树皮，并没什么可悲的。"
+			你死亡时将不再生成墓石，也不再掉落钱币
+			免疫魔力病
+			'''
+	}
+
+	TheOldManAndTheSea: {
+		DisplayName: 老人与海
+		Tooltip:
+			'''
+			"破晓前天很冷，老头抵着木头取暖，他想鱼能支撑多久他就能支撑多久。
+			他用温柔的语调大声说:‘鱼啊，只要我不死就要同你周旋到底’"
+			手持该鱼竿时，怪物生成速率大大提升。
+			可以在熔岩中钓鱼
+			'''
+	}
+
+	ZenithBoulder: {
+		DisplayName: 天顶巨石
+		Tooltip: 天体宝球，小子！
+	}
+}
+
+Buffs: {
+	LifeRegenStagnant: {
+		DisplayName: 生命停滞
+		Description: 有借有还
+	}
+
+	Eternal: {
+		DisplayName: 永生
+		Description: 讽刺的是，这只是短暂的无敌
+	}
+}
+
+Projectiles: {
+	DashingTortoiseShell.DisplayName: 高速旋转丛林王八壳！！
+	TheOldManAndTheSeaBobber.DisplayName: 老人与海 浮标
+	ZenithBoulderProjectile.DisplayName: 天顶巨石
+}
+
+// Tiles.LittlePrinceRose.MapEntry: Little Prince Rose
