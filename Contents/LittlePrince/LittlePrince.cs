@@ -10,7 +10,7 @@ using Terraria.ObjectData;
 
 namespace MatterRecord.Contents.LittlePrince
 {
-    public class LittlePrincePlayer : ModPlayer 
+    public class LittlePrincePlayer : ModPlayer
     {
         public bool EquippedRose;
         public override void ResetEffects()
@@ -38,7 +38,7 @@ namespace MatterRecord.Contents.LittlePrince
         }
         private static long PrinceBanDropCoins(On_Player.orig_DropCoins orig, Player self)
         {
-            if (self.GetModPlayer<LittlePrincePlayer>().EquippedRose) 
+            if (self.GetModPlayer<LittlePrincePlayer>().EquippedRose)
             {
                 self.lostCoins = 0L;
                 self.lostCoinString = "";
@@ -54,7 +54,7 @@ namespace MatterRecord.Contents.LittlePrince
             base.Unload();
         }
     }
-    public class LittlePrince:ModItem
+    public class LittlePrince : ModItem
     {
         //public override string Texture => $"Terraria/Images/Item_{ItemID.JungleRose}";
         public override void SetDefaults()
@@ -72,7 +72,7 @@ namespace MatterRecord.Contents.LittlePrince
         }
 
     }
-    public class LittlePrinceRose : ModTile 
+    public class LittlePrinceRose : ModTile
     {
         public override void SetStaticDefaults()
         {
@@ -87,7 +87,7 @@ namespace MatterRecord.Contents.LittlePrince
             LocalizedText name = CreateMapEntryName();
             AddMapEntry(new Color(128, 128, 128), name);
 
-            
+
 
             TileObjectData.newTile.CopyFrom(TileObjectData.StyleAlch);
             TileObjectData.newTile.AnchorValidTiles = [
@@ -115,7 +115,7 @@ namespace MatterRecord.Contents.LittlePrince
         }
     }
 
-    public class LittlePrinceRoseSpawn : GlobalTile 
+    public class LittlePrinceRoseSpawn : GlobalTile
     {
 
         private static bool HasValidGroundForAbigailsFlowerBelowSpot(int x, int y)
@@ -130,9 +130,8 @@ namespace MatterRecord.Contents.LittlePrince
             if (type < 0)
                 return false;
 
-            if (type != 70 && type != 633 && !TileID.Sets.Conversion.Grass[type])
+            if (type != TileID.MushroomGrass && type != TileID.AshGrass && !TileID.Sets.Conversion.Grass[type])
                 return false;
-
             return WorldGen.SolidTileAllowBottomSlope(x, y + 1);
         }
 
@@ -157,9 +156,18 @@ namespace MatterRecord.Contents.LittlePrince
 
         public override void RandomUpdate(int i, int j, int type)
         {
-            if (type != TileID.Tombstones || !Main.rand.NextBool(30)) return;// 
-            for (int k = 0; k < 1; k++)
+            if (type != TileID.Tombstones) return;
+            Vector2 spt = new Vector2(Main.spawnTileX, Main.spawnTileY);
+            var l = Vector2.Distance(new Vector2(i, j), spt);
+            var m = 0f;
+            for (int n = 0; n < 4; n++)
+                m = Math.Max(Vector2.Distance(new Vector2(Main.maxTilesX, Main.maxTilesY) * new Vector2(n % 2, n / 2), spt), m);
+            int chance = (int)MathHelper.Lerp(5, 60, l / m);
+            int times = (int)MathHelper.Lerp(4, 1, l / m);
+
+            for (int k = 0; k < times; k++)
             {
+                if (!Main.rand.NextBool(chance)) continue;
                 int num2 = WorldGen.genRand.Next(Math.Max(10, i - 10), Math.Min(Main.maxTilesX - 10, i + 10));
                 int num3 = WorldGen.genRand.Next(Math.Max(10, j - 10), Math.Min(Main.maxTilesY - 10, j + 10));
                 if (HasValidGroundForAbigailsFlowerBelowSpot(num2, num3) && NoNearbyAbigailsFlower(num2, num3) && WorldGen.PlaceTile(num2, num3, ModContent.TileType<LittlePrinceRose>(), mute: true))

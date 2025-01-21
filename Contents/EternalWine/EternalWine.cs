@@ -28,12 +28,87 @@ namespace MatterRecord.Contents.EternalWine
     {
         public override void Load()
         {
+            IL_Player.QuickBuff += EternalWineQuickBuff;
             IL_Player.QuickHeal += EternalWineHealModify;
             On_Player.QuickHeal_GetItemToUse += GetEternalWineToHeal;
             On_Player.ApplyPotionDelay += WineBanDelay;
             base.Load();
         }
 
+        private void EternalWineQuickBuff(ILContext il)
+        {
+            ILCursor cursor = new ILCursor(il);
+
+            for (int i = 0; i < 3; i++)
+                if (!cursor.TryGotoNext(i => i.MatchLdloc(5)))
+                    return;
+
+            int currentIndex = cursor.Index;
+
+            if (!cursor.TryGotoNext(i => i.MatchLdloc(4)))
+                return;
+
+            ILLabel curLabel = cursor.MarkLabel();
+
+            cursor.Index = currentIndex;
+            cursor.Index++;
+            for (int n = 0; n < 3; n++)
+                cursor.Remove();
+            cursor.EmitDelegate<Func<Item, bool>>(
+                item =>
+                {
+                    bool flag1 = item.buffTime <= 0;
+                    bool flag2 = item.type != ModContent.ItemType<EternalWine>();
+                    return flag1 && flag2;
+                }
+                );
+            cursor.EmitBrtrue(curLabel);
+
+
+
+            for (int i = 0; i < 3; i++)//8
+                if (!cursor.TryGotoNext(i => i.MatchLdloc(5)))
+                    return;
+            cursor.EmitLdloc(5);
+            cursor.EmitLdarg0();
+            cursor.EmitDelegate<Action<Item, Player>>((item, player) =>
+            {
+                if (item.type != ModContent.ItemType<EternalWine>())
+                    return;
+                int buffTime;
+                int healValue;
+                if (NPC.downedMoonlord)
+                {
+                    healValue = 175;
+                    buffTime = 90;
+                }
+                else if (Main.hardMode)
+                {
+                    healValue = 125;
+                    buffTime = 60;
+                }
+                else
+                {
+                    healValue = 75;
+                    buffTime = 30;
+                }
+                player.AddBuff(ModContent.BuffType<Eternal>(), buffTime);
+                player.GetModPlayer<EternalWinePlayer>().LifeDebt = healValue;
+                player.GetModPlayer<EternalWinePlayer>().LifeDebtMax = healValue;
+                player.statLife += healValue;
+                if (player.whoAmI == Main.myPlayer)
+                    player.HealEffect(healValue);
+                if (Main.netMode == NetmodeID.MultiplayerClient && Main.myPlayer == player.whoAmI)
+                {
+                    var packet = Mod.GetPacket();
+                    packet.Write((byte)PacketType.EternalWinePlayerSync);
+                    packet.Write((byte)player.whoAmI);
+                    packet.Write(healValue);
+                    packet.Write(healValue);
+                    packet.Send(-1, player.whoAmI);
+                }
+            });
+        }
 
         private static void WineBanDelay(On_Player.orig_ApplyPotionDelay orig, Player self, Item sItem)
         {
@@ -90,9 +165,6 @@ namespace MatterRecord.Contents.EternalWine
             }
             if (self.potionDelay > 0 || result == null)
                 result = resultEternal;
-            //Main.NewText("酒来!!");
-            StackTrace stackTrace = new StackTrace();
-            var str = stackTrace.GetFrame(4).GetMethod().Name;
             return result;
         }
 
@@ -179,12 +251,12 @@ namespace MatterRecord.Contents.EternalWine
                 healValue = 125;
                 buffTime = 60;
             }
-            else 
+            else
             {
                 healValue = 75;
                 buffTime = 30;
             }
-            if (quickHeal) 
+            if (quickHeal)
             {
                 player.AddBuff(ModContent.BuffType<Eternal>(), buffTime);
                 player.GetModPlayer<EternalWinePlayer>().LifeDebt = healValue;
@@ -201,6 +273,7 @@ namespace MatterRecord.Contents.EternalWine
             }
 
         }
+
 
     }
     public class EternalWinePlayer : ModPlayer
@@ -348,11 +421,11 @@ namespace MatterRecord.Contents.EternalWine
             base.SetStaticDefaults();
         }
     }
-    public class EternalWineGlobalItem : GlobalItem 
+    public class EternalWineGlobalItem : GlobalItem
     {
         public override void ModifyItemLoot(Item item, ItemLoot itemLoot)
         {
-            if (item.type == ItemID.ObsidianLockbox) 
+            if (item.type == ItemID.ObsidianLockbox)
             {
                 OneFromRulesRule dropRule = null;
                 foreach (var rule in itemLoot.Get())
@@ -363,7 +436,7 @@ namespace MatterRecord.Contents.EternalWine
                         break;
                     }
                 }
-                if (dropRule != null) 
+                if (dropRule != null)
                 {
                     itemLoot.Remove(dropRule);
                     var list = dropRule.options.ToList();
