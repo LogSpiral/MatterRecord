@@ -5,8 +5,12 @@
 
 	<!-- General -->
 	<PropertyGroup>
-		
+		<AssemblyName>MatterRecord</AssemblyName>
+		<LangVersion>latest</LangVersion>
 	</PropertyGroup>
+	<ItemGroup>
+	  <ProjectReference Include="..\LogSpiralLibrary\LogSpiralLibrary.csproj" />
+	</ItemGroup>
 
 	<!-- References -->
 

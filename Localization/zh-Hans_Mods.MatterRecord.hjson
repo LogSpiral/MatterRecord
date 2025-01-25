@@ -1,3 +1,13 @@
+MeleeAction: {
+	DonQuijoteDeLaManchaDash.DisplayName: 堂吉诃德-冲锋
+	DonQuijoteDeLaManchaStab.DisplayName: 堂吉诃德-突刺
+}
+
+Condition: {
+	DonQuijoteDeLaManchaDashCoolDownFinished: 堂吉诃德-冲锋冷却结束
+	DonQuijoteDeLaManchaStabing: 堂吉诃德-突刺状态
+}
+
 Items: {
 	EternalWine: {
 		RestoreLifeText: 恢复生命
@@ -93,6 +103,19 @@ Items: {
 		DisplayName: 天顶巨石
 		Tooltip: 天体宝球，小子！
 	}
+
+	DonQuijoteDeLaMancha: {
+		DisplayName: 堂吉诃德
+		Tooltip:
+			'''
+			“堂吉诃德对他的侍从桑丘说:
+			‘我的朋友，前面出现了几十个巨人，
+			我要去和他们决斗，我要打败他们，
+			这是一场正义的决斗,
+			我要消灭这些侵略地球的坏家伙。’”
+			右键召唤一座风车并向其冲刺
+			'''
+	}
 }
 
 Buffs: {
@@ -111,6 +134,7 @@ Projectiles: {
 	DashingTortoiseShell.DisplayName: 高速旋转丛林王八壳！！
 	TheOldManAndTheSeaBobber.DisplayName: 老人与海 浮标
 	ZenithBoulderProjectile.DisplayName: 天顶巨石
+	DonQuijoteDeLaManchaProj.DisplayName: 堂吉诃德
 }
 
-// Tiles.LittlePrinceRose.MapEntry: Little Prince Rose
+Tiles.LittlePrinceRose.MapEntry: 小王子玫瑰
