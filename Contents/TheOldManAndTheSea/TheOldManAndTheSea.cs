@@ -1,4 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -20,7 +22,7 @@ namespace MatterRecord.Contents.TheOldManAndTheSea
         {
             ItemID.Sets.CanFishInLava[Item.type] = true; // Allows the pole to fish in lava
         }
-
+        static Asset<Texture2D> itemTex;
         public override void SetDefaults()
         {
             // These are copied through the CloneDefaults method:
@@ -32,6 +34,7 @@ namespace MatterRecord.Contents.TheOldManAndTheSea
             // Item.UseSound = SoundID.Item1;
             Item.CloneDefaults(ItemID.WoodFishingPole);
             Item.buyPrice(2);
+            Item.rare = ItemRarityID.Yellow;
             Item.fishingPole = 75; // Sets the poles fishing power
             Item.shootSpeed = 12f; // Sets the speed in which the bobbers are launched. Wooden Fishing Pole is 9f and Golden Fishing Rod is 17f.
             Item.shoot = ModContent.ProjectileType<TheOldManAndTheSeaBobber>(); // The bobber projectile. Note that this will be overridden by Fishing Bobber accessories if present, so don't assume the bobber spawned is the specified projectile. https://terraria.wiki.gg/wiki/Fishing_Bobbers
@@ -63,13 +66,26 @@ namespace MatterRecord.Contents.TheOldManAndTheSea
 
         public override void ModifyFishingLine(Projectile bobber, ref Vector2 lineOriginOffset, ref Color lineColor)
         {
-            lineOriginOffset = new Vector2(43, -30);
-            lineColor = Color.White;
+            lineOriginOffset = new Vector2(42, -44);
+            lineColor = Color.Black;
+        }
+        public override bool PreDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
+        {
+            itemTex ??= ModContent.Request<Texture2D>("MatterRecord/Contents/TheOldManAndTheSea/TheOldManAndTheSea_full");
+            spriteBatch.Draw(itemTex.Value, position, null, drawColor, 0, origin, scale, 0, 0);
+            return false;
+        }
+        public override bool PreDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, ref float rotation, ref float scale, int whoAmI)
+        {
+            itemTex ??= ModContent.Request<Texture2D>("MatterRecord/Contents/TheOldManAndTheSea/TheOldManAndTheSea_full");
+            spriteBatch.Draw(itemTex.Value, Item.position-Main.screenPosition, null, lightColor, rotation, itemTex.Size() * .5f, scale, 0, 0);
+
+            return false;
         }
     }
     public class TheOldManAndTheSeaBobber : ModProjectile
     {
-        public override string Texture => $"Terraria/Images/Projectile_{ProjectileID.BobberWooden}";
+        //public override string Texture => $"Terraria/Images/Projectile_{ProjectileID.BobberWooden}";
 
         // This holds the index of the fishing line color in the PossibleLineColors array.
 
@@ -84,7 +100,7 @@ namespace MatterRecord.Contents.TheOldManAndTheSea
             // Projectile.netImportant = true;
             Projectile.CloneDefaults(ProjectileID.BobberWooden);
 
-            DrawOriginOffsetY = -8; // Adjusts the draw position
+            DrawOriginOffsetY = 0; // Adjusts the draw position
         }
         public override bool PreDraw(ref Color lightColor)
         {
