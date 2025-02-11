@@ -19,11 +19,16 @@ using Terraria.ModLoader.Default;
 using Terraria.UI;
 using Terraria.ModLoader.Config;
 using Terraria.ModLoader.IO;
+using ReLogic.Content;
+using Terraria.UI.Chat;
+using Terraria.ModLoader;
+using Terraria;
 
 namespace MatterRecord.Contents.DonQuijoteDeLaMancha
 {
     public class DonQuijoteDeLaMancha : MeleeSequenceItem<DonQuijoteDeLaManchaProj>
     {
+        public static bool SlashActive => MatterRecordConfig.Instance.DonQuijoteSlashActive;
         public override void SetDefaults()
         {
             base.SetDefaults();
@@ -34,19 +39,56 @@ namespace MatterRecord.Contents.DonQuijoteDeLaMancha
             Item.UseSound = MySoundID.Scythe;
             /*Item.damage = 155;
             Item.useTime = 24;
-            Item.useAnimation = 24;
+            time = 24;
             Item.knockBack = 14f;*/
 
-            Item.damage = 2;
+            Item.damage = 21;
             Item.useTime = 60;
             Item.useAnimation = 60;
-            Item.knockBack = 1f;
+            Item.knockBack = 10f;
+            Item.value = Item.buyPrice(2);
+            Item.useTurn = true;
+            Item.noUseGraphic = false;
+            Item.noMelee = false;
+        }
+        public override bool? UseItem(Player player)
+        {
+            if (SlashActive)
+            {
+                Item.shoot = ModContent.ProjectileType<DonQuijoteDeLaManchaProj>();
+                Item.noUseGraphic = true;
+                Item.noMelee = true;
+                Item.useStyle = ItemUseStyleID.Shoot;
+                Item.channel = true;
+                return base.UseItem(player);
+            }
+            if (player.whoAmI == Main.myPlayer)
+            {
+                if (player.altFunctionUse != 2 && player.GetModPlayer<DonQuijoteDeLaManchaPlayer>().StabTimeLeft <= 0)
+                {
+                    Item.shoot = 0;
+                    Item.noUseGraphic = false;
+                    Item.noMelee = false;
+                    Item.useStyle = ItemUseStyleID.Swing;
+                    Item.channel = false;
+                }
+                else
+                {
+                    Item.shoot = ModContent.ProjectileType<DonQuijoteDeLaManchaProj>();
+                    Item.noUseGraphic = true;
+                    Item.noMelee = true;
+                    Item.useStyle = ItemUseStyleID.Shoot;
+                    Item.channel = true;
+                }
+            }
+            return base.UseItem(player);
         }
         public override bool AltFunctionUse(Player player)
         {
             var mplr = player.GetModPlayer<DonQuijoteDeLaManchaPlayer>();
             if (mplr.DashCoolDown <= 0)
                 return true;
+
             if (mplr.StabTimeLeft > 0)
             {
                 mplr.StabTimeLeft = 0;
@@ -58,14 +100,28 @@ namespace MatterRecord.Contents.DonQuijoteDeLaMancha
             }
             return false;
         }
+        public override void Load()
+        {
+            On_Item.TryGetPrefixStatMultipliersForItem += On_Item_TryGetPrefixStatMultipliersForItem;
+            base.Load();
+        }
+
+        private bool On_Item_TryGetPrefixStatMultipliersForItem(On_Item.orig_TryGetPrefixStatMultipliersForItem orig, Item self, int rolledPrefix, out float dmg, out float kb, out float spd, out float size, out float shtspd, out float mcst, out int crt)
+        {
+            PreFixStat = orig;
+            return orig.Invoke(self, rolledPrefix, out dmg, out kb, out spd, out size, out shtspd, out mcst, out crt);
+        }
+
+        public static On_Item.orig_TryGetPrefixStatMultipliersForItem PreFixStat;
         public override void ModifyWeaponDamage(Player player, ref StatModifier damage)
         {
             var mplr = player.GetModPlayer<DonQuijoteDeLaManchaPlayer>();
             var definition = mplr.itemDefinition;
             var item = new Item(definition.Type);
-            if (item.damage <= 0) return;
-            damage.Base = item.damage - 1;
-
+            if (PreFixStat?.Invoke(Item, Item.prefix, out float dmg, out _, out _, out _, out _, out _, out _) == true)
+                damage.Base = (int)((Math.Clamp(item.damage,1,int.MaxValue) - 21) * dmg);
+            else
+                damage.Base = Math.Clamp(item.damage, 1, int.MaxValue) - 21;
             base.ModifyWeaponDamage(player, ref damage);
         }
         public override void ModifyWeaponKnockback(Player player, ref StatModifier knockback)
@@ -91,12 +147,41 @@ namespace MatterRecord.Contents.DonQuijoteDeLaMancha
             var mplr = player.GetModPlayer<DonQuijoteDeLaManchaPlayer>();
             var definition = mplr.itemDefinition;
             var item = new Item(definition.Type);
-            if (item.useTime == 0) return 1f;
-            return item.useTime / 60f;
+            if (item.useAnimation == 0) return 1f;
+            return item.useAnimation / 60f;
+        }
+        public override float UseAnimationMultiplier(Player player)
+        {
+            var mplr = player.GetModPlayer<DonQuijoteDeLaManchaPlayer>();
+            var definition = mplr.itemDefinition;
+            var item = new Item(definition.Type);
+            if (item.useAnimation == 0) return 1f;
+            return item.useAnimation / 60f;
         }
         public override void HoldItem(Player player)
         {
             player.aggro += 400;
+            if (player.whoAmI == Main.myPlayer)
+            {
+                if (player.altFunctionUse != 2 && player.GetModPlayer<DonQuijoteDeLaManchaPlayer>().StabTimeLeft <= 0 && !SlashActive)
+                {
+                    Item.shoot = 0;
+                    Item.noUseGraphic = false;
+                    Item.noMelee = false;
+                    Item.useStyle = ItemUseStyleID.Swing;
+                    Item.channel = false;
+                    if (player.itemAnimation == player.itemAnimationMax)
+                        player.lastVisualizedSelectedItem = Item.Clone();
+                }
+                else
+                {
+                    Item.shoot = ModContent.ProjectileType<DonQuijoteDeLaManchaProj>();
+                    Item.noUseGraphic = true;
+                    Item.noMelee = true;
+                    Item.useStyle = ItemUseStyleID.Shoot;
+                    Item.channel = true;
+                }
+            }
             base.HoldItem(player);
         }
         public static bool Active;
@@ -137,20 +222,68 @@ namespace MatterRecord.Contents.DonQuijoteDeLaMancha
         public override void ModifyTooltips(List<TooltipLine> tooltips)
         {
             var mplr = Main.LocalPlayer.GetModPlayer<DonQuijoteDeLaManchaPlayer>();
-            tooltips.Add(new TooltipLine(Mod, "targetItem", $"目前属性继承自武器{mplr.itemDefinition.DisplayName}[i:{mplr.itemDefinition.Type}]"));
+            if (mplr.itemDefinition.Type > 0)
+            {
+
+                tooltips.Insert(16, new TooltipLine(Mod, "targetItem", $"目前属性继承自武器{mplr.itemDefinition.DisplayName}[i:{mplr.itemDefinition.Type}]"));
+                foreach (var tips in tooltips)
+                {
+                    if (tips.Name == "Speed")
+                    {
+                        int time = new Item(mplr.itemDefinition.Type).useAnimation;
+                        string str = Lang.tip[time switch
+                        {
+                            <= 8 => 6,
+                            <= 20 => 7,
+                            <= 25 => 8,
+                            <= 30 => 9,
+                            <= 35 => 10,
+                            <= 45 => 11,
+                            <= 55 => 12,
+                            _ => 13
+                        }].Value;
+                        tips.Text = str;
+                        break;
+                    }
+                }
+            }
+            else 
+            {
+
+                tooltips.Insert(16, new TooltipLine(Mod, "FindItemPlz", $"请[c/FF0000:背包内右键]激活后再[c/FF0000:右键某个近战武器]以继承属性"));
+            }
+            float k = Main.mouseTextColor / 255f;
+            k = .85f + .15f * k;
+            tooltips.Insert(17, new TooltipLine(Mod, "Sheep", $"+500%对绵羊大军伤害") { OverrideColor = new Color(120, 190,120, 255) * k });
+
             base.ModifyTooltips(tooltips);
+        }
+        public override bool CanShoot(Player player)
+        {
+            if (SlashActive)
+                return base.CanShoot(player);
+            bool flag = (player.altFunctionUse == 2 || player.GetModPlayer<DonQuijoteDeLaManchaPlayer>().StabTimeLeft > 0) && player.ownedProjectileCounts[ModContent.ProjectileType<DonQuijoteDeLaManchaProj>()] == 0;
+            if (flag)
+                return true;
+            Item.shoot = 0;
+            Item.noUseGraphic = false;
+            Item.noMelee = false;
+            Item.useStyle = ItemUseStyleID.Swing;
+            Item.channel = false;
+            return false;
         }
     }
     public class DonQuijoteDeLaManchaProj : MeleeSequenceProj
     {
+        public override bool LabeledAsCompleted => true;
         public override StandardInfo StandardInfo => base.StandardInfo with
         {
             standardColor = Color.DarkRed * (player.GetModPlayer<DonQuijoteDeLaManchaPlayer>().StabTimeLeft > 0 ? 0.3f : 0.1f),
-            standardTimer = player.itemTimeMax,
+            standardTimer = player.controlUseItem && !player.controlUseTile ? Math.Clamp(player.itemTimeMax,1,30) : 10,
             vertexStandard = Main.netMode == NetmodeID.Server ? default : new VertexDrawInfoStandardInfo() with
             {
                 active = true,
-                scaler = 120,
+                scaler = DonQuijoteDeLaMancha.SlashActive || player.GetModPlayer<DonQuijoteDeLaManchaPlayer>().StabTimeLeft > 0 || player.GetModPlayer<DonQuijoteDeLaManchaPlayer>().Dashing ? 120 : 0,
                 timeLeft = 10,
                 colorVec = new Vector3(0, 1, 0),
                 alphaFactor = 2f
@@ -161,17 +294,22 @@ namespace MatterRecord.Contents.DonQuijoteDeLaMancha
 
         class DonQuijoteDeLaManchaDash : MeleeAction
         {
-            public override bool Attacktive => Factor < .85f;
-            bool givenUp;
+            public override string Category => "";
+            public override bool Attacktive => Factor < .65f;
+            //bool givenUp;
             Vector2 originVelocity;
+            WindMill windMill;
             public override void OnEndAttack()
             {
-                Owner.velocity *= MathHelper.Clamp(.07f * (1 + MathF.Sqrt(originVelocity.Length())), 0, 1);
+                Owner.velocity *= MathHelper.Clamp(.05f * (1 + MathF.Sqrt(originVelocity.Length())), 0, 1);
                 Owner.velocity += originVelocity * MathF.Pow(0.9f, originVelocity.Length());//
                 if (Owner is Player plr)
                 {
                     var mplr = plr.GetModPlayer<DonQuijoteDeLaManchaPlayer>();
-                    mplr.StabTimeLeft = 300;
+                    var maxT = 60;
+                    if (mplr.itemDefinition != null && mplr.itemDefinition.Type > 0)
+                        maxT = new Item(mplr.itemDefinition.Type).useAnimation;
+                    mplr.StabTimeLeft = Math.Max((maxT < 30 ? 6 * maxT + 300 : 12 * maxT + 120) * 3 / 4,300);
                     mplr.NextHitImmune = false;
                     mplr.Dashing = false;
                 }
@@ -180,16 +318,17 @@ namespace MatterRecord.Contents.DonQuijoteDeLaMancha
             public override void OnAttack()
             {
 
-                Owner.velocity += targetedVector * .25f * (1 - Factor).HillFactor2();
+                //Owner.velocity += targetedVector * .125f * (1 - Factor).HillFactor2();
                 if (Owner is Player plr)
                 {
-                    plr.GetModPlayer<LogSpiralLibraryPlayer>().strengthOfShake += 4f;
+                    plr.GetModPlayer<LogSpiralLibraryPlayer>().strengthOfShake += 1f / (1f + timerMax / 30f);
                     plr.GetModPlayer<LogSpiralLibraryPlayer>().ultraFallEnable = true;
-                    if (!plr.controlUseTile && !plr.controlUseItem && !givenUp)
-                    {
-                        timer = 2;
-                        givenUp = true;
-                    }
+                    //if (!plr.controlUseTile && !plr.controlUseItem && !givenUp)
+                    //{
+                    //    timer = 2;
+                    //    givenUp = true;
+                    //}
+
                     //plr.velocity += targetedVector * 0.05f;
                     //plr.immune = true;
                     //plr.immuneTime = 6;
@@ -203,7 +342,7 @@ namespace MatterRecord.Contents.DonQuijoteDeLaMancha
                 }
                 if (current != null)
                 {
-                    current.timeLeft = (byte)MathHelper.Lerp(current.timeLeftMax, 0, Terraria.Utils.GetLerpValue(0.25f, 1, Factor, true));
+                    current.timeLeft = (byte)MathHelper.Lerp(current.timeLeftMax, 0, Utils.GetLerpValue(0.25f, 1, Factor, true));
                     current.xScaler = 2 + Owner.velocity.Length() / 32;
                     current.scaler = standardInfo.vertexStandard.scaler * ModifyData.actionOffsetSize * offsetSize / 3 * 4f * current.xScaler;
                     current.center = Owner.Center - Rotation.ToRotationVector2() * current.scaler * .5f;
@@ -214,7 +353,7 @@ namespace MatterRecord.Contents.DonQuijoteDeLaMancha
             }
             public override void OnStartSingle()
             {
-                givenUp = false;
+                //givenUp = false;
                 KValue = 1f;
                 if (Owner is Player plr)
                 {
@@ -222,8 +361,13 @@ namespace MatterRecord.Contents.DonQuijoteDeLaMancha
                     if (mplr.DashCoolDown > 0)
                     {
                         Projectile.Kill();
+                        return;
                     }
+                    var proj = Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), plr.GetModPlayer<LogSpiralLibraryPlayer>().targetedMousePosition, default, ModContent.ProjectileType<WindMill>(), Projectile.damage, Projectile.knockBack, Projectile.owner);
+                    windMill = proj.ModProjectile as WindMill;
                 }
+
+
                 base.OnStartSingle();
             }
             public override void OnStartAttack()
@@ -232,15 +376,25 @@ namespace MatterRecord.Contents.DonQuijoteDeLaMancha
                 var rand = Main.rand.NextFloat(0.25f, 0.5f);
                 originVelocity = Owner.velocity;
                 //if (Owner is Player plr) plr.AddBuff(ModContent.BuffType<DoggoBoost>(), 180);
+                if (windMill != null)
+                    windMill.Projectile.ai[0] = 10;
                 if (Owner is Player plr)
                 {
                     var mplr = plr.GetModPlayer<DonQuijoteDeLaManchaPlayer>();
                     mplr.NextHitImmune = true;
                     mplr.Dashing = true;
-                    var maxT = standardInfo.standardTimer;
-                    mplr.DashCoolDown = maxT < 30 ? 6 * maxT + 240 : 12 * maxT + 60;
+                    var maxT = 60;
+                    if (mplr.itemDefinition != null && mplr.itemDefinition.Type > 0)
+                        maxT = new Item(mplr.itemDefinition.Type).useAnimation;
+                    mplr.DashCoolDown = maxT < 30 ? 6 * maxT + 300 : 12 * maxT + 120;
                     mplr.DashCoolDownMax = mplr.DashCoolDown;
                     mplr.startPoint = plr.Center;
+                }
+
+                Owner.velocity += targetedVector.SafeNormalize(default) * (1200 / timerMax + 45);
+                if (Owner is Player plr2)
+                {
+                    Owner.velocity *= ((plr2.GetModPlayer<LogSpiralLibraryPlayer>().targetedMousePosition - plr2.Center).Length()) / 1440 + 1 / 6f - .1f;
                 }
                 for (int k = 0; k < 60; k++)
                 {
@@ -269,32 +423,70 @@ namespace MatterRecord.Contents.DonQuijoteDeLaMancha
         }
         class DonQuijoteDeLaManchaStab : RapidlyStabInfo
         {
-            public override bool Collide(Rectangle rectangle)
+            public override string Category => "";
+            public override void OnHitEntity(Entity victim, int damageDone, object[] context)
             {
-                bool flag = base.Collide(rectangle);
-                if (flag)
+                if (Owner is Player player)
                 {
-                    if (Owner is Player plr)
+                    damageDone /= Math.Clamp(player.GetWeaponDamage(player.HeldItem), 1, int.MaxValue);
+                    var mplr = player.GetModPlayer<DonQuijoteDeLaManchaPlayer>();
+                    if (victim is NPC npc && npc.CanBeChasedBy())
                     {
-                        var mplr = plr.GetModPlayer<DonQuijoteDeLaManchaPlayer>();
-                        mplr.DashCoolDown -= 10;
+                        hitCount++;
+                        mplr.DashCoolDown -= hitCount switch
+                        {
+                            1 => 10,
+                            2 => 5,
+                            3 => 3,
+                            4 => 1,
+                            5 => 1,
+                            _ => 0
+                        };
                         if (mplr.DashCoolDown < 0)
                             mplr.DashCoolDown = 0;
                     }
-                    return true;
                 }
-                return false;
+                float delta = Main.rand.NextFloat(0.85f, 1.15f) * damageDone;
+                Main.LocalPlayer.GetModPlayer<LogSpiralLibraryPlayer>().strengthOfShake += delta * .15f;//
+                for (int n = 0; n < 30 * delta * (standardInfo.dustAmount + .2f); n++)
+                    OtherMethods.FastDust(victim.Center + Main.rand.NextVector2Unit() * Main.rand.NextFloat(0, 16f), Main.rand.NextVector2Unit() * Main.rand.NextFloat(Main.rand.NextFloat(0, 8), 16), standardInfo.standardColor);
             }
+            int hitCount = 0;
             public override void OnEndSingle()
             {
-                Owner.velocity += targetedVector.SafeNormalize(default) * 2;
+                Owner.velocity += targetedVector.SafeNormalize(default) * 12;
+                Owner.velocity = Owner.velocity.SafeNormalize(default) * 12;
                 base.OnEndSingle();
+            }
+            public override void OnStartSingle()
+            {
+                hitCount = 0;
+                base.OnStartSingle();
             }
             public override void OnEndAttack()
             {
                 SoundEngine.PlaySound(SoundID.Item96 with { Volume = 0.5f * SoundID.Item96.Volume });//MaxInstances =-1,
                 base.OnEndAttack();
             }
+        }
+
+        public override void AI()
+        {
+            var mplr = player.GetModPlayer<DonQuijoteDeLaManchaPlayer>();
+            if (player.controlUseItem && !player.controlUseTile && mplr.StabTimeLeft <= 0 && currentData is not DonQuijoteDeLaManchaDash && !MatterRecordConfig.Instance.DonQuijoteSlashActive)
+            {
+                Projectile.Kill();
+                return;
+            }
+            base.AI();
+        }
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+        {
+            /*float delta = Main.rand.NextFloat(0.85f, 1.15f) * (damageDone / MathHelper.Clamp(player.GetWeaponDamage(player.HeldItem), 1, int.MaxValue));
+            player.GetModPlayer<LogSpiralLibraryPlayer>().strengthOfShake += delta * .15f;//
+            for (int n = 0; n < 30 * delta * (StandardInfo.dustAmount + .2f); n++)
+                OtherMethods.FastDust(target.Center + Main.rand.NextVector2Unit() * Main.rand.NextFloat(0, 16f), Main.rand.NextVector2Unit() * Main.rand.NextFloat(Main.rand.NextFloat(0, 8), 16), StandardInfo.standardColor);*/
+            base.OnHitNPC(target, hit, damageDone);
         }
     }
     public class DonQuijoteDeLaManchaPlayer : ModPlayer
@@ -307,7 +499,7 @@ namespace MatterRecord.Contents.DonQuijoteDeLaMancha
             {
                 NextHitImmune = false;
                 Player.immune = true;
-                Player.immuneTime = 15;
+                //Player.immuneTime = 2;
                 return true;
             }
             return false;
@@ -372,13 +564,27 @@ namespace MatterRecord.Contents.DonQuijoteDeLaMancha
 
             base.OnHitByProjectile(proj, hurtInfo);
         }
-        public override void ModifyDrawInfo(ref PlayerDrawSet drawInfo)
+        /*public override void ModifyDrawInfo(ref PlayerDrawSet drawInfo)
         {
             if (DashCoolDown > 0)
             {
                 //DrawData drawData = new DrawData(TextureAssets.Projectile[ModContent.ProjectileType<DonQuijoteDeLaManchaProj>()].Value,Player.Center - Main.screenPosition,nu);
                 //drawInfo.DrawDataCache.Add(drawData);
                 Main.spriteBatch.DrawString(FontAssets.MouseText.Value, $"冲刺冷却{DashCoolDown / 60f:0.0}/{DashCoolDownMax / 60f:0.0}", Player.Center - Main.screenPosition + new Vector2(-48, -54), Color.White);
+            }
+            base.ModifyDrawInfo(ref drawInfo);
+        }*/
+        public override void ModifyDrawInfo(ref PlayerDrawSet drawInfo)
+        {
+            if (DashCoolDown > 0 && Main.myPlayer == Player.whoAmI && !Player.DeadOrGhost)
+            {
+                Vector2 cen = Player.Center + Player.gfxOffY * Vector2.UnitY - Main.screenPosition - new Vector2(16, 160);
+                drawInfo.DrawDataCache.Add(new DrawData(ModContent.Request<Texture2D>("MatterRecord/Contents/DonQuijoteDeLaMancha/DashCooldown_Recover").Value, cen, null, Color.White, 0, new Vector2(), 1f, 0));
+
+                drawInfo.DrawDataCache.Add(new DrawData(ModContent.Request<Texture2D>("MatterRecord/Contents/DonQuijoteDeLaMancha/DashCooldown").Value, cen, new Rectangle(0, 0, 32, (int)(32f * DashCoolDown / DashCoolDownMax)), Color.White, 0, new Vector2(), 1f, 0));
+                string text = $"冲刺冷却{DashCoolDown / 60f:0.0}/{DashCoolDownMax / 60f:0.0}";
+                ChatManager.DrawColorCodedStringWithShadow(Main.spriteBatch, FontAssets.MouseText.Value, text, cen + new Vector2(16, 48), Color.White, Color.Black, 0, FontAssets.MouseText.Value.MeasureString(text) * .5f, Vector2.One);
+                //Main.spriteBatch.DrawString(FontAssets.MouseText.Value,, cen + Vector2.UnitY * 48, Color.White);
             }
             base.ModifyDrawInfo(ref drawInfo);
         }
@@ -395,7 +601,9 @@ namespace MatterRecord.Contents.DonQuijoteDeLaMancha
         public static void DonQuijoteModifyRightClick(Action<Item, Player> orig, Item item, Player player)
         {
             if (!DonQuijoteDeLaMancha.Active) goto Label;
-            if (item.damage <= 0) goto Label;
+            var damageClass = item.DamageType;
+            bool flag = damageClass == DamageClass.Melee || damageClass.GetEffectInheritance(DamageClass.Melee) || !damageClass.GetModifierInheritance(DamageClass.Melee).Equals(StatInheritanceData.None);
+            if (item.damage <= 0 || !flag) goto Label;
             if (item.useTime == 0) goto Label;
             if (item.type == ModContent.ItemType<DonQuijoteDeLaMancha>()) goto Label;
             var mplr = player.GetModPlayer<DonQuijoteDeLaManchaPlayer>();
@@ -416,7 +624,9 @@ namespace MatterRecord.Contents.DonQuijoteDeLaMancha
         {
             if (item.type == ItemID.None) return false;
             if (!DonQuijoteDeLaMancha.Active) return false;
-            if (item.damage <= 0) return false;
+            var damageClass = item.DamageType;
+            bool flag = damageClass == DamageClass.Melee || damageClass.GetEffectInheritance(DamageClass.Melee) || !damageClass.GetModifierInheritance(DamageClass.Melee).Equals(StatInheritanceData.None);
+            if (item.damage <= 0 || !flag) return false;
             if (item.useTime == 0) return false;
             if (item.type == ModContent.ItemType<UnloadedItem>()) return false;
             if (item.type == ModContent.ItemType<DonQuijoteDeLaMancha>()) return false;
@@ -424,6 +634,43 @@ namespace MatterRecord.Contents.DonQuijoteDeLaMancha
                 return Main.mouseRightRelease = true;
 
             return false;
+        }
+    }
+
+    public class WindMill : ModProjectile
+    {
+        static Asset<Texture2D> wheelTex;
+
+        public override void SetStaticDefaults()
+        {
+            wheelTex = ModContent.Request<Texture2D>("MatterRecord/Contents/DonQuijoteDeLaMancha/WindMill_Wheel");
+            base.SetStaticDefaults();
+        }
+        public override void SetDefaults()
+        {
+            Projectile.timeLeft = 180;
+            Projectile.tileCollide = false;
+            Projectile.penetrate = -1;
+            Projectile.friendly = true;
+            Projectile.width = 106;
+            Projectile.height = 136;
+            base.SetDefaults();
+        }
+        public override void AI()
+        {
+            Projectile.ai[1] += Projectile.ai[0];
+            base.AI();
+        }
+        public override bool PreDraw(ref Color lightColor)
+        {
+            lightColor *= MathHelper.SmoothStep(0, 1, (90 - MathF.Abs(90 - Projectile.timeLeft)) / 10f);
+            return base.PreDraw(ref lightColor);
+        }
+        public override void PostDraw(Color lightColor)
+        {
+            lightColor *= MathHelper.SmoothStep(0, 1, (90 - MathF.Abs(90 - Projectile.timeLeft)) / 10f);
+            Main.spriteBatch.Draw(wheelTex.Value, Projectile.Center + new Vector2(0, -12) - Main.screenPosition, null, lightColor, Projectile.ai[1], new Vector2(53, 55), 1f, 0, 0);
+            base.PostDraw(lightColor);
         }
     }
 }

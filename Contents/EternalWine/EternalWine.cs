@@ -351,7 +351,7 @@ namespace MatterRecord.Contents.EternalWine
         }
         public override void ModifyDrawInfo(ref PlayerDrawSet drawInfo)
         {
-            if (LifeDebtMax != -1 && Main.myPlayer == Player.whoAmI)
+            if (LifeDebtMax != -1 && Main.myPlayer == Player.whoAmI && !Player.DeadOrGhost)
             {
                 Vector2 cen = Player.Center + Player.gfxOffY * Vector2.UnitY - Main.screenPosition - new Vector2(16, 128);
                 drawInfo.DrawDataCache.Add(new DrawData(ModContent.Request<Texture2D>("MatterRecord/Contents/EternalWine/LifeRegenStagnant_Recover").Value, cen, null, Color.White, 0, new Vector2(), 1f, 0));

@@ -54,6 +54,21 @@ Items: {
 		DisplayName: Don Quijote De La Mancha
 		Tooltip: ""
 	}
+
+	EtherChest: {
+		DisplayName: Ether Chest
+		Tooltip: ""
+	}
+
+	EmeraldTablet: {
+		DisplayName: Emerald Tablet
+		Tooltip: ""
+	}
+
+	TheoryofJustice: {
+		DisplayName: Theoryof Justice
+		Tooltip: ""
+	}
 }
 
 Buffs: {
@@ -73,6 +88,21 @@ Projectiles: {
 	TheOldManAndTheSeaBobber.DisplayName: The Old Man And The Sea Bobber
 	ZenithBoulderProjectile.DisplayName: Zenith Boulder Projectile
 	DonQuijoteDeLaManchaProj.DisplayName: Don Quijote De La Mancha Proj
+	WindMill.DisplayName: Wind Mill
 }
 
-Tiles.LittlePrinceRose.MapEntry: Little Prince Rose
+Tiles: {
+	LittlePrinceRose.MapEntry: Little Prince Rose
+	EtherChest_Tile.MapEntry: EtherChest
+}
+
+Configs: {
+	MatterRecordConfig: {
+		DisplayName: Matter Record Config
+
+		DonQuijoteSlashActive: {
+			Label: Don Quijote Slash Active
+			Tooltip: ""
+		}
+	}
+}

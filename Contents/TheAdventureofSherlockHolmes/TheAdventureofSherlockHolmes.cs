@@ -22,7 +22,7 @@ namespace MatterRecord.Contents.TheAdventureofSherlockHolmes
         public static int coolDown;
         public static Point? cachePoint;
         public static bool readyToShow;
-        static void LightOnMap(Point worldCoord) 
+        static void LightOnMap(Point worldCoord)
         {
             for (int i = worldCoord.X - 3; i < worldCoord.X + 4; i++)
             {
@@ -35,18 +35,17 @@ namespace MatterRecord.Contents.TheAdventureofSherlockHolmes
                 }
             }
             Main.refreshMap = true;
-            Main.LocalPlayer.BuyItem(Item.buyPrice(0, Main.LocalPlayer.discountEquipped ? 4 : 5, 0, 0));
         }
         private void Main_OnPostFullscreenMapDraw(Vector2 arg1, float arg2)
         {
-            if (Main.netMode == NetmodeID.MultiplayerClient && readyToShow && cachePoint.HasValue && Main.LocalPlayer.CanAfford(Item.buyPrice(0, Main.LocalPlayer.discountEquipped ? 4 : 5, 0, 0))) 
+            if (Main.netMode == NetmodeID.MultiplayerClient && readyToShow && cachePoint.HasValue && Main.LocalPlayer.BuyItem(Item.buyPrice(0, 0, Main.LocalPlayer.discountEquipped ? 8 : 10, 0)))
             {
                 LightOnMap(cachePoint.Value);
                 cachePoint = null;
                 readyToShow = false;
                 return;
             }
-            if (Main.gameMenu || !Main.mouseRight || Main.LocalPlayer.HeldItem.type != ModContent.ItemType<TheAdventureofSherlockHolmes>() || coolDown >= 0 || !Main.LocalPlayer.CanAfford(Item.buyPrice(0, Main.LocalPlayer.discountEquipped ? 4 : 5, 0, 0)))
+            if (Main.gameMenu || !Main.mouseRight || Main.LocalPlayer.HeldItem.type != ModContent.ItemType<TheAdventureofSherlockHolmes>() || coolDown >= 0 || !Main.LocalPlayer.CanAfford(Item.buyPrice(0, 0, Main.LocalPlayer.discountEquipped ? 8 : 10, 0)))
             {
                 coolDown--;
                 return;
@@ -59,10 +58,11 @@ namespace MatterRecord.Contents.TheAdventureofSherlockHolmes
             {
                 if (Main.netMode == NetmodeID.SinglePlayer)
                 {
-                    LightOnMap(worldCoord);
+                    if (Main.LocalPlayer.BuyItem(Item.buyPrice(0, 0, Main.LocalPlayer.discountEquipped ? 8 : 10, 0)))
+                        LightOnMap(worldCoord);
                     coolDown = 30;
                 }
-                else 
+                else
                 {
                     cachePoint = worldCoord;
                     ModPacket packet = Mod.GetPacket();

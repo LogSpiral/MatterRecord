@@ -70,6 +70,11 @@ namespace MatterRecord.Contents.Faust
             SoundEngine.PlaySound(SoundID.Item4);
             base.RightClick(player);
         }
+        public override void ModifyTooltips(List<TooltipLine> tooltips)
+        {
+            tooltips.Add(new(Mod, "ConsumedMoney", $"你已经在恶魔这里消费了{Main.ValueToCoins((long)Main.LocalPlayer.GetModPlayer<FaustPlayer>().ConsumedMoney)}") { OverrideColor = Color.Lerp(Color.Gray,Color.Red,0.5f + 0.5f * MathF.Cos(Main.GlobalTimeWrappedHourly))});
+            base.ModifyTooltips(tooltips);
+        }
     }
     public class FaustGBItem : GlobalItem
     {
@@ -171,12 +176,12 @@ namespace MatterRecord.Contents.Faust
                     player.GetModPlayer<FaustPlayer>().ConsumedMoney += (ulong)item.GetStoreValue() * 4UL;
                     if (flag1)
                         Main.mouseItem.stack++;
-                    else if(flag2)
+                    else if (flag2)
                     {
                         Main.mouseItem = item.Clone();
                         Main.mouseItem.stack = 1;
                     }
-                    if (n == 0) 
+                    if (n == 0)
                     {
                         SoundEngine.PlaySound(SoundID.Coins);
                         ItemSlot.RefreshStackSplitCooldown();
@@ -249,7 +254,7 @@ namespace MatterRecord.Contents.Faust
         //}
 
     }
-    public class FaustPlayer : ModPlayer 
+    public class FaustPlayer : ModPlayer
     {
         public ulong ConsumedMoney;
 
@@ -295,8 +300,15 @@ namespace MatterRecord.Contents.Faust
 
         public override void UpdateEquips()
         {
-            Player.statDefense -= (int)(ConsumedMoney / 500000);
+            //Player.statLifeMax2 -= (int)(ConsumedMoney / 500000);
+            //if (Player.statLifeMax2 < 100) Player.statLifeMax2 = 100;
             base.UpdateEquips();
+        }
+        public override void ModifyLuck(ref float luck)
+        {
+            luck -= ConsumedMoney / 1000000 * 0.01f;
+
+            base.ModifyLuck(ref luck);
         }
     }
 }

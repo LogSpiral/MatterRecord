@@ -33,7 +33,7 @@ namespace MatterRecord.Contents.TheOldManAndTheSea
             // Item.useTime = 8;
             // Item.UseSound = SoundID.Item1;
             Item.CloneDefaults(ItemID.WoodFishingPole);
-            Item.buyPrice(2);
+            Item.value = Item.buyPrice(2);
             Item.rare = ItemRarityID.Yellow;
             Item.fishingPole = 75; // Sets the poles fishing power
             Item.shootSpeed = 12f; // Sets the speed in which the bobbers are launched. Wooden Fishing Pole is 9f and Golden Fishing Rod is 17f.
@@ -78,7 +78,7 @@ namespace MatterRecord.Contents.TheOldManAndTheSea
         public override bool PreDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, ref float rotation, ref float scale, int whoAmI)
         {
             itemTex ??= ModContent.Request<Texture2D>("MatterRecord/Contents/TheOldManAndTheSea/TheOldManAndTheSea_full");
-            spriteBatch.Draw(itemTex.Value, Item.position-Main.screenPosition, null, lightColor, rotation, itemTex.Size() * .5f, scale, 0, 0);
+            spriteBatch.Draw(itemTex.Value, Item.position - Main.screenPosition, null, lightColor, rotation, itemTex.Size() * .5f, scale, 0, 0);
 
             return false;
         }

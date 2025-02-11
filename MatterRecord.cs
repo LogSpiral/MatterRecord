@@ -2,11 +2,13 @@ global using Terraria;
 global using Terraria.ID;
 global using Terraria.IO;
 global using Terraria.ModLoader;
+using MatterRecord.Contents.DonQuijoteDeLaMancha;
 using MatterRecord.Contents.EternalWine;
 using MatterRecord.Contents.Faust;
 using MatterRecord.Contents.TheAdventureofSherlockHolmes;
 using MatterRecord.Contents.TheOldManAndTheSea;
 using MatterRecord.Contents.TheoryOfFreedom;
+using MatterRecord.Contents.TheoryofJustice;
 using MatterRecord.Contents.TortoiseShell;
 using Microsoft.Xna.Framework;
 using System;
@@ -15,7 +17,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using Terraria.ModLoader.Config;
 using Terraria.WorldBuilding;
 
 namespace MatterRecord
@@ -160,8 +162,21 @@ namespace MatterRecord
                 shop.Add<Faust>();
                 shop.Add<TheAdventureofSherlockHolmes>();
                 shop.Add<TheOldManAndTheSea>();
+                shop.Add<DonQuijoteDeLaMancha>();
+            }
+            if (shop.NpcType == NPCID.BestiaryGirl) 
+            {
+                shop.Add<TheoryofJustice>();
             }
             base.ModifyShop(shop);
         }
+    }
+
+
+    public class MatterRecordConfig : ModConfig 
+    {
+        public static MatterRecordConfig Instance => ModContent.GetInstance<MatterRecordConfig>();
+        public override ConfigScope Mode => ConfigScope.ServerSide;
+        public bool DonQuijoteSlashActive = false;
     }
 }

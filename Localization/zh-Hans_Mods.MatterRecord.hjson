@@ -60,7 +60,7 @@ Items: {
 		Tooltip:
 			'''
 			拿在手上并打开了大地图时，
-			右键地图可以消耗五金币咨询地图上7x7的位置
+			右键地图可以消耗十银币咨询地图上7x7的位置
 			“只是一些简单的推理罢了，华生医生”
 			'''
 	}
@@ -73,7 +73,7 @@ Items: {
 			背包内右键点击以激活/取消
 			激活后选取背包内一件物品，可使用售价20倍购买
 			（选择一个物品复制，消耗其售价的20倍）
-			每消费50金币降低1防御
+			每消费1铂金币降低0.01幸运
 			'''
 	}
 
@@ -111,9 +111,40 @@ Items: {
 			“堂吉诃德对他的侍从桑丘说:
 			‘我的朋友，前面出现了几十个巨人，
 			我要去和他们决斗，我要打败他们，
-			这是一场正义的决斗,
-			我要消灭这些侵略地球的坏家伙。’”
-			右键召唤一座风车并向其冲刺
+			这是一场正义的决斗，
+			我要消灭这些侵略地球的坏家伙’”
+			右键召唤一座风车向其冲锋并免疫下一次受伤
+			冲锋根据距离计算伤害加成并且必定暴击，冲锋后短时间内攻击转为突刺
+			右键取消该状态
+			突刺会减少一次冲锋冷却时间
+			冲锋时受到攻击会延长冷却时间
+			持握时敌人更有可能以你为目标
+			'''
+	}
+
+	EtherChest: {
+		DisplayName: 以太宝箱
+		Tooltip: 容积是边长为两个物块的正十二面体的体积
+	}
+
+	EmeraldTablet: {
+		DisplayName: 翠玉录
+		Tooltip:
+			'''
+			“上为其下，下为其上，以成太一之奇迹”
+			制作任意药剂时，50%不消耗材料
+			你只需要将它带在身上（背包中）
+			'''
+	}
+
+	TheoryofJustice: {
+		DisplayName: 正义论
+		Tooltip:
+			'''
+			“无知即正义”
+			根据你的生物图鉴获得减伤效果
+			未点亮图鉴越多，减伤越高
+			最高30%，困难模式减半
 			'''
 	}
 }
@@ -135,6 +166,21 @@ Projectiles: {
 	TheOldManAndTheSeaBobber.DisplayName: 老人与海 浮标
 	ZenithBoulderProjectile.DisplayName: 天顶巨石
 	DonQuijoteDeLaManchaProj.DisplayName: 堂吉诃德
+	WindMill.DisplayName: 风车
 }
 
-Tiles.LittlePrinceRose.MapEntry: 小王子玫瑰
+Tiles: {
+	LittlePrinceRose.MapEntry: 小王子玫瑰
+	EtherChest_Tile.MapEntry: 以太宝箱
+}
+
+Configs: {
+	MatterRecordConfig: {
+		DisplayName: 事象网罗配置
+
+		DonQuijoteSlashActive: {
+			Label: 堂吉诃德左键挥砍模式
+			Tooltip: 开启后使用手持弹幕模式，默认关闭
+		}
+	}
+}
