@@ -9,9 +9,6 @@
 		<LangVersion>latest</LangVersion>
 	</PropertyGroup>
 	<ItemGroup>
-	  <None Remove="Contents\EtherChest\EtherChest.png" />
-	</ItemGroup>
-	<ItemGroup>
 	  <ProjectReference Include="..\LogSpiralLibrary\LogSpiralLibrary.csproj" />
 	</ItemGroup>
 

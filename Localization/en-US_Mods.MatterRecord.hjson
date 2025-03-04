@@ -69,6 +69,61 @@ Items: {
 		DisplayName: Theoryof Justice
 		Tooltip: ""
 	}
+
+	TheInterpretationOfDreams: {
+		DisplayName: The Interpretation Of Dreams
+		Tooltip: ""
+	}
+
+	ClothierDream: {
+		DisplayName: Clothier Dream
+		Tooltip: ""
+	}
+
+	CosmosScissors: {
+		DisplayName: Cosmos Scissors
+		Tooltip: ""
+	}
+
+	DreamOfStylist: {
+		DisplayName: Dream Of Stylist
+		Tooltip: ""
+	}
+
+	DyeTraderDream: {
+		DisplayName: Dye Trader Dream
+		Tooltip: ""
+	}
+
+	GolferDream: {
+		DisplayName: Golfer Dream
+		Tooltip: ""
+	}
+
+	GuideDream: {
+		DisplayName: Guide Dream
+		Tooltip: ""
+	}
+
+	PirateDream: {
+		DisplayName: Pirate Dream
+		Tooltip: ""
+	}
+
+	TavernkeepDream: {
+		DisplayName: Tavernkeep Dream
+		Tooltip: ""
+	}
+
+	WizardDream: {
+		DisplayName: Wizard Dream
+		Tooltip: ""
+	}
+
+	ZoologiseDream: {
+		DisplayName: Zoologise Dream
+		Tooltip: ""
+	}
 }
 
 Buffs: {

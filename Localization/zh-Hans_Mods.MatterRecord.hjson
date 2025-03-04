@@ -147,6 +147,103 @@ Items: {
 			最高30%，困难模式减半
 			'''
 	}
+
+	TheInterpretationOfDreams: {
+		DisplayName: 梦的解析
+		Tooltip:
+			'''
+			“梦是潜意识欲望的表达”
+			对原版NPC使用时获取梦境，每天一次，右键打开梦匣
+			(破碎之梦50%，美梦20%，噩梦20%，专属梦境10%)
+			获取专属梦境时检测当前玩家梦匣，解锁性的不重复获取
+			'''
+	}
+
+	ClothierDream: {
+		DisplayName: 裁缝之梦
+		Tooltip:
+			'''
+			使用后获得一把金钥匙，消耗品
+			“也许我当时应该打开几个宝箱？我刚刚梦到它们了”
+			'''
+	}
+
+	CosmosScissors: {
+		DisplayName: 鸿蒙剪刀
+		Tooltip: “裁剪空间...抱歉做不到”
+	}
+
+	DreamOfStylist: {
+		DisplayName: 理发师之梦
+		Tooltip:
+			'''
+			使用后获得鸿蒙剪刀
+			“在梦里，我意识到剪刀除了剪头发还能剪些其他的！”
+			'''
+	}
+
+	DyeTraderDream: {
+		DisplayName: 染料商之梦
+		Tooltip:
+			'''
+			使用后获得随机三种染料
+			“亲爱的，试试这个染料吧，我刚获得的新灵感”
+			'''
+	}
+
+	GolferDream: {
+		DisplayName: 高尔夫手之梦
+		Tooltip:
+			'''
+			使用后召唤沙尘暴，再次使用以取消
+			“是沙坑？真是一场噩梦，对高尔夫球和我都是”
+			'''
+	}
+
+	GuideDream: {
+		DisplayName: 向导之梦
+		Tooltip:
+			'''
+			使用后获得四职业徽章各一枚
+			“久违的安眠，你最近应该没有探索地狱吧？没有……吧？”
+			'''
+	}
+
+	PirateDream: {
+		DisplayName: 海盗船长之梦
+		Tooltip:
+			'''
+			使用后召唤暴雨，再次使用以取消
+			“嗝……风暴，风暴就要来了，大副，扬帆！”
+			'''
+	}
+
+	TavernkeepDream: {
+		DisplayName: 酒馆老板之梦
+		Tooltip:
+			'''
+			使用后随军团难度提升获得2/4/8护卫勋章
+			“那些哥布林没进来吧？”
+			'''
+	}
+
+	WizardDream: {
+		DisplayName: 巫师之梦
+		Tooltip:
+			'''
+			使用后永久减少1%法力消耗
+			“我在梦中领悟了一些新的魔法，你要学吗？嗯？为什么这么看我，得交钱”
+			'''
+	}
+
+	ZoologiseDream: {
+		DisplayName: 动物学家之梦
+		Tooltip:
+			'''
+			使用后召唤一只奇怪的城镇史莱姆(未实装十来亩)
+			“我梦到了一只新品种的史莱姆，等等，你说那不是梦？”
+			'''
+	}
 }
 
 Buffs: {
