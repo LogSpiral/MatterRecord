@@ -23,8 +23,15 @@ namespace MatterRecord.Contents.TheoryofJustice
         {
             BestiaryUnlockProgressReport bestiaryProgressReport = Main.GetBestiaryProgressReport();
             float offsetEndurance = (1 - bestiaryProgressReport.CompletionPercent) * .3f;
-            player.endurance += offsetEndurance * (Main.hardMode ? .5f : 1f);
+            player.endurance += offsetEndurance;// * (Main.hardMode ? .5f : 1f);
             base.UpdateAccessory(player, hideVisual);
+        }
+        public override void ModifyTooltips(List<TooltipLine> tooltips)
+        {
+            BestiaryUnlockProgressReport bestiaryProgressReport = Main.GetBestiaryProgressReport();
+            float offsetEndurance = (1 - bestiaryProgressReport.CompletionPercent) * .3f;
+            tooltips.Add(new TooltipLine(Mod, "JusticeEndurance", $"现在提供减伤{offsetEndurance * 100:0.00}%"));
+            base.ModifyTooltips(tooltips);
         }
     }
 }

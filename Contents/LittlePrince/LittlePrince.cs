@@ -59,7 +59,8 @@ namespace MatterRecord.Contents.LittlePrince
         //public override string Texture => $"Terraria/Images/Item_{ItemID.JungleRose}";
         public override void SetDefaults()
         {
-            Item.width = Item.height = 32;
+            Item.width = 20;
+            Item.height = 27;
             Item.rare = ItemRarityID.Yellow;
             Item.value = Item.sellPrice(0, 1);
             Item.accessory = true;
@@ -78,7 +79,7 @@ namespace MatterRecord.Contents.LittlePrince
         {
             Main.tileFrameImportant[Type] = true;
             Main.tileObsidianKill[Type] = true;
-            Main.tileCut[Type] = true;
+            //Main.tileCut[Type] = true;
             Main.tileNoFail[Type] = true;
             TileID.Sets.ReplaceTileBreakUp[Type] = true;
             TileID.Sets.IgnoredInHouseScore[Type] = true;

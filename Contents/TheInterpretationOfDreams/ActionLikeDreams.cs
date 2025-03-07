@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Terraria.DataStructures;
 using Terraria.GameContent.Creative;
 using Terraria.GameContent.Events;
+using Terraria.ModLoader;
 
 namespace MatterRecord.Contents.TheInterpretationOfDreams
 {
@@ -21,8 +22,7 @@ namespace MatterRecord.Contents.TheInterpretationOfDreams
 
         public override void SetDefaults()
         {
-            Item.consumable = true;
-            Item.useAnimation = 30;
+            Item.useTime = Item.useAnimation = 30;
             Item.useStyle = ItemUseStyleID.HoldUp;
             Item.UseSound = MySoundID.MagicShiny;
             base.SetDefaults();
@@ -41,28 +41,51 @@ namespace MatterRecord.Contents.TheInterpretationOfDreams
     }
     public class WizardDream : ActionLikeDreams
     {
+        public override void SetDefaults()
+        {
+            base.SetDefaults();
+            Item.consumable = true;
+            Item.maxStack = 10;
+        }
         public override void UseAction(Player player)
         {
             var mplr = player.GetModPlayer<DreamPlayer>();
+
             if (mplr.WizardDreamCount >= 10)
                 Main.NewText("已达使用上限", Color.Blue);
-            else
+            else 
+            {
                 mplr.WizardDreamCount++;
+                Item.stack--;
+                if(Item.stack <= 0)
+                    Item.TurnToAir();
+            }
         }
         public override bool ConsumeItem(Player player) => player.GetModPlayer<DreamPlayer>().WizardDreamCount < 10;
     }
     public class ZoologiseDream : ActionLikeDreams
     {
-        public override void UseAction(Player player) => DreamWorld.UsedZoologistDream = true;
+        public override void SetDefaults()
+        {
+            base.SetDefaults();
+            Item.consumable = true;
+        }
+        public override void UseAction(Player player) 
+        {
+            if (DreamWorld.UsedZoologistDream)
+                Main.NewText("你梦到了同一只史莱姆", Color.Pink);
+            else 
+            {
+                DreamWorld.UsedZoologistDream = true;
+                Item.stack--;
+                if (Item.stack <= 0)
+                    Item.TurnToAir();
+            }
+        }
         public override bool ConsumeItem(Player player) => !DreamWorld.UsedZoologistDream;
     }
     public class GolferDream : ActionLikeDreams
     {
-        public override void SetDefaults()
-        {
-            base.SetDefaults();
-            Item.consumable = false;
-        }
         public override void UseAction(Player player)
         {
             if (Sandstorm.Happening)
@@ -73,31 +96,38 @@ namespace MatterRecord.Contents.TheInterpretationOfDreams
     }
     public class PirateDream : ActionLikeDreams
     {
-        public override void SetDefaults()
-        {
-            base.SetDefaults();
-            Item.consumable = false;
-        }
         public override void UseAction(Player player)
         {
-            bool flag = Main.GameModeInfo == GameModeData.CreativeMode;
-            FieldInfo fldInfo = null;
-            if(flag)
-                fldInfo= typeof(CreativePowers.ASharedSliderPower).GetField("_sliderCurrentValueCache", BindingFlags.NonPublic | BindingFlags.Instance);
-            var power = CreativePowerManager.Instance.GetPower<CreativePowers.ModifyRainPower>();
-            if (Main.cloudAlpha == 0)
+            if (Main.cloudAlpha <= 0.02f)
             {
-
-                fldInfo?.SetValue(power, 1);
-                Main.cloudAlpha = Main.maxRaining = 1f;
                 Main.StartRain();
+                Main.cloudAlpha = Main.maxRaining = 1f;
             }
             else
             {
-                fldInfo?.SetValue(power, 0);
-                Main.cloudAlpha = Main.maxRaining = 0f;
                 Main.StopRain();
+                Main.cloudAlpha = Main.maxRaining = 0f;
             }
+        }
+    }
+    public class BrokenDream : ActionLikeDreams 
+    {
+        public override void SetDefaults()
+        {
+            base.SetDefaults();
+            Item.consumable = true;
+            Item.maxStack = 9999;
+        }
+        public override void UseAction(Player player)
+        {
+            int buff;
+            do buff = Main.rand.Next(BuffID.Count);
+            while (Main.buffNoTimeDisplay[buff]);
+
+            player.AddBuff(buff, 6000);
+            Item.stack--;
+            if (Item.stack <= 0)
+                Item.TurnToAir();
         }
     }
 }

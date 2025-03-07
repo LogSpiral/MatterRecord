@@ -7,32 +7,31 @@ using Terraria.Graphics.Shaders;
 
 namespace MatterRecord.Contents.TheInterpretationOfDreams
 {
-    public class DyeTraderDream : ModItem
+    public abstract class BagLikeDreams(int type, int stack = 1, Func<IEnumerable<(int, int)>> itemGetter = null) : ModItem
     {
         public override string Texture => $"Terraria/Images/Item_{ItemID.Cloud}";
-        public override void RightClick(Player player)
+        public override void SetDefaults()
         {
-            for (int n = 0; n < 3; n++)
-                player.QuickSpawnItem(Item.GetSource_GiftOrReward(), Main.rand.Next(DreamWorld.availableDyeId));
-            base.RightClick(player);
+            Item.maxStack = 9999;
+            base.SetDefaults();
         }
-        public override bool CanRightClick() => true;
-    }
-    public abstract class BagLikeDreams(int type, int stack = 1) : ModItem
-    {
-        public override string Texture => $"Terraria/Images/Item_{ItemID.Cloud}";
-
         protected BagLikeDreams() : this(0) { }
         public override void RightClick(Player player)
         {
-            player.QuickSpawnItem(Item.GetSource_GiftOrReward(), type, stack);
+            var collection = itemGetter?.Invoke();
+            if (collection != null)
+                foreach (var pair in collection)
+                    player.QuickSpawnItem(Item.GetSource_GiftOrReward(), pair.Item1, pair.Item2);
+            else
+                player.QuickSpawnItem(Item.GetSource_GiftOrReward(), type, stack);
+
             base.RightClick(player);
         }
         public override bool CanRightClick() => true;
     }
-    public class GuideDream() : BagLikeDreams(Main.rand.Next([ItemID.WarriorEmblem, ItemID.SorcererEmblem, ItemID.RangerEmblem, ItemID.SummonerEmblem]));
-    public class TavernkeepDream() : BagLikeDreams(ItemID.DefenderMedal, NPC.downedGolemBoss ? 8 : NPC.downedMechBossAny ? 4 : 2);
+    public class GuideDream() : BagLikeDreams(0, 0, () => [(ItemID.WarriorEmblem,1), (ItemID.SummonerEmblem, 1), (ItemID.SorcererEmblem, 1), (ItemID.RangerEmblem, 1)]);
+    public class TavernkeepDream() : BagLikeDreams(0, 0, () => [(ItemID.DefenderMedal, NPC.downedGolemBoss ? 8 : NPC.downedMechBossAny ? 4 : 2)]);
     public class ClothierDream() : BagLikeDreams(ItemID.GoldenKey);
-    public class DreamOfStylist() : BagLikeDreams(ModContent.ItemType<CosmosScissors>());
-
+    public class StylistDream() : BagLikeDreams(ModContent.ItemType<CosmosScissors>());
+    public class DyeTraderDream() : BagLikeDreams(0, 0, () => [(Main.rand.Next(DreamWorld.availableDyeId), 3)]);
 }

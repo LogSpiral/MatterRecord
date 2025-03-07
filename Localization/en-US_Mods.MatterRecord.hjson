@@ -73,6 +73,116 @@ Items: {
 	TheInterpretationOfDreams: {
 		DisplayName: The Interpretation Of Dreams
 		Tooltip: ""
+		Unlock: ""
+		Hint: ""
+		SkeletonMerchant:
+			'''
+			骷髅商人之梦
+			激活时，骷髅商人售卖所有商品
+			“我梦到大家都住到地下了，所以今天是骷髅大放送”
+			'''
+		Princess:
+			'''
+			公主之梦
+			激活时，NPC幸福感增加，物品售价修正为原来的90%(不影响晶塔)
+			“在梦里，我的臣民们都很幸福，你也一样！”
+			'''
+		SantaClaus:
+			'''
+			圣诞老人之梦
+			激活时，游戏时间视为圣诞节
+			“哦……今天是圣诞节，你想坐雪橇吗？”
+			'''
+		GoblinTinkerer:
+			'''
+			哥布林工匠之梦
+			激活时，越高级的前缀越有可能被重铸到
+			“谢天谢地，我教会了他们用指南针，虽然是在梦里”
+			'''
+		Merchant:
+			'''
+			商人之梦
+			激活时，出售时的价格系数提升为30%
+			“我梦见镇子里装上了很多路灯……是的，路灯……咳咳”
+			'''
+		Mechanic:
+			'''
+			机械师之梦
+			激活时，使用电线不消耗
+			“我看到了一个机械王国，去把它变为现实吧”
+			'''
+		Demolitionist:
+			'''
+			爆破专家之梦
+			激活时，玩家引起的爆炸不会使自己受伤
+			“我净化了整个世界！等等，那是梦？”
+			'''
+		TaxCollector:
+			'''
+			税收官之梦
+			激活时，对城镇npc造成伤害使他们爆金币(臭虫剑或者臭蛋)(对税收官除外)
+			“你知道的，哪怕是在梦里，他们也不愿意缴税”
+			'''
+		Steampunker:
+			'''
+			蒸汽朋克之梦
+			激活时，飞行时间+2秒，火箭背包额外+5秒
+			“在我梦里你是一名出色的空盗！”
+			'''
+		Dryad:
+			'''
+			树妖之梦
+			激活时，获得永久的树妖祝福buff
+			“为了泰拉瑞亚的净化，也许我需要给你一点帮助，我的梦？在梦里你的内脏变成了外脏”
+			'''
+		WitchDoctor:
+			'''
+			巫医之梦
+			激活时，召唤栏+1
+			“森中的精灵在梦中告诉我，它们很喜欢你”
+			'''
+		Painter:
+			'''
+			画家之梦
+			激活时，使用油漆不消耗
+			“你很有艺术细胞，在梦里我和你办了一次画展！”
+			'''
+		Truffle:
+			'''
+			松露人之梦
+			激活时，仇恨值-100，但你无法食用蘑菇回血
+			“我又梦到有人在啃我的脚，更糟糕的是，醒来后我发现这是真的”
+			'''
+		PartyGirl:
+			'''
+			派对女孩之梦
+			激活时，npc死亡后刷新加快
+			“世界上最棒的派对！是梦？那我会办一场更大的派对！”
+			'''
+		ArmsDealer:
+			'''
+			军火商之梦
+			激活时，15%概率不消耗弹药
+			“太荒谬了，我的子弹居然打光了”
+			'''
+		Angler:
+			'''
+			渔夫之梦
+			激活时，渔夫任务交付时获得两次奖励
+			“你是我的头号仆人，连梦里都在为我捕鱼，哈哈”
+			'''
+		Nurse:
+			'''
+			护士之梦
+			激活时，护士治疗费用减少20%
+			“呃......你可以转过身去吗？抱歉，梦中你的伤势有点惨烈，我得稍微缓缓”
+			'''
+		TravelingMerchant:
+			'''
+			旅行商人之梦
+			激活时，旅行商人每天都会到来
+			“我梦到货物又滞销了，带着这些东西旅行是有点累赘了，所以只能恳请你来多消费消费了”
+			'''
 	}
 
 	ClothierDream: {
@@ -85,8 +195,8 @@ Items: {
 		Tooltip: ""
 	}
 
-	DreamOfStylist: {
-		DisplayName: Dream Of Stylist
+	StylistDream: {
+		DisplayName: Stylist Dream
 		Tooltip: ""
 	}
 
@@ -122,6 +232,21 @@ Items: {
 
 	ZoologiseDream: {
 		DisplayName: Zoologise Dream
+		Tooltip: ""
+	}
+
+	BrokenDream: {
+		DisplayName: Broken Dream
+		Tooltip: ""
+	}
+
+	CybrogDream: {
+		DisplayName: Cybrog Dream
+		Tooltip: ""
+	}
+
+	TaijiNoYume: {
+		DisplayName: Taiji no Yume
 		Tooltip: ""
 	}
 }
