@@ -29,7 +29,7 @@ namespace MatterRecord.Contents.TheInterpretationOfDreams
         ArmsDealer = 16384,
         Angler = 32768,
         Nurse = 65536,
-        TravelingMerchant = 131072
+        TravellingMerchant = 131072
     }
     public class DreamPlayer : ModPlayer
     {
@@ -124,7 +124,8 @@ namespace MatterRecord.Contents.TheInterpretationOfDreams
             {
                 todayCheckedNPC.Clear();
 
-                WorldGen.SpawnTravelNPC();
+                if (CheckActive(DreamState.TravellingMerchant))
+                    WorldGen.SpawnTravelNPC();
             }
             int count = LuckyTimer.Count;
             for (int i = 0; i < count; i++)

@@ -1,4 +1,6 @@
-﻿using LogSpiralLibrary.ForFun.ScreenTransformUI;
+﻿using LogSpiralLibrary.CodeLibrary.DataStructures.Drawing;
+using LogSpiralLibrary.CodeLibrary.UIElements;
+using LogSpiralLibrary.ForFun.ScreenTransformUI;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Graphics;
@@ -31,16 +33,15 @@ namespace MatterRecord.Contents.TheInterpretationOfDreams
             instance.RemoveAllChildren();
             instance.OnInitialize();
 
-
             instance.mainPanel.Width = new(174, 0);
 
             var vec = Main.MouseScreen;
             vec -= Main.ScreenSize.ToVector2() * .5f;
             vec *= Main.GameViewMatrix.Zoom.X;
             vec += Main.ScreenSize.ToVector2() * .5f;
-
-            instance.mainPanel.Left = new((int)vec.X + 80, 0);
-            instance.mainPanel.Top = new((int)vec.Y - 270, 0);
+            vec /= Main.UIScale;
+            instance.mainPanel.Left = new((int)vec.X, 0);
+            instance.mainPanel.Top = new((int)vec.Y, 0);
             instance.mainPanel.Height = new(540, 0);
             instance.Height = new(600, 0);
             instance.Recalculate();
@@ -50,14 +51,19 @@ namespace MatterRecord.Contents.TheInterpretationOfDreams
             Visible = false;
             SoundEngine.PlaySound(SoundID.MenuClose);
         }
-        UIPanel mainPanel;
+        DraggablePanel mainPanel;
         public override void OnInitialize()
         {
             instance = this;
-            mainPanel = new UIPanel()
+            mainPanel = new DraggablePanel()
             {
                 Width = new(174, 0),
                 Height = new(540, 0)
+            };
+            mainPanel.OnUpdate += elem =>
+            {
+                if(mainPanel.IsMouseHovering)
+                    Main.LocalPlayer.mouseInterface = true;
             };
             Append(mainPanel);
 
@@ -98,6 +104,37 @@ namespace MatterRecord.Contents.TheInterpretationOfDreams
             base.OnInitialize();
         }
     }
+    public class DraggablePanel : UIPanel
+    {
+        public bool Dragging = false;
+        public Vector2 Offset;
+        public override void LeftMouseDown(UIMouseEvent evt)
+        {
+            if (evt.Target == this)
+            {
+                Dragging = true;
+                var dimension = GetDimensions();
+                Offset = new Vector2(evt.MousePosition.X - Left.Pixels, evt.MousePosition.Y - Top.Pixels);
+
+            }
+            base.LeftMouseDown(evt);
+        }
+        public override void LeftMouseUp(UIMouseEvent evt)
+        {
+            Dragging = false;
+            base.LeftMouseUp(evt);
+        }
+        public override void Update(GameTime gameTime)
+        {
+            if (Dragging)
+            {
+                Left.Set(Main.mouseX - Offset.X, 0f);
+                Top.Set(Main.mouseY - Offset.Y, 0f);
+                Recalculate();
+            }
+            base.Update(gameTime);
+        }
+    }
     public class DreamItemSlot : UIPanel
     {
         public int index;
@@ -105,9 +142,44 @@ namespace MatterRecord.Contents.TheInterpretationOfDreams
         Item _item;
         public override void LeftClick(UIMouseEvent evt)
         {
+
             base.LeftClick(evt);
             if (Main.mouseItem.type != ItemID.None)
+            {
+                int targetType = index switch
+                {
+                    0 => ModContent.ItemType<BrokenDream>(),
+                    1 => ModContent.ItemType<WizardDream>(),
+                    2 => ModContent.ItemType<ZoologiseDream>(),
+                    3 => ModContent.ItemType<GolferDream>(),
+                    4 => ModContent.ItemType<PirateDream>(),
+                    5 => ModContent.ItemType<GuideDream>(),
+                    6 => ModContent.ItemType<TavernkeepDream>(),
+                    7 => ModContent.ItemType<ClothierDream>(),
+                    8 => ModContent.ItemType<StylistDream>(),
+                    9 => ModContent.ItemType<DyeTraderDream>(),
+                    10 => ModContent.ItemType<CybrogDream>(),
+                    11 or _ => ModContent.ItemType<TaijiNoYume.TaijiNoYume>()
+                };
+                if (Main.mouseItem.type != targetType)
+                    return;
+
+                if (BindItem.stack < Main.mouseItem.maxStack) 
+                {
+                    int origStack = BindItem.stack;
+                    BindItem.SetDefaults(targetType);
+                    int delta = Math.Min(Main.mouseItem.stack, Main.mouseItem.maxStack - origStack);
+
+                    BindItem.stack = origStack + delta;
+
+                    Main.mouseItem.stack -= delta;
+                    if (Main.mouseItem.stack <= 0)
+                        Main.mouseItem = new Item();
+                }
+
                 return;
+
+            }
             if (BindItem.type == ItemID.None) return;
             Main.mouseItem = BindItem.Clone();
             BindItem.TurnToAir();
@@ -178,6 +250,7 @@ namespace MatterRecord.Contents.TheInterpretationOfDreams
         }
         protected override void DrawSelf(SpriteBatch spriteBatch)
         {
+            base.DrawSelf(spriteBatch);
             var mplr = Main.LocalPlayer.GetModPlayer<DreamPlayer>();
             var position = GetDimensions().Center();
             if (mplr.CheckUnlock(targetState))
@@ -212,14 +285,13 @@ namespace MatterRecord.Contents.TheInterpretationOfDreams
                     DreamState.ArmsDealer => 6,
                     DreamState.Angler => 22,
                     DreamState.Nurse => 3,
-                    DreamState.TravelingMerchant => 21,
+                    DreamState.TravellingMerchant => 21,
                     _ => 0
                 }].Value, position, Color.White * .5f);
 
 
             if (IsMouseHovering)
                 UICommon.TooltipMouseText(Language.GetTextValue($"Mods.MatterRecord.Items.TheInterpretationOfDreams.{targetState}") + "\n" + Language.GetTextValue($"Mods.MatterRecord.Items.TheInterpretationOfDreams.{(mplr.CheckUnlock(targetState) ? "Hint" : "Unlock")}"));
-            base.DrawSelf(spriteBatch);
         }
     }
     public class DreamUISystem : ModSystem

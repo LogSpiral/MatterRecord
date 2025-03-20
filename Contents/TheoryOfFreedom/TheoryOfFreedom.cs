@@ -16,7 +16,7 @@ public class TheoryOfFreedom : ModItem
     {
         Item.width = Item.height = 32;
         Item.accessory = true;
-        Item.value = Item.sellPrice(0, 1, 0, 0);
+        Item.value = Item.sellPrice(0, 4, 0, 0);
         Item.rare = ItemRarityID.Yellow;
         base.SetDefaults();
     }
@@ -73,7 +73,7 @@ public class TheoryOfFreedom : ModItem
 
       }
 
-    private void On_Player_GrappleMovement(On_Player.orig_GrappleMovement orig, Player self)
+    private static void On_Player_GrappleMovement(On_Player.orig_GrappleMovement orig, Player self)
     {
         float cache = self.wingTime;
         orig.Invoke(self);
@@ -214,27 +214,5 @@ public class TOFGlobalProjectile : GlobalProjectile
             packet.Send(-1, player.whoAmI);
         }
         return base.CanUseGrapple(type, player);
-    }
-}
-public class TOFGlobalNPCLoot : GlobalNPC
-{
-    public override void ModifyNPCLoot(NPC npc, NPCLoot npcLoot)
-    {
-        if (npc.type == NPCID.Plantera && !Main.expertMode)
-        {
-            npcLoot.Add(ItemDropRule.ByCondition(Condition.InClassicMode.ToDropCondition(ShowItemDropInUI.WhenConditionSatisfied), ModContent.ItemType<TheoryOfFreedom>(), 4));
-        }
-        base.ModifyNPCLoot(npc, npcLoot);
-    }
-}
-public class TOFGlobalItemBossBagLoot : GlobalItem
-{
-    public override void ModifyItemLoot(Item item, ItemLoot itemLoot)
-    {
-        if (item.type == ItemID.PlanteraBossBag)
-        {
-            itemLoot.Add(ItemDropRule.Common(ModContent.ItemType<TheoryOfFreedom>(), 4));
-        }
-        base.ModifyItemLoot(item, itemLoot);
     }
 }

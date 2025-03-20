@@ -82,7 +82,7 @@ namespace MatterRecord.Contents.TheAdventureofSherlockHolmes
         {
             Item.width = Item.height = 48;
             Item.value = Item.sellPrice(0, 1, 0, 0);
-            Item.rare = ItemRarityID.Yellow;
+            Item.rare = ItemRarityID.Green;
 
             base.SetDefaults();
         }

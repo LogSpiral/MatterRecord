@@ -260,7 +260,7 @@ Items: {
 			激活时，护士治疗费用减少20%
 			“呃......你可以转过身去吗？抱歉，梦中你的伤势有点惨烈，我得稍微缓缓”
 			'''
-		TravelingMerchant:
+		TravellingMerchant:
 			'''
 			旅行商人之梦
 			激活时，旅行商人每天都会到来
@@ -378,6 +378,16 @@ Items: {
 			   而感到害怕吗......”
 			'''
 	}
+
+	CantSeword: {
+		DisplayName: 看不剑
+		Tooltip: 真正的真空刃！
+	}
+
+	ProtagonistAura: {
+		DisplayName: 主角光环
+		Tooltip: ""
+	}
 }
 
 Buffs: {
@@ -398,6 +408,7 @@ Projectiles: {
 	ZenithBoulderProjectile.DisplayName: 天顶巨石
 	DonQuijoteDeLaManchaProj.DisplayName: 堂吉诃德
 	WindMill.DisplayName: 风车
+	// CantSewordProj.DisplayName: Cant Seword Proj
 }
 
 Tiles: {

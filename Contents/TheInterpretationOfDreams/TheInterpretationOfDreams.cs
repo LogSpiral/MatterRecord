@@ -83,8 +83,8 @@ public class TheInterpretationOfDreams : ModItem
                                     case NPCID.BestiaryGirl:
                                         {
                                             var targetItem = mplr.dreamItemSlots[2];
-                                            if (DreamWorld.UsedZoologistDream)
-                                                goto Label;
+                                            //if (DreamWorld.UsedZoologistDream)
+                                            //    goto Label;
                                             if (targetItem.type != ItemID.None)
                                                 goto Label;
                                             targetItem.SetDefaults(ModContent.ItemType<ZoologiseDream>());

@@ -106,7 +106,7 @@ public class DreamWorld : ModSystem
         float shtspd = 1f;
         float mcst = 1f;
         int crt = 0;
-        object[] args = [ prefix, dmg, kb, spd, size, shtspd, mcst, crt ];
+        object[] args = [prefix, dmg, kb, spd, size, shtspd, mcst, crt];
         var method = typeof(Item).GetMethod("TryGetPrefixStatMultipliersForItem", BindingFlags.NonPublic | BindingFlags.Instance);
         method?.Invoke(targetItem, args);
         dmg = (float)args[1];
@@ -134,7 +134,7 @@ public class DreamWorld : ModSystem
 
         num *= num;
 
-        return Math.Pow(num,2.0);
+        return Math.Pow(num, 2.0);
     }
     private void PartyGirlModify2(On_WorldGen.orig_TrySpawningTownNPC orig, int x, int y)
     {
@@ -190,7 +190,7 @@ public class DreamWorld : ModSystem
     {
         var cursor = new ILCursor(il);
 
-        var soundMethod = typeof(SoundEngine).GetMethod(nameof(SoundEngine.PlaySound), BindingFlags.Static | BindingFlags.Public, [typeof(int), typeof(int), typeof(int), typeof(int), typeof(float), typeof(float)]);
+        var soundMethod = typeof(SoundEngine).GetMethod(nameof(SoundEngine.PlaySound), BindingFlags.Static | BindingFlags.NonPublic, [typeof(int), typeof(int), typeof(int), typeof(int), typeof(float), typeof(float)]);
         for (int n = 0; n < 3; n++)
             if (!cursor.TryGotoNext(i => i.MatchCall(soundMethod)))
                 return;
@@ -198,7 +198,8 @@ public class DreamWorld : ModSystem
         cursor.Index += 2;
         cursor.EmitDelegate(() =>
         {
-            Main.LocalPlayer.GetAnglerReward(Main.npc[Main.LocalPlayer.talkNPC], Main.anglerQuestItemNetIDs[Main.anglerQuest]);
+            if (Main.LocalPlayer.CheckDreamActive(DreamState.Angler))
+                Main.LocalPlayer.GetAnglerReward(Main.npc[Main.LocalPlayer.talkNPC], Main.anglerQuestItemNetIDs[Main.anglerQuest]);
         });
     }
 

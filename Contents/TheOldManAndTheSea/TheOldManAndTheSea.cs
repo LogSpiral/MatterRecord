@@ -33,7 +33,7 @@ namespace MatterRecord.Contents.TheOldManAndTheSea
             // Item.useTime = 8;
             // Item.UseSound = SoundID.Item1;
             Item.CloneDefaults(ItemID.WoodFishingPole);
-            Item.value = Item.buyPrice(2);
+            Item.value = Item.sellPrice(0,5);
             Item.rare = ItemRarityID.Yellow;
             Item.fishingPole = 75; // Sets the poles fishing power
             Item.shootSpeed = 12f; // Sets the speed in which the bobbers are launched. Wooden Fishing Pole is 9f and Golden Fishing Rod is 17f.

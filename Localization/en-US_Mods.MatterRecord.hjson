@@ -177,7 +177,7 @@ Items: {
 			激活时，护士治疗费用减少20%
 			“呃......你可以转过身去吗？抱歉，梦中你的伤势有点惨烈，我得稍微缓缓”
 			'''
-		TravelingMerchant:
+		TravellingMerchant:
 			'''
 			旅行商人之梦
 			激活时，旅行商人每天都会到来
@@ -249,6 +249,16 @@ Items: {
 		DisplayName: Taiji no Yume
 		Tooltip: ""
 	}
+
+	CantSeword: {
+		DisplayName: CantSeword
+		Tooltip: Real Void!
+	}
+
+	ProtagonistAura: {
+		DisplayName: Protagonist Aura
+		Tooltip: ""
+	}
 }
 
 Buffs: {
@@ -269,6 +279,7 @@ Projectiles: {
 	ZenithBoulderProjectile.DisplayName: Zenith Boulder Projectile
 	DonQuijoteDeLaManchaProj.DisplayName: Don Quijote De La Mancha Proj
 	WindMill.DisplayName: Wind Mill
+	CantSewordProj.DisplayName: Cant Seword Proj
 }
 
 Tiles: {

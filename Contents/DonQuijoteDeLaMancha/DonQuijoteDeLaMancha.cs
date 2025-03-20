@@ -46,7 +46,7 @@ namespace MatterRecord.Contents.DonQuijoteDeLaMancha
             Item.useTime = 60;
             Item.useAnimation = 60;
             Item.knockBack = 10f;
-            Item.value = Item.buyPrice(2);
+            Item.value = Item.sellPrice(0,2);
             Item.useTurn = true;
             Item.noUseGraphic = false;
             Item.noMelee = false;
@@ -526,6 +526,11 @@ namespace MatterRecord.Contents.DonQuijoteDeLaMancha
                 damage *= (1 + 0.5f * MathF.Log((Player.Center - startPoint).Length() / 16f + 1));//
             }
             base.ModifyWeaponDamage(item, ref damage);
+        }
+        public override void UpdateDead()
+        {
+            Dashing = false;
+            base.UpdateDead();
         }
         public override void Load()
         {

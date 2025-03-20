@@ -2,6 +2,7 @@ global using Terraria;
 global using Terraria.ID;
 global using Terraria.IO;
 global using Terraria.ModLoader;
+using MatterRecord.Contents.CantSeword;
 using MatterRecord.Contents.DonQuijoteDeLaMancha;
 using MatterRecord.Contents.EternalWine;
 using MatterRecord.Contents.Faust;
@@ -17,6 +18,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Terraria.GameContent.ItemDropRules;
 using Terraria.ModLoader.Config;
 using Terraria.WorldBuilding;
 
@@ -153,22 +155,25 @@ namespace MatterRecord
     }
 
 
-    public class MerchantModify : GlobalNPC 
+    public class ContentsLoots : GlobalNPC 
     {
-        public override void ModifyShop(NPCShop shop)
+        public override void ModifyNPCLoot(NPC npc, NPCLoot npcLoot)
         {
-            if (shop.NpcType == NPCID.Merchant) 
+            int itemtype = npc.type switch
             {
-                shop.Add<Faust>();
-                shop.Add<TheAdventureofSherlockHolmes>();
-                shop.Add<TheOldManAndTheSea>();
-                shop.Add<DonQuijoteDeLaMancha>();
-            }
-            if (shop.NpcType == NPCID.BestiaryGirl) 
-            {
-                shop.Add<TheoryofJustice>();
-            }
-            base.ModifyShop(shop);
+                NPCID.KingSlime => ModContent.ItemType<TheAdventureofSherlockHolmes>(),
+                NPCID.DukeFishron => ModContent.ItemType<TheOldManAndTheSea>(),
+                NPCID.Plantera => ModContent.ItemType<TheoryOfFreedom>(),
+                NPCID.EyeofCthulhu => ModContent.ItemType<DonQuijoteDeLaMancha>(),
+                NPCID.DD2DarkMageT1 or NPCID.DD2DarkMageT3 => ModContent.ItemType<TheoryofJustice>(),
+                NPCID.BrainofCthulhu => ModContent.ItemType<Faust>(),
+                _ => -1
+            };
+            if (itemtype != -1)
+                npcLoot.Add(ItemDropRule.Common(itemtype));
+
+            
+            base.ModifyNPCLoot(npc, npcLoot);
         }
     }
 
