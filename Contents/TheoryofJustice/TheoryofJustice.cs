@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Terraria.GameContent.Bestiary;
+using Terraria.Localization;
 
 namespace MatterRecord.Contents.TheoryofJustice
 {
@@ -30,7 +31,7 @@ namespace MatterRecord.Contents.TheoryofJustice
         {
             BestiaryUnlockProgressReport bestiaryProgressReport = Main.GetBestiaryProgressReport();
             float offsetEndurance = (1 - bestiaryProgressReport.CompletionPercent) * .3f;
-            tooltips.Add(new TooltipLine(Mod, "JusticeEndurance", $"现在提供减伤{offsetEndurance * 100:0.00}%"));
+            tooltips.Add(new TooltipLine(Mod, "JusticeEndurance",this.GetLocalizedValue("Endurance")+$"{offsetEndurance * 100:0.00}%"));
             base.ModifyTooltips(tooltips);
         }
     }

@@ -1,258 +1,383 @@
 MeleeAction: {
-	DonQuijoteDeLaManchaDash.DisplayName: DonQuijoteDeLaManchaDash
-	DonQuijoteDeLaManchaStab.DisplayName: DonQuijoteDeLaManchaStab
+	DonQuijoteDeLaManchaDash.DisplayName: Don Quijote Dash
+	DonQuijoteDeLaManchaStab.DisplayName: Don Quijote Stab
 }
 
 Condition: {
-	DonQuijoteDeLaManchaDashCoolDownFinished: DonQuijoteDeLaManchDashCoolDownFinished
-	DonQuijoteDeLaManchaStabing: 堂吉诃德-突刺状态
+	DonQuijoteDeLaManchaDashCoolDownFinished: Don Quijote Dash Cooldown Finished
+	DonQuijoteDeLaManchaStabing: Don Quijote Stab State
 }
 
 Items: {
 	EternalWine: {
-		RestoreLifeText: Mods.MatterRecord.Items.EternalWine.RestoreLifeText
+		RestoreLifeText: Restore Life
 		DisplayName: Eternal Wine
-		Tooltip: ""
+		Tooltip:
+			'''
+			"A sublime yet corrupting nectar, akin to divine ambrosia."
+			Borrows life: 75 (pre-Hardmode), 125 (Hardmode), 175 (post-Moon Lord)
+			Grants brief invincibility (0.5s / 1.0s / 1.5s)
+			After consumption, natural life regeneration repays the borrowed life
+
+			Can be used via Quick Heal (prioritizes healing potions)
+			Can be activated via Quick Buff even at full health, triggering the borrowing effect
+			'''
 	}
 
 	TortoiseShell: {
-		DisplayName: Tortoise Shell
-		Tooltip: ""
+		DisplayName: Giant Tortoise Shell
+		Tooltip:
+			'''
+			"My friend, never mock a retreating tortoise."
+			Retract into the shell and charge for up to 3s before launching
+
+			Damage scales with speed and launch angle
+			Higher angles yield greater speed and damage
+
+			Elastic collisions with targets
+			Knockback depends on relative size (volume = mass)
+			Large targets rebound you
+			Medium targets partially rebound both
+			Small targets are sent flying without affecting your speed
+			Equal mass results in velocity exchange
+			'''
 	}
 
 	TheoryOfFreedom: {
-		DisplayName: Theory Of Freedom
-		Tooltip: ""
+		DisplayName: Theory of Freedom
+		Tooltip:
+			'''
+			"To understand shackles is better than adorning them with flowers."
+			All hooks can latch onto mid-air
+			Costs 1% HP per grapple use
+			Grappling mid-air no longer restores flight time
+			'''
 	}
 
 	TheAdventureofSherlockHolmes: {
-		DisplayName: The Adventureof Sherlock Holmes
-		Tooltip: ""
+		DisplayName: The Adventures of Sherlock Holmes
+		Tooltip:
+			'''
+			Right-click the world map while holding to consult a 7x7 area for 10 Silver
+			"Elementary deductions, Dr. Watson."
+			'''
 	}
 
 	Faust: {
+		MoneySpent: You have spent these Money with demons:
 		DisplayName: Faust
-		Tooltip: ""
+		Tooltip:
+			'''
+			"I signed the pact for transcendent power, but who will save my soul?"
+			Right-click in inventory to activate/deactivate
+			Activate to duplicate an item at 20x its sell value
+			Lose 0.01 luck per Platinum spent
+			'''
 	}
 
 	LittlePrince: {
-		DisplayName: Little Prince
-		Tooltip: ""
+		DisplayName: The Little Prince
+		Tooltip:
+			'''
+			"It is like shedding old bark; there is nothing sad about old bark."
+			No tombstones on death
+			Immune to Mana Sickness
+			No coin loss on death
+			'''
 	}
 
 	TheOldManAndTheSea: {
-		DisplayName: The Old Man And The Sea
-		Tooltip: ""
+		DisplayName: The Old Man and the Sea
+		Tooltip:
+			'''
+			"At dawn, the old man leaned against the wood for warmth. He vowed to endure as long as the fish."
+			Greatly increases enemy spawn rate while held
+			Allows lava fishing
+			'''
 	}
 
 	ZenithBoulder: {
 		DisplayName: Zenith Boulder
-		Tooltip: ""
+		Tooltip: Celestial Orb, kid!
 	}
 
 	DonQuijoteDeLaMancha: {
-		DisplayName: Don Quijote De La Mancha
-		Tooltip: ""
+		InheritedFrom: The current property inherites from
+		SheepDamage: +500% damage to the sheep army
+		FindItemHint: Please [c/FF0000:Right click in Inventory] to activate it and then [c/FF0000:Right click another melee weapon]to get it's property.
+		DisplayName: Don Quijote
+		Tooltip:
+			'''
+			"Don Quijote said to Sancho: 'Behold, giants approach! I shall vanquish them in righteous combat!'"
+			Right-click to summon a windmill and charge toward it, granting immunity to the next hit
+			Charge damage scales with distance (guaranteed crit)
+			Post-charge, attacks become stabs (reduces charge cooldown)
+			Right-click to cancel
+			Taking damage during charge extends cooldown
+			Enemies prioritize targeting you while held
+			'''
 	}
 
 	EtherChest: {
 		DisplayName: Ether Chest
-		Tooltip: ""
+		Tooltip: Volume equals a dodecahedron with 2-block edges
 	}
 
 	EmeraldTablet: {
 		DisplayName: Emerald Tablet
-		Tooltip: ""
+		Tooltip:
+			'''
+			"As above, so below. Thus is the miracle of the One."
+			50% chance to not consume materials when crafting potions
+			Carry it in your inventory
+			'''
 	}
 
 	TheoryofJustice: {
-		DisplayName: Theoryof Justice
-		Tooltip: ""
+		Endurance: Now reduce damage by
+		DisplayName: Theory of Justice
+		Tooltip:
+			'''
+			"Ignorance is justice."
+			Grants damage reduction based on undiscovered Bestiary entries
+			Up to 30% reduction
+			'''
 	}
 
 	TheInterpretationOfDreams: {
-		DisplayName: The Interpretation Of Dreams
-		Tooltip: ""
-		Unlock: ""
-		Hint: ""
+		DisplayName: The Interpretation of Dreams
+		Tooltip:
+			'''
+			"Dreams are the royal road to the unconscious."
+			Use on NPCs to collect dreams (once daily). Right-click to open Dream Vault
+			(50% Broken Dream, 20% Sweet Dream, 20% Nightmare, 10% Unique Dream)
+			Unique Dreams are non-repeating per player
+			'''
+		Unlock: (Locked)
+		Hint: (Left-click to activate/deactivate)
 		SkeletonMerchant:
 			'''
-			骷髅商人之梦
-			激活时，骷髅商人售卖所有商品
-			“我梦到大家都住到地下了，所以今天是骷髅大放送”
+			Skeleton Merchant's Dream
+			Activates: Skeleton Merchant sells all items
+			"I dreamed we all lived underground. Today's a skeleton clearance sale!"
 			'''
 		Princess:
 			'''
-			公主之梦
-			激活时，NPC幸福感增加，物品售价修正为原来的90%(不影响晶塔)
-			“在梦里，我的臣民们都很幸福，你也一样！”
+			Princess's Dream
+			Activates: NPC happiness ↑, prices reduced to 90% (excludes Pylons)
+			"In my dream, my subjects were happy. You shall be too!"
 			'''
 		SantaClaus:
 			'''
-			圣诞老人之梦
-			激活时，游戏时间视为圣诞节
-			“哦……今天是圣诞节，你想坐雪橇吗？”
+			Santa Claus's Dream
+			Activates: Game time becomes Christmas
+			"Ho-ho... It's Christmas! Fancy a sleigh ride?"
 			'''
 		GoblinTinkerer:
 			'''
-			哥布林工匠之梦
-			激活时，越高级的前缀越有可能被重铸到
-			“谢天谢地，我教会了他们用指南针，虽然是在梦里”
+			Goblin Tinkerer's Dream
+			Activates: Higher-tier prefixes become more likely
+			"Praise the compass! Well, in my dream..."
 			'''
 		Merchant:
 			'''
-			商人之梦
-			激活时，出售时的价格系数提升为30%
-			“我梦见镇子里装上了很多路灯……是的，路灯……咳咳”
+			Merchant's Dream
+			Activates: Sell price multiplier ↑ to 30%
+			"I dreamed of streetlights... Yes, streetlights... Ahem."
 			'''
 		Mechanic:
 			'''
-			机械师之梦
-			激活时，使用电线不消耗
-			“我看到了一个机械王国，去把它变为现实吧”
+			Mechanic's Dream
+			Activates: Wires cost nothing
+			"I saw a mechanical kingdom. Make it real!"
 			'''
 		Demolitionist:
 			'''
-			爆破专家之梦
-			激活时，玩家引起的爆炸不会使自己受伤
-			“我净化了整个世界！等等，那是梦？”
+			Demolitionist's Dream
+			Activates: Player explosions won't harm you
+			"I cleansed the world! Wait... was that a dream?"
 			'''
 		TaxCollector:
 			'''
-			税收官之梦
-			激活时，对城镇npc造成伤害使他们爆金币(臭虫剑或者臭蛋)(对税收官除外)
-			“你知道的，哪怕是在梦里，他们也不愿意缴税”
+			Tax Collector's Dream
+			Activates: Attacking town NPCs makes them drop coins (excludes Tax Collector)
+			"Even in dreams, they evade taxes!"
 			'''
 		Steampunker:
 			'''
-			蒸汽朋克之梦
-			激活时，飞行时间+2秒，火箭背包额外+5秒
-			“在我梦里你是一名出色的空盗！”
+			Steampunker's Dream
+			Activates: Flight time +2s, Rocket Boots +5s
+			"In my dream, you were a sky pirate extraordinaire!"
 			'''
 		Dryad:
 			'''
-			树妖之梦
-			激活时，获得永久的树妖祝福buff
-			“为了泰拉瑞亚的净化，也许我需要给你一点帮助，我的梦？在梦里你的内脏变成了外脏”
+			Dryad's Dream
+			Activates: Permanent Dryad's Blessing buff
+			"For Terraria's purification! Though in my dream, your organs... became external."
 			'''
 		WitchDoctor:
 			'''
-			巫医之梦
-			激活时，召唤栏+1
-			“森中的精灵在梦中告诉我，它们很喜欢你”
+			Witch Doctor's Dream
+			Activates: +1 minion slot
+			"The forest spirits whispered their fondness for you."
 			'''
 		Painter:
 			'''
-			画家之梦
-			激活时，使用油漆不消耗
-			“你很有艺术细胞，在梦里我和你办了一次画展！”
+			Painter's Dream
+			Activates: Paint costs nothing
+			"You're an artist! We even held an exhibition in my dream."
 			'''
 		Truffle:
 			'''
-			松露人之梦
-			激活时，仇恨值-100，但你无法食用蘑菇回血
-			“我又梦到有人在啃我的脚，更糟糕的是，醒来后我发现这是真的”
+			Truffle's Dream
+			Activates: Aggro -100, but mushrooms can't heal
+			"Someone nibbled my foot... and it wasn't a dream!"
 			'''
 		PartyGirl:
 			'''
-			派对女孩之梦
-			激活时，npc死亡后刷新加快
-			“世界上最棒的派对！是梦？那我会办一场更大的派对！”
+			Party Girl's Dream
+			Activates: Faster NPC respawn after death
+			"The ultimate party! Wait—it was a dream? I'll make it real!"
 			'''
 		ArmsDealer:
 			'''
-			军火商之梦
-			激活时，15%概率不消耗弹药
-			“太荒谬了，我的子弹居然打光了”
+			Arms Dealer's Dream
+			Activates: 15% chance to not consume ammo
+			"Out of bullets? Preposterous!"
 			'''
 		Angler:
 			'''
-			渔夫之梦
-			激活时，渔夫任务交付时获得两次奖励
-			“你是我的头号仆人，连梦里都在为我捕鱼，哈哈”
+			Angler's Dream
+			Activates: Double rewards for fishing quests
+			"Even in dreams, you're my top servant. Keep fishing!"
 			'''
 		Nurse:
 			'''
-			护士之梦
-			激活时，护士治疗费用减少20%
-			“呃......你可以转过身去吗？抱歉，梦中你的伤势有点惨烈，我得稍微缓缓”
+			Nurse's Dream
+			Activates: Nurse healing cost -20%
+			"Please... turn around. Your injuries in the dream were... graphic."
 			'''
 		TravellingMerchant:
 			'''
-			旅行商人之梦
-			激活时，旅行商人每天都会到来
-			“我梦到货物又滞销了，带着这些东西旅行是有点累赘了，所以只能恳请你来多消费消费了”
+			Travelling Merchant's Dream
+			Activates: Travelling Merchant arrives daily
+			"My nightmare of unsold goods compels me to beg for your patronage."
 			'''
 	}
 
 	ClothierDream: {
-		DisplayName: Clothier Dream
-		Tooltip: ""
+		DisplayName: Clothier's Dream
+		Tooltip:
+			'''
+			Grants a Golden Key (consumable)
+			"Perhaps I should've opened a few chests? I just dreamed of them..."
+			'''
 	}
 
 	CosmosScissors: {
 		DisplayName: Cosmos Scissors
-		Tooltip: ""
+		Tooltip: To sever the fabric of space... Not really.
 	}
 
 	StylistDream: {
-		DisplayName: Stylist Dream
-		Tooltip: ""
+		DisplayName: Stylist's Dream
+		Tooltip:
+			'''
+			Grants Cosmos Scissors
+			"In my dream, scissors could cut more than hair!"
+			'''
 	}
 
 	DyeTraderDream: {
-		DisplayName: Dye Trader Dream
-		Tooltip: ""
+		DisplayName: Dye Trader's Dream
+		Tooltip:
+			'''
+			Grants 3 random dyes
+			"Try these new hues, darling! Fresh from my inspiration."
+			'''
 	}
 
 	GolferDream: {
-		DisplayName: Golfer Dream
-		Tooltip: ""
+		DisplayName: Golfer's Dream
+		Tooltip:
+			'''
+			Summons/Cancels a Sandstorm
+			"A sand trap? A nightmare for golf and me alike!"
+			'''
 	}
 
 	GuideDream: {
-		DisplayName: Guide Dream
-		Tooltip: ""
+		DisplayName: Guide's Dream
+		Tooltip:
+			'''
+			Grants one of each class emblem
+			"Restful sleep... You haven't been to the Underworld, right?... Right?"
+			'''
 	}
 
 	PirateDream: {
-		DisplayName: Pirate Dream
-		Tooltip: ""
+		DisplayName: Pirate's Dream
+		Tooltip:
+			'''
+			Summons/Cancels a Rainstorm
+			"Blimey! Storm's brewin', matey! Hoist the sails!"
+			'''
 	}
 
 	TavernkeepDream: {
-		DisplayName: Tavernkeep Dream
-		Tooltip: ""
+		DisplayName: Tavernkeep's Dream
+		Tooltip:
+			'''
+			Grants 2/4/8 Defender Medals based on current wave difficulty
+			"Those goblins aren't here, are they?"
+			'''
 	}
 
 	WizardDream: {
-		DisplayName: Wizard Dream
-		Tooltip: ""
+		DisplayName: Wizard's Dream
+		Tooltip:
+			'''
+			Permanently reduces mana cost by 1%
+			"New spells from my dreams! Payment required, of course."
+			'''
 	}
 
 	ZoologiseDream: {
-		DisplayName: Zoologise Dream
-		Tooltip: ""
+		DisplayName: Zoologist's Dream
+		Tooltip:
+			'''
+			Summons a peculiar Town Slime (unimplemented)
+			"I dreamed of a new slime species... Wait, that wasn't a dream?"
+			'''
 	}
 
 	BrokenDream: {
 		DisplayName: Broken Dream
-		Tooltip: ""
+		Tooltip: Grants a random buff
 	}
 
 	CybrogDream: {
-		DisplayName: Cybrog Dream
-		Tooltip: ""
+		DisplayName: Cyborg's Dream
+		Tooltip:
+			'''
+			Summons an Electric Sheep
+			"I lack sleep simulations. Thus, I do not dream of electric sheep."
+			'''
 	}
 
 	TaijiNoYume: {
-		DisplayName: Taiji no Yume
-		Tooltip: ""
+		DisplayName: Fetus's Dream
+		Tooltip:
+			'''
+			"O fetus, why do you stir?
+			O fetus, why do you stir?
+			Is it the mother's heart you fear?"
+			'''
 	}
 
 	CantSeword: {
 		DisplayName: CantSeword
-		Tooltip: Real Void!
+		Tooltip: The True Void Edge!
 	}
 
 	ProtagonistAura: {
@@ -263,28 +388,28 @@ Items: {
 
 Buffs: {
 	LifeRegenStagnant: {
-		DisplayName: Life Regen Stagnant
-		Description: Mods.MatterRecord.Buffs.LifeRegenStagnant.Description
+		DisplayName: Life Regeneration Stagnation
+		Description: Debts must be repaid
 	}
 
 	Eternal: {
 		DisplayName: Eternal
-		Description: Mods.MatterRecord.Buffs.Eternal.Description
+		Description: Ironically, this is but fleeting invincibility
 	}
 }
 
 Projectiles: {
-	DashingTortoiseShell.DisplayName: Dashing Tortoise Shell
-	TheOldManAndTheSeaBobber.DisplayName: The Old Man And The Sea Bobber
-	ZenithBoulderProjectile.DisplayName: Zenith Boulder Projectile
-	DonQuijoteDeLaManchaProj.DisplayName: Don Quijote De La Mancha Proj
-	WindMill.DisplayName: Wind Mill
-	CantSewordProj.DisplayName: Cant Seword Proj
+	DashingTortoiseShell.DisplayName: Spinning Giant Tortoise Shell!!
+	TheOldManAndTheSeaBobber.DisplayName: The Old Man and the Sea Bobber
+	ZenithBoulderProjectile.DisplayName: Zenith Boulder
+	DonQuijoteDeLaManchaProj.DisplayName: Don Quijote
+	WindMill.DisplayName: Windmill
+	CantSewordProj.DisplayName: Unseen Blade Projectile
 }
 
 Tiles: {
-	LittlePrinceRose.MapEntry: Little Prince Rose
-	EtherChest_Tile.MapEntry: EtherChest
+	LittlePrinceRose.MapEntry: The Little Prince's Rose
+	EtherChest_Tile.MapEntry: Ether Chest
 }
 
 Configs: {
@@ -292,8 +417,8 @@ Configs: {
 		DisplayName: Matter Record Config
 
 		DonQuijoteSlashActive: {
-			Label: Don Quijote Slash Active
-			Tooltip: ""
+			Label: Don Quijote Left-Click Slash Mode
+			Tooltip: Enables melee projectile mode (disabled by default)
 		}
 	}
 }

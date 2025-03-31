@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent;
+using Terraria.Localization;
 using Terraria.ModLoader.Default;
 using Terraria.ModLoader.IO;
 using Terraria.UI;
@@ -72,7 +73,7 @@ namespace MatterRecord.Contents.Faust
         }
         public override void ModifyTooltips(List<TooltipLine> tooltips)
         {
-            tooltips.Add(new(Mod, "ConsumedMoney", $"你已经在恶魔这里消费了{Main.ValueToCoins((long)Main.LocalPlayer.GetModPlayer<FaustPlayer>().ConsumedMoney)}") { OverrideColor = Color.Lerp(Color.Gray,Color.Red,0.5f + 0.5f * MathF.Cos(Main.GlobalTimeWrappedHourly))});
+            tooltips.Add(new(Mod, "ConsumedMoney", this.GetLocalizedValue("MoneySpent")+$"{Main.ValueToCoins((long)Main.LocalPlayer.GetModPlayer<FaustPlayer>().ConsumedMoney)}") { OverrideColor = Color.Lerp(Color.Gray,Color.Red,0.5f + 0.5f * MathF.Cos(Main.GlobalTimeWrappedHourly))});
             base.ModifyTooltips(tooltips);
         }
     }

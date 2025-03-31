@@ -66,6 +66,7 @@ Items: {
 	}
 
 	Faust: {
+		MoneySpent: 你已经在恶魔这里消费了
 		DisplayName: 浮士德
 		Tooltip:
 			'''
@@ -105,6 +106,9 @@ Items: {
 	}
 
 	DonQuijoteDeLaMancha: {
+		InheritedFrom: 目前属性继承自武器
+		SheepDamage: +500%对绵羊大军伤害
+		FindItemHint: 请[c/FF0000:背包内右键]激活后再[c/FF0000:右键某个近战武器]以继承属性
 		DisplayName: 堂吉诃德
 		Tooltip:
 			'''
@@ -138,6 +142,7 @@ Items: {
 	}
 
 	TheoryofJustice: {
+		Endurance: 现在提供减伤
 		DisplayName: 正义论
 		Tooltip:
 			'''
@@ -408,7 +413,7 @@ Projectiles: {
 	ZenithBoulderProjectile.DisplayName: 天顶巨石
 	DonQuijoteDeLaManchaProj.DisplayName: 堂吉诃德
 	WindMill.DisplayName: 风车
-	// CantSewordProj.DisplayName: Cant Seword Proj
+	// CantSewordProj.DisplayName: Unseen Blade Projectile
 }
 
 Tiles: {

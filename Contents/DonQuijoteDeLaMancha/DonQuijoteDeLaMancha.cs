@@ -23,6 +23,7 @@ using ReLogic.Content;
 using Terraria.UI.Chat;
 using Terraria.ModLoader;
 using Terraria;
+using Terraria.Localization;
 
 namespace MatterRecord.Contents.DonQuijoteDeLaMancha
 {
@@ -46,7 +47,7 @@ namespace MatterRecord.Contents.DonQuijoteDeLaMancha
             Item.useTime = 60;
             Item.useAnimation = 60;
             Item.knockBack = 10f;
-            Item.value = Item.sellPrice(0,2);
+            Item.value = Item.sellPrice(0, 2);
             Item.useTurn = true;
             Item.noUseGraphic = false;
             Item.noMelee = false;
@@ -119,7 +120,7 @@ namespace MatterRecord.Contents.DonQuijoteDeLaMancha
             var definition = mplr.itemDefinition;
             var item = new Item(definition.Type);
             if (PreFixStat?.Invoke(Item, Item.prefix, out float dmg, out _, out _, out _, out _, out _, out _) == true)
-                damage.Base = (int)((Math.Clamp(item.damage,1,int.MaxValue) - 21) * dmg);
+                damage.Base = (int)((Math.Clamp(item.damage, 1, int.MaxValue) - 21) * dmg);
             else
                 damage.Base = Math.Clamp(item.damage, 1, int.MaxValue) - 21;
             base.ModifyWeaponDamage(player, ref damage);
@@ -221,11 +222,17 @@ namespace MatterRecord.Contents.DonQuijoteDeLaMancha
         }
         public override void ModifyTooltips(List<TooltipLine> tooltips)
         {
+            var index = tooltips.FindIndex(0, line => line.Name.StartsWith("Prefix")); 
+            if (index == -1)
+                index = tooltips.FindIndex(0, line => line.Name == "JourneyResearch");
             var mplr = Main.LocalPlayer.GetModPlayer<DonQuijoteDeLaManchaPlayer>();
             if (mplr.itemDefinition.Type > 0)
             {
-
-                tooltips.Insert(16, new TooltipLine(Mod, "targetItem", $"目前属性继承自武器{mplr.itemDefinition.DisplayName}[i:{mplr.itemDefinition.Type}]"));
+                var line = new TooltipLine(Mod, "targetItem", this.GetLocalizedValue("InheritedFrom") +$" {mplr.itemDefinition.DisplayName}[i:{mplr.itemDefinition.Type}]");
+                if (index == -1)
+                    tooltips.Add(line);
+                else
+                    tooltips.Insert(index, line);
                 foreach (var tips in tooltips)
                 {
                     if (tips.Name == "Speed")
@@ -247,14 +254,21 @@ namespace MatterRecord.Contents.DonQuijoteDeLaMancha
                     }
                 }
             }
-            else 
+            else
             {
-
-                tooltips.Insert(16, new TooltipLine(Mod, "FindItemPlz", $"请[c/FF0000:背包内右键]激活后再[c/FF0000:右键某个近战武器]以继承属性"));
+                var line = new TooltipLine(Mod, "FindItemPlz", this.GetLocalizedValue("FinItemHint"));
+                if (index==-1)
+                tooltips.Add(line);
+                else
+                    tooltips.Insert(index, line);
             }
             float k = Main.mouseTextColor / 255f;
             k = .85f + .15f * k;
-            tooltips.Insert(17, new TooltipLine(Mod, "Sheep", $"+500%对绵羊大军伤害") { OverrideColor = new Color(120, 190,120, 255) * k });
+            var dmgTip = new TooltipLine(Mod, "Sheep", this.GetLocalizedValue("SheepDamage")) { OverrideColor = new Color(120, 190, 120, 255) * k };
+            if (index == -1)
+                tooltips.Add(dmgTip);
+            else
+                tooltips.Insert(index + 1, dmgTip);
 
             base.ModifyTooltips(tooltips);
         }
@@ -279,7 +293,7 @@ namespace MatterRecord.Contents.DonQuijoteDeLaMancha
         public override StandardInfo StandardInfo => base.StandardInfo with
         {
             standardColor = Color.DarkRed * (player.GetModPlayer<DonQuijoteDeLaManchaPlayer>().StabTimeLeft > 0 ? 0.3f : 0.1f),
-            standardTimer = player.controlUseItem && !player.controlUseTile ? Math.Clamp(player.itemTimeMax,1,30) : 10,
+            standardTimer = player.controlUseItem && !player.controlUseTile ? Math.Clamp(player.itemTimeMax, 1, 30) : 10,
             vertexStandard = Main.netMode == NetmodeID.Server ? default : new VertexDrawInfoStandardInfo() with
             {
                 active = true,
@@ -309,7 +323,7 @@ namespace MatterRecord.Contents.DonQuijoteDeLaMancha
                     var maxT = 60;
                     if (mplr.itemDefinition != null && mplr.itemDefinition.Type > 0)
                         maxT = new Item(mplr.itemDefinition.Type).useAnimation;
-                    mplr.StabTimeLeft = Math.Max((maxT < 30 ? 6 * maxT + 300 : 12 * maxT + 120) * 3 / 4,300);
+                    mplr.StabTimeLeft = Math.Max((maxT < 30 ? 6 * maxT + 300 : 12 * maxT + 120) * 3 / 4, 300);
                     mplr.NextHitImmune = false;
                     mplr.Dashing = false;
                 }
