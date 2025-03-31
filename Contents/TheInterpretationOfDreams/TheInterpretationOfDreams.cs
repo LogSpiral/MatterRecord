@@ -8,6 +8,12 @@ namespace MatterRecord.Contents.TheInterpretationOfDreams;
 
 public class TheInterpretationOfDreams : ModItem
 {
+    public override void SetStaticDefaults()
+    {
+        ItemID.Sets.ShimmerTransformToItem[Type] = ItemID.BugNet;
+        ItemID.Sets.ShimmerTransformToItem[ItemID.BugNet] = Type;
+        base.SetStaticDefaults();
+    }
     public override void SetDefaults()
     {
         Item.useStyle = ItemUseStyleID.Swing;
@@ -204,6 +210,13 @@ public class TheInterpretationOfDreams : ModItem
                 }
             }
         return base.UseItem(player);
+    }
+    public override void UseStyle(Player player, Rectangle heldItemFrame)
+    {
+        player.itemRotation += MathHelper.PiOver4 * player.direction;
+        player.itemLocation = player.Center - player.itemRotation.ToRotationVector2() * 12 * player.direction;
+        //player.itemLocation += new Vector2(-12 * player.direction, 8);
+        base.UseStyle(player, heldItemFrame);
     }
     public override bool AltFunctionUse(Player player)
     {

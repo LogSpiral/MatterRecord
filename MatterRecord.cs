@@ -12,15 +12,17 @@ using MatterRecord.Contents.TheoryOfFreedom;
 using MatterRecord.Contents.TheoryofJustice;
 using MatterRecord.Contents.TortoiseShell;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Graphics;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Terraria.GameContent;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.ModLoader.Config;
-using Terraria.WorldBuilding;
 
 namespace MatterRecord
 {
@@ -164,7 +166,7 @@ namespace MatterRecord
                 NPCID.KingSlime => ModContent.ItemType<TheAdventureofSherlockHolmes>(),
                 NPCID.DukeFishron => ModContent.ItemType<TheOldManAndTheSea>(),
                 NPCID.Plantera => ModContent.ItemType<TheoryOfFreedom>(),
-                NPCID.EyeofCthulhu => ModContent.ItemType<DonQuijoteDeLaMancha>(),
+                NPCID.EyeofCthulhu=> ModContent.ItemType<DonQuijoteDeLaMancha>(),
                 NPCID.DD2DarkMageT1 or NPCID.DD2DarkMageT3 => ModContent.ItemType<TheoryofJustice>(),
                 NPCID.BrainofCthulhu => ModContent.ItemType<Faust>(),
                 _ => -1
@@ -172,7 +174,8 @@ namespace MatterRecord
             if (itemtype != -1)
                 npcLoot.Add(ItemDropRule.Common(itemtype));
 
-            
+            if (npc.type is NPCID.EaterofWorldsHead or NPCID.EaterofWorldsBody or NPCID.EaterofWorldsTail)
+                npcLoot.Add(ItemDropRule.ByCondition(new Conditions.LegacyHack_IsABoss(), ModContent.ItemType<Faust>()));
             base.ModifyNPCLoot(npc, npcLoot);
         }
     }
