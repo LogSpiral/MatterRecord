@@ -430,4 +430,38 @@ Configs: {
 			Tooltip: 开启后使用手持弹幕模式，默认关闭
 		}
 	}
+
+	DonQuijoteDeLaManchaDash: {
+		// OnEndAttackDelegate.Label: OnEndAttackDelegate
+		// OnStartAttackDelegate.Label: OnStartAttackDelegate
+		// OnAttackDelegate.Label: OnAttackDelegate
+		// OnChargeDelegate.Label: OnChargeDelegate
+		// OnActiveDelegate.Label: OnActiveDelegate
+		// OnDeactiveDelegate.Label: OnDeactiveDelegate
+		// OnEndSingleDelegate.Label: OnEndSingleDelegate
+		// OnStartSingleDelegate.Label: OnStartSingleDelegate
+		// OnHitTargetDelegate.Label: OnHitTargetDelegate
+		// ModifyData.Label: ModifyData
+		// Cycle.Label: Cycle
+	}
+
+	DonQuijoteDeLaManchaStab: {
+		// rangeOffsetMin.Label: rangeOffsetMin
+		// rangeOffsetMax.Label: rangeOffsetMax
+		// givenCycle.Label: givenCycle
+		// minKValue.Label: minKValue
+		// KValueRange.Label: KValueRange
+		// visualCentered.Label: visualCentered
+		// randAngleRange.Label: randAngleRange
+		// OnEndAttackDelegate.Label: OnEndAttackDelegate
+		// OnStartAttackDelegate.Label: OnStartAttackDelegate
+		// OnAttackDelegate.Label: OnAttackDelegate
+		// OnChargeDelegate.Label: OnChargeDelegate
+		// OnActiveDelegate.Label: OnActiveDelegate
+		// OnDeactiveDelegate.Label: OnDeactiveDelegate
+		// OnEndSingleDelegate.Label: OnEndSingleDelegate
+		// OnStartSingleDelegate.Label: OnStartSingleDelegate
+		// OnHitTargetDelegate.Label: OnHitTargetDelegate
+		// ModifyData.Label: ModifyData
+	}
 }

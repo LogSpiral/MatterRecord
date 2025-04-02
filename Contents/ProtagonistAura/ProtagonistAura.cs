@@ -139,6 +139,8 @@ namespace MatterRecord.Contents.ProtagonistAura
         public override Position GetDefaultPosition() => new AfterParent(PlayerDrawLayers.Head);
         protected override void Draw(ref PlayerDrawSet drawInfo)
         {
+            if (drawInfo.colorArmorHead == default) return;
+            if (drawInfo.drawPlayer.dead) return;
             var plr = drawInfo.drawPlayer;
             var mplr = plr.GetModPlayer<ProtagonistAuraPlayer>();
             if (!mplr.HasProtagonistAura) return;
@@ -169,7 +171,7 @@ namespace MatterRecord.Contents.ProtagonistAura
                 center + new Vector2(4 + (plr.direction < 0 ? -8 : 0), -23 + offsetY), new Rectangle(offset * 32, 0, 32, 32), Color.White, 0, new(16), new Vector2(1, 0.6f), plr.direction < 0 ? SpriteEffects.FlipHorizontally : 0, 0));
 
             drawInfo.DrawDataCache.Add(new DrawData(ModContent.Request<Texture2D>("MatterRecord/Contents/ProtagonistAura/Aura").Value,
-    center + new Vector2(4 + (plr.direction < 0 ? -8 : 0), -21 + offsetY), new Rectangle(96, 0, 32, offset == 2 ? 12 : 14), Color.White, 0, new(16), 1, plr.direction < 0 ? SpriteEffects.FlipHorizontally : 0, 0));
+    center + new Vector2(4 + (plr.direction < 0 ? -8 : 0), -21 + offsetY), new Rectangle(96, 0, 32, offset == 2 ? 12 : 14), drawInfo.colorArmorHead, 0, new(16), 1, plr.direction < 0 ? SpriteEffects.FlipHorizontally : 0, 0));
             //Main.spriteBatch.DrawString(FontAssets.MouseText.Value, (plr.bodyFrame.Top / 56).ToString(), center + Vector2.UnitX * 32, Color.White);
             /*switch (mplr.cDye)
             {
