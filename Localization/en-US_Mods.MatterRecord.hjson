@@ -286,6 +286,7 @@ Items: {
 			Grants Cosmos Scissors
 			"In my dream, scissors could cut more than hair!"
 			'''
+		Unlock: Has been cursed by a powerful Jungle creature
 	}
 
 	DyeTraderDream: {
@@ -313,6 +314,7 @@ Items: {
 			Grants one of each class emblem
 			"Restful sleep... You haven't been to the Underworld, right?... Right?"
 			'''
+		Unlock: Has been cursed by the Guide himself
 	}
 
 	PirateDream: {

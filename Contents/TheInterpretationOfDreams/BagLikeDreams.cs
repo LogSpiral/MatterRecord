@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -29,9 +30,27 @@ namespace MatterRecord.Contents.TheInterpretationOfDreams
         }
         public override bool CanRightClick() => true;
     }
-    public class GuideDream() : BagLikeDreams(0, 0, () => [(ItemID.WarriorEmblem,1), (ItemID.SummonerEmblem, 1), (ItemID.SorcererEmblem, 1), (ItemID.RangerEmblem, 1)]);
+    public class GuideDream() : BagLikeDreams(0, 0, () => [(ItemID.WarriorEmblem, 1), (ItemID.SummonerEmblem, 1), (ItemID.SorcererEmblem, 1), (ItemID.RangerEmblem, 1)])
+    {
+        public override bool CanRightClick() => Main.hardMode;
+        public override void ModifyTooltips(List<TooltipLine> tooltips)
+        {
+            if (!Main.hardMode)
+                tooltips.Add(new TooltipLine(Mod, "Unlock", this.GetLocalizedValue("Unlock")) { OverrideColor = Color.Lerp(Color.Gray, Color.DarkGray, Main.mouseTextColor / 255f) });
+            base.ModifyTooltips(tooltips);
+        }
+    }
     public class TavernkeepDream() : BagLikeDreams(0, 0, () => [(ItemID.DefenderMedal, NPC.downedGolemBoss ? 8 : NPC.downedMechBossAny ? 4 : 2)]);
     public class ClothierDream() : BagLikeDreams(ItemID.GoldenKey);
-    public class StylistDream() : BagLikeDreams(ModContent.ItemType<CosmosScissors>());
+    public class StylistDream() : BagLikeDreams(ModContent.ItemType<CosmosScissors>()) 
+    {
+        public override bool CanRightClick() => NPC.downedPlantBoss;
+        public override void ModifyTooltips(List<TooltipLine> tooltips)
+        {
+            if (!NPC.downedPlantBoss)
+                tooltips.Add(new TooltipLine(Mod, "Unlock", this.GetLocalizedValue("Unlock")) { OverrideColor = Color.Lerp(Color.Gray, Color.DarkGray, Main.mouseTextColor / 255f) });
+            base.ModifyTooltips(tooltips);
+        }
+    }
     public class DyeTraderDream() : BagLikeDreams(0, 0, () => [(Main.rand.Next(DreamWorld.availableDyeId), 3)]);
 }
