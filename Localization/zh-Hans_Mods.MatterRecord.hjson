@@ -395,6 +395,19 @@ Items: {
 		DisplayName: 主角光环
 		Tooltip: ""
 	}
+
+	WarAndPeace: {
+		DisplayName: 战争与和平
+		Tooltip:
+			'''
+			根据当前星期获取不同的buff
+			一三五获得战争，提高伤害
+			二四六获得和平，获得减伤
+			"在巴格拉季翁部队里，人们对整个战局毫无所知
+			他们谈论和平，但不相信和平有可能实现；
+			谈论打仗，又不相信战斗在即"
+			'''
+	}
 }
 
 Buffs: {
@@ -406,6 +419,29 @@ Buffs: {
 	Eternal: {
 		DisplayName: 永生
 		Description: 讽刺的是，这只是短暂的无敌
+	}
+
+	Holiday: {
+		DisplayName: 休假！
+		Description: 见鬼，难道你要让两只猫星期日加班？
+	}
+
+	Peace: {
+		DisplayName: 和平
+		Description:
+			'''
+			和平是灵魂的宁静
+			所受伤害降低10%，在此基础上再降低5
+			'''
+	}
+
+	War: {
+		DisplayName: 战争
+		Description:
+			'''
+			战争是心灵的风暴
+			造成伤害增加10%，在此基础上再增加5
+			'''
 	}
 }
 

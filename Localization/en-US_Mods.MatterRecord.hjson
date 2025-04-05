@@ -386,6 +386,19 @@ Items: {
 		DisplayName: Protagonist Aura
 		Tooltip: ""
 	}
+
+	WarAndPeace: {
+		DisplayName: War And Peace
+		Tooltip:
+			'''
+			Buffs are obtained depending on the current week
+			Monday Wednesday Friday to get war, increase damage
+			Tuesday Thursday Saturday was made peace, and injuries were reduced
+			"In Bagration's troops, people don't know anything about the whole situation
+			They talk about peace, but they don't believe that peace is possible;
+			Talking about war, but not believing that war is imminent"
+			'''
+	}
 }
 
 Buffs: {
@@ -397,6 +410,29 @@ Buffs: {
 	Eternal: {
 		DisplayName: Eternal
 		Description: Ironically, this is but fleeting invincibility
+	}
+
+	Holiday: {
+		DisplayName: Holiday!
+		Description: Damn, are you going to make two cats work overtime on Sundays?
+	}
+
+	Peace: {
+		DisplayName: Peace
+		Description:
+			'''
+			Peace is the tranquility of the soul
+			Reduces damage taken by 10%, then by 5
+			'''
+	}
+
+	War: {
+		DisplayName: War
+		Description:
+			'''
+			War is a storm of the heart
+			Damage is increased by 10%, then by 5
+			'''
 	}
 }
 
