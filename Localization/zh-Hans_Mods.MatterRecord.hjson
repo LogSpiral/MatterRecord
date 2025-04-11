@@ -1,6 +1,7 @@
 MeleeAction: {
 	DonQuijoteDeLaManchaDash.DisplayName: 堂吉诃德-冲锋
 	DonQuijoteDeLaManchaStab.DisplayName: 堂吉诃德-突刺
+	// Category.: ""
 }
 
 Condition: {
@@ -423,7 +424,7 @@ Buffs: {
 
 	Holiday: {
 		DisplayName: 休假！
-		Description: 见鬼，难道你要让两只猫星期日加班？
+		Description: 见鬼，难道你要让猫猫星期日加班？
 	}
 
 	Peace: {
@@ -443,6 +444,16 @@ Buffs: {
 			造成伤害增加10%，在此基础上再增加5
 			'''
 	}
+
+	Holiday_Peace: {
+		DisplayName: 休假！
+		Description: 见鬼，难道你要让猫猫星期日加班？
+	}
+
+	Holiday_War: {
+		DisplayName: 休假！
+		Description: 见鬼，难道你要让猫猫星期日加班？
+	}
 }
 
 Projectiles: {
@@ -452,6 +463,8 @@ Projectiles: {
 	DonQuijoteDeLaManchaProj.DisplayName: 堂吉诃德
 	WindMill.DisplayName: 风车
 	// CantSewordProj.DisplayName: Unseen Blade Projectile
+	// PeaceCat.DisplayName: Peace Cat
+	// WarCat.DisplayName: War Cat
 }
 
 Tiles: {

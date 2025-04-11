@@ -97,6 +97,7 @@ public class DreamWorld : ModSystem
     }
     private static double GetWeightFromPrefix(int prefix, Item targetItem)
     {
+        if (Main.gameMenu) return 1;
         if (!Main.LocalPlayer.CheckDreamActive(DreamState.GoblinTinkerer))
             return 1;
         float dmg = 1f;

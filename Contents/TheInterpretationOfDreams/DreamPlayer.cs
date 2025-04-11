@@ -183,6 +183,6 @@ namespace MatterRecord.Contents.TheInterpretationOfDreams
 
     public static class DreamHelper
     {
-        public static bool CheckDreamActive(this Player player, DreamState flag) => player.GetModPlayer<DreamPlayer>().CheckActive(flag);
+        public static bool CheckDreamActive(this Player player, DreamState flag)  =>  player.GetModPlayer<DreamPlayer>().CheckActive(flag);
     }
 }

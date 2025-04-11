@@ -20,6 +20,7 @@ namespace MatterRecord.Contents.ProtagonistAura
             if (Main.netMode == NetmodeID.Server)
                 return;
 
+            // 注册上相应部位的贴图
             EquipLoader.AddEquipTexture(Mod, $"{Texture}_{EquipType.Head}", EquipType.Head, this);
             EquipLoader.AddEquipTexture(Mod, $"{Texture}_{EquipType.Body}", EquipType.Body, this);
             EquipLoader.AddEquipTexture(Mod, $"{Texture}_{EquipType.Legs}", EquipType.Legs, this);
@@ -30,14 +31,15 @@ namespace MatterRecord.Contents.ProtagonistAura
             if (Main.netMode == NetmodeID.Server)
                 return;
 
+            // 初始化一些信息
             int equipSlotHead = EquipLoader.GetEquipSlot(Mod, Name, EquipType.Head);
             int equipSlotBody = EquipLoader.GetEquipSlot(Mod, Name, EquipType.Body);
             int equipSlotLegs = EquipLoader.GetEquipSlot(Mod, Name, EquipType.Legs);
 
-            ArmorIDs.Head.Sets.DrawHead[equipSlotHead] = false;
-            ArmorIDs.Body.Sets.HidesTopSkin[equipSlotBody] = true;
-            ArmorIDs.Body.Sets.HidesArms[equipSlotBody] = true;
-            ArmorIDs.Legs.Sets.HidesBottomSkin[equipSlotLegs] = true;
+            ArmorIDs.Head.Sets.DrawHead[equipSlotHead] = false; // 隐藏原版头部绘制
+            ArmorIDs.Body.Sets.HidesTopSkin[equipSlotBody] = true; // 隐藏上身皮肤绘制
+            ArmorIDs.Body.Sets.HidesArms[equipSlotBody] = true; // 隐藏皮肤手臂
+            ArmorIDs.Legs.Sets.HidesBottomSkin[equipSlotLegs] = true; // 隐藏皮肤
         }
 
         public override void SetStaticDefaults()
@@ -86,7 +88,7 @@ namespace MatterRecord.Contents.ProtagonistAura
             if (armorItem.ModItem is ProtagonistAura && !(isSetToHidden && isNotInVanitySlot))
             {
                 var mplr = self.GetModPlayer<ProtagonistAuraPlayer>();
-                mplr.cDye = dyeItem.dye;
+                mplr.cDye = dyeItem.dye; // 获取当前饰品所染上的颜色，不知道有没有更好的做法，我记得example那边好像不支持染料
                 mplr.HasProtagonistAura = true;
             }
             else
@@ -97,7 +99,7 @@ namespace MatterRecord.Contents.ProtagonistAura
         {
             if (HasProtagonistAura)
             {
-                drawInfo.cHead = 0;
+                drawInfo.cHead = 0; // 头发不染色(
                 drawInfo.cBody = cDye;
                 drawInfo.cLegs = cDye;
             }
@@ -120,6 +122,8 @@ namespace MatterRecord.Contents.ProtagonistAura
                     player.head = EquipLoader.GetEquipSlot(Mod, mItem.Name, EquipType.Head);
                     player.body = EquipLoader.GetEquipSlot(Mod, mItem.Name, EquipType.Body);
                     player.legs = EquipLoader.GetEquipSlot(Mod, mItem.Name, EquipType.Legs);
+                    // 如果有物品就换装
+                    // 哦不过如果是想要原版的头盔(铁桶)再套在上面，就得自己加绘制层了
                 }
             });
             cursor.EmitLdarg0();
@@ -130,12 +134,14 @@ namespace MatterRecord.Contents.ProtagonistAura
         public override void ModifyShop(NPCShop shop)
         {
             if (shop.NpcType == NPCID.Clothier)
-                shop.Add<ProtagonistAura>();
+                shop.Add<ProtagonistAura>(); // 单纯添加购买(
             base.ModifyShop(shop);
         }
     }
     public class AuraLayer : PlayerDrawLayer
     {
+        // 这里是给红染料 绿染料 灰染料加了光环效果
+        // 你应该用不着(
         public override Position GetDefaultPosition() => new AfterParent(PlayerDrawLayers.Head);
         protected override void Draw(ref PlayerDrawSet drawInfo)
         {

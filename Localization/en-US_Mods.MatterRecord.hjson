@@ -1,6 +1,7 @@
 MeleeAction: {
 	DonQuijoteDeLaManchaDash.DisplayName: Don Quijote Dash
 	DonQuijoteDeLaManchaStab.DisplayName: Don Quijote Stab
+	Category.: ""
 }
 
 Condition: {
@@ -414,7 +415,7 @@ Buffs: {
 
 	Holiday: {
 		DisplayName: Holiday!
-		Description: Damn, are you going to make two cats work overtime on Sundays?
+		Description: Damn, are you going to make the cat work overtime on Sundays?
 	}
 
 	Peace: {
@@ -434,6 +435,16 @@ Buffs: {
 			Damage is increased by 10%, then by 5
 			'''
 	}
+
+	Holiday_Peace: {
+		DisplayName: Holiday!
+		Description: Damn, are you going to make the cat work overtime on Sundays?
+	}
+
+	Holiday_War: {
+		DisplayName: Holiday!
+		Description: Damn, are you going to make the cat work overtime on Sundays?
+	}
 }
 
 Projectiles: {
@@ -443,6 +454,8 @@ Projectiles: {
 	DonQuijoteDeLaManchaProj.DisplayName: Don Quijote
 	WindMill.DisplayName: Windmill
 	CantSewordProj.DisplayName: Unseen Blade Projectile
+	PeaceCat.DisplayName: Peace Cat
+	WarCat.DisplayName: War Cat
 }
 
 Tiles: {
