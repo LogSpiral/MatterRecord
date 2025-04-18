@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Terraria.Audio;
+using Terraria.GameContent;
 using Terraria.Graphics.Shaders;
 
 namespace MatterRecord.Contents.WarAndPeace;
@@ -26,7 +27,7 @@ public class WarAndPeace : ModItem
         var dayOfWeek = DateTime.Now.DayOfWeek;
         if (dayOfWeek == DayOfWeek.Sunday)
             player.AddBuff(IsPeace ? ModContent.BuffType<Holiday_Peace>() : ModContent.BuffType<Holiday_War>(), 2);
-        else if ((int)dayOfWeek % 2 == 1)
+        else if ((int)dayOfWeek % 2 == 0)
         {
             player.endurance += .1f;
             player.AddBuff(ModContent.BuffType<Peace>(), 2);
@@ -69,7 +70,8 @@ public class War : ModBuff
     public override void Update(Player player, ref int buffIndex)
     { // This method gets called every frame your buff is active on your player.
         bool unused = false;
-        player.BuffHandle_SpawnPetIfNeededAndSetTime(buffIndex, ref unused, ModContent.ProjectileType<WarCat>());
+        player.BuffHandle_SpawnPetIfNeeded(ref unused, ModContent.ProjectileType<WarCat>(), buffIndex);
+
     }
 }
 public class Peace : ModBuff
@@ -82,7 +84,7 @@ public class Peace : ModBuff
     public override void Update(Player player, ref int buffIndex)
     { // This method gets called every frame your buff is active on your player.
         bool unused = false;
-        player.BuffHandle_SpawnPetIfNeededAndSetTime(buffIndex, ref unused, ModContent.ProjectileType<PeaceCat>());
+        player.BuffHandle_SpawnPetIfNeeded(ref unused, ModContent.ProjectileType<PeaceCat>(), buffIndex);
     }
 }
 public class Holiday_War : ModBuff
@@ -95,7 +97,7 @@ public class Holiday_War : ModBuff
     public override void Update(Player player, ref int buffIndex)
     { // This method gets called every frame your buff is active on your player.
         bool unused = false;
-        player.BuffHandle_SpawnPetIfNeededAndSetTime(buffIndex, ref unused, ModContent.ProjectileType<WarCat>());
+        player.BuffHandle_SpawnPetIfNeeded(ref unused, ModContent.ProjectileType<WarCat>(), buffIndex);
     }
 }
 public class Holiday_Peace : ModBuff
@@ -108,7 +110,7 @@ public class Holiday_Peace : ModBuff
     public override void Update(Player player, ref int buffIndex)
     { // This method gets called every frame your buff is active on your player.
         bool unused = false;
-        player.BuffHandle_SpawnPetIfNeededAndSetTime(buffIndex, ref unused, ModContent.ProjectileType<PeaceCat>());
+        player.BuffHandle_SpawnPetIfNeeded(ref unused, ModContent.ProjectileType<PeaceCat>(), buffIndex);
     }
 }
 public abstract class CatProj : ModProjectile
@@ -287,38 +289,13 @@ public abstract class CatProj : ModProjectile
             }
             #endregion
             #region 动画处理
-            //state = KoishiState.Launch;
-            //if (!Projectile.wet)
-            //    for (int k = 0; k < 10; k++)
-            //    {
-            //        float fac = (k + 1) / 10f;
-            //        var unit = ((FrameCounter - 1 + fac) / 32f * MathHelper.TwoPi * -Projectile.spriteDirection).ToRotationVector2() * new Vector2(16, 4);
-            //        unit = unit.RotatedBy(Projectile.rotation);
-            //        //for (int n = -1; n < 2; n += 2)
-            //        //{
-            //        //    var dust = Dust.NewDustPerfect(Projectile.Center + unit * n + Projectile.velocity + Main.rand.NextVector2Unit(), n == 1 ? DustID.Clentaminator_Cyan : DustID.TheDestroyer, null, 0, Color.White, (1 + fac) * .5f + Main.rand.NextFloat(0, .25f));// 
-            //        //    dust.noGravity = true;
-            //        //    dust.velocity *= .625f;
-            //        //    dust.shader = GameShaders.Armor.GetShaderFromItemId(player.miscDyes[0].type);
-            //        //}
-            //    }
-
             FrameCounter++;
             if (FrameCounter % 4 == 0)
                 Frame++;
             Frame %= MaxFrame;
-
-            //if (Projectile.velocity.X > 0.5)
-            //    Projectile.spriteDirection = -1;
-            //else if (Projectile.velocity.X < -0.5)
-            //    Projectile.spriteDirection = 1;
-
             if (MathF.Abs(Projectile.velocity.X) > .5f)
                 Projectile.spriteDirection = Math.Sign(Projectile.velocity.X);
             Projectile.rotation = MathHelper.PiOver2 * Projectile.direction * (1 - 1 / (Math.Abs(Projectile.velocity.X) / 24f + 1));
-            //Vector2 velocity3 = Projectile.velocity;
-            //velocity3.Normalize();
-            //Projectile.rotation = velocity3.ToRotation() + (float)Math.PI / 2f;
             #endregion
         }
         #endregion
@@ -342,35 +319,12 @@ public abstract class CatProj : ModProjectile
                     }
                     Projectile.velocity.X *= .975f;
                     Projectile.velocity.Y = 0;
-                    //for (int k = 0; k < 10; k++)
-                    //{
-                    //    float fac = (k + 1) / 10f;
-                    //    var unit = ((FrameCounter - 1 + fac) / 16f * MathHelper.TwoPi).ToRotationVector2() * new Vector2(48, 24);
-                    //    unit = unit.RotatedBy((Projectile.position - Projectile.oldPosition).ToRotation() + MathHelper.PiOver2);
-
-                    //    for (int n = 0; n < 2; n++)
-                    //    {
-                    //        var dust = Dust.NewDustPerfect(Projectile.Center + unit * (n == 0 ? 1 : -.5f), DustID.Clentaminator_Blue, null, 0, Color.White, 1 + fac * .5f);
-                    //        dust.noGravity = true;
-                    //        dust.velocity *= .75f;
-                    //        dust.shader = GameShaders.Armor.GetShaderFromItemId(player.miscDyes[0].type);
-
-                    //    }
-                    //}
 
                 }
                 else
                 {
                     Projectile.velocity.X *= .925f;
                 }
-                //if (FrameCounter == 16)
-                //{
-                //    for (int n = 0; n < 30; n++)
-                //    {
-                //        Dust.NewDustPerfect(Projectile.Center, DustID.Clentaminator_Blue, -Main.rand.NextFloat(0, MathHelper.Pi).ToRotationVector2() * Main.rand.NextFloat(0, 8f), 0, default, Main.rand.NextFloat(.5f, 1.5f)).shader = GameShaders.Armor.GetShaderFromItemId(player.miscDyes[0].type);
-                //    }
-                //    SoundEngine.PlaySound(SoundID.Item10, Projectile.Center);//整活就听62
-                //}
                 Projectile.velocity.Y += 0.4f;
                 if (Projectile.velocity.Y > 10f)
                     Projectile.velocity.Y = 10f;
@@ -510,9 +464,8 @@ public abstract class CatProj : ModProjectile
                     //    ResetFrameData();
                     //}
                     var t = Projectile.velocity.X * 128 / helpCounter;//应该是 逐渐从1降低至0的
-                    if (MathF.Abs(Projectile.velocity.X) > .5f)
-                        Projectile.spriteDirection = -Math.Sign(helpCounter);
-                    if (t <= 0) //已经减小至0，退出转身状态
+                    Projectile.spriteDirection = -Math.Sign(helpCounter);
+                    if (t <= 0 || t > 1) //已经减小至0，退出转身状态
                     {
                         //Projectile.spriteDirection = Math.Sign(helpCounter);
                         state = KoishiState.Walk;
@@ -534,8 +487,7 @@ public abstract class CatProj : ModProjectile
                 #region 跳跃
                 else if (state == KoishiState.Jump)
                 {
-                    if (MathF.Abs(Projectile.velocity.X) > .5f)
-                        Projectile.spriteDirection = Math.Sign(Projectile.velocity.X);
+                     Projectile.spriteDirection = Math.Sign(Projectile.velocity.X);
                     if (Projectile.velocity.Y != 0)
                     {
                         if (helpCounter < 15)
@@ -598,8 +550,7 @@ public abstract class CatProj : ModProjectile
                     if (Frame >= MaxFrame) Frame = 0;
                     if (Math.Abs(Projectile.velocity.X) < 4) state = KoishiState.Walk;
                     else state = KoishiState.Run;
-                    if (MathF.Abs(Projectile.velocity.X) > .5f)
-                        Projectile.spriteDirection = Math.Sign(Projectile.velocity.X);
+                    Projectile.spriteDirection = Math.Sign(Projectile.velocity.X);
                     //if (state == KoishiState.Run || Main.rand.NextBool(3))
                     //{
                     //    var dust = Dust.NewDustPerfect(Projectile.Center + new Vector2(Projectile.velocity.X, 12), DustID.Clentaminator_Blue, default, 0, default, Main.rand.NextFloat(.5f, 1.5f));
@@ -629,7 +580,7 @@ public abstract class CatProj : ModProjectile
         {
             Projectile.spriteDirection = player.direction;
         }
-            
+
     }
     public enum KoishiState
     {
@@ -658,6 +609,12 @@ public abstract class CatProj : ModProjectile
     {
         get => Projectile.frame;
         set => Projectile.frame = value;
+    }
+    public override bool PreDraw(ref Color lightColor)
+    {
+        Main.EntitySpriteDraw(TextureAssets.Projectile[Type].Value, Projectile.Center - Main.screenPosition - Vector2.UnitY * 4,
+            new Rectangle(0, 28 * Projectile.frame, 36, 28), lightColor, Projectile.rotation, new Vector2(18, 14), 1, Projectile.spriteDirection == -1 ? Microsoft.Xna.Framework.Graphics.SpriteEffects.FlipHorizontally : 0, 0);
+        return false;
     }
 }
 public class WarCat : CatProj
