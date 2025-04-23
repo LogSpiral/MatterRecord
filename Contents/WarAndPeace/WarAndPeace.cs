@@ -65,7 +65,7 @@ public class War : ModBuff
     public override void SetStaticDefaults()
     {
         Main.buffNoTimeDisplay[Type] = true;
-        Main.vanityPet[Type] = true;
+        //Main.vanityPet[Type] = true;
     }
     public override void Update(Player player, ref int buffIndex)
     { // This method gets called every frame your buff is active on your player.
@@ -79,7 +79,7 @@ public class Peace : ModBuff
     public override void SetStaticDefaults()
     {
         Main.buffNoTimeDisplay[Type] = true;
-        Main.vanityPet[Type] = true;
+        //Main.vanityPet[Type] = true;
     }
     public override void Update(Player player, ref int buffIndex)
     { // This method gets called every frame your buff is active on your player.
@@ -92,7 +92,7 @@ public class Holiday_War : ModBuff
     public override void SetStaticDefaults()
     {
         Main.buffNoTimeDisplay[Type] = true;
-        Main.vanityPet[Type] = true;
+        //Main.vanityPet[Type] = true;
     }
     public override void Update(Player player, ref int buffIndex)
     { // This method gets called every frame your buff is active on your player.
@@ -105,7 +105,7 @@ public class Holiday_Peace : ModBuff
     public override void SetStaticDefaults()
     {
         Main.buffNoTimeDisplay[Type] = true;
-        Main.vanityPet[Type] = true;
+        //Main.vanityPet[Type] = true;
     }
     public override void Update(Player player, ref int buffIndex)
     { // This method gets called every frame your buff is active on your player.
