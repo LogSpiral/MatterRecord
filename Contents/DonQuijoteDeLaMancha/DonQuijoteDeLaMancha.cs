@@ -19,6 +19,9 @@ using Terraria.UI.Chat;
 using LogSpiralLibrary.CodeLibrary.DataStructures.SequenceStructures.Core;
 using LogSpiralLibrary.CodeLibrary.DataStructures.SequenceStructures.System;
 using LogSpiralLibrary.CodeLibrary.DataStructures.SequenceStructures.Contents.Melee.StandardMelee;
+using LogSpiralLibrary.CodeLibrary.DataStructures.Drawing.RenderDrawingContents;
+using LogSpiralLibrary.CodeLibrary.Utilties;
+using LogSpiralLibrary.CodeLibrary.Utilties.Extensions;
 
 namespace MatterRecord.Contents.DonQuijoteDeLaMancha;
 
@@ -285,21 +288,24 @@ public class DonQuijoteDeLaMancha : MeleeSequenceItem<DonQuijoteDeLaManchaProj>
 public class DonQuijoteDeLaManchaProj : MeleeSequenceProj
 {
     public override bool LabeledAsCompleted => true;
-    public override StandardInfo StandardInfo => base.StandardInfo with
+
+    public override void InitializeStandardInfo(StandardInfo standardInfo, VertexDrawStandardInfo vertexStandard)
     {
-        standardColor = Color.DarkRed * (player.GetModPlayer<DonQuijoteDeLaManchaPlayer>().StabTimeLeft > 0 ? 0.3f : 0.1f),
-        standardTimer = player.controlUseItem && !player.controlUseTile ? Math.Clamp(player.itemTimeMax, 1, 30) : 10,
-        standardOrigin = player.GetModPlayer<DonQuijoteDeLaManchaPlayer>().StabTimeLeft > 0 ? new Vector2(.3f, .7f) : new Vector2(.1f, .9f),
-        vertexStandard = Main.netMode == NetmodeID.Server ? default : new VertexDrawInfoStandardInfo() with
-        {
-            active = true,
-            scaler = DonQuijoteDeLaMancha.SlashActive || player.GetModPlayer<DonQuijoteDeLaManchaPlayer>().StabTimeLeft > 0 || player.GetModPlayer<DonQuijoteDeLaManchaPlayer>().Dashing ? 120 : 0,
-            timeLeft = 10,
-            colorVec = new Vector3(0, 1, 0),
-            alphaFactor = 2f
-        },
-        itemType = ModContent.ItemType<DonQuijoteDeLaMancha>()
-    };
+        standardInfo.itemType = ModContent.ItemType<DonQuijoteDeLaMancha>();
+        vertexStandard.timeLeft = 10;
+        vertexStandard.colorVec = new(0, 1, 0);
+        vertexStandard.alphaFactor = 2f;
+    }
+    public override void UpdateStandardInfo(StandardInfo standardInfo, VertexDrawStandardInfo vertexStandard)
+    {
+
+        standardInfo.standardColor = Color.DarkRed * (player.GetModPlayer<DonQuijoteDeLaManchaPlayer>().StabTimeLeft > 0 ? 0.3f : 0.1f);
+        standardInfo.standardTimer = player.controlUseItem && !player.controlUseTile ? Math.Clamp(player.itemTimeMax, 1, 30) : 10;
+        standardInfo.standardOrigin = player.GetModPlayer<DonQuijoteDeLaManchaPlayer>().StabTimeLeft > 0 ? new Vector2(.3f, .7f) : new Vector2(.1f, .9f);
+
+        vertexStandard.scaler = DonQuijoteDeLaMancha.SlashActive || player.GetModPlayer<DonQuijoteDeLaManchaPlayer>().StabTimeLeft > 0 || player.GetModPlayer<DonQuijoteDeLaManchaPlayer>().Dashing ? 120 : 0;
+
+    }
     //public override string Texture => $"Terraria/Images/Item_{ItemID.ShadowJoustingLance}";
 
     class DonQuijoteDeLaManchaDash : MeleeAction
@@ -354,7 +360,7 @@ public class DonQuijoteDeLaManchaProj : MeleeSequenceProj
             {
                 current.timeLeft = (byte)MathHelper.Lerp(current.timeLeftMax, 0, Utils.GetLerpValue(0.25f, 1, Factor, true));
                 current.xScaler = 2 + Owner.velocity.Length() / 32;
-                current.scaler = standardInfo.vertexStandard.scaler * ModifyData.actionOffsetSize * offsetSize / 3 * 4f * current.xScaler;
+                current.scaler = standardInfo.VertexStandard.scaler * ModifyData.actionOffsetSize * offsetSize / 3 * 4f * current.xScaler;
                 current.center = Owner.Center - Rotation.ToRotationVector2() * current.scaler * .5f;
                 current.rotation = Rotation;
                 current.negativeDir = flip;
@@ -413,19 +419,17 @@ public class DonQuijoteDeLaManchaProj : MeleeSequenceProj
                 //DoggoDust(Owner.Center, vec * 2 - targetedVector * .5f);
 
             }
-            var verS = standardInfo.vertexStandard;
+            var verS = standardInfo.VertexStandard;
             if (verS.active)
             {
-                var u = UltraStab.NewUltraStab(standardInfo.standardColor, verS.timeLeft, verS.scaler * ModifyData.actionOffsetSize * offsetSize / 3 * 8f, Owner.Center - targetedVector, verS.heatMap, flip, Rotation, 2, colorVec: verS.colorVec);
-                if (verS.renderInfos == null)
-                    u.ResetAllRenderInfo();
-                else
-                {
-                    u.ModityAllRenderInfo(verS.renderInfos);
-                }
+                var u = UltraStab.NewUltraStabOnDefaultCanvas(verS.timeLeft, verS.scaler * ModifyData.actionOffsetSize * offsetSize / 3 * 8f, Owner.Center - targetedVector);
+                u.heatMap = verS.heatMap;
+                u.negativeDir = flip;
+                u.rotation = Rotation;
+                u.xScaler = 16;
+                u.ColorVector = verS.colorVec;
                 u.ApplyStdValueToVtxEffect(standardInfo);
                 current = u;
-
             }
             base.OnStartAttack();
         }
@@ -459,7 +463,7 @@ public class DonQuijoteDeLaManchaProj : MeleeSequenceProj
             float delta = Main.rand.NextFloat(0.85f, 1.15f) * damageDone;
             Main.LocalPlayer.GetModPlayer<LogSpiralLibraryPlayer>().strengthOfShake += delta * .15f;//
             for (int n = 0; n < 30 * delta * (standardInfo.dustAmount + .2f); n++)
-                OtherMethods.FastDust(victim.Center + Main.rand.NextVector2Unit() * Main.rand.NextFloat(0, 16f), Main.rand.NextVector2Unit() * Main.rand.NextFloat(Main.rand.NextFloat(0, 8), 16), standardInfo.standardColor);
+                MiscMethods.FastDust(victim.Center + Main.rand.NextVector2Unit() * Main.rand.NextFloat(0, 16f), Main.rand.NextVector2Unit() * Main.rand.NextFloat(Main.rand.NextFloat(0, 8), 16), standardInfo.standardColor);
         }
         int hitCount = 0;
         public override void OnEndSingle()
