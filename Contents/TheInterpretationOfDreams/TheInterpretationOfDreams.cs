@@ -1,8 +1,5 @@
-﻿using MatterRecord.Contents.TheInterpretationOfDreams.TaijiNoYume;
-using Microsoft.Xna.Framework;
-using Newtonsoft.Json.Linq;
+﻿using Microsoft.Xna.Framework;
 using System;
-using System.Reflection.Emit;
 
 namespace MatterRecord.Contents.TheInterpretationOfDreams;
 
@@ -31,7 +28,7 @@ public class TheInterpretationOfDreams : ModItem
     }
     public override bool? UseItem(Player player)
     {
-
+        if (player.whoAmI != Main.myPlayer) return true;
         var mplr = player.GetModPlayer<DreamPlayer>();
         if (player.itemAnimation == player.itemAnimationMax / 2)
             foreach (var npc in Main.npc)
@@ -44,7 +41,7 @@ public class TheInterpretationOfDreams : ModItem
                 {
                     if (mplr.todayCheckedNPC.Contains(npc.type))
                     {
-                        Main.NewText("看来暂时不会做新的梦了", Color.DeepPink);
+                        Main.NewText(this.GetLocalizedValue("NoDreamHint"), Color.DeepPink);
                         continue;
                     }
                     mplr.todayCheckedNPC.Add(npc.type);
@@ -60,7 +57,6 @@ public class TheInterpretationOfDreams : ModItem
                     {
                         case 0:
                             {
-                                Main.NewText("芝士专属梦");
 
                                 var targetName = NPCID.Search.GetName(npc.type);
                                 var names = typeof(DreamState).GetEnumNames();
@@ -179,19 +175,21 @@ public class TheInterpretationOfDreams : ModItem
                                         }
 
                                 }
+                                Main.NewText(this.GetLocalizedValue("SpecialDreamHint"), new Color(255, 255, 127));
                                 break;
                             }
                         case < 3:
                             {
                                 mplr.LuckyTimer.Add(43200);
                                 player.QuickSpawnItem(Item.GetSource_FromThis(), ItemID.GoldCoin);
-                                Main.NewText("芝士美梦");
+                                Main.NewText(this.GetLocalizedValue("SweetDreamHint"), new Color(253, 195, 229));
                                 break;
                             }
                         case < 5:
                             {
                                 mplr.UnluckyTimer.Add(43200);
-                                Main.NewText("芝士厄梦");
+                                Main.NewText(this.GetLocalizedValue("NightmareHint"), new Color(3, 20, 96));
+
                                 break;
                             }
                         default:
@@ -203,7 +201,8 @@ public class TheInterpretationOfDreams : ModItem
                                     targetItem.SetDefaults(ModContent.ItemType<BrokenDream>());
                                 else
                                     targetItem.stack++;
-                                Main.NewText("芝士破碎梦");
+                                Main.NewText(this.GetLocalizedValue("BrokenDreamHint"), new Color(153, 153, 153));
+
                                 break;
                             }
                     }

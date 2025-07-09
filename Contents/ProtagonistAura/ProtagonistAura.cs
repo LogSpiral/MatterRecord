@@ -150,7 +150,7 @@ namespace MatterRecord.Contents.ProtagonistAura
             var plr = drawInfo.drawPlayer;
             var mplr = plr.GetModPlayer<ProtagonistAuraPlayer>();
             if (!mplr.HasProtagonistAura) return;
-            Vector2 center = plr.Center + Vector2.UnitY * plr.gfxOffY;
+            Vector2 center = plr.MountedCenter + Vector2.UnitY * plr.gfxOffY;
             if (!Main.gameMenu)
                 center -= Main.screenPosition;
             center = new Vector2((int)center.X, (int)center.Y);
@@ -170,14 +170,15 @@ namespace MatterRecord.Contents.ProtagonistAura
                 _ => 0
             };
             float t = MathHelper.SmoothStep(0, 1, Main.GlobalTimeWrappedHourly % 1);
+            
             drawInfo.DrawDataCache.Add(new DrawData(ModContent.Request<Texture2D>("MatterRecord/Contents/ProtagonistAura/Aura_Glow").Value,
-    center + new Vector2(4 + (plr.direction < 0 ? -8 : 0), -23 + offsetY), new Rectangle(offset * 32, 0, 32, 32), (Color.White * (1 - MathF.Cos(MathHelper.TwoPi * MathF.Sqrt(t))) * .75f) with { A = 0 }, 0, new(16), new Vector2(1, 0.6f) * (1 + .5f * t), plr.direction < 0 ? SpriteEffects.FlipHorizontally : 0, 0));
+    center + new Vector2(4 + (plr.direction < 0 ? -8 : 0), (-23 + offsetY) * plr.gravDir), new Rectangle(offset * 32, 0, 32, 32), (Color.White * (1 - MathF.Cos(MathHelper.TwoPi * MathF.Sqrt(t))) * .75f) with { A = 0 }, 0, new(16), new Vector2(1, 0.6f) * (1 + .5f * t), drawInfo.playerEffect, 0));
+            
+            drawInfo.DrawDataCache.Add(new DrawData(ModContent.Request<Texture2D>("MatterRecord/Contents/ProtagonistAura/Aura").Value,
+                center + new Vector2(4 + (plr.direction < 0 ? -8 : 0), (-23 + offsetY) * plr.gravDir), new Rectangle(offset * 32, 0, 32, 32), Color.White, 0, new(16), new Vector2(1, 0.6f), drawInfo.playerEffect, 0));
 
             drawInfo.DrawDataCache.Add(new DrawData(ModContent.Request<Texture2D>("MatterRecord/Contents/ProtagonistAura/Aura").Value,
-                center + new Vector2(4 + (plr.direction < 0 ? -8 : 0), -23 + offsetY), new Rectangle(offset * 32, 0, 32, 32), Color.White, 0, new(16), new Vector2(1, 0.6f), plr.direction < 0 ? SpriteEffects.FlipHorizontally : 0, 0));
-
-            drawInfo.DrawDataCache.Add(new DrawData(ModContent.Request<Texture2D>("MatterRecord/Contents/ProtagonistAura/Aura").Value,
-    center + new Vector2(4 + (plr.direction < 0 ? -8 : 0), -21 + offsetY), new Rectangle(96, 0, 32, offset == 2 ? 12 : 14), drawInfo.colorArmorHead, 0, new(16), 1, plr.direction < 0 ? SpriteEffects.FlipHorizontally : 0, 0));
+    center + new Vector2(4 + (plr.direction < 0 ? -8 : 0), (-21 + offsetY) * plr.gravDir + (plr.gravDir < 1 ? 18:0)), new Rectangle(96, 0, 32, offset == 2 ? 12 : 14), drawInfo.colorArmorHead, 0, new(16), 1, drawInfo.playerEffect, 0));
             //Main.spriteBatch.DrawString(FontAssets.MouseText.Value, (plr.bodyFrame.Top / 56).ToString(), center + Vector2.UnitX * 32, Color.White);
             /*switch (mplr.cDye)
             {

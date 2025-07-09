@@ -73,7 +73,19 @@ namespace MatterRecord.Contents.Faust
         }
         public override void ModifyTooltips(List<TooltipLine> tooltips)
         {
-            tooltips.Add(new(Mod, "ConsumedMoney", this.GetLocalizedValue("MoneySpent")+$"{Main.ValueToCoins((long)Main.LocalPlayer.GetModPlayer<FaustPlayer>().ConsumedMoney)}") { OverrideColor = Color.Lerp(Color.Gray,Color.Red,0.5f + 0.5f * MathF.Cos(Main.GlobalTimeWrappedHourly))});
+            var money = (long)Main.LocalPlayer.GetModPlayer<FaustPlayer>().ConsumedMoney;
+
+            string content;
+
+            if (money > 0)
+                content = this.GetLocalizedValue("MoneySpent") + $"{Main.ValueToCoins(money)}" ;
+            else
+                content = this.GetLocalizedValue("WannaDeal");
+
+            tooltips.Add( new( Mod, "ConsumedMoney", content) {
+                    OverrideColor = Color.Lerp(Color.Gray, Color.Red, 0.5f + 0.5f * MathF.Cos(Main.GlobalTimeWrappedHourly))
+                });
+
             base.ModifyTooltips(tooltips);
         }
     }

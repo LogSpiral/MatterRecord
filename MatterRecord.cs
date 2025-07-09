@@ -88,12 +88,12 @@ namespace MatterRecord
                         }
                         break;
                     }
-                case PacketType.HookPointSync: 
+                case PacketType.HookPointSync:
                     {
                         byte whoami = reader.ReadByte();
                         byte count = reader.ReadByte();
-                        List<Point> coords = new List<Point>();
-                        for (int n = 0; n < count; n++) 
+                        List<Point> coords = [];
+                        for (int n = 0; n < count; n++)
                         {
                             coords.Add(new Point(reader.ReadInt32(), reader.ReadInt32()));
                         }
@@ -116,7 +116,7 @@ namespace MatterRecord
                         }
                         break;
                     }
-                case PacketType.TASHTileSync: 
+                case PacketType.TASHTileSync:
                     {
                         if (Main.netMode != NetmodeID.Server) break;
                         var point = new Point(reader.ReadInt32(), reader.ReadInt32());
@@ -126,12 +126,12 @@ namespace MatterRecord
                         packet.Send(whoAmI);
                         break;
                     }
-                case PacketType.TASHSyncSuccessed: 
+                case PacketType.TASHSyncSuccessed:
                     {
                         TASHSystem.readyToShow = true;
                         break;
                     }
-                case PacketType.FaustSync: 
+                case PacketType.FaustSync:
                     {
                         byte playerNumber = reader.ReadByte();
                         FaustPlayer examplePlayer = Main.player[playerNumber].GetModPlayer<FaustPlayer>();
@@ -139,6 +139,33 @@ namespace MatterRecord
                         if (Main.netMode == NetmodeID.Server)
                             examplePlayer.SyncPlayer(-1, whoAmI, false);
 
+                        break;
+                    }
+                case PacketType.DonQuijoteDeLaManchaItemDefinition:
+                    {
+                        byte playerNumber = reader.ReadByte();
+                        DonQuijoteDeLaManchaPlayer mplr = Main.player[playerNumber].GetModPlayer<DonQuijoteDeLaManchaPlayer>();
+                        mplr.ReceivePlayerSyncItemDefinition(reader);
+                        if (Main.netMode == NetmodeID.Server)
+                            mplr.SyncPlayer(-1, whoAmI, false);
+                        break;
+                    }
+                case PacketType.DonQuijoteDeLaManchaAI:
+                    {
+                        byte playerNumber = reader.ReadByte();
+                        DonQuijoteDeLaManchaPlayer mplr = Main.player[playerNumber].GetModPlayer<DonQuijoteDeLaManchaPlayer>();
+                        mplr.ReceivePlayerSyncAI(reader);
+                        if (Main.netMode == NetmodeID.Server)
+                            mplr.SendSyncAI();
+                        break;
+                    }
+                case PacketType.TheoryOfFreedomHookPlatformAbility: 
+                    {
+                        byte playerNumber = reader.ReadByte();
+                        FreedomPlayer mplr = Main.player[playerNumber].GetModPlayer<FreedomPlayer>();
+                        mplr.ReceivePlayerSync(reader);
+                        if (Main.netMode == NetmodeID.Server)
+                            mplr.SyncPlayer(-1, whoAmI, false);
                         break;
                     }
             }
@@ -153,11 +180,14 @@ namespace MatterRecord
         HookPointSync,
         TASHTileSync,
         TASHSyncSuccessed,
-        FaustSync
+        FaustSync,
+        DonQuijoteDeLaManchaItemDefinition,
+        DonQuijoteDeLaManchaAI,
+        TheoryOfFreedomHookPlatformAbility
     }
 
 
-    public class ContentsLoots : GlobalNPC 
+    public class ContentsLoots : GlobalNPC
     {
         public override void ModifyNPCLoot(NPC npc, NPCLoot npcLoot)
         {
@@ -166,7 +196,7 @@ namespace MatterRecord
                 NPCID.KingSlime => ModContent.ItemType<TheAdventureofSherlockHolmes>(),
                 NPCID.DukeFishron => ModContent.ItemType<TheOldManAndTheSea>(),
                 NPCID.Plantera => ModContent.ItemType<TheoryOfFreedom>(),
-                NPCID.EyeofCthulhu=> ModContent.ItemType<DonQuijoteDeLaMancha>(),
+                NPCID.EyeofCthulhu => ModContent.ItemType<DonQuijoteDeLaMancha>(),
                 NPCID.DD2DarkMageT1 or NPCID.DD2DarkMageT3 => ModContent.ItemType<TheoryofJustice>(),
                 NPCID.BrainofCthulhu => ModContent.ItemType<Faust>(),
                 _ => -1
@@ -181,7 +211,7 @@ namespace MatterRecord
     }
 
 
-    public class MatterRecordConfig : ModConfig 
+    public class MatterRecordConfig : ModConfig
     {
         public static MatterRecordConfig Instance => ModContent.GetInstance<MatterRecordConfig>();
         public override ConfigScope Mode => ConfigScope.ServerSide;

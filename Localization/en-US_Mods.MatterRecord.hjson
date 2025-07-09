@@ -45,6 +45,9 @@ Items: {
 	}
 
 	TheoryOfFreedom: {
+		CanHookOnPlatform: Hook on to the platforms enabled.
+		CantHookOnPlatform: Hook on to the platforms disabled.
+		GotFreedom: "{0} has got 「Freedom」"
 		DisplayName: Theory of Freedom
 		Tooltip:
 			'''
@@ -65,6 +68,7 @@ Items: {
 	}
 
 	Faust: {
+		WannaDeal: Well, Do ya wanna a deal?
 		MoneySpent: You have spent these Money with demons:
 		DisplayName: Faust
 		Tooltip:
@@ -103,6 +107,8 @@ Items: {
 	}
 
 	DonQuijoteDeLaMancha: {
+		DashCooldown: Dash Cooldown
+		CancelStabState: Cancel Stabing State
 		InheritedFrom: The current property inherites from
 		SheepDamage: +500% damage to the sheep army
 		FindItemHint: Please [c/FF0000:Right click in Inventory] to activate it and then [c/FF0000:Right click another melee weapon]to get it's property.
@@ -146,6 +152,12 @@ Items: {
 	}
 
 	TheInterpretationOfDreams: {
+		Unlocked: Has been unlocked
+		BrokenDreamHint: You capture a broken dream
+		SweetDreamHint: You capture a sweet dream
+		NightmareHint: You capture a nightmare
+		NoDreamHint: It seems that there's no more dream now
+		SpecialDreamHint: A special dream is captured.
 		DisplayName: The Interpretation of Dreams
 		Tooltip:
 			'''
@@ -156,117 +168,11 @@ Items: {
 			'''
 		Unlock: (Locked)
 		Hint: (Left-click to activate/deactivate)
-		SkeletonMerchant:
-			'''
-			Skeleton Merchant's Dream
-			Activates: Skeleton Merchant sells all items
-			"I dreamed we all lived underground. Today's a skeleton clearance sale!"
-			'''
-		Princess:
-			'''
-			Princess's Dream
-			Activates: NPC happiness ↑, prices reduced to 90% (excludes Pylons)
-			"In my dream, my subjects were happy. You shall be too!"
-			'''
-		SantaClaus:
-			'''
-			Santa Claus's Dream
-			Activates: Game time becomes Christmas
-			"Ho-ho... It's Christmas! Fancy a sleigh ride?"
-			'''
-		GoblinTinkerer:
-			'''
-			Goblin Tinkerer's Dream
-			Activates: Higher-tier prefixes become more likely
-			"Praise the compass! Well, in my dream..."
-			'''
-		Merchant:
-			'''
-			Merchant's Dream
-			Activates: Sell price multiplier ↑ to 30%
-			"I dreamed of streetlights... Yes, streetlights... Ahem."
-			'''
-		Mechanic:
-			'''
-			Mechanic's Dream
-			Activates: Wires cost nothing
-			"I saw a mechanical kingdom. Make it real!"
-			'''
-		Demolitionist:
-			'''
-			Demolitionist's Dream
-			Activates: Player explosions won't harm you
-			"I cleansed the world! Wait... was that a dream?"
-			'''
-		TaxCollector:
-			'''
-			Tax Collector's Dream
-			Activates: Attacking town NPCs makes them drop coins (excludes Tax Collector)
-			"Even in dreams, they evade taxes!"
-			'''
-		Steampunker:
-			'''
-			Steampunker's Dream
-			Activates: Flight time +2s, Rocket Boots +5s
-			"In my dream, you were a sky pirate extraordinaire!"
-			'''
-		Dryad:
-			'''
-			Dryad's Dream
-			Activates: Permanent Dryad's Blessing buff
-			"For Terraria's purification! Though in my dream, your organs... became external."
-			'''
-		WitchDoctor:
-			'''
-			Witch Doctor's Dream
-			Activates: +1 minion slot
-			"The forest spirits whispered their fondness for you."
-			'''
-		Painter:
-			'''
-			Painter's Dream
-			Activates: Paint costs nothing
-			"You're an artist! We even held an exhibition in my dream."
-			'''
-		Truffle:
-			'''
-			Truffle's Dream
-			Activates: Aggro -100, but mushrooms can't heal
-			"Someone nibbled my foot... and it wasn't a dream!"
-			'''
-		PartyGirl:
-			'''
-			Party Girl's Dream
-			Activates: Faster NPC respawn after death
-			"The ultimate party! Wait—it was a dream? I'll make it real!"
-			'''
-		ArmsDealer:
-			'''
-			Arms Dealer's Dream
-			Activates: 15% chance to not consume ammo
-			"Out of bullets? Preposterous!"
-			'''
-		Angler:
-			'''
-			Angler's Dream
-			Activates: Double rewards for fishing quests
-			"Even in dreams, you're my top servant. Keep fishing!"
-			'''
-		Nurse:
-			'''
-			Nurse's Dream
-			Activates: Nurse healing cost -20%
-			"Please... turn around. Your injuries in the dream were... graphic."
-			'''
-		TravellingMerchant:
-			'''
-			Travelling Merchant's Dream
-			Activates: Travelling Merchant arrives daily
-			"My nightmare of unsold goods compels me to beg for your patronage."
-			'''
+		UnlockHint: Use to unlock, manipulate the state in the Menu of The Interpretation of Dreams
 	}
 
 	ClothierDream: {
+		RecipeCondition: Unlock Clothier
 		DisplayName: Clothier's Dream
 		Tooltip:
 			'''
@@ -281,6 +187,7 @@ Items: {
 	}
 
 	StylistDream: {
+		RecipeCondition: Unlock Stylist
 		DisplayName: Stylist's Dream
 		Tooltip:
 			'''
@@ -291,6 +198,7 @@ Items: {
 	}
 
 	DyeTraderDream: {
+		RecipeCondition: Unlock Dye Trader
 		DisplayName: Dye Trader's Dream
 		Tooltip:
 			'''
@@ -300,6 +208,7 @@ Items: {
 	}
 
 	GolferDream: {
+		RecipeCondition: Unlock Golfer
 		DisplayName: Golfer's Dream
 		Tooltip:
 			'''
@@ -309,6 +218,7 @@ Items: {
 	}
 
 	GuideDream: {
+		RecipeCondition: Unlock Guide
 		DisplayName: Guide's Dream
 		Tooltip:
 			'''
@@ -319,6 +229,7 @@ Items: {
 	}
 
 	PirateDream: {
+		RecipeCondition: Unlock Pirate
 		DisplayName: Pirate's Dream
 		Tooltip:
 			'''
@@ -328,6 +239,7 @@ Items: {
 	}
 
 	TavernkeepDream: {
+		RecipeCondition: Unlock Tavernkeep
 		DisplayName: Tavernkeep's Dream
 		Tooltip:
 			'''
@@ -337,6 +249,8 @@ Items: {
 	}
 
 	WizardDream: {
+		RecipeCondition: Unlock Wizard
+		ReachedLimit: Has reached the maxium
 		DisplayName: Wizard's Dream
 		Tooltip:
 			'''
@@ -346,20 +260,24 @@ Items: {
 	}
 
 	ZoologiseDream: {
+		RecipeCondition: Unlock Zoologist
 		DisplayName: Zoologist's Dream
 		Tooltip:
 			'''
 			Summons a peculiar Town Slime (unimplemented)
 			"I dreamed of a new slime species... Wait, that wasn't a dream?"
 			'''
+		TheSameSlime: You dreamed of the same slime as before
 	}
 
 	BrokenDream: {
+		RecipeCondition: None
 		DisplayName: Broken Dream
-		Tooltip: Grants a random buff
+		Tooltip: Grants a random vanilla potion buff
 	}
 
 	CybrogDream: {
+		RecipeCondition: Unlock Cybrog
 		DisplayName: Cyborg's Dream
 		Tooltip:
 			'''
@@ -369,7 +287,8 @@ Items: {
 	}
 
 	TaijiNoYume: {
-		DisplayName: Fetus's Dream
+		RecipeCondition: None
+		DisplayName: Taiji No Yume
 		Tooltip:
 			'''
 			"O fetus, why do you stir?
@@ -398,6 +317,187 @@ Items: {
 			"In Bagration's troops, people don't know anything about the whole situation
 			They talk about peace, but they don't believe that peace is possible;
 			Talking about war, but not believing that war is imminent"
+			'''
+	}
+
+	AnglerDream: {
+		RecipeCondition: Unlock Angler
+		DisplayName: Angler's Dream
+		Tooltip:
+			'''
+			Angler's Dream
+			Activates: Double rewards for fishing quests
+			"Even in dreams, you're my top servant. Keep fishing!"
+			'''
+	}
+
+	ArmsDealerDream: {
+		RecipeCondition: Unlock Arms Dealer
+		DisplayName: Arms Dealer's Dream
+		Tooltip:
+			'''
+			Activates: 15% chance to not consume ammo
+			"Out of bullets? Preposterous!"
+			'''
+	}
+
+	DemolitionistDream: {
+		RecipeCondition: Unlock Demolitionist
+		DisplayName: Demolitionist's Dream
+		Tooltip:
+			'''
+			Activates: Player explosions won't harm you
+			"I cleansed the world! Wait... was that a dream?"
+			'''
+	}
+
+	DryadDream: {
+		RecipeCondition: Unlock Deyad
+		DisplayName: Deyad's Dream
+		Tooltip:
+			'''
+			Activates: Permanent Dryad's Blessing buff
+			"For Terraria's purification! Though in my dream, your organs... became external."
+			'''
+	}
+
+	GoblinTinkererDream: {
+		RecipeCondition: Unlock Goblin Tinkerer
+		DisplayName: Goblin Tinkerer's Dream
+		Tooltip:
+			'''
+			Activates: Higher-tier prefixes become more likely
+			"Praise the compass! Well, in my dream..."
+			'''
+	}
+
+	MechanicDream: {
+		RecipeCondition: Unlock Mechanic
+		DisplayName: Mechanic's Dream
+		Tooltip:
+			'''
+			Activates: Wires cost nothing
+			"I saw a mechanical kingdom. Make it real!"
+			'''
+	}
+
+	MerchantDream: {
+		RecipeCondition: Unlock Merchant
+		DisplayName: Merchant's Dream
+		Tooltip:
+			'''
+			Activates: Sell price multiplier ↑ to 30%
+			"I dreamed of streetlights... Yes, streetlights... Ahem."
+			'''
+	}
+
+	NurseDream: {
+		RecipeCondition: Unlock Nurse
+		DisplayName: Nurse's Dream
+		Tooltip:
+			'''
+			Activates: Nurse healing cost -20%
+			"Please... turn around. Your injuries in the dream were... graphic."
+			'''
+	}
+
+	PainterDream: {
+		RecipeCondition: None
+		DisplayName: Painter's Dream
+		Tooltip:
+			'''
+			Activates: Paint costs nothing
+			"You're an artist! We even held an exhibition in my dream."
+			'''
+	}
+
+	PartyGirlDream: {
+		RecipeCondition: Unlock Party Girl
+		DisplayName: Party Girl's Dream
+		Tooltip:
+			'''
+			Activates: Faster NPC respawn after death
+			"The ultimate party! Wait—it was a dream? I'll make it real!"
+			'''
+	}
+
+	PrincessDream: {
+		RecipeCondition: Unlock Princess
+		DisplayName: Princess's Dream
+		Tooltip:
+			'''
+			Activates: NPC happiness ↑, prices reduced to 90% (excludes Pylons)
+			"In my dream, my subjects were happy. You shall be too!"
+			'''
+	}
+
+	SantaClausDream: {
+		RecipeCondition: Unlock Santa Claus
+		DisplayName: Santa Claus's Dream
+		Tooltip:
+			'''
+			Activates: Game time becomes Christmas
+			"Ho-ho... It's Christmas! Fancy a sleigh ride?"
+			'''
+	}
+
+	SkeletonMerchantDream: {
+		RecipeCondition: None
+		DisplayName: Skeleton Merchant's Dream
+		Tooltip:
+			'''
+			Activates: Skeleton Merchant sells all items
+			"I dreamed we all lived underground. Today's a skeleton clearance sale!"
+			'''
+	}
+
+	SteampunkerDream: {
+		RecipeCondition: Unlock Steampunker
+		DisplayName: Steampunker's Dream
+		Tooltip:
+			'''
+			Activates: Flight time +2s, Rocket Boots +5s
+			"In my dream, you were a sky pirate extraordinaire!"
+			'''
+	}
+
+	TaxCollectorDream: {
+		RecipeCondition: Unlock TaxCollector
+		DisplayName: Tax Collector's Dream
+		Tooltip:
+			'''
+			Activates: Attacking town NPCs makes them drop coins (excludes Tax Collector)
+			"Even in dreams, they evade taxes!"
+			'''
+	}
+
+	TravellingMerchatDream: {
+		RecipeCondition: None
+		DisplayName: Travelling Merchat's Dream
+		Tooltip:
+			'''
+			Activates: Travelling Merchant arrives daily
+			"My nightmare of unsold goods compels me to beg for your patronage."
+			'''
+	}
+
+	TruffleDream: {
+		RecipeCondition: Unlock Truffle
+		DisplayName: Truffle's Dream
+		Tooltip:
+			'''
+			Activates: Aggro -100, but mushrooms can't heal
+			"Someone nibbled my foot... and it wasn't a dream!"
+			'''
+	}
+
+	WitchDoctorDream: {
+		RecipeCondition: Unlock Which Doctor
+		DisplayName: Witch Doctor's Dream
+		Tooltip:
+			'''
+			Activates: +1 minion slot
+			"The forest spirits whispered their fondness for you."
 			'''
 	}
 }
@@ -507,3 +607,5 @@ Configs: {
 		ModifyData.Label: ModifyData
 	}
 }
+
+Keybinds.CanHookPlatform.DisplayName: Can Hook Platform
