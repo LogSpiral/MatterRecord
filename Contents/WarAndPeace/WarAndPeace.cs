@@ -222,7 +222,7 @@ public abstract class CatProj : ModProjectile
                     j /= 16;
                     while (n < 12)
                     {
-                        var tile = Main.tile[i, j];
+                        var tile = Framing.GetTileSafely(i, j);
                         if (tile.HasUnactuatedTile && Main.tileSolid[tile.TileType])
                         {
                             //Main.NewText(tile);
@@ -403,7 +403,7 @@ public abstract class CatProj : ModProjectile
                         //TODO 加入jump状态
                         int num164 = (int)(Projectile.position.X + Projectile.width / 2) / 16;
                         int num165 = (int)(Projectile.position.Y + Projectile.height) / 16;
-                        if (WorldGen.SolidTileAllowBottomSlope(num164, num165) || Main.tile[num164, num165].IsHalfBlock || Main.tile[num164, num165].Slope > 0)
+                        if (WorldGen.SolidTileAllowBottomSlope(num164, num165) || Framing.GetTileSafely(num164, num165).IsHalfBlock || Framing.GetTileSafely(num164, num165).Slope > 0)
                         {
                             try
                             {

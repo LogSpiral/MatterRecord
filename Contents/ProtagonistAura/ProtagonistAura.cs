@@ -143,7 +143,7 @@ namespace MatterRecord.Contents.ProtagonistAura
         // 这里是给红染料 绿染料 灰染料加了光环效果
         // 你应该用不着(
         public override Position GetDefaultPosition() => new AfterParent(PlayerDrawLayers.Head);
-        protected override void Draw(ref PlayerDrawSet drawInfo)
+        public override void Draw(ref PlayerDrawSet drawInfo)
         {
             if (drawInfo.colorArmorHead == default) return;
             if (drawInfo.drawPlayer.dead) return;

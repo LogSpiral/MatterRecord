@@ -384,7 +384,7 @@ namespace MatterRecord.Contents.EternalWine
         {
 
         }
-        protected override void ApplyPass(GenerationProgress progress, GameConfiguration configuration)
+        public override void ApplyPass(GenerationProgress progress, GameConfiguration configuration)
         {
             progress.Message = "永生之酒";
             foreach (var chest in Main.chest)

@@ -197,7 +197,7 @@ public class DreamItemSlot : UIPanel
         if (BindItem.stack <= 0)
             BindItem.TurnToAir();
     }
-    protected override void DrawSelf(SpriteBatch spriteBatch)
+    public override void DrawSelf(SpriteBatch spriteBatch)
     {
         base.DrawSelf(spriteBatch);
         var position = GetDimensions().Center();
@@ -244,7 +244,7 @@ public class DreamPowerSlot : UIPanel
         SoundEngine.PlaySound(SoundID.MenuTick);
         base.LeftClick(evt);
     }
-    protected override void DrawSelf(SpriteBatch spriteBatch)
+    public override void DrawSelf(SpriteBatch spriteBatch)
     {
         base.DrawSelf(spriteBatch);
         var mplr = Main.LocalPlayer.GetModPlayer<DreamPlayer>();

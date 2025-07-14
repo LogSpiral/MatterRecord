@@ -500,6 +500,16 @@ Items: {
 			"The forest spirits whispered their fondness for you."
 			'''
 	}
+
+	AliceInWonderlandWatch: {
+		DisplayName: Alice In Wonderland Watch
+		Tooltip: ""
+	}
+
+	LordOfTheFlies: {
+		DisplayName: Lord Of The Flies
+		Tooltip: ""
+	}
 }
 
 Buffs: {
@@ -556,6 +566,8 @@ Projectiles: {
 	CantSewordProj.DisplayName: Unseen Blade Projectile
 	PeaceCat.DisplayName: Peace Cat
 	WarCat.DisplayName: War Cat
+	AliceInWonderlandArrow.DisplayName: Alice In Wonderland Arrow
+	AnnihilationBullet.DisplayName: Annihilation Bullet
 }
 
 Tiles: {
@@ -609,3 +621,4 @@ Configs: {
 }
 
 Keybinds.CanHookPlatform.DisplayName: Can Hook Platform
+DamageClasses.RangedMagicDamage.DisplayName: Ranged Magic Damage

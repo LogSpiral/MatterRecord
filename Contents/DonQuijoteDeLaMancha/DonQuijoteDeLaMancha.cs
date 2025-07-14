@@ -289,6 +289,7 @@ public class DonQuijoteDeLaMancha : MeleeSequenceItem<DonQuijoteDeLaManchaProj>
 }
 public class DonQuijoteDeLaManchaProj : MeleeSequenceProj
 {
+    // TODO 修复贴脸伤害爆炸问题
     public override void CutTiles()
     {
         if (currentData is null) return;
@@ -302,9 +303,9 @@ public class DonQuijoteDeLaManchaProj : MeleeSequenceProj
 
 
     public override bool LabeledAsCompleted => true;
-    public override StandardInfo StandardInfo 
+    public override StandardInfo StandardInfo
     {
-        get 
+        get
         {
             var mplr = player.GetModPlayer<DonQuijoteDeLaManchaPlayer>();
             var type = mplr.itemDefinition.Type;
@@ -419,7 +420,7 @@ public class DonQuijoteDeLaManchaProj : MeleeSequenceProj
             var rand = Main.rand.NextFloat(0.25f, 0.5f);
             originVelocity = Owner.velocity;
             //if (Owner is Player plr) plr.AddBuff(ModContent.BuffType<DoggoBoost>(), 180);
-            if (windMill != null) 
+            if (windMill != null)
             {
                 windMill.Projectile.ai[0] = 10;
                 windMill.Projectile.netUpdate = true;
@@ -671,7 +672,7 @@ public class DonQuijoteDeLaManchaPlayer : ModPlayer
         itemDefinition = new ItemDefinition(reader.ReadString());
     }
 
-    public void ReceivePlayerSyncAI(BinaryReader reader) 
+    public void ReceivePlayerSyncAI(BinaryReader reader)
     {
         DashCoolDown = reader.ReadUInt16();
         DashCoolDownMax = reader.ReadUInt16();
@@ -680,7 +681,7 @@ public class DonQuijoteDeLaManchaPlayer : ModPlayer
         StabTimeLeft = reader.ReadUInt16();
     }
 
-    public void SendSyncAI() 
+    public void SendSyncAI()
     {
         if (Main.netMode == NetmodeID.SinglePlayer) return;
         ModPacket packet = Mod.GetPacket();
@@ -727,7 +728,8 @@ public class DonQuijoteGBItem : GlobalItem
         if (item.type == ModContent.ItemType<DonQuijoteDeLaMancha>()) goto Label;
         var mplr = player.GetModPlayer<DonQuijoteDeLaManchaPlayer>();
         mplr.itemDefinition = new(item.type);
-        mplr.SyncPlayer(-1, player.whoAmI, false);
+        if (Main.netMode == NetmodeID.MultiplayerClient)
+            mplr.SyncPlayer(-1, player.whoAmI, false);
         item.stack++;
         DonQuijoteDeLaMancha.Active = false;
     Label:

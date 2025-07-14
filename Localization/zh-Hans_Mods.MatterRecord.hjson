@@ -58,6 +58,8 @@ Items: {
 			钩住目标时增加10%免伤
 			代价是甩出钩爪需要消耗1%的生命
 			并且钩住空中的物块不再会恢复飞行值
+			免疫摔落伤害
+			可以决定是否能钩住平台/占在平台上
 			'''
 	}
 
@@ -510,6 +512,36 @@ Items: {
 			“森中的精灵在梦中告诉我，它们很喜欢你”
 			'''
 	}
+
+	AliceInWonderlandWatch: {
+		DisplayName: 爱丽丝漫游仙境
+		Tooltip:
+			'''
+			装备后随机产生传送门，右键即可传送
+			每天最多生成三个传送门
+			即时会有粒子指引传送门位置
+			传送门会将你传送至一个地表下的箱子处
+			优先传送至未被探索的区域，不会传送至地牢或者神庙
+
+			“哦，天哪！哦，天哪！我要迟到了！”
+			'''
+	}
+
+	LordOfTheFlies: {
+		DisplayName: 蝇王
+		Tooltip:
+			'''
+			右键进入审判模式
+			审判模式下每次射击消耗子弹时额外消耗5法力值附加敌人最大0.1%生命值的伤害以及20点穿透
+			长按右键消耗200法力值制造并储存源质堙灭弹，最多六枚，源质堙灭弹额外造成5%最大生命值伤害
+			有魔力病时无法使用
+			“凡不长久的，多将以悲剧”
+
+			源质堙灭弹每次使用消耗100法力值，优先发射源质堙灭弹
+			源质堙灭弹仅能在审判模式使用
+			审判模式时魔力无法自然恢复
+			'''
+	}
 }
 
 Buffs: {
@@ -566,6 +598,8 @@ Projectiles: {
 	// CantSewordProj.DisplayName: Unseen Blade Projectile
 	// PeaceCat.DisplayName: Peace Cat
 	// WarCat.DisplayName: War Cat
+	// AliceInWonderlandArrow.DisplayName: Alice In Wonderland Arrow
+	// AnnihilationBullet.DisplayName: Annihilation Bullet
 }
 
 Tiles: {
@@ -618,4 +652,5 @@ Configs: {
 	}
 }
 
-// Keybinds.CanHookPlatform.DisplayName: Can Hook Platform
+Keybinds.CanHookPlatform.DisplayName: 可以钩至平台
+DamageClasses.RangedMagicDamage.DisplayName: 魔法-远程伤害

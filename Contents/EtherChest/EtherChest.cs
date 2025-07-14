@@ -87,7 +87,7 @@ namespace MatterRecord.Contents.EtherChest
 
         public override ushort GetMapOption(int i, int j)
         {
-            return (ushort)(Main.tile[i, j].TileFrameX / 36);
+            return (ushort)(Framing.GetTileSafely(i, j).TileFrameX / 36);
         }
 
         public override LocalizedText DefaultContainerName(int frameX, int frameY)
@@ -105,7 +105,7 @@ namespace MatterRecord.Contents.EtherChest
         {
             int left = i;
             int top = j;
-            Tile tile = Main.tile[i, j];
+            Tile tile = Framing.GetTileSafely(i, j);
             if (tile.TileFrameX % 36 != 0)
             {
                 left--;
@@ -144,7 +144,7 @@ namespace MatterRecord.Contents.EtherChest
         public override bool RightClick(int i, int j)
         {
             Player player = Main.LocalPlayer;
-            Tile tile = Main.tile[i, j];
+            Tile tile = Framing.GetTileSafely(i, j);
             Main.mouseRightRelease = false;
             int left = i;
             int top = j;
@@ -217,7 +217,7 @@ namespace MatterRecord.Contents.EtherChest
         public override void MouseOver(int i, int j)
         {
             Player player = Main.LocalPlayer;
-            Tile tile = Main.tile[i, j];
+            Tile tile = Framing.GetTileSafely(i, j);
             int left = i;
             int top = j;
             if (tile.TileFrameX % 36 != 0)

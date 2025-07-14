@@ -57,8 +57,10 @@ public abstract class BasicDream : ModItem
         if (RecipeCondition != null)
             recipe.AddCondition(RecipeCondition);
         ExtraIngredient(recipe);
+        recipe.DisableDecraft();
         recipe.Register();
     }
+
 
     public virtual void ExtraIngredient(Recipe recipe) { }
 }
