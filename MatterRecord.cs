@@ -6,6 +6,7 @@ using MatterRecord.Contents.CantSeword;
 using MatterRecord.Contents.DonQuijoteDeLaMancha;
 using MatterRecord.Contents.EternalWine;
 using MatterRecord.Contents.Faust;
+using MatterRecord.Contents.LordOfTheFlies;
 using MatterRecord.Contents.TheAdventureofSherlockHolmes;
 using MatterRecord.Contents.TheOldManAndTheSea;
 using MatterRecord.Contents.TheoryOfFreedom;
@@ -168,6 +169,39 @@ namespace MatterRecord
                             mplr.SyncPlayer(-1, whoAmI, false);
                         break;
                     }
+                case PacketType.LordOfFilesPlayerSync: 
+                    {
+                        byte playerNumber = reader.ReadByte();
+                        LordOfTheFliesPlayer mplr = Main.player[playerNumber].GetModPlayer<LordOfTheFliesPlayer>();
+                        mplr.ReceivePlayerSync(reader);
+                        if (Main.netMode == NetmodeID.Server)
+                            mplr.SyncPlayer(-1, whoAmI, false);
+                        break;
+                    }
+                case PacketType.SyncAltFunctionUse2: 
+                    {
+                        byte playerNumber = reader.ReadByte();
+                        var player = Main.player[playerNumber];
+                        player.altFunctionUse = reader.ReadByte();
+                        if (Main.netMode == NetmodeID.Server) 
+                        {
+                            var packet = GetPacket();
+                            packet.Write((byte)packetType);
+                            packet.Write(playerNumber);
+                            packet.Write((byte)player.altFunctionUse);
+                            packet.Send();
+                        }
+                        break;
+                    }
+                case PacketType.LordOfFilesChargingSync: 
+                    {
+                        byte playerNumber = reader.ReadByte();
+                        LordOfTheFliesPlayer mplr = Main.player[playerNumber].GetModPlayer<LordOfTheFliesPlayer>();
+                        mplr.ReceiveAnniCharging(reader);
+                        if (Main.netMode == NetmodeID.Server)
+                            mplr.SyncAnniCharging(-1, whoAmI);
+                        break;
+                    }
             }
             base.HandlePacket(reader, whoAmI);
         }
@@ -183,7 +217,10 @@ namespace MatterRecord
         FaustSync,
         DonQuijoteDeLaManchaItemDefinition,
         DonQuijoteDeLaManchaAI,
-        TheoryOfFreedomHookPlatformAbility
+        TheoryOfFreedomHookPlatformAbility,
+        LordOfFilesPlayerSync,
+        SyncAltFunctionUse2,
+        LordOfFilesChargingSync,
     }
 
 

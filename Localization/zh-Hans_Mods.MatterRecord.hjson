@@ -528,18 +528,18 @@ Items: {
 	}
 
 	LordOfTheFlies: {
+		KillCount: 这把武器已经杀死了 {0} 位玩家
 		DisplayName: 蝇王
 		Tooltip:
 			'''
 			右键进入审判模式
-			审判模式下每次射击消耗子弹时额外消耗5法力值附加敌人最大0.1%生命值的伤害以及20点穿透
-			长按右键消耗200法力值制造并储存源质堙灭弹，最多六枚，源质堙灭弹额外造成5%最大生命值伤害
-			有魔力病时无法使用
+			审判模式下每次射击消耗子弹时额外消耗2.5%能量槽, 附加100%暴击以及20点穿透
+			长按右键消耗100%能量槽制造并储存源质堙灭弹，最多六枚，源质堙灭弹额外造成5%最大生命值伤害
 			“凡不长久的，多将以悲剧”
 
-			源质堙灭弹每次使用消耗100法力值，优先发射源质堙灭弹
-			源质堙灭弹仅能在审判模式使用
-			审判模式时魔力无法自然恢复
+			源质堙灭弹每次使用消耗1/6能量槽
+			源质堙灭弹仅能在审判模式使用，蓄力状态下长按以瞄准发射
+			审判模式时能量无法自然恢复
 			'''
 	}
 }
@@ -652,5 +652,9 @@ Configs: {
 	}
 }
 
-Keybinds.CanHookPlatform.DisplayName: 可以钩至平台
+Keybinds: {
+	CanHookPlatform.DisplayName: 可以钩至平台
+	// AnnihilationModeKeyBind.DisplayName: Annihilation Mode Key Bind
+}
+
 DamageClasses.RangedMagicDamage.DisplayName: 魔法-远程伤害

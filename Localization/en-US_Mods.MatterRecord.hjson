@@ -507,6 +507,7 @@ Items: {
 	}
 
 	LordOfTheFlies: {
+		KillCount: This weapon has killed {0} Players
 		DisplayName: Lord Of The Flies
 		Tooltip: ""
 	}
@@ -620,5 +621,9 @@ Configs: {
 	}
 }
 
-Keybinds.CanHookPlatform.DisplayName: Can Hook Platform
+Keybinds: {
+	CanHookPlatform.DisplayName: Can Hook Platform
+	AnnihilationModeKeyBind.DisplayName: Annihilation Mode Key Bind
+}
+
 DamageClasses.RangedMagicDamage.DisplayName: Ranged Magic Damage

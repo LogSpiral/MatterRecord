@@ -549,6 +549,8 @@ public class DonQuijoteDeLaManchaProj : MeleeSequenceProj
         for (int n = 0; n < 30 * delta * (StandardInfo.dustAmount + .2f); n++)
             OtherMethods.FastDust(target.Center + Main.rand.NextVector2Unit() * Main.rand.NextFloat(0, 16f), Main.rand.NextVector2Unit() * Main.rand.NextFloat(Main.rand.NextFloat(0, 8), 16), StandardInfo.standardColor);*/
         base.OnHitNPC(target, hit, damageDone);
+        Projectile.localNPCHitCooldown = Math.Clamp(StandardInfo.standardTimer, 1, 514);
+
     }
 }
 public class DonQuijoteDeLaManchaPlayer : ModPlayer
@@ -795,3 +797,4 @@ public class WindMill : ModProjectile
         base.PostDraw(lightColor);
     }
 }
+

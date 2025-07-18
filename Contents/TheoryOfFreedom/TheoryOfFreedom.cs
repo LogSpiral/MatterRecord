@@ -217,7 +217,7 @@ public class FreedomPlayer : ModPlayer
     public override void SyncPlayer(int toWho, int fromWho, bool newPlayer)
     {
         ModPacket packet = Mod.GetPacket();
-        packet.Write((byte)PacketType.DonQuijoteDeLaManchaItemDefinition);
+        packet.Write((byte)PacketType.TheoryOfFreedomHookPlatformAbility);
         packet.Write((byte)Player.whoAmI);
         packet.Write(CanHookPlatform);
         packet.Send(toWho, fromWho);
