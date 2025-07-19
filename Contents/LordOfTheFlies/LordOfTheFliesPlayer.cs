@@ -5,6 +5,7 @@ using System.IO;
 using Terraria.GameInput;
 using Terraria.ModLoader.IO;
 using Terraria.WorldBuilding;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace MatterRecord.Contents.LordOfTheFlies;
 
@@ -19,6 +20,7 @@ public class LordOfTheFliesPlayer : ModPlayer
     public int ChargingEnergy;
 
     public int PlayerKillCount { get; set; }
+    public int NPCKillCount { get; set; }
 
 
     public bool IsChargingAnnihilation { get; set; }
@@ -29,6 +31,7 @@ public class LordOfTheFliesPlayer : ModPlayer
     {
         tag.Add(nameof(StoredAmmoCount), StoredAmmoCount);
         tag.Add(nameof(PlayerKillCount), PlayerKillCount);
+        tag.Add(nameof(NPCKillCount), NPCKillCount);
         base.SaveData(tag);
     }
     public override void LoadData(TagCompound tag)
@@ -37,7 +40,21 @@ public class LordOfTheFliesPlayer : ModPlayer
             StoredAmmoCount = amount;
         if (tag.TryGet(nameof(PlayerKillCount), out int count))
             PlayerKillCount = count;
+        if (tag.TryGet(nameof(NPCKillCount), out int count2))
+            NPCKillCount = count2;
         base.LoadData(tag);
+    }
+
+    public override void UpdateEquips()
+    {
+        if (Player.HeldItem?.ModItem is not LordOfTheFlies) return;
+        var count = NPCKillCount;
+        var factor = count / (count + 200f);
+        var count2 = PlayerKillCount;
+        var factor2 = count2 / (count2 + 20f);
+        Player.rangedDamage.Additive += factor * .5f;
+        Player.rangedDamage.Additive += factor2;
+        base.UpdateEquips();
     }
 
     public override void PreUpdate()
@@ -108,6 +125,7 @@ public class LordOfTheFliesPlayer : ModPlayer
         ChargeTimer = reader.ReadByte();
         ChargingEnergy = reader.ReadByte();
         PlayerKillCount = reader.ReadInt32();
+        NPCKillCount = reader.ReadInt32();
     }
 
     public override void CopyClientState(ModPlayer targetCopy)
@@ -140,20 +158,21 @@ public class LordOfTheFliesPlayer : ModPlayer
         packet.Write((byte)ChargeTimer);
         packet.Write((byte)ChargingEnergy);
         packet.Write(PlayerKillCount);
+        packet.Write(NPCKillCount);
         packet.Send(toWho, fromWho);
         base.SyncPlayer(toWho, fromWho, newPlayer);
     }
 
-    public void SyncAnniCharging(int toWho, int fromWho) 
+    public void SyncAnniCharging(int toWho, int fromWho)
     {
         ModPacket packet = Mod.GetPacket();
         packet.Write((byte)PacketType.LordOfFilesChargingSync);
         packet.Write((byte)Player.whoAmI);
         packet.Write(IsChargingAnnihilation);
-        packet.Send(toWho,fromWho);
+        packet.Send(toWho, fromWho);
     }
 
-    public void ReceiveAnniCharging(BinaryReader reader) 
+    public void ReceiveAnniCharging(BinaryReader reader)
     {
         IsChargingAnnihilation = reader.ReadBoolean();
     }

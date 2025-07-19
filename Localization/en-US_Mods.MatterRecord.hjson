@@ -502,11 +502,14 @@ Items: {
 	}
 
 	AliceInWonderlandWatch: {
+		Start: Wierd Portal Entrance
+		End: Wierd Portal Exit
 		DisplayName: Alice In Wonderland Watch
 		Tooltip: ""
 	}
 
 	LordOfTheFlies: {
+		NPCKillCount: This weapon has killed {0} Targets
 		KillCount: This weapon has killed {0} Players
 		DisplayName: Lord Of The Flies
 		Tooltip: ""
@@ -581,8 +584,13 @@ Configs: {
 		DisplayName: Matter Record Config
 
 		DonQuijoteSlashActive: {
-			Label: Don Quijote Left-Click Slash Mode
+			Label: "[i:MatterRecord/DonQuijoteDeLaMancha]Don Quijote Left-Click Slash Mode"
 			Tooltip: Enables melee projectile mode (disabled by default)
+		}
+
+		LordOfTheFliesUIReset: {
+			Label: "[i:MatterRecord/LordOfTheFlies]Reset the position of LordOfTheFlies's UI To Default"
+			Tooltip: ""
 		}
 	}
 

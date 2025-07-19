@@ -19,11 +19,11 @@ internal class AliceInWonderlandWatch : ModItem
         var mplr = player.GetModPlayer<AliceInWonderlandPlayer>();
         if ((int)Main.time % 60 == 0 && !mplr.PortalSpawnLock && mplr.PortalSpawnedToday < 3 && Main.rand.NextBool(180))
         {
-            player.PotionOfReturnOriginalUsePosition = FindTargetPoint();
-            player.PotionOfReturnHomePosition = mplr.CurrentPortalStart = FindStartPoint(player.Center);
-            mplr.CurrentPortalStart -= Vector2.UnitY * 24;
+            mplr.CurrentPortalEnd = FindTargetPoint();
+            mplr.CurrentPortalStart = FindStartPoint(player.Center);
             mplr.DustHintTimer = 600;
-            NetMessage.SendData(MessageID.PlayerControls, -1, player.whoAmI, null, player.whoAmI);
+            if (Main.netMode == NetmodeID.MultiplayerClient)
+                mplr.SyncPlayer(-1, player.whoAmI, false);
         }
         base.UpdateAccessory(player, hideVisual);
     }
@@ -43,6 +43,21 @@ internal class AliceInWonderlandWatch : ModItem
             condition |= tile.LiquidAmount > 0 && tile.LiquidType != LiquidID.Water;
             condition |= tile.HasTile;
 
+            if (!condition) 
+            {
+                bool flag = false;
+                for (int n = 1; n < 5; n++) 
+                {
+                    tile = Framing.GetTileSafely(new Point(coord.X, coord.Y + n));
+                    if (tile.HasTile)
+                    {
+                        flag = true;
+                        break;
+                    }
+                }
+                condition = !flag;
+            }
+
         } while (condition && tryTime < 50);
 
         return resultPoint;
@@ -59,7 +74,7 @@ internal class AliceInWonderlandWatch : ModItem
             if (targetChest is not null)
                 tryTime++;
             condition = targetChest is null || Main.Map.IsRevealed(targetChest.x, targetChest.y) || targetChest.y < Main.worldSurface;
-            if (targetChest != null) 
+            if (targetChest != null)
             {
                 var tile = Framing.GetTileSafely(targetChest.x, targetChest.y);
                 condition |= tile.wall == 87 || Main.wallDungeon[tile.wall];
@@ -82,7 +97,7 @@ internal class AliceInWonderlandWatch : ModItem
 
             } while (condition && tryTime < 50);
         }
-        else 
+        else
             resultPoint = new Vector2(targetChest.x + 1, targetChest.y) * 16;
         return resultPoint;
     }

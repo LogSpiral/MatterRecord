@@ -42,4 +42,36 @@ public class LordOfTheFliesGlobalProj : GlobalProjectile
 
         base.OnSpawn(projectile, source);
     }
+
+
+    public override void OnHitNPC(Projectile projectile, NPC target, NPC.HitInfo hit, int damageDone)
+    {
+        if (IsFromLOF)
+        {
+            var owner = Main.player[projectile.owner];
+            var mplr = owner.GetModPlayer<LordOfTheFliesPlayer>();
+            if (hit.Crit)
+            {
+                var rangedModifier = owner.rangedDamage;
+                //rangedModifier.Additive *= .1f;
+                //rangedModifier.Multiplicative = (rangedModifier.Multiplicative - 1) * .25f + 1;
+                var dmg = rangedModifier.ApplyTo(Main.DamageVar(hit.SourceDamage, owner.luck)) * .1f;
+                bool flag = target.life > 0;
+                NPC.HitInfo info = hit;
+                info.Damage = (int)dmg;
+                info.Knockback = 0;
+                target.StrikeNPC(info);
+                if (flag && target.life <= 0)
+                {
+                    mplr.NPCKillCount++;
+                }
+                NetMessage.SendStrikeNPC(target, info);
+            }
+            if (target.life <= 0)
+            {
+                mplr.NPCKillCount++;
+            }
+        }
+        base.OnHitNPC(projectile, target, hit, damageDone);
+    }
 }

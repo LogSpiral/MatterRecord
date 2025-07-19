@@ -25,7 +25,8 @@ public class AnnihilationBullet : ModProjectile
     }
     public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
     {
-        modifiers.FlatBonusDamage += target.lifeMax / 20;
+        // 因为湮灭弹固定源自于审判模式所以固定有暴击双倍，这里平衡回来就得 / 40
+        modifiers.FlatBonusDamage += target.lifeMax / 40;
         base.ModifyHitNPC(target, ref modifiers);
     }
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)

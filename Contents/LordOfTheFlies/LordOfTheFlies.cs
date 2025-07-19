@@ -22,6 +22,7 @@ public class LordOfTheFlies : ModItem
         Item.DamageType = DamageClass.Ranged;
         Item.rare = ItemRarityID.Lime;
         Item.holdStyle = ItemHoldStyleID.HoldHeavy;
+        Item.noMelee = true;
         base.SetDefaults();
     }
     public override bool CanUseItem(Player player)
@@ -48,7 +49,7 @@ public class LordOfTheFlies : ModItem
         {
             if (player.altFunctionUse == 2 || mplr.IsChargingAnnihilation)
             {
-                if (player.controlUseTile && (_chargeTimer < 10 || (mplr.ChargingEnergy == 120 && mplr.StoredAmmoCount < 6)))
+                if (player.controlUseTile && (_chargeTimer < 10 || (mplr.ChargingEnergy == 120 && mplr.StoredAmmoCount < 6)) && _chargeTimer <= 130)
                 {
                     player.itemAnimation = 2;
                     _chargeTimer++;
@@ -115,7 +116,7 @@ public class LordOfTheFlies : ModItem
         {
             if (player.itemTime == player.itemTimeMax - 1)
             {
-                if (player.controlUseItem && mplr.StoredAmmoCount > 0 && mplr.IsInTrialMode)
+                if (player.controlUseItem && mplr.StoredAmmoCount > 0 && mplr.ChargingEnergy >= 20 && mplr.IsInTrialMode)
                 {
                     player.itemAnimation = player.itemAnimationMax;
                     player.itemTime = player.itemTimeMax;
@@ -303,23 +304,39 @@ public class LordOfTheFlies : ModItem
         if (index == -1)
             index = tooltips.FindIndex(0, line => line.Name == "JourneyResearch");
         var mplr = Main.LocalPlayer.GetModPlayer<LordOfTheFliesPlayer>();
-        var count = mplr.PlayerKillCount;
+        var count = mplr.NPCKillCount;
         var factor = count / (count + 20f);
+        var count2 = mplr.PlayerKillCount;
+        var factor2 = count2 / (count2 + 20f);
+
         var timerFac = 0.5f + 0.5f * MathF.Cos(Main.GlobalTimeWrappedHourly);
-        var line = new TooltipLine(Mod, "PlrKillCount", Language.GetTextValue(this.GetLocalizationKey("KillCount"), count)) { OverrideColor = Color.Lerp(Color.DarkGray, Color.DarkRed, factor * timerFac) };
+        var line = new TooltipLine(Mod, "NPCKillCount", Language.GetTextValue(this.GetLocalizationKey("NPCKillCount"), count)) { OverrideColor = Color.Lerp(Color.DarkGray, Color.DarkGreen, factor * timerFac) };
+        var line2 = new TooltipLine(Mod, "PlrKillCount", Language.GetTextValue(this.GetLocalizationKey("KillCount"), count2)) { OverrideColor = Color.Lerp(Color.DarkGray, Color.DarkRed, factor2 * timerFac) };
         if (index == -1)
+        {
             tooltips.Add(line);
+            if (count2 > 0)
+                tooltips.Add(line2);
+        }
         else
+        {
             tooltips.Insert(index, line);
+            if (count2 > 0)
+                tooltips.Insert(index + 1, line2);
+        }
 
         base.ModifyTooltips(tooltips);
     }
 
-    public override void ModifyWeaponDamage(Player player, ref StatModifier damage)
-    {
-        var count = player.GetModPlayer<LordOfTheFliesPlayer>().PlayerKillCount;
-        var factor = count / (count + 20f);
-        damage.Additive += factor;
-        base.ModifyWeaponDamage(player, ref damage);
-    }
+    //public override void ModifyWeaponDamage(Player player, ref StatModifier damage)
+    //{
+    //    var mplr = player.GetModPlayer<LordOfTheFliesPlayer>();
+    //    var count = mplr.NPCKillCount;
+    //    var factor = count / (count + 200f);
+    //    var count2 = mplr.PlayerKillCount;
+    //    var factor2 = count / (count + 20f);
+    //    damage.Additive += factor * .5f;
+    //    damage.Additive += factor2;
+    //    base.ModifyWeaponDamage(player, ref damage);
+    //}
 }

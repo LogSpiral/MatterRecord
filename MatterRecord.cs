@@ -2,6 +2,7 @@ global using Terraria;
 global using Terraria.ID;
 global using Terraria.IO;
 global using Terraria.ModLoader;
+using MatterRecord.Contents.AliceInWonderland;
 using MatterRecord.Contents.CantSeword;
 using MatterRecord.Contents.DonQuijoteDeLaMancha;
 using MatterRecord.Contents.EternalWine;
@@ -21,9 +22,14 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.GameContent.ItemDropRules;
+using Terraria.GameContent.UI.Elements;
 using Terraria.ModLoader.Config;
+using Terraria.ModLoader.Config.UI;
+using Terraria.ModLoader.UI;
+using Terraria.UI;
 
 namespace MatterRecord
 {
@@ -202,6 +208,15 @@ namespace MatterRecord
                             mplr.SyncAnniCharging(-1, whoAmI);
                         break;
                     }
+                case PacketType.AliceInWonderLandSync: 
+                    {
+                        byte playerNumber = reader.ReadByte();
+                        AliceInWonderlandPlayer mplr = Main.player[playerNumber].GetModPlayer<AliceInWonderlandPlayer>();
+                        mplr.ReceivePlayerSync(reader);
+                        if (Main.netMode == NetmodeID.Server)
+                            mplr.SyncPlayer(-1, whoAmI, false);
+                        break;
+                    }
             }
             base.HandlePacket(reader, whoAmI);
         }
@@ -221,6 +236,7 @@ namespace MatterRecord
         LordOfFilesPlayerSync,
         SyncAltFunctionUse2,
         LordOfFilesChargingSync,
+        AliceInWonderLandSync,
     }
 
 
@@ -253,5 +269,44 @@ namespace MatterRecord
         public static MatterRecordConfig Instance => ModContent.GetInstance<MatterRecordConfig>();
         public override ConfigScope Mode => ConfigScope.ServerSide;
         public bool DonQuijoteSlashActive = false;
+
+        [CustomModConfigItem(typeof(LordOfTheFliesResetElement))]
+        public object LordOfTheFliesUIReset;
+
+
+        class LordOfTheFliesResetElement : ConfigElement<object> 
+        {
+            //public override void OnBind()
+            //{
+            //    base.OnBind();
+            //    Height.Set(36f, 0f);
+            //    DrawLabel = false;
+            //    Append(new UIText(Label, 0.8f)
+            //    {
+            //        TextOriginX = 0f,
+            //        TextOriginY = 0.5f,
+            //        Width = StyleDimension.Fill,
+            //        Height = StyleDimension.Fill,
+            //        Left = new(8f,0)
+            //    });
+            //}
+
+            public override void DrawSelf(SpriteBatch spriteBatch)
+            {
+                var dimensions = GetDimensions();
+                float num = dimensions.Width + 1f;
+                var pos = new Vector2(dimensions.X, dimensions.Y);
+                var color = IsMouseHovering ? UICommon.DefaultUIBlue : UICommon.DefaultUIBlue.MultiplyRGBA(new Color(180, 180, 180));
+                DrawPanel2(spriteBatch, pos, TextureAssets.SettingsPanel.Value, num, dimensions.Height, color);
+
+                base.DrawSelf(spriteBatch);
+            }
+
+            public override void LeftClick(UIMouseEvent evt)
+            {
+                LordOfTheFilesSystem.SetOffsetValue(default);
+                SoundEngine.PlaySound(SoundID.MaxMana);
+            }
+        }
     }
 }

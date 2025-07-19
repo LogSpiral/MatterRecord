@@ -514,6 +514,8 @@ Items: {
 	}
 
 	AliceInWonderlandWatch: {
+		Start: 奇怪的传送门入口
+		End: 奇怪的传送门出口
 		DisplayName: 爱丽丝漫游仙境
 		Tooltip:
 			'''
@@ -528,6 +530,7 @@ Items: {
 	}
 
 	LordOfTheFlies: {
+		NPCKillCount: 这把武器已经击杀了 {0} 个目标
 		KillCount: 这把武器已经杀死了 {0} 位玩家
 		DisplayName: 蝇王
 		Tooltip:
@@ -612,8 +615,13 @@ Configs: {
 		DisplayName: 事象网罗配置
 
 		DonQuijoteSlashActive: {
-			Label: 堂吉诃德左键挥砍模式
+			Label: "[i:MatterRecord/DonQuijoteDeLaMancha]堂吉诃德左键挥砍模式"
 			Tooltip: 开启后使用手持弹幕模式，默认关闭
+		}
+
+		LordOfTheFliesUIReset: {
+			Label: "[i:MatterRecord/LordOfTheFlies]重置蝇王的UI位置为默认值"
+			Tooltip: ""
 		}
 	}
 

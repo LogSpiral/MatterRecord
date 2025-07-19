@@ -3,6 +3,8 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using Terraria.GameInput;
 using Terraria.UI;
 
 namespace MatterRecord.Contents.LordOfTheFlies;
@@ -127,8 +129,34 @@ public class LordOfTheFilesSystem : ModSystem
     {
         if (Progress <= 0) return true;
 
-        DrawChargeBar_Internal(new(Main.screenWidth - 360, 80, 40, 280), Progress, BarValue);
-        DrawAmmoBar_Internal(new(Main.screenWidth - 400, 80, 40, 280), Progress, AmmoValue);
+        DrawChargeBar_Internal(new(Main.screenWidth - 360 + OffsetValue.X, 80 + OffsetValue.Y, 40, 280), Progress, BarValue);
+        DrawAmmoBar_Internal(new(Main.screenWidth - 400 + OffsetValue.X, 80 + OffsetValue.Y, 40, 280), Progress, AmmoValue);
+
+        var dimension = new Rectangle(Main.screenWidth - 400 + (int)OffsetValue.X, 80 + (int)OffsetValue.Y, 80, 280);
+
+        bool flag = dimension.Contains(Main.MouseScreen.ToPoint());
+        if (flag)
+            Main.LocalPlayer.mouseInterface = true;
+        if (!IsDragging && Main.mouseLeft && flag)
+        {
+            IsDragging = true;
+            PendingOffsetValue = OffsetValue;
+            PendingOffsetValue = Main.MouseScreen - PendingOffsetValue;
+        }
+        if (IsDragging)
+        {
+            if (Main.mouseLeft && flag)
+            {
+
+                OffsetValue = Main.MouseScreen - PendingOffsetValue;
+            }
+            else
+            {
+                IsDragging = false;
+                SetOffsetValue(Main.MouseScreen - PendingOffsetValue);
+            }
+
+        }
         return true;
     }
     public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
@@ -173,5 +201,35 @@ public class LordOfTheFilesSystem : ModSystem
     }
     #endregion
 
+    static Vector2 PendingOffsetValue { get; set; }
+    static Vector2 OffsetValue { get; set; }
 
+    static string MainPath { get; set; }
+
+    static bool IsDragging { get; set; }
+
+    public static void SetOffsetValue(Vector2 newOffset)
+    {
+        OffsetValue = newOffset;
+        File.WriteAllText(MainPath, $"{OffsetValue.X},{OffsetValue.Y}");
+    }
+
+    public override void Load()
+    {
+        MainPath = Path.Combine(Main.SavePath, "Mods", nameof(MatterRecord));
+        Directory.CreateDirectory(MainPath);
+        MainPath = Path.Combine(MainPath, "LordOfTieFilesUIOffset.txt");
+        if (File.Exists(MainPath))
+        {
+            var line = File.ReadAllLines(MainPath);
+            if (line.Length > 0)
+            {
+                var content = line[0];
+                var datas = content.Split(",");
+                if (float.TryParse(datas[0], out float x) && float.TryParse(datas[1], out float y))
+                    OffsetValue = new(x, y);
+            }
+        }
+        base.Load();
+    }
 }
