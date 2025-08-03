@@ -1,10 +1,12 @@
-﻿using MatterRecord.Contents.DonQuijoteDeLaMancha;
+﻿using LogSpiralLibrary;
+using MatterRecord.Contents.DonQuijoteDeLaMancha;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
+using Terraria.GameContent;
 using Terraria.Localization;
 
 namespace MatterRecord.Contents.LordOfTheFlies;
@@ -92,6 +94,12 @@ public class LordOfTheFlies : ModItem
                         if (Main.netMode == NetmodeID.MultiplayerClient && Main.myPlayer == player.whoAmI)
                             mplr.SyncPlayer(-1, player.whoAmI, false);
                         SoundEngine.PlaySound(SoundID.Item20);
+                        if (mplr.IsInTrialMode) 
+                        {
+                            var box = player.Hitbox;
+                            //box.Offset(0, -32);
+                            CombatText.NewText(box, Color.Green, this.GetLocalizedValue("Clatter"));
+                        }
                     }
                     else if (_chargeTimer > 120)
                     {
@@ -100,6 +108,7 @@ public class LordOfTheFlies : ModItem
                         if (Main.netMode == NetmodeID.MultiplayerClient && Main.myPlayer == player.whoAmI)
                             mplr.SyncPlayer(-1, player.whoAmI, false);
                         SoundEngine.PlaySound(SoundID.Item45);
+                        mplr.RightCooldown = 30;
                     }
                     _chargeTimer = 0;
                     if (mplr.IsChargingAnnihilation)
@@ -123,24 +132,24 @@ public class LordOfTheFlies : ModItem
                     _chargeTimer++;
                     if (_chargeTimer > 3)
                     {
-                        float factor = Utils.GetLerpValue(3, 40, _chargeTimer, true);
-                        if (_chargeTimer % 3 == 0)
-                            for (int k = 0; k < 4; k++)
-                            {
-                                for (float f = 0; f < MathHelper.PiOver2 * factor; f += 0.1f)
-                                {
-                                    var unit = (f + k * MathHelper.PiOver2).ToRotationVector2();
-                                    var dust = Dust.NewDustPerfect(
-                                        player.Center + unit * 64,
-                                        DustID.GreenTorch,
-                                        new Vector2(-unit.Y, unit.X) * -4 + player.velocity,
-                                        0,
-                                        Color.White * .25f,
-                                        Main.rand.NextFloat()
-                                        * (factor == 1 ? 2f : 1));
-                                    dust.noGravity = true;
-                                }
-                            }
+                        //float factor = Utils.GetLerpValue(3, 40, _chargeTimer, true);
+                        //if (_chargeTimer % 3 == 0)
+                        //    for (int k = 0; k < 4; k++)
+                        //    {
+                        //        for (float f = 0; f < MathHelper.PiOver2 * factor; f += 0.1f)
+                        //        {
+                        //            var unit = (f + k * MathHelper.PiOver2).ToRotationVector2();
+                        //            var dust = Dust.NewDustPerfect(
+                        //                player.Center + unit * 64,
+                        //                DustID.GreenTorch,
+                        //                new Vector2(-unit.Y, unit.X) * -4 + player.velocity,
+                        //                0,
+                        //                Color.White * .25f,
+                        //                Main.rand.NextFloat()
+                        //                * (factor == 1 ? 2f : 1));
+                        //            dust.noGravity = true;
+                        //        }
+                        //    }
                         if (_chargeTimer == 40)
                             SoundEngine.PlaySound(SoundID.MaxMana, player.Center);
                     }
@@ -152,6 +161,7 @@ public class LordOfTheFlies : ModItem
                         player.itemRotation = rotation;
                         if (player.direction < 0)
                             player.itemRotation += MathHelper.Pi;
+                        player.itemRotation += Main.rand.NextFloat(Utils.GetLerpValue(3, 40, _chargeTimer, true) * 0.05f);
                         if (_chargeTimer % 4 == 0)
                         {
                             NetMessage.SendData(MessageID.PlayerControls, -1, -1, null, Main.myPlayer);
@@ -216,7 +226,7 @@ public class LordOfTheFlies : ModItem
         player.scope = false;
         base.UseStyle(player, heldItemFrame);
     }
-    public override bool AltFunctionUse(Player player) => true;
+    public override bool AltFunctionUse(Player player) => player.GetModPlayer<LordOfTheFliesPlayer>().RightCooldown <= 0;
     public override void HoldStyle(Player player, Rectangle heldItemFrame)
     {
         var mplr = player.GetModPlayer<LordOfTheFliesPlayer>();
@@ -262,6 +272,7 @@ public class LordOfTheFlies : ModItem
                 proj.MaxUpdates *= 2;
                 proj.GetGlobalProjectile<LordOfTheFliesGlobalProj>().IsFromTrialMode = true;
                 NetMessage.SendData(MessageID.SyncProjectile, -1, -1, null, proj.whoAmI);
+                player.GetModPlayer<LogSpiralLibraryPlayer>().strengthOfShake += 5.0f;
             }
             else
             {
@@ -340,3 +351,81 @@ public class LordOfTheFlies : ModItem
     //    base.ModifyWeaponDamage(player, ref damage);
     //}
 }
+public class LordOfTheFliesAnnihilationBulletLayer : PlayerDrawLayer 
+{
+    public override Position GetDefaultPosition() => new BeforeParent(PlayerDrawLayers.HeldItem);
+    public override void Draw(ref PlayerDrawSet drawInfo)
+    {
+        if (Main.gameMenu) return;
+        var player = drawInfo.drawPlayer;
+        if (player.whoAmI != Main.myPlayer) return;
+        if (player.HeldItem.type != ModContent.ItemType<LordOfTheFlies>()) return;
+        if (!player.controlUseItem) return;
+        var mplr = player.GetModPlayer<LordOfTheFliesPlayer>();
+        float chargeTimer = mplr.ChargeTimer;
+        if (chargeTimer < 3) return;
+        float factor = Utils.GetLerpValue(3, 40, chargeTimer, true);
+        factor = factor == 1 ? 1 : factor * .5f;
+
+        float factor2 = 0;
+        float factor3 = 0;
+        bool flag = chargeTimer > 40;
+
+        if (flag)
+        {
+            factor2 = Utils.GetLerpValue(40, 60, chargeTimer, true);
+            factor3 = 1 - MathF.Cos(MathF.Tau * MathF.Sqrt(factor2));
+            factor3 *= .125f;
+        }
+
+        var center = player.RotatedRelativePoint(player.MountedCenter);
+        float rotation = (Main.MouseWorld - center).ToRotation();
+        var color = Color.White with { A = 0 };
+        drawInfo.DrawDataCache.Add(
+            new DrawData(
+                TextureAssets.MagicPixel.Value,
+                center - Main.screenPosition, 
+                null,
+                color * factor,
+                rotation - MathHelper.PiOver2, 
+                new Vector2(.5f),
+                new Vector2(2,1), 0, 0));
+
+        if (flag) 
+        {
+            drawInfo.DrawDataCache.Add(
+                new DrawData(
+                    TextureAssets.MagicPixel.Value,
+                    center - Main.screenPosition,
+                    null,
+                    color * factor3 * .25f,
+                    rotation - MathHelper.PiOver2,
+                    new Vector2(.5f),
+                    new Vector2(2 + factor2 * 16,1), 0, 0));
+        }
+
+        drawInfo.DrawDataCache.Add(
+            new DrawData(
+                ModAsset.crosshair.Value, 
+                Main.MouseScreen,
+                null,
+                color * .25f * factor, 
+                Main.GlobalTimeWrappedHourly * 4, 
+                new Vector2(32), 
+                1f, 0, 0));
+
+        if (flag) 
+        {
+            drawInfo.DrawDataCache.Add(
+                new DrawData(
+                    ModAsset.crosshair.Value,
+                    Main.MouseScreen,
+                    null,
+                    color * .25f * factor3,
+                    Main.GlobalTimeWrappedHourly * 4,
+                    new Vector2(32),
+                    1f + 3 * factor2, 0, 0));
+        }
+    }
+}
+

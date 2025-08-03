@@ -509,6 +509,7 @@ Items: {
 	}
 
 	LordOfTheFlies: {
+		Clatter: Clatter
 		NPCKillCount: This weapon has killed {0} Targets
 		KillCount: This weapon has killed {0} Players
 		DisplayName: Lord Of The Flies

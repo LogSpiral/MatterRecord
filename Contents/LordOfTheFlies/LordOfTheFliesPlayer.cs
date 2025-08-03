@@ -27,6 +27,8 @@ public class LordOfTheFliesPlayer : ModPlayer
 
     //public bool ControlUseAnnihilation { get; private set; }
 
+    public int RightCooldown { get; set; }
+
     public override void SaveData(TagCompound tag)
     {
         tag.Add(nameof(StoredAmmoCount), StoredAmmoCount);
@@ -59,6 +61,11 @@ public class LordOfTheFliesPlayer : ModPlayer
 
     public override void PreUpdate()
     {
+#if false
+        StoredAmmoCount = 6;
+        ChargingEnergy = 120;
+#endif
+        RightCooldown--;
         if (Player.HeldItem?.ModItem is not LordOfTheFlies)
             IsInTrialMode = false;
         //ChargingEnergy = 0;

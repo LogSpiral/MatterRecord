@@ -17,10 +17,17 @@ internal class AliceInWonderlandWatch : ModItem
     {
         if (player.whoAmI != Main.myPlayer) return;
         var mplr = player.GetModPlayer<AliceInWonderlandPlayer>();
-        if ((int)Main.time % 60 == 0 && !mplr.PortalSpawnLock && mplr.PortalSpawnedToday < 3 && Main.rand.NextBool(180))
+        if (mplr.CurrentPortalStart.HasValue && Vector2.Distance(mplr.CurrentPortalStart.Value, player.MountedCenter) < 1000) return;
+        if ((int)Main.time % 60 == 0 && !mplr.PortalSpawnLock && mplr.PortalSpawnedToday < 3 && Main.rand.NextBool(10))
         {
-            mplr.CurrentPortalEnd = FindTargetPoint();
-            mplr.CurrentPortalStart = FindStartPoint(player.Center);
+            var end = FindTargetPoint(out bool failed);
+            if (failed) 
+                return;
+            var start = FindStartPoint(player.Center, out failed);
+            if (failed) 
+                return;
+            mplr.CurrentPortalEnd = end;
+            mplr.CurrentPortalStart = start;
             mplr.DustHintTimer = 600;
             if (Main.netMode == NetmodeID.MultiplayerClient)
                 mplr.SyncPlayer(-1, player.whoAmI, false);
@@ -28,8 +35,9 @@ internal class AliceInWonderlandWatch : ModItem
         base.UpdateAccessory(player, hideVisual);
     }
 
-    static Vector2 FindStartPoint(Vector2 currentCenter)
+    static Vector2 FindStartPoint(Vector2 currentCenter,out bool failed)
     {
+        failed = false;
         Vector2 resultPoint;
         int tryTime = 0;
         bool condition;
@@ -38,18 +46,27 @@ internal class AliceInWonderlandWatch : ModItem
             resultPoint = currentCenter + Main.rand.NextVector2Unit() * Main.rand.NextFloat(1200, 1400);
             tryTime++;
             var coord = resultPoint.ToTileCoordinates();
-            var tile = Framing.GetTileSafely(coord);
-            condition = !WorldGen.InWorld(coord.X, coord.Y);
-            condition |= tile.LiquidAmount > 0 && tile.LiquidType != LiquidID.Water;
-            condition |= tile.HasTile;
+            condition = false;
+            for (int i = -1; i <= 1; i++) 
+            {
+                for (int j = -1; j <= 1; j++)
+                {
+                    var tile = Framing.GetTileSafely(new Point(coord.X + i,coord.Y + j));
+                    condition |= !WorldGen.InWorld(coord.X, coord.Y);
+                    condition |= tile.LiquidAmount > 0 && tile.LiquidType != LiquidID.Water;
+                    condition |= tile.HasTile;
+                    if (condition) break;
+                }
+            }
+
 
             if (!condition) 
             {
                 bool flag = false;
                 for (int n = 1; n < 5; n++) 
                 {
-                    tile = Framing.GetTileSafely(new Point(coord.X, coord.Y + n));
-                    if (tile.HasTile)
+                    var tile = Framing.GetTileSafely(new Point(coord.X, coord.Y + n));
+                    if (tile.HasTile && Main.tileSolid[tile.TileType])
                     {
                         flag = true;
                         break;
@@ -58,29 +75,34 @@ internal class AliceInWonderlandWatch : ModItem
                 condition = !flag;
             }
 
-        } while (condition && tryTime < 50);
+        } while (condition && tryTime < 500);
 
+        if (tryTime >= 500) failed = true;
         return resultPoint;
     }
 
-    static Vector2 FindTargetPoint()
+    static Vector2 FindTargetPoint(out bool failed)
     {
+        failed = false;
         Chest targetChest;
         int tryTime = 0;
         bool condition;
+        int tryTime2 = 0;
         do
         {
             targetChest = Main.rand.Next(Main.chest);
             if (targetChest is not null)
                 tryTime++;
+            else tryTime2++;
             condition = targetChest is null || Main.Map.IsRevealed(targetChest.x, targetChest.y) || targetChest.y < Main.worldSurface;
             if (targetChest != null)
             {
                 var tile = Framing.GetTileSafely(targetChest.x, targetChest.y);
                 condition |= tile.wall == 87 || Main.wallDungeon[tile.wall];
             }
-        } while (condition && tryTime < 50);
-
+        } while (condition && tryTime < 500 && tryTime2 < 5000);
+        //if (tryTime >= 500) 
+        //    failed = true;
         Vector2 resultPoint;
         if (targetChest is null)
         {

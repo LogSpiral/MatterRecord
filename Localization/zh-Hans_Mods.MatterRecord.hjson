@@ -530,6 +530,7 @@ Items: {
 	}
 
 	LordOfTheFlies: {
+		Clatter: 咔哒
 		NPCKillCount: 这把武器已经击杀了 {0} 个目标
 		KillCount: 这把武器已经杀死了 {0} 位玩家
 		DisplayName: 蝇王
