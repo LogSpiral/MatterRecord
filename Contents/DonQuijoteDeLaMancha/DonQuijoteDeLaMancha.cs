@@ -1,11 +1,8 @@
 ﻿using LogSpiralLibrary;
-using LogSpiralLibrary.CodeLibrary;
-using LogSpiralLibrary.CodeLibrary.DataStructures.Drawing;
 using LogSpiralLibrary.CodeLibrary.DataStructures.SequenceStructures.Contents.Melee;
 using LogSpiralLibrary.CodeLibrary.DataStructures.SequenceStructures.Contents.Melee.StandardMelee;
 using LogSpiralLibrary.CodeLibrary.DataStructures.SequenceStructures.Core;
 using LogSpiralLibrary.CodeLibrary.DataStructures.SequenceStructures.System;
-using MatterRecord.Contents.Faust;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
@@ -23,12 +20,10 @@ using Terraria.ModLoader.Default;
 using Terraria.ModLoader.IO;
 using Terraria.UI;
 using Terraria.UI.Chat;
-using LogSpiralLibrary.CodeLibrary.DataStructures.SequenceStructures.Core;
-using LogSpiralLibrary.CodeLibrary.DataStructures.SequenceStructures.System;
-using LogSpiralLibrary.CodeLibrary.DataStructures.SequenceStructures.Contents.Melee.StandardMelee;
 using LogSpiralLibrary.CodeLibrary.DataStructures.Drawing.RenderDrawingContents;
 using LogSpiralLibrary.CodeLibrary.Utilties;
 using LogSpiralLibrary.CodeLibrary.Utilties.Extensions;
+using Terraria.ID;
 
 namespace MatterRecord.Contents.DonQuijoteDeLaMancha;
 
@@ -72,7 +67,7 @@ public class DonQuijoteDeLaMancha : MeleeSequenceItem<DonQuijoteDeLaManchaProj>
         {
             if (player.altFunctionUse != 2 && player.GetModPlayer<DonQuijoteDeLaManchaPlayer>().StabTimeLeft <= 0)
             {
-                Item.shoot = 0;
+                Item.shoot = ProjectileID.None;
                 Item.noUseGraphic = false;
                 Item.noMelee = false;
                 Item.useStyle = ItemUseStyleID.Swing;
@@ -172,7 +167,7 @@ public class DonQuijoteDeLaMancha : MeleeSequenceItem<DonQuijoteDeLaManchaProj>
         {
             if (player.altFunctionUse != 2 && player.GetModPlayer<DonQuijoteDeLaManchaPlayer>().StabTimeLeft <= 0 && !SlashActive)
             {
-                Item.shoot = 0;
+                Item.shoot = ProjectileID.None;
                 Item.noUseGraphic = false;
                 Item.noMelee = false;
                 Item.useStyle = ItemUseStyleID.Swing;
@@ -295,18 +290,6 @@ public class DonQuijoteDeLaMancha : MeleeSequenceItem<DonQuijoteDeLaManchaProj>
 }
 public class DonQuijoteDeLaManchaProj : MeleeSequenceProj
 {
-    // TODO 修复贴脸伤害爆炸问题
-    public override void CutTiles()
-    {
-        if (currentData is null) return;
-        DelegateMethods.tilecut_0 = TileCuttingContext.AttackProjectile;
-        Utils.TileActionAttempt cut = new Utils.TileActionAttempt(DelegateMethods.CutTiles);
-        Vector2 beamStartPos = Projectile.Center;
-        Vector2 beamEndPos = Projectile.Center + currentData.targetedVector;
-        Utils.PlotTileLine(beamStartPos, beamEndPos, 16, cut);
-        base.CutTiles();
-    }
-
 
     public override bool LabeledAsCompleted => true;
 
@@ -319,12 +302,16 @@ public class DonQuijoteDeLaManchaProj : MeleeSequenceProj
     }
     public override void UpdateStandardInfo(StandardInfo standardInfo, VertexDrawStandardInfo vertexStandard)
     {
-
+        var mplr = player.GetModPlayer<DonQuijoteDeLaManchaPlayer>();
+        int type = mplr.itemDefinition.Type;
+        int timer = 60;
+        if (type != 0)
+            timer = ContentSamples.ItemsByType[type].useTime;
         standardInfo.standardColor = Color.DarkRed * (player.GetModPlayer<DonQuijoteDeLaManchaPlayer>().StabTimeLeft > 0 ? 0.3f : 0.1f);
-        standardInfo.standardTimer = player.controlUseItem && !player.controlUseTile ? Math.Clamp(player.itemTimeMax, 1, 30) : 10;
+        standardInfo.standardTimer = player.controlUseItem && !player.controlUseTile ? Math.Clamp(timer, 1, 30) : 10;
         standardInfo.standardOrigin = player.GetModPlayer<DonQuijoteDeLaManchaPlayer>().StabTimeLeft > 0 ? new Vector2(.3f, .7f) : new Vector2(.1f, .9f);
 
-        vertexStandard.scaler = DonQuijoteDeLaMancha.SlashActive || player.GetModPlayer<DonQuijoteDeLaManchaPlayer>().StabTimeLeft > 0 || player.GetModPlayer<DonQuijoteDeLaManchaPlayer>().Dashing ? 120 : 0;
+        vertexStandard.scaler = DonQuijoteDeLaMancha.SlashActive || mplr.StabTimeLeft > 0 || mplr.Dashing ? 120 : 0;
 
     }
     //public override string Texture => $"Terraria/Images/Item_{ItemID.ShadowJoustingLance}";

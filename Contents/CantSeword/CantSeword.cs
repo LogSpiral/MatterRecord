@@ -106,7 +106,7 @@ namespace MatterRecord.Contents.CantSeword
             Lighting.AddLight(vector20, 0.8f, 0.8f, 0.8f);
             if (Main.rand.NextBool(3))
             {
-                int num43 = Dust.NewDust(vector20 - projectile.Size / 2f, projectile.width, projectile.height, 63, projectile.velocity.X, projectile.velocity.Y, 100, default(Color), 2f);
+                int num43 = Dust.NewDust(vector20 - projectile.Size / 2f, projectile.width, projectile.height, DustID.WhiteTorch, projectile.velocity.X, projectile.velocity.Y, 100, default(Color), 2f);
                 Main.dust[num43].noGravity = true;
                 Main.dust[num43].position -= projectile.velocity;
             }

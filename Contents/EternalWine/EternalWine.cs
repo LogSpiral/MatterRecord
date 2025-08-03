@@ -128,7 +128,7 @@ namespace MatterRecord.Contents.EternalWine
             for (int i = 0; i < num3; i++)
             {
                 Item item = i >= 58 ? self.bank4.item[i - 58] : self.inventory[i];
-                if (item.stack <= 0 || item.type <= 0 || !item.potion && item.type != ModContent.ItemType<EternalWine>() || item.healLife <= 0)
+                if (item.stack <= 0 || item.type <= ItemID.None || !item.potion && item.type != ModContent.ItemType<EternalWine>() || item.healLife <= 0)
                     continue;
 
                 if (!CombinedHooks.CanUseItem(self, item))

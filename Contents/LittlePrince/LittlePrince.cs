@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Terraria.GameContent.Metadata;
 using Terraria.Localization;
 using Terraria.ObjectData;
+using Terraria.ID;
 
 namespace MatterRecord.Contents.LittlePrince
 {
@@ -173,7 +174,7 @@ namespace MatterRecord.Contents.LittlePrince
                 int num3 = WorldGen.genRand.Next(Math.Max(10, j - 10), Math.Min(Main.maxTilesY - 10, j + 10));
                 if (HasValidGroundForAbigailsFlowerBelowSpot(num2, num3) && NoNearbyAbigailsFlower(num2, num3) && WorldGen.PlaceTile(num2, num3, ModContent.TileType<LittlePrinceRose>(), mute: true))
                 {
-                    if (Main.netMode == 2 && Framing.GetTileSafely(num2, num3) != null && Framing.GetTileSafely(num2, num3).HasTile)
+                    if (Main.netMode == NetmodeID.Server && Framing.GetTileSafely(num2, num3) != null && Framing.GetTileSafely(num2, num3).HasTile)
                         NetMessage.SendTileSquare(-1, num2, num3);
                 }
             }

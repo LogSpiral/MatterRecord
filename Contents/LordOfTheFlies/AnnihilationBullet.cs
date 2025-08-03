@@ -1,5 +1,6 @@
 ﻿using LogSpiralLibrary;
-using LogSpiralLibrary.CodeLibrary;
+using LogSpiralLibrary.CodeLibrary.Utilties.Extensions;
+using LogSpiralLibrary.CodeLibrary.Utilties;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.GameContent;
