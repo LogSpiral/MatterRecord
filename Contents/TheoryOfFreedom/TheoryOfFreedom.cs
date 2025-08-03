@@ -1,17 +1,49 @@
-﻿
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
+using System.IO;
 using Terraria.DataStructures;
-using Terraria.GameContent.ItemDropRules;
+using Terraria.GameInput;
+using Terraria.Localization;
+using Terraria.ModLoader.IO;
 
 namespace MatterRecord.Contents.TheoryOfFreedom;
+
 public class TheoryOfFreedom : ModItem
 {
     public override void UpdateAccessory(Player player, bool hideVisual)
     {
-        player.GetModPlayer<FreedomPlayer>().EquippedTOF = true;
+        var mplr = player.GetModPlayer<FreedomPlayer>();
+        mplr.EquippedTOF = true;
+        if (player.grapCount > 0)
+            player.endurance += 0.1f;
+        player.noFallDmg = true;
+        if (mplr.CanHookPlatform) return;
+
+        Tile thisTile = Framing.GetTileSafely(player.Bottom);
+        Tile bottomTile = Framing.GetTileSafely(player.Bottom + Vector2.UnitY * 8f);
+        if (!Collision.SolidCollision(player.BottomLeft, player.width, 16))
+        {
+            if (player.velocity.Y >= 0f && (IsPlatform(thisTile.TileType) || IsPlatform(bottomTile.TileType)))
+            {
+                player.position.Y += 2f;
+            }
+            if (player.velocity.Y == 0f)
+            {
+                player.position.Y += 16f;
+            }
+        }
+        static bool IsPlatform(int tileType)
+        {
+            if (tileType != 19)
+            {
+                return tileType == 380;
+            }
+            return true;
+        }
         base.UpdateAccessory(player, hideVisual);
     }
+
     public override void SetDefaults()
     {
         Item.width = Item.height = 32;
@@ -20,6 +52,7 @@ public class TheoryOfFreedom : ModItem
         Item.rare = ItemRarityID.Yellow;
         base.SetDefaults();
     }
+
     public override void Load()
     {
         //On_Player.GrappleMovement += On_Player_GrappleMovement;
@@ -40,7 +73,7 @@ public class TheoryOfFreedom : ModItem
             for (int i = 0; i < self.grapCount; i++)
             {
                 Point coord = Main.projectile[self.grappling[i]].Center.ToTileCoordinates();
-                var tile = Main.tile[coord];
+                var tile = Framing.GetTileSafely(coord);
                 if (tile.HasTile && Main.tileSolid[tile.TileType])
                 {
                     orig.Invoke(self);
@@ -57,12 +90,12 @@ public class TheoryOfFreedom : ModItem
             orig.Invoke(self, doubleJumps);
             return;
         }
-        else 
+        else
         {
             for (int i = 0; i < self.grapCount; i++)
             {
                 Point coord = Main.projectile[self.grappling[i]].Center.ToTileCoordinates();
-                var tile = Main.tile[coord];
+                var tile = Framing.GetTileSafely(coord);
                 if (tile.HasTile && Main.tileSolid[tile.TileType])
                 {
                     orig.Invoke(self, doubleJumps);
@@ -70,8 +103,7 @@ public class TheoryOfFreedom : ModItem
                 }
             }
         }
-
-      }
+    }
 
     private static void On_Player_GrappleMovement(On_Player.orig_GrappleMovement orig, Player self)
     {
@@ -84,7 +116,7 @@ public class TheoryOfFreedom : ModItem
         for (int i = 0; i < self.grapCount; i++)
         {
             Point coord = Main.projectile[self.grappling[i]].Center.ToTileCoordinates();
-            var tile = Main.tile[coord];
+            var tile = Framing.GetTileSafely(coord);
             if (tile.HasTile && Main.tileSolid[tile.TileType])
             {
                 antiReset = false;
@@ -94,6 +126,7 @@ public class TheoryOfFreedom : ModItem
         if (antiReset)
             self.wingTime = cache;
     }
+
     public override void Unload()
     {
         On_Player.RefreshMovementAbilities -= On_Player_RefreshMovementAbilities;
@@ -102,40 +135,110 @@ public class TheoryOfFreedom : ModItem
         base.Unload();
     }
 }
+
 public class FreedomPlayer : ModPlayer
 {
     public bool EquippedTOF = false;
+    public bool CanHookPlatform;
+
+    public override void SaveData(TagCompound tag)
+    {
+        tag.Add(nameof(CanHookPlatform), CanHookPlatform);
+        base.SaveData(tag);
+    }
+
+    public override void LoadData(TagCompound tag)
+    {
+        if (tag.TryGet<bool>(nameof(CanHookPlatform), out bool value))
+            CanHookPlatform = value;
+        base.LoadData(tag);
+    }
+
     public override void ResetEffects()
     {
         EquippedTOF = false;
         var v = Player.Center.ToTileCoordinates();
         base.ResetEffects();
     }
+
     public override void PreUpdate()
     {
         flyTimeCache = Player.wingTime;
         base.PreUpdate();
     }
+
     public override void PostUpdate()
     {
-
         base.PostUpdate();
     }
+
     public float flyTimeCache;
     public List<Point> targetTileCoords = [];
+
+    private static ModKeybind CanHookPlatformSwitch { get; set; }
+
+    public override void Load()
+    {
+        CanHookPlatformSwitch = KeybindLoader.RegisterKeybind(Mod, "CanHookPlatform", Keys.L);
+        base.Load();
+    }
+
+    public override void ProcessTriggers(TriggersSet triggersSet)
+    {
+        if (CanHookPlatformSwitch.JustPressed)
+        {
+            CanHookPlatform = !CanHookPlatform;
+            Main.NewText(Language.GetTextValue($"Mods.{nameof(MatterRecord)}.Items.{nameof(TheoryOfFreedom)}.{(CanHookPlatform ? "CanHookOnPlatform" : "CantHookOnPlatform")}"), CanHookPlatform ? Color.Lime : Color.Green);
+            if (Main.netMode == NetmodeID.MultiplayerClient)
+                SyncPlayer(-1, Player.whoAmI, false);
+        }
+        base.ProcessTriggers(triggersSet);
+    }
+
+    public void ReceivePlayerSync(BinaryReader reader)
+    {
+        CanHookPlatform = reader.ReadBoolean();
+    }
+
+    public override void CopyClientState(ModPlayer targetCopy)
+    {
+        FreedomPlayer clone = (FreedomPlayer)targetCopy;
+        clone.CanHookPlatform = CanHookPlatform;
+    }
+
+    public override void SendClientChanges(ModPlayer clientPlayer)
+    {
+        FreedomPlayer clone = (FreedomPlayer)clientPlayer;
+
+        if (CanHookPlatform != clone.CanHookPlatform)
+            SyncPlayer(toWho: -1, fromWho: Main.myPlayer, newPlayer: false);
+    }
+
+    public override void SyncPlayer(int toWho, int fromWho, bool newPlayer)
+    {
+        ModPacket packet = Mod.GetPacket();
+        packet.Write((byte)PacketType.TheoryOfFreedomHookPlatformAbility);
+        packet.Write((byte)Player.whoAmI);
+        packet.Write(CanHookPlatform);
+        packet.Send(toWho, fromWho);
+        base.SyncPlayer(toWho, fromWho, newPlayer);
+    }
 }
+
 public class TOFGlobalProjectile : GlobalProjectile
 {
     public override bool? GrappleCanLatchOnTo(Projectile projectile, Player player, int x, int y)
     {
         var mplr = player.GetModPlayer<FreedomPlayer>();
+        if (mplr.EquippedTOF && !mplr.CanHookPlatform && Main.tileSolidTop[Framing.GetTileSafely(x, y).TileType])
+            return false;
         if (mplr.EquippedTOF && mplr.targetTileCoords.Contains(new Point(x, y)) && Vector2.Distance(player.Center, new Vector2(x, y) * 16) > new Vector2(projectile.width, projectile.height).Length() * 1.5f)
             return true;
         return null;
     }
+
     public override bool? CanUseGrapple(int type, Player player)
     {
-
         var mplr = player.GetModPlayer<FreedomPlayer>();
         if (!mplr.EquippedTOF) return null;
         if ((type < ProjectileID.LunarHookSolar || type > ProjectileID.LunarHookStardust) && type != ProjectileID.Web)
@@ -198,7 +301,7 @@ public class TOFGlobalProjectile : GlobalProjectile
         player.statLife -= player.statLifeMax2 / 100;
         CombatText.NewText(player.Hitbox, CombatText.DamagedFriendly, player.statLifeMax2 / 100);
         if (player.statLife <= 0)
-            player.KillMe(PlayerDeathReason.ByCustomReason($"{player.name}获得了「自由」"), 0, 0);
+            player.KillMe(PlayerDeathReason.ByCustomReason(NetworkText.FromKey($"Mods.{nameof(MatterRecord)}.Items.{nameof(TheoryOfFreedom)}.GotFreedom", player.name)), 0, 0);
 
         if (Main.netMode == NetmodeID.MultiplayerClient)
         {
@@ -214,5 +317,32 @@ public class TOFGlobalProjectile : GlobalProjectile
             packet.Send(-1, player.whoAmI);
         }
         return base.CanUseGrapple(type, player);
+    }
+
+    public override void GrapplePullSpeed(Projectile projectile, Player player, ref float speed)
+    {
+        if (player.GetModPlayer<FreedomPlayer>().EquippedTOF)
+            speed *= 1.5f;
+        base.GrapplePullSpeed(projectile, player, ref speed);
+    }
+
+    public override void GrappleRetreatSpeed(Projectile projectile, Player player, ref float speed)
+    {
+        if (player.GetModPlayer<FreedomPlayer>().EquippedTOF)
+        {
+            speed *= 3f;
+            speed = MathHelper.Min(speed, 100);
+        }
+
+        base.GrappleRetreatSpeed(projectile, player, ref speed);
+    }
+
+    public override void OnSpawn(Projectile projectile, IEntitySource source)
+    {
+        if (projectile.aiStyle == 7 && Main.player[projectile.owner].GetModPlayer<FreedomPlayer>().EquippedTOF)
+        {
+            projectile.velocity *= 2;
+        }
+        base.OnSpawn(projectile, source);
     }
 }

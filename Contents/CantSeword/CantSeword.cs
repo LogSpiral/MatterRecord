@@ -135,7 +135,7 @@ namespace MatterRecord.Contents.CantSeword
 
         public override void KillTile(int i, int j, int type, ref bool fail, ref bool effectOnly, ref bool noItem)
         {
-            bool flag = grassTypes.Contains(Main.tile[i, j].TileType);
+            bool flag = grassTypes.Contains(Framing.GetTileSafely(i, j).TileType);
             if (!flag || !Main.rand.NextBool(5000)) return;
             int number = Item.NewItem(new EntitySource_ItemUse(Main.LocalPlayer, Main.LocalPlayer.HeldItem), i * 16, j * 16, 16, 16, ModContent.ItemType<CantSeword>());
             if (Main.netMode == NetmodeID.MultiplayerClient)

@@ -123,7 +123,7 @@ namespace MatterRecord.Contents.LittlePrince
         {
             if (!WorldGen.InWorld(x, y, 2))
                 return false;
-            Tile tile = Main.tile[x, y + 1];
+            Tile tile = Framing.GetTileSafely(x, y + 1);
             if (tile == null || !tile.HasTile)
                 return false;
 
@@ -146,7 +146,7 @@ namespace MatterRecord.Contents.LittlePrince
             {
                 for (int l = num3; l <= num4; l++)
                 {
-                    Tile tile = Main.tile[k, l];
+                    Tile tile = Framing.GetTileSafely(k, l);
                     if (tile.HasTile && tile.TileType == ModContent.TileType<LittlePrinceRose>())
                         return false;
                 }
@@ -173,7 +173,7 @@ namespace MatterRecord.Contents.LittlePrince
                 int num3 = WorldGen.genRand.Next(Math.Max(10, j - 10), Math.Min(Main.maxTilesY - 10, j + 10));
                 if (HasValidGroundForAbigailsFlowerBelowSpot(num2, num3) && NoNearbyAbigailsFlower(num2, num3) && WorldGen.PlaceTile(num2, num3, ModContent.TileType<LittlePrinceRose>(), mute: true))
                 {
-                    if (Main.netMode == 2 && Main.tile[num2, num3] != null && Main.tile[num2, num3].HasTile)
+                    if (Main.netMode == 2 && Framing.GetTileSafely(num2, num3) != null && Framing.GetTileSafely(num2, num3).HasTile)
                         NetMessage.SendTileSquare(-1, num2, num3);
                 }
             }

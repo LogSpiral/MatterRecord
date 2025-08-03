@@ -2,10 +2,12 @@ global using Terraria;
 global using Terraria.ID;
 global using Terraria.IO;
 global using Terraria.ModLoader;
+using MatterRecord.Contents.AliceInWonderland;
 using MatterRecord.Contents.CantSeword;
 using MatterRecord.Contents.DonQuijoteDeLaMancha;
 using MatterRecord.Contents.EternalWine;
 using MatterRecord.Contents.Faust;
+using MatterRecord.Contents.LordOfTheFlies;
 using MatterRecord.Contents.TheAdventureofSherlockHolmes;
 using MatterRecord.Contents.TheOldManAndTheSea;
 using MatterRecord.Contents.TheoryOfFreedom;
@@ -20,9 +22,14 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.GameContent.ItemDropRules;
+using Terraria.GameContent.UI.Elements;
 using Terraria.ModLoader.Config;
+using Terraria.ModLoader.Config.UI;
+using Terraria.ModLoader.UI;
+using Terraria.UI;
 
 namespace MatterRecord
 {
@@ -88,12 +95,12 @@ namespace MatterRecord
                         }
                         break;
                     }
-                case PacketType.HookPointSync: 
+                case PacketType.HookPointSync:
                     {
                         byte whoami = reader.ReadByte();
                         byte count = reader.ReadByte();
-                        List<Point> coords = new List<Point>();
-                        for (int n = 0; n < count; n++) 
+                        List<Point> coords = [];
+                        for (int n = 0; n < count; n++)
                         {
                             coords.Add(new Point(reader.ReadInt32(), reader.ReadInt32()));
                         }
@@ -116,7 +123,7 @@ namespace MatterRecord
                         }
                         break;
                     }
-                case PacketType.TASHTileSync: 
+                case PacketType.TASHTileSync:
                     {
                         if (Main.netMode != NetmodeID.Server) break;
                         var point = new Point(reader.ReadInt32(), reader.ReadInt32());
@@ -126,12 +133,12 @@ namespace MatterRecord
                         packet.Send(whoAmI);
                         break;
                     }
-                case PacketType.TASHSyncSuccessed: 
+                case PacketType.TASHSyncSuccessed:
                     {
                         TASHSystem.readyToShow = true;
                         break;
                     }
-                case PacketType.FaustSync: 
+                case PacketType.FaustSync:
                     {
                         byte playerNumber = reader.ReadByte();
                         FaustPlayer examplePlayer = Main.player[playerNumber].GetModPlayer<FaustPlayer>();
@@ -139,6 +146,75 @@ namespace MatterRecord
                         if (Main.netMode == NetmodeID.Server)
                             examplePlayer.SyncPlayer(-1, whoAmI, false);
 
+                        break;
+                    }
+                case PacketType.DonQuijoteDeLaManchaItemDefinition:
+                    {
+                        byte playerNumber = reader.ReadByte();
+                        DonQuijoteDeLaManchaPlayer mplr = Main.player[playerNumber].GetModPlayer<DonQuijoteDeLaManchaPlayer>();
+                        mplr.ReceivePlayerSyncItemDefinition(reader);
+                        if (Main.netMode == NetmodeID.Server)
+                            mplr.SyncPlayer(-1, whoAmI, false);
+                        break;
+                    }
+                case PacketType.DonQuijoteDeLaManchaAI:
+                    {
+                        byte playerNumber = reader.ReadByte();
+                        DonQuijoteDeLaManchaPlayer mplr = Main.player[playerNumber].GetModPlayer<DonQuijoteDeLaManchaPlayer>();
+                        mplr.ReceivePlayerSyncAI(reader);
+                        if (Main.netMode == NetmodeID.Server)
+                            mplr.SendSyncAI();
+                        break;
+                    }
+                case PacketType.TheoryOfFreedomHookPlatformAbility: 
+                    {
+                        byte playerNumber = reader.ReadByte();
+                        FreedomPlayer mplr = Main.player[playerNumber].GetModPlayer<FreedomPlayer>();
+                        mplr.ReceivePlayerSync(reader);
+                        if (Main.netMode == NetmodeID.Server)
+                            mplr.SyncPlayer(-1, whoAmI, false);
+                        break;
+                    }
+                case PacketType.LordOfFilesPlayerSync: 
+                    {
+                        byte playerNumber = reader.ReadByte();
+                        LordOfTheFliesPlayer mplr = Main.player[playerNumber].GetModPlayer<LordOfTheFliesPlayer>();
+                        mplr.ReceivePlayerSync(reader);
+                        if (Main.netMode == NetmodeID.Server)
+                            mplr.SyncPlayer(-1, whoAmI, false);
+                        break;
+                    }
+                case PacketType.SyncAltFunctionUse2: 
+                    {
+                        byte playerNumber = reader.ReadByte();
+                        var player = Main.player[playerNumber];
+                        player.altFunctionUse = reader.ReadByte();
+                        if (Main.netMode == NetmodeID.Server) 
+                        {
+                            var packet = GetPacket();
+                            packet.Write((byte)packetType);
+                            packet.Write(playerNumber);
+                            packet.Write((byte)player.altFunctionUse);
+                            packet.Send();
+                        }
+                        break;
+                    }
+                case PacketType.LordOfFilesChargingSync: 
+                    {
+                        byte playerNumber = reader.ReadByte();
+                        LordOfTheFliesPlayer mplr = Main.player[playerNumber].GetModPlayer<LordOfTheFliesPlayer>();
+                        mplr.ReceiveAnniCharging(reader);
+                        if (Main.netMode == NetmodeID.Server)
+                            mplr.SyncAnniCharging(-1, whoAmI);
+                        break;
+                    }
+                case PacketType.AliceInWonderLandSync: 
+                    {
+                        byte playerNumber = reader.ReadByte();
+                        AliceInWonderlandPlayer mplr = Main.player[playerNumber].GetModPlayer<AliceInWonderlandPlayer>();
+                        mplr.ReceivePlayerSync(reader);
+                        if (Main.netMode == NetmodeID.Server)
+                            mplr.SyncPlayer(-1, whoAmI, false);
                         break;
                     }
             }
@@ -153,11 +229,18 @@ namespace MatterRecord
         HookPointSync,
         TASHTileSync,
         TASHSyncSuccessed,
-        FaustSync
+        FaustSync,
+        DonQuijoteDeLaManchaItemDefinition,
+        DonQuijoteDeLaManchaAI,
+        TheoryOfFreedomHookPlatformAbility,
+        LordOfFilesPlayerSync,
+        SyncAltFunctionUse2,
+        LordOfFilesChargingSync,
+        AliceInWonderLandSync,
     }
 
 
-    public class ContentsLoots : GlobalNPC 
+    public class ContentsLoots : GlobalNPC
     {
         public override void ModifyNPCLoot(NPC npc, NPCLoot npcLoot)
         {
@@ -166,7 +249,7 @@ namespace MatterRecord
                 NPCID.KingSlime => ModContent.ItemType<TheAdventureofSherlockHolmes>(),
                 NPCID.DukeFishron => ModContent.ItemType<TheOldManAndTheSea>(),
                 NPCID.Plantera => ModContent.ItemType<TheoryOfFreedom>(),
-                NPCID.EyeofCthulhu=> ModContent.ItemType<DonQuijoteDeLaMancha>(),
+                NPCID.EyeofCthulhu => ModContent.ItemType<DonQuijoteDeLaMancha>(),
                 NPCID.DD2DarkMageT1 or NPCID.DD2DarkMageT3 => ModContent.ItemType<TheoryofJustice>(),
                 NPCID.BrainofCthulhu => ModContent.ItemType<Faust>(),
                 _ => -1
@@ -181,10 +264,49 @@ namespace MatterRecord
     }
 
 
-    public class MatterRecordConfig : ModConfig 
+    public class MatterRecordConfig : ModConfig
     {
         public static MatterRecordConfig Instance => ModContent.GetInstance<MatterRecordConfig>();
         public override ConfigScope Mode => ConfigScope.ServerSide;
         public bool DonQuijoteSlashActive = false;
+
+        [CustomModConfigItem(typeof(LordOfTheFliesResetElement))]
+        public object LordOfTheFliesUIReset;
+
+
+        class LordOfTheFliesResetElement : ConfigElement<object> 
+        {
+            //public override void OnBind()
+            //{
+            //    base.OnBind();
+            //    Height.Set(36f, 0f);
+            //    DrawLabel = false;
+            //    Append(new UIText(Label, 0.8f)
+            //    {
+            //        TextOriginX = 0f,
+            //        TextOriginY = 0.5f,
+            //        Width = StyleDimension.Fill,
+            //        Height = StyleDimension.Fill,
+            //        Left = new(8f,0)
+            //    });
+            //}
+
+            public override void DrawSelf(SpriteBatch spriteBatch)
+            {
+                var dimensions = GetDimensions();
+                float num = dimensions.Width + 1f;
+                var pos = new Vector2(dimensions.X, dimensions.Y);
+                var color = IsMouseHovering ? UICommon.DefaultUIBlue : UICommon.DefaultUIBlue.MultiplyRGBA(new Color(180, 180, 180));
+                DrawPanel2(spriteBatch, pos, TextureAssets.SettingsPanel.Value, num, dimensions.Height, color);
+
+                base.DrawSelf(spriteBatch);
+            }
+
+            public override void LeftClick(UIMouseEvent evt)
+            {
+                LordOfTheFilesSystem.SetOffsetValue(default);
+                SoundEngine.PlaySound(SoundID.MaxMana);
+            }
+        }
     }
 }

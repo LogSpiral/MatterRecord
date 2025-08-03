@@ -199,7 +199,7 @@ namespace MatterRecord.Contents.ZenithBoulder
         {
             float y = Projectile.Center.Y;
             int x = (int)Projectile.Center.X / 16;
-            while (y > Main.screenPosition.Y && WorldGen.InWorld(x, (int)y / 16) && !Main.tile[x, (int)y / 16].HasTile)
+            while (y > Main.screenPosition.Y && WorldGen.InWorld(x, (int)y / 16) && !Framing.GetTileSafely(x, (int)y / 16).HasTile)
                 y -= 16;
 
 
@@ -213,7 +213,7 @@ namespace MatterRecord.Contents.ZenithBoulder
 
             float y = Projectile.Center.Y;
             int x = (int)Projectile.Center.X / 16;
-            while (y > Main.screenPosition.Y && WorldGen.InWorld(x, (int)y / 16) && !Main.tile[x, (int)y / 16].HasTile)
+            while (y > Main.screenPosition.Y && WorldGen.InWorld(x, (int)y / 16) && !Framing.GetTileSafely(x, (int)y / 16).HasTile)
                 y -= 16;
 
             Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center with { Y = y }, Vector2.UnitY * 16, ProjectileID.Boulder, 70, 10f, Main.myPlayer);
@@ -316,7 +316,7 @@ namespace MatterRecord.Contents.ZenithBoulder
         {
 
         }
-        protected override void ApplyPass(GenerationProgress progress, GameConfiguration configuration)
+        public override void ApplyPass(GenerationProgress progress, GameConfiguration configuration)
         {
             progress.Message = "西西弗斯";
             var type = ModContent.TileType<ZenithBoulderTile>();
@@ -325,7 +325,7 @@ namespace MatterRecord.Contents.ZenithBoulder
 
             for (int x = 0; x < Main.maxTilesX; x++)
                 for (int y = 0; y < Main.maxTilesY; y++)
-                    if (Main.tile[x, y].TileType == 138 && !selectedTiles.Contains((x,y)))
+                    if (Framing.GetTileSafely(x, y).TileType == 138 && !selectedTiles.Contains((x,y)))
                     {
 
                         selectedTiles.Add((x, y));

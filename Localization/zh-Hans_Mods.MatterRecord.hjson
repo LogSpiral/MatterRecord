@@ -46,13 +46,20 @@ Items: {
 	}
 
 	TheoryOfFreedom: {
+		CanHookOnPlatform: 现在可以钩至平台
+		CantHookOnPlatform: 现在禁用钩至平台
+		GotFreedom: "{0}获得了「自由」"
 		DisplayName: 自由论
 		Tooltip:
 			'''
 			“知道枷锁的性质比用鲜花装饰它们要好”
 			对所有钩爪进行修改，现在它们能抓在半空中
+			出钩速度x2 拉取速度x1.5 回收速度x3
+			钩住目标时增加10%免伤
 			代价是甩出钩爪需要消耗1%的生命
 			并且钩住空中的物块不再会恢复飞行值
+			免疫摔落伤害
+			可以决定是否能钩住平台/占在平台上
 			'''
 	}
 
@@ -67,6 +74,7 @@ Items: {
 	}
 
 	Faust: {
+		WannaDeal: 怎么，要来场交易吗？
 		MoneySpent: 你已经在恶魔这里消费了
 		DisplayName: 浮士德
 		Tooltip:
@@ -107,6 +115,8 @@ Items: {
 	}
 
 	DonQuijoteDeLaMancha: {
+		DashCooldown: 冲刺冷却
+		CancelStabState: 解除突刺状态
 		InheritedFrom: 目前属性继承自武器
 		SheepDamage: +500%对绵羊大军伤害
 		FindItemHint: 请[c/FF0000:背包内右键]激活后再[c/FF0000:右键某个近战武器]以继承属性
@@ -154,6 +164,12 @@ Items: {
 	}
 
 	TheInterpretationOfDreams: {
+		Unlocked: 已经解锁过了
+		BrokenDreamHint: 捕获到了破碎之梦
+		SweetDreamHint: 捕获到了美梦
+		NightmareHint: 捕获到了噩梦
+		NoDreamHint: 看来暂时不会做新的梦了
+		SpecialDreamHint: 一个特殊的梦境被捕获了
 		DisplayName: 梦的解析
 		Tooltip:
 			'''
@@ -162,119 +178,13 @@ Items: {
 			(破碎之梦50%，美梦20%，噩梦20%，专属梦境10%)
 			获取专属梦境时检测当前玩家梦匣，解锁性的不重复获取
 			'''
-		Unlock: （未解锁）
+		// Unlock: (Locked)
 		Hint: （左键点击以激活/取消激活）
-		SkeletonMerchant:
-			'''
-			骷髅商人之梦
-			激活时，骷髅商人售卖所有商品
-			“我梦到大家都住到地下了，所以今天是骷髅大放送”
-			'''
-		Princess:
-			'''
-			公主之梦
-			激活时，NPC幸福感增加，物品售价修正为原来的90%(不影响晶塔)
-			“在梦里，我的臣民们都很幸福，你也一样！”
-			'''
-		SantaClaus:
-			'''
-			圣诞老人之梦
-			激活时，游戏时间视为圣诞节
-			“哦……今天是圣诞节，你想坐雪橇吗？”
-			'''
-		GoblinTinkerer:
-			'''
-			哥布林工匠之梦
-			激活时，越高级的前缀越有可能被重铸到
-			“谢天谢地，我教会了他们用指南针，虽然是在梦里”
-			'''
-		Merchant:
-			'''
-			商人之梦
-			激活时，出售时的价格系数提升为30%
-			“我梦见镇子里装上了很多路灯……是的，路灯……咳咳”
-			'''
-		Mechanic:
-			'''
-			机械师之梦
-			激活时，使用电线不消耗
-			“我看到了一个机械王国，去把它变为现实吧”
-			'''
-		Demolitionist:
-			'''
-			爆破专家之梦
-			激活时，玩家引起的爆炸不会使自己受伤
-			“我净化了整个世界！等等，那是梦？”
-			'''
-		TaxCollector:
-			'''
-			税收官之梦
-			激活时，对城镇npc造成伤害使他们爆金币(臭虫剑或者臭蛋)(对税收官除外)
-			“你知道的，哪怕是在梦里，他们也不愿意缴税”
-			'''
-		Steampunker:
-			'''
-			蒸汽朋克之梦
-			激活时，飞行时间+2秒，火箭背包额外+5秒
-			“在我梦里你是一名出色的空盗！”
-			'''
-		Dryad:
-			'''
-			树妖之梦
-			激活时，获得永久的树妖祝福buff
-			“为了泰拉瑞亚的净化，也许我需要给你一点帮助，我的梦？在梦里你的内脏变成了外脏”
-			'''
-		WitchDoctor:
-			'''
-			巫医之梦
-			激活时，召唤栏+1
-			“森中的精灵在梦中告诉我，它们很喜欢你”
-			'''
-		Painter:
-			'''
-			画家之梦
-			激活时，使用油漆不消耗
-			“你很有艺术细胞，在梦里我和你办了一次画展！”
-			'''
-		Truffle:
-			'''
-			松露人之梦
-			激活时，仇恨值-100，但你无法食用蘑菇回血
-			“我又梦到有人在啃我的脚，更糟糕的是，醒来后我发现这是真的”
-			'''
-		PartyGirl:
-			'''
-			派对女孩之梦
-			激活时，npc死亡后刷新加快
-			“世界上最棒的派对！是梦？那我会办一场更大的派对！”
-			'''
-		ArmsDealer:
-			'''
-			军火商之梦
-			激活时，15%概率不消耗弹药
-			“太荒谬了，我的子弹居然打光了”
-			'''
-		Angler:
-			'''
-			渔夫之梦
-			激活时，渔夫任务交付时获得两次奖励
-			“你是我的头号仆人，连梦里都在为我捕鱼，哈哈”
-			'''
-		Nurse:
-			'''
-			护士之梦
-			激活时，护士治疗费用减少20%
-			“呃......你可以转过身去吗？抱歉，梦中你的伤势有点惨烈，我得稍微缓缓”
-			'''
-		TravellingMerchant:
-			'''
-			旅行商人之梦
-			激活时，旅行商人每天都会到来
-			“我梦到货物又滞销了，带着这些东西旅行是有点累赘了，所以只能恳请你来多消费消费了”
-			'''
+		UnlockHint: 使用以解锁，通过梦的解析的面板进行控制
 	}
 
 	ClothierDream: {
+		RecipeCondition: 服装商可入住
 		DisplayName: 裁缝之梦
 		Tooltip:
 			'''
@@ -289,6 +199,7 @@ Items: {
 	}
 
 	StylistDream: {
+		RecipeCondition: 理发师可入住
 		DisplayName: 理发师之梦
 		Tooltip:
 			'''
@@ -299,6 +210,7 @@ Items: {
 	}
 
 	DyeTraderDream: {
+		RecipeCondition: 染料商可入住
 		DisplayName: 染料商之梦
 		Tooltip:
 			'''
@@ -308,6 +220,7 @@ Items: {
 	}
 
 	GolferDream: {
+		RecipeCondition: 高尔夫球手可入住
 		DisplayName: 高尔夫手之梦
 		Tooltip:
 			'''
@@ -317,6 +230,7 @@ Items: {
 	}
 
 	GuideDream: {
+		RecipeCondition: 向导可入住
 		DisplayName: 向导之梦
 		Tooltip:
 			'''
@@ -327,6 +241,7 @@ Items: {
 	}
 
 	PirateDream: {
+		RecipeCondition: 海盗船长可入住
 		DisplayName: 海盗船长之梦
 		Tooltip:
 			'''
@@ -336,6 +251,7 @@ Items: {
 	}
 
 	TavernkeepDream: {
+		RecipeCondition: 酒馆老板可入住
 		DisplayName: 酒馆老板之梦
 		Tooltip:
 			'''
@@ -345,6 +261,8 @@ Items: {
 	}
 
 	WizardDream: {
+		RecipeCondition: 巫师可入住
+		ReachedLimit: 已达到上限
 		DisplayName: 巫师之梦
 		Tooltip:
 			'''
@@ -354,20 +272,24 @@ Items: {
 	}
 
 	ZoologiseDream: {
+		RecipeCondition: 动物学家可入住
 		DisplayName: 动物学家之梦
 		Tooltip:
 			'''
 			使用后召唤一只奇怪的城镇史莱姆(未实装十来亩)
 			“我梦到了一只新品种的史莱姆，等等，你说那不是梦？”
 			'''
+		TheSameSlime: 你梦到了同一只史莱姆
 	}
 
 	BrokenDream: {
+		RecipeCondition: None
 		DisplayName: 破碎之梦
-		Tooltip: 使用后获得随机buff
+		Tooltip: 使用后获得随机原版药水buff
 	}
 
 	CybrogDream: {
+		RecipeCondition: 机器侠可入住
 		DisplayName: 机器侠之梦
 		Tooltip:
 			'''
@@ -377,6 +299,7 @@ Items: {
 	}
 
 	TaijiNoYume: {
+		RecipeCondition: None
 		DisplayName: 胎儿之梦
 		Tooltip:
 			'''
@@ -407,6 +330,220 @@ Items: {
 			"在巴格拉季翁部队里，人们对整个战局毫无所知
 			他们谈论和平，但不相信和平有可能实现；
 			谈论打仗，又不相信战斗在即"
+			'''
+	}
+
+	AnglerDream: {
+		RecipeCondition: 渔夫可入住
+		DisplayName: 渔夫之梦
+		Tooltip:
+			'''
+			激活时，渔夫任务交付时获得两次奖励
+			“你是我的头号仆人，连梦里都在为我捕鱼，哈哈”
+			'''
+	}
+
+	ArmsDealerDream: {
+		RecipeCondition: 军火商可入住
+		DisplayName: 军火商之梦
+		Tooltip:
+			'''
+			激活时，15%概率不消耗弹药
+			“太荒谬了，我的子弹居然打光了”
+			'''
+	}
+
+	DemolitionistDream: {
+		RecipeCondition: 爆破专家可入住
+		DisplayName: 爆破专家之梦
+		Tooltip:
+			'''
+			激活时，玩家引起的爆炸不会使自己受伤
+			“我净化了整个世界！等等，那是梦？”
+			'''
+	}
+
+	DryadDream: {
+		RecipeCondition: 树妖可入住
+		DisplayName: 树妖之梦
+		Tooltip:
+			'''
+			激活时，获得永久的树妖祝福buff
+			“为了泰拉瑞亚的净化，也许我需要给你一点帮助，我的梦？在梦里你的内脏变成了外脏”
+			'''
+	}
+
+	GoblinTinkererDream: {
+		RecipeCondition: 哥布林工匠可入住
+		DisplayName: 哥布林工匠之梦
+		Tooltip:
+			'''
+			激活时，越高级的前缀越有可能被重铸到
+			“谢天谢地，我教会了他们用指南针，虽然是在梦里”
+			'''
+	}
+
+	MechanicDream: {
+		RecipeCondition: 机械师可入住
+		DisplayName: 机械师之梦
+		Tooltip:
+			'''
+			激活时，使用电线不消耗
+			“我看到了一个机械王国，去把它变为现实吧”
+			'''
+	}
+
+	MerchantDream: {
+		RecipeCondition: 商人可入住
+		DisplayName: 商人之梦
+		Tooltip:
+			'''
+			激活时，出售时的价格系数提升为30%
+			“我梦见镇子里装上了很多路灯……是的，路灯……咳咳”
+			'''
+	}
+
+	NurseDream: {
+		RecipeCondition: 护士可入住
+		DisplayName: 护士之梦
+		Tooltip:
+			'''
+			激活时，护士治疗费用减少20%
+			“呃......你可以转过身去吗？抱歉，梦中你的伤势有点惨烈，我得稍微缓缓”
+			'''
+	}
+
+	PainterDream: {
+		RecipeCondition: None
+		DisplayName: 画家之梦
+		Tooltip:
+			'''
+			激活时，使用油漆不消耗
+			“你很有艺术细胞，在梦里我和你办了一次画展！”
+			'''
+	}
+
+	PartyGirlDream: {
+		RecipeCondition: 派对女孩可入住
+		DisplayName: 派对女孩之梦
+		Tooltip:
+			'''
+			激活时，npc死亡后刷新加快
+			“世界上最棒的派对！是梦？那我会办一场更大的派对！”
+			'''
+	}
+
+	PrincessDream: {
+		RecipeCondition: 公主可入住
+		DisplayName: 公主之梦
+		Tooltip:
+			'''
+			激活时，NPC幸福感增加，物品售价修正为原来的90%(不影响晶塔)
+			“在梦里，我的臣民们都很幸福，你也一样！”
+			'''
+	}
+
+	SantaClausDream: {
+		RecipeCondition: 圣诞老人可入住
+		DisplayName: 圣诞老人之梦
+		Tooltip:
+			'''
+			激活时，游戏时间视为圣诞节
+			“哦……今天是圣诞节，你想坐雪橇吗？”
+			'''
+	}
+
+	SkeletonMerchantDream: {
+		RecipeCondition: None
+		DisplayName: 骷髅商人之梦
+		Tooltip:
+			'''
+			激活时，骷髅商人售卖所有商品
+			“我梦到大家都住到地下了，所以今天是骷髅大放送”
+			'''
+	}
+
+	SteampunkerDream: {
+		RecipeCondition: 蒸汽朋克可入住
+		DisplayName: 蒸汽朋克之梦
+		Tooltip:
+			'''
+			激活时，飞行时间+2秒，火箭背包额外+5秒
+			“在我梦里你是一名出色的空盗！”
+			'''
+	}
+
+	TaxCollectorDream: {
+		RecipeCondition: 税收官可入住
+		DisplayName: 税收官之梦
+		Tooltip:
+			'''
+			激活时，对城镇npc造成伤害使他们爆金币(臭虫剑或者臭蛋)(对税收官除外)
+			“你知道的，哪怕是在梦里，他们也不愿意缴税”
+			'''
+	}
+
+	TravellingMerchatDream: {
+		RecipeCondition: None
+		DisplayName: 旅行商人之梦
+		Tooltip:
+			'''
+			激活时，旅行商人每天都会到来
+			“我梦到货物又滞销了，带着这些东西旅行是有点累赘了，所以只能恳请你来多消费消费了”
+			'''
+	}
+
+	TruffleDream: {
+		RecipeCondition: 松露人可入住
+		DisplayName: 松露人之梦
+		Tooltip:
+			'''
+			激活时，仇恨值-100，但你无法食用蘑菇回血
+			“我又梦到有人在啃我的脚，更糟糕的是，醒来后我发现这是真的”
+			'''
+	}
+
+	WitchDoctorDream: {
+		RecipeCondition: 巫医可入住
+		DisplayName: 巫医之梦
+		Tooltip:
+			'''
+			激活时，召唤栏+1
+			“森中的精灵在梦中告诉我，它们很喜欢你”
+			'''
+	}
+
+	AliceInWonderlandWatch: {
+		Start: 奇怪的传送门入口
+		End: 奇怪的传送门出口
+		DisplayName: 爱丽丝漫游仙境
+		Tooltip:
+			'''
+			装备后随机产生传送门，右键即可传送
+			每天最多生成三个传送门
+			即时会有粒子指引传送门位置
+			传送门会将你传送至一个地表下的箱子处
+			优先传送至未被探索的区域，不会传送至地牢或者神庙
+
+			“哦，天哪！哦，天哪！我要迟到了！”
+			'''
+	}
+
+	LordOfTheFlies: {
+		Clatter: 咔哒
+		NPCKillCount: 这把武器已经击杀了 {0} 个目标
+		KillCount: 这把武器已经杀死了 {0} 位玩家
+		DisplayName: 蝇王
+		Tooltip:
+			'''
+			右键进入审判模式
+			审判模式下每次射击消耗子弹时额外消耗2.5%能量槽, 附加100%暴击以及20点穿透
+			长按右键消耗100%能量槽制造并储存源质堙灭弹，最多六枚，源质堙灭弹额外造成5%最大生命值伤害
+			“凡不长久的，多将以悲剧”
+
+			源质堙灭弹每次使用消耗1/6能量槽
+			源质堙灭弹仅能在审判模式使用，蓄力状态下长按以瞄准发射
+			审判模式时能量无法自然恢复
 			'''
 	}
 }
@@ -465,6 +602,8 @@ Projectiles: {
 	// CantSewordProj.DisplayName: Unseen Blade Projectile
 	// PeaceCat.DisplayName: Peace Cat
 	// WarCat.DisplayName: War Cat
+	// AliceInWonderlandArrow.DisplayName: Alice In Wonderland Arrow
+	// AnnihilationBullet.DisplayName: Annihilation Bullet
 }
 
 Tiles: {
@@ -477,8 +616,13 @@ Configs: {
 		DisplayName: 事象网罗配置
 
 		DonQuijoteSlashActive: {
-			Label: 堂吉诃德左键挥砍模式
+			Label: "[i:MatterRecord/DonQuijoteDeLaMancha]堂吉诃德左键挥砍模式"
 			Tooltip: 开启后使用手持弹幕模式，默认关闭
+		}
+
+		LordOfTheFliesUIReset: {
+			Label: "[i:MatterRecord/LordOfTheFlies]重置蝇王的UI位置为默认值"
+			Tooltip: ""
 		}
 	}
 
@@ -516,3 +660,10 @@ Configs: {
 		// ModifyData.Label: ModifyData
 	}
 }
+
+Keybinds: {
+	CanHookPlatform.DisplayName: 可以钩至平台
+	// AnnihilationModeKeyBind.DisplayName: Annihilation Mode Key Bind
+}
+
+DamageClasses.RangedMagicDamage.DisplayName: 魔法-远程伤害

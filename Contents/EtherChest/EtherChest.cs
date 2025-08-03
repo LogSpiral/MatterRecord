@@ -87,7 +87,7 @@ namespace MatterRecord.Contents.EtherChest
 
         public override ushort GetMapOption(int i, int j)
         {
-            return (ushort)(Main.tile[i, j].TileFrameX / 36);
+            return (ushort)(Framing.GetTileSafely(i, j).TileFrameX / 36);
         }
 
         public override LocalizedText DefaultContainerName(int frameX, int frameY)
@@ -105,7 +105,7 @@ namespace MatterRecord.Contents.EtherChest
         {
             int left = i;
             int top = j;
-            Tile tile = Main.tile[i, j];
+            Tile tile = Framing.GetTileSafely(i, j);
             if (tile.TileFrameX % 36 != 0)
             {
                 left--;
@@ -144,7 +144,7 @@ namespace MatterRecord.Contents.EtherChest
         public override bool RightClick(int i, int j)
         {
             Player player = Main.LocalPlayer;
-            Tile tile = Main.tile[i, j];
+            Tile tile = Framing.GetTileSafely(i, j);
             Main.mouseRightRelease = false;
             int left = i;
             int top = j;
@@ -217,7 +217,7 @@ namespace MatterRecord.Contents.EtherChest
         public override void MouseOver(int i, int j)
         {
             Player player = Main.LocalPlayer;
-            Tile tile = Main.tile[i, j];
+            Tile tile = Framing.GetTileSafely(i, j);
             int left = i;
             int top = j;
             if (tile.TileFrameX % 36 != 0)
@@ -267,16 +267,22 @@ namespace MatterRecord.Contents.EtherChest
         void Detour_Shimmer(WorldGen.orig_GenPassDetour orig, object self, GenerationProgress progress, GameConfiguration configuration)
         {
             orig(self, progress, configuration);
-            List<Rectangle> structArea = typeof(StructureMap).GetField("_structures",BindingFlags.NonPublic | BindingFlags.Instance).GetValue(GenVars.structures) as List<Rectangle>;
+            List<Rectangle> structArea = typeof(StructureMap).GetField("_structures", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(GenVars.structures) as List<Rectangle>;
             List<Rectangle> protectArea = typeof(StructureMap).GetField("_protectedStructures", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(GenVars.structures) as List<Rectangle>;
             Rectangle s = structArea.Last();
             Rectangle p = protectArea.Last();
             structArea.Remove(s);
             protectArea.Remove(p);
             var point = GenVars.shimmerPosition.ToPoint();
-            for (int i =0; i < 2; i++)
-                for (int j = 0; j < 2; j++)
+            for (int i = -1; i < 3; i++)
+                for (int j = 0; j < 3; j++)
                     WorldGen.KillTile(point.X + i, point.Y + 30 - j, false, false, true);
+
+
+            for (int i = 0; i < 2; i++)
+                WorldGen.PlaceTile(point.X + i * 3 - 1, point.Y + 28, TileID.Torches, false, true, -1, 23);
+
+
 
             int id = WorldGen.PlaceChest(point.X, point.Y + 30, (ushort)ModContent.TileType<EtherChest_Tile>());
             var chest = Main.chest[id];

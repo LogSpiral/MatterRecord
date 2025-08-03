@@ -18,6 +18,8 @@ namespace MatterRecord.Contents.TheInterpretationOfDreams;
 
 public class DreamWorld : ModSystem
 {
+    public static Dictionary<DreamState, int> DreamTypeByState { get; } = [];
+
     public static bool UsedZoologistDream;
     public static List<int> availableDyeId = [];
     public override void PostSetupContent()
