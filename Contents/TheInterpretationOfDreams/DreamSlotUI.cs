@@ -1,9 +1,7 @@
-﻿using MatterRecord.Contents.TheInterpretationOfDreams.TaijiNoYume;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
-using System.Reflection;
 using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.GameContent.UI.Elements;
@@ -18,6 +16,7 @@ public class DreamSlotUI : UIState
 {
     public static bool Visible;
     public static DreamSlotUI instance;
+
     public static void Open()
     {
         Visible = true;
@@ -38,12 +37,15 @@ public class DreamSlotUI : UIState
         instance.Height = new(600, 0);
         instance.Recalculate();
     }
+
     public static void Close()
     {
         Visible = false;
         SoundEngine.PlaySound(SoundID.MenuClose);
     }
-    DraggablePanel mainPanel;
+
+    private DraggablePanel mainPanel;
+
     public override void OnInitialize()
     {
         instance = this;
@@ -96,10 +98,12 @@ public class DreamSlotUI : UIState
         base.OnInitialize();
     }
 }
+
 public class DraggablePanel : UIPanel
 {
     public bool Dragging = false;
     public Vector2 Offset;
+
     public override void LeftMouseDown(UIMouseEvent evt)
     {
         if (evt.Target == this)
@@ -107,15 +111,16 @@ public class DraggablePanel : UIPanel
             Dragging = true;
             var dimension = GetDimensions();
             Offset = new Vector2(evt.MousePosition.X - Left.Pixels, evt.MousePosition.Y - Top.Pixels);
-
         }
         base.LeftMouseDown(evt);
     }
+
     public override void LeftMouseUp(UIMouseEvent evt)
     {
         Dragging = false;
         base.LeftMouseUp(evt);
     }
+
     public override void Update(GameTime gameTime)
     {
         if (Dragging)
@@ -127,14 +132,15 @@ public class DraggablePanel : UIPanel
         base.Update(gameTime);
     }
 }
+
 public class DreamItemSlot : UIPanel
 {
     public int index;
     public Item BindItem => _item ??= Main.LocalPlayer.GetModPlayer<DreamPlayer>().dreamItemSlots[index];
-    Item _item;
+    private Item _item;
+
     public override void LeftClick(UIMouseEvent evt)
     {
-
         base.LeftClick(evt);
         if (Main.mouseItem.type != ItemID.None)
         {
@@ -170,12 +176,12 @@ public class DreamItemSlot : UIPanel
             }
 
             return;
-
         }
         if (BindItem.type == ItemID.None) return;
         Main.mouseItem = BindItem.Clone();
         BindItem.TurnToAir();
     }
+
     public override void RightClick(UIMouseEvent evt)
     {
         base.RightClick(evt);
@@ -197,6 +203,7 @@ public class DreamItemSlot : UIPanel
         if (BindItem.stack <= 0)
             BindItem.TurnToAir();
     }
+
     public override void DrawSelf(SpriteBatch spriteBatch)
     {
         base.DrawSelf(spriteBatch);
@@ -232,9 +239,11 @@ public class DreamItemSlot : UIPanel
         }
     }
 }
+
 public class DreamPowerSlot : UIPanel
 {
     public DreamState targetState;
+
     public override void LeftClick(UIMouseEvent evt)
     {
         var mplr = Main.LocalPlayer.GetModPlayer<DreamPlayer>();
@@ -244,6 +253,7 @@ public class DreamPowerSlot : UIPanel
         SoundEngine.PlaySound(SoundID.MenuTick);
         base.LeftClick(evt);
     }
+
     public override void DrawSelf(SpriteBatch spriteBatch)
     {
         base.DrawSelf(spriteBatch);
@@ -252,7 +262,7 @@ public class DreamPowerSlot : UIPanel
         int type = 0;
         if (DreamWorld.DreamTypeByState.TryGetValue(targetState, out var t))
             type = t;
-        var iconItem = new Item(type) { stack = mplr.CheckUnlock(targetState) ? 1 : 0};
+        var iconItem = new Item(type) { stack = mplr.CheckUnlock(targetState) ? 1 : 0 };
 
         ItemSlot.DrawItemIcon(iconItem, 0, spriteBatch, position, 1f, 40, Color.White);
 
@@ -275,6 +285,7 @@ public class DreamPowerSlot : UIPanel
         }
     }
 }
+
 public class DreamUISystem : ModSystem
 {
     public override void Load()
@@ -289,9 +300,11 @@ public class DreamUISystem : ModSystem
         }
         base.Load();
     }
+
     public static DreamUISystem instance;
     public DreamSlotUI dreamSlotUI;
     public UserInterface userInterface;
+
     public override void UpdateUI(GameTime gameTime)
     {
         if (DreamSlotUI.Visible)
@@ -300,6 +313,7 @@ public class DreamUISystem : ModSystem
         }
         base.UpdateUI(gameTime);
     }
+
     public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
     {
         int MouseTextIndex = layers.FindIndex(layer => layer.Name.Equals("Vanilla: Mouse Text"));
@@ -318,5 +332,4 @@ public class DreamUISystem : ModSystem
         }
         base.ModifyInterfaceLayers(layers);
     }
-
 }

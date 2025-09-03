@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
-using Terraria.ID;
 
 namespace MatterRecord.Contents.AliceInWonderland;
+
 internal class AliceInWonderlandWatch : ModItem
 {
     public override string Texture => $"Terraria/Images/Item_{ItemID.PlatinumWatch}";
@@ -13,6 +13,7 @@ internal class AliceInWonderlandWatch : ModItem
 
         base.SetDefaults();
     }
+
     public override void UpdateAccessory(Player player, bool hideVisual)
     {
         if (player.whoAmI != Main.myPlayer) return;
@@ -21,10 +22,10 @@ internal class AliceInWonderlandWatch : ModItem
         if ((int)Main.time % 60 == 0 && !mplr.PortalSpawnLock && mplr.PortalSpawnedToday < 3 && Main.rand.NextBool(10))
         {
             var end = FindTargetPoint(out bool failed);
-            if (failed) 
+            if (failed)
                 return;
             var start = FindStartPoint(player.Center, out failed);
-            if (failed) 
+            if (failed)
                 return;
             mplr.CurrentPortalEnd = end;
             mplr.CurrentPortalStart = start;
@@ -35,7 +36,7 @@ internal class AliceInWonderlandWatch : ModItem
         base.UpdateAccessory(player, hideVisual);
     }
 
-    static Vector2 FindStartPoint(Vector2 currentCenter,out bool failed)
+    private static Vector2 FindStartPoint(Vector2 currentCenter, out bool failed)
     {
         failed = false;
         Vector2 resultPoint;
@@ -47,11 +48,11 @@ internal class AliceInWonderlandWatch : ModItem
             tryTime++;
             var coord = resultPoint.ToTileCoordinates();
             condition = false;
-            for (int i = -1; i <= 1; i++) 
+            for (int i = -1; i <= 1; i++)
             {
                 for (int j = -1; j <= 1; j++)
                 {
-                    var tile = Framing.GetTileSafely(new Point(coord.X + i,coord.Y + j));
+                    var tile = Framing.GetTileSafely(new Point(coord.X + i, coord.Y + j));
                     condition |= !WorldGen.InWorld(coord.X, coord.Y);
                     condition |= tile.LiquidAmount > 0 && tile.LiquidType != LiquidID.Water;
                     condition |= tile.HasTile;
@@ -59,11 +60,10 @@ internal class AliceInWonderlandWatch : ModItem
                 }
             }
 
-
-            if (!condition) 
+            if (!condition)
             {
                 bool flag = false;
-                for (int n = 1; n < 5; n++) 
+                for (int n = 1; n < 5; n++)
                 {
                     var tile = Framing.GetTileSafely(new Point(coord.X, coord.Y + n));
                     if (tile.HasTile && Main.tileSolid[tile.TileType])
@@ -74,14 +74,13 @@ internal class AliceInWonderlandWatch : ModItem
                 }
                 condition = !flag;
             }
-
         } while (condition && tryTime < 500);
 
         if (tryTime >= 500) failed = true;
         return resultPoint;
     }
 
-    static Vector2 FindTargetPoint(out bool failed)
+    private static Vector2 FindTargetPoint(out bool failed)
     {
         failed = false;
         Chest targetChest;
@@ -101,7 +100,7 @@ internal class AliceInWonderlandWatch : ModItem
                 condition |= tile.wall == 87 || Main.wallDungeon[tile.wall];
             }
         } while (condition && tryTime < 500 && tryTime2 < 5000);
-        //if (tryTime >= 500) 
+        //if (tryTime >= 500)
         //    failed = true;
         Vector2 resultPoint;
         if (targetChest is null)
@@ -116,7 +115,6 @@ internal class AliceInWonderlandWatch : ModItem
                 condition = !WorldGen.InWorld(coord.X, coord.Y);
                 condition |= tile.LiquidAmount > 0 && tile.LiquidType != LiquidID.Water;
                 condition |= tile.HasTile;
-
             } while (condition && tryTime < 50);
         }
         else

@@ -1,24 +1,21 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Terraria.GameContent.Metadata;
 using Terraria.Localization;
 using Terraria.ObjectData;
-using Terraria.ID;
 
 namespace MatterRecord.Contents.LittlePrince
 {
     public class LittlePrincePlayer : ModPlayer
     {
         public bool EquippedRose;
+
         public override void ResetEffects()
         {
             EquippedRose = false;
             base.ResetEffects();
         }
+
         public override void Load()
         {
             On_Player.DropCoins += PrinceBanDropCoins;
@@ -31,12 +28,14 @@ namespace MatterRecord.Contents.LittlePrince
             if (self.GetModPlayer<LittlePrincePlayer>().EquippedRose) return;
             orig(self, coinsOwned, deathText, hitDirection);
         }
+
         public override void UpdateEquips()
         {
             Player.buffImmune[BuffID.ManaSickness] = EquippedRose;
 
             base.UpdateEquips();
         }
+
         private static long PrinceBanDropCoins(On_Player.orig_DropCoins orig, Player self)
         {
             if (self.GetModPlayer<LittlePrincePlayer>().EquippedRose)
@@ -55,6 +54,7 @@ namespace MatterRecord.Contents.LittlePrince
             base.Unload();
         }
     }
+
     public class LittlePrince : ModItem
     {
         //public override string Texture => $"Terraria/Images/Item_{ItemID.JungleRose}";
@@ -67,13 +67,14 @@ namespace MatterRecord.Contents.LittlePrince
             Item.accessory = true;
             base.SetDefaults();
         }
+
         public override void UpdateEquip(Player player)
         {
             player.GetModPlayer<LittlePrincePlayer>().EquippedRose = true;
             base.UpdateEquip(player);
         }
-
     }
+
     public class LittlePrinceRose : ModTile
     {
         public override void SetStaticDefaults()
@@ -88,8 +89,6 @@ namespace MatterRecord.Contents.LittlePrince
 
             LocalizedText name = CreateMapEntryName();
             AddMapEntry(new Color(128, 128, 128), name);
-
-
 
             TileObjectData.newTile.CopyFrom(TileObjectData.StyleAlch);
             TileObjectData.newTile.AnchorValidTiles = [
@@ -111,6 +110,7 @@ namespace MatterRecord.Contents.LittlePrince
             HitSound = SoundID.Grass;
             DustType = DustID.Grass;
         }
+
         public override IEnumerable<Item> GetItemDrops(int i, int j)
         {
             return [new Item(ModContent.ItemType<LittlePrince>())];
@@ -119,7 +119,6 @@ namespace MatterRecord.Contents.LittlePrince
 
     public class LittlePrinceRoseSpawn : GlobalTile
     {
-
         private static bool HasValidGroundForAbigailsFlowerBelowSpot(int x, int y)
         {
             if (!WorldGen.InWorld(x, y, 2))
@@ -174,7 +173,7 @@ namespace MatterRecord.Contents.LittlePrince
                 int num3 = WorldGen.genRand.Next(Math.Max(10, j - 10), Math.Min(Main.maxTilesY - 10, j + 10));
                 if (HasValidGroundForAbigailsFlowerBelowSpot(num2, num3) && NoNearbyAbigailsFlower(num2, num3) && WorldGen.PlaceTile(num2, num3, ModContent.TileType<LittlePrinceRose>(), mute: true))
                 {
-                    if (Main.netMode == NetmodeID.Server && Framing.GetTileSafely(num2, num3) != null && Framing.GetTileSafely(num2, num3).HasTile)
+                    if (Main.dedServ && Framing.GetTileSafely(num2, num3) != null && Framing.GetTileSafely(num2, num3).HasTile)
                         NetMessage.SendTileSquare(-1, num2, num3);
                 }
             }

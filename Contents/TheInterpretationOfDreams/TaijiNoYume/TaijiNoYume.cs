@@ -4,6 +4,5 @@ public class TaijiNoYume() : BasicDream(null, null)
 {
     public override void AddRecipes()
     {
-        
     }
 }

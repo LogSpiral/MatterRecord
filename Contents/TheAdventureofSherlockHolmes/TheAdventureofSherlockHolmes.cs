@@ -1,9 +1,4 @@
 ﻿using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MatterRecord.Contents.TheAdventureofSherlockHolmes
 {
@@ -14,15 +9,18 @@ namespace MatterRecord.Contents.TheAdventureofSherlockHolmes
             Main.OnPostFullscreenMapDraw += Main_OnPostFullscreenMapDraw;
             base.Load();
         }
+
         public override void Unload()
         {
             Main.OnPostFullscreenMapDraw -= Main_OnPostFullscreenMapDraw;
             base.Unload();
         }
+
         public static int coolDown;
         public static Point? cachePoint;
         public static bool readyToShow;
-        static void LightOnMap(Point worldCoord)
+
+        private static void LightOnMap(Point worldCoord)
         {
             for (int i = worldCoord.X - 3; i < worldCoord.X + 4; i++)
             {
@@ -36,6 +34,7 @@ namespace MatterRecord.Contents.TheAdventureofSherlockHolmes
             }
             Main.refreshMap = true;
         }
+
         private void Main_OnPostFullscreenMapDraw(Vector2 arg1, float arg2)
         {
             if (Main.netMode == NetmodeID.MultiplayerClient && readyToShow && cachePoint.HasValue && Main.LocalPlayer.BuyItem(Item.buyPrice(0, 0, Main.LocalPlayer.discountEquipped ? 8 : 10, 0)))
@@ -73,9 +72,9 @@ namespace MatterRecord.Contents.TheAdventureofSherlockHolmes
                     coolDown = 30;
                 }
             }
-
         }
     }
+
     public class TheAdventureofSherlockHolmes : ModItem
     {
         public override void SetDefaults()

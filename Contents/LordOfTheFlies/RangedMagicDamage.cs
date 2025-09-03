@@ -1,6 +1,6 @@
 ﻿namespace MatterRecord.Contents.LordOfTheFlies;
 
-public class RangedMagicDamage:DamageClass
+public class RangedMagicDamage : DamageClass
 {
     public override StatInheritanceData GetModifierInheritance(DamageClass damageClass)
     {

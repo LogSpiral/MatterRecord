@@ -4,7 +4,6 @@ using ReLogic.Content;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using Terraria.GameInput;
 using Terraria.UI;
 
 namespace MatterRecord.Contents.LordOfTheFlies;
@@ -12,14 +11,17 @@ namespace MatterRecord.Contents.LordOfTheFlies;
 public class LordOfTheFilesSystem : ModSystem
 {
     #region Properties
+
     public static float Progress { get; set; }
 
     public static float BarValue { get; set; }
 
     public static float AmmoValue { get; set; }
-    #endregion
+
+    #endregion Properties
 
     #region Assets
+
     public static Asset<Texture2D> ElementPanelBorder => ModAsset.Element_Panel_Right_Border;
     public static Asset<Texture2D> ElementPanelContent => ModAsset.Element_Panel_Right_Content;
     public static Asset<Texture2D> ElementPanelMiddleBorder => ModAsset.Element_Panel_Middle_Border;
@@ -27,13 +29,14 @@ public class LordOfTheFilesSystem : ModSystem
     public static Asset<Texture2D> ElementPanelFill => ModAsset.Element_Fill;
     public static Asset<Texture2D> ElementPanelEnd => ModAsset.Panel_Left;
 
-
     public static Asset<Texture2D> ElementPanelMiddleBorderLong => ModAsset.Element_Panel_Middle_Border_Long;
     public static Asset<Texture2D> ElementPanelMiddleGroundLong => ModAsset.Element_Panel_Middle_Ground_Long;
     public static Asset<Texture2D> ElementPanelFillLong => ModAsset.Element_Fill_Long;
-    #endregion
+
+    #endregion Assets
 
     #region Drawing
+
     public static void DrawChargeBar_Internal(CalculatedStyle destination, float elementBarProgress, float elementBarValue)
     {
         SpriteBatch spriteBatch = Main.spriteBatch;
@@ -44,7 +47,9 @@ public class LordOfTheFilesSystem : ModSystem
         Color color = Color.Green;
         float factor1 = MathHelper.SmoothStep(0, 1, 2 * elementBarProgress);
         float factor2 = MathHelper.SmoothStep(0, 1, elementBarProgress * 2 - 1);
+
         #region Bar
+
         var offsetUnit = new Vector2(0, 12 * factor2);
         var offset = new Vector2(-30, 40);
         if (flag)
@@ -61,9 +66,10 @@ public class LordOfTheFilesSystem : ModSystem
         for (int n = 0; n < 20; n++)
             spriteBatch.Draw(ElementPanelMiddleBorder.Value, topLeft + offset + offsetUnit * n + new Vector2(24, -12), new Rectangle(0, 0, (int)(12f * factor2 + 1), 24), Color.White * factor1 * factor1, MathHelper.PiOver2, default, 1f, 0, 0);
 
-        #endregion
+        #endregion Bar
 
         #region icon
+
         spriteBatch.Draw(ElementPanelEnd.Value, topLeft + offset + offsetUnit * 20 - new Vector2(0, 6), null, Color.White * factor1, -MathHelper.PiOver2, default, 1f, 0, 0);
 
         if (flag)
@@ -71,14 +77,15 @@ public class LordOfTheFilesSystem : ModSystem
             spriteBatch.Draw(ElementPanelContent.Value, topLeft, null, color * factor1, MathHelper.PiOver2, default, 1f, SpriteEffects.FlipHorizontally, 0);
             for (int n = 0; n < 3; n++)
                 spriteBatch.Draw(ElementPanelContent.Value, topLeft + Main.rand.NextVector2Unit() * elementBarValue * 4, null, Color.White with { A = 0 } * .25f * factor1 * elementBarValue, MathHelper.PiOver2, default, 1f, SpriteEffects.FlipHorizontally, 0);
-
         }
         spriteBatch.Draw(ElementPanelBorder.Value, topLeft, null, Color.White * factor1, MathHelper.PiOver2, default, 1f, SpriteEffects.FlipHorizontally, 0);
-        #endregion
+
+        #endregion icon
 
         if (destination.ToRectangle().Contains(Main.MouseScreen.ToPoint()))
             Main.instance.MouseText((elementBarValue * 100).ToString("0.0") + "%");
     }
+
     public static void DrawAmmoBar_Internal(CalculatedStyle destination, float elementBarProgress, float elementBarValue)
     {
         SpriteBatch spriteBatch = Main.spriteBatch;
@@ -89,7 +96,9 @@ public class LordOfTheFilesSystem : ModSystem
         Color color = Color.Green;
         float factor1 = MathHelper.SmoothStep(0, 1, 2 * elementBarProgress);
         float factor2 = MathHelper.SmoothStep(0, 1, elementBarProgress * 2 - 1);
+
         #region Bar
+
         var offsetUnit = new Vector2(0, 40 * factor2);
         var offset = new Vector2(-30, 40);
         if (flag)
@@ -106,9 +115,10 @@ public class LordOfTheFilesSystem : ModSystem
         for (int n = 0; n < 6; n++)
             spriteBatch.Draw(ElementPanelMiddleBorderLong.Value, topLeft + offset + offsetUnit * n + new Vector2(24, -12), new Rectangle(0, 0, (int)(40f * factor2 + 1), 24), Color.White * factor1 * factor1, MathHelper.PiOver2, default, 1f, 0, 0);
 
-        #endregion
+        #endregion Bar
 
         #region icon
+
         spriteBatch.Draw(ElementPanelEnd.Value, topLeft + offset + offsetUnit * 6 - new Vector2(0, 6), null, Color.White * factor1, -MathHelper.PiOver2, default, 1f, 0, 0);
 
         if (flag)
@@ -116,10 +126,10 @@ public class LordOfTheFilesSystem : ModSystem
             spriteBatch.Draw(ElementPanelContent.Value, topLeft, null, color * factor1, MathHelper.PiOver2, default, 1f, SpriteEffects.FlipHorizontally, 0);
             for (int n = 0; n < 3; n++)
                 spriteBatch.Draw(ElementPanelContent.Value, topLeft + Main.rand.NextVector2Unit() * elementBarValue * 4, null, Color.White with { A = 0 } * .25f * factor1 * elementBarValue, MathHelper.PiOver2, default, 1f, SpriteEffects.FlipHorizontally, 0);
-
         }
         spriteBatch.Draw(ElementPanelBorder.Value, topLeft, null, Color.White * factor1, MathHelper.PiOver2, default, 1f, SpriteEffects.FlipHorizontally, 0);
-        #endregion
+
+        #endregion icon
 
         if (destination.ToRectangle().Contains(Main.MouseScreen.ToPoint()))
             Main.instance.MouseText((elementBarValue * 100).ToString("0.0") + "%");
@@ -147,7 +157,6 @@ public class LordOfTheFilesSystem : ModSystem
         {
             if (Main.mouseLeft && flag)
             {
-
                 OffsetValue = Main.MouseScreen - PendingOffsetValue;
             }
             else
@@ -155,10 +164,10 @@ public class LordOfTheFilesSystem : ModSystem
                 IsDragging = false;
                 SetOffsetValue(Main.MouseScreen - PendingOffsetValue);
             }
-
         }
         return true;
     }
+
     public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
     {
         int inventoryIndex = layers.FindIndex(layer => layer.Name == "Vanilla: Inventory");
@@ -167,9 +176,11 @@ public class LordOfTheFilesSystem : ModSystem
 
         base.ModifyInterfaceLayers(layers);
     }
-    #endregion
+
+    #endregion Drawing
 
     #region Update
+
     public override void PostUpdatePlayers()
     {
         Player player = Main.LocalPlayer;
@@ -189,7 +200,6 @@ public class LordOfTheFilesSystem : ModSystem
             if (result > 0.9999f) result = 1;
             AmmoValue = result;
 
-
             progressTarget = 1;
         }
 
@@ -199,14 +209,15 @@ public class LordOfTheFilesSystem : ModSystem
 
         base.PostUpdatePlayers();
     }
-    #endregion
 
-    static Vector2 PendingOffsetValue { get; set; }
-    static Vector2 OffsetValue { get; set; }
+    #endregion Update
 
-    static string MainPath { get; set; }
+    private static Vector2 PendingOffsetValue { get; set; }
+    private static Vector2 OffsetValue { get; set; }
 
-    static bool IsDragging { get; set; }
+    private static string MainPath { get; set; }
+
+    private static bool IsDragging { get; set; }
 
     public static void SetOffsetValue(Vector2 newOffset)
     {

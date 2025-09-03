@@ -1,11 +1,5 @@
-﻿using MatterRecord.Contents.TheoryOfFreedom;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
-using System.IO;
-using Terraria.GameInput;
+﻿using System.IO;
 using Terraria.ModLoader.IO;
-using Terraria.WorldBuilding;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace MatterRecord.Contents.LordOfTheFlies;
 
@@ -22,7 +16,6 @@ public class LordOfTheFliesPlayer : ModPlayer
     public int PlayerKillCount { get; set; }
     public int NPCKillCount { get; set; }
 
-
     public bool IsChargingAnnihilation { get; set; }
 
     //public bool ControlUseAnnihilation { get; private set; }
@@ -36,6 +29,7 @@ public class LordOfTheFliesPlayer : ModPlayer
         tag.Add(nameof(NPCKillCount), NPCKillCount);
         base.SaveData(tag);
     }
+
     public override void LoadData(TagCompound tag)
     {
         if (tag.TryGet(nameof(StoredAmmoCount), out int amount))
@@ -90,6 +84,7 @@ public class LordOfTheFliesPlayer : ModPlayer
             ControlUseAnnihilation= false;
         base.ProcessTriggers(triggersSet);
     }*/
+
     public override void ModifyHurt(ref Player.HurtModifiers modifiers)
     {
         modifiers.DamageSource.TryGetCausingEntity(out var causing);
@@ -101,10 +96,10 @@ public class LordOfTheFliesPlayer : ModPlayer
                 modifiers.ArmorPenetration += 20;
                 modifiers.FinalDamage += 1;
             }
-
         }
         base.ModifyHurt(ref modifiers);
     }
+
     public override void OnHurt(Player.HurtInfo info)
     {
         info.DamageSource.TryGetCausingEntity(out var causing);
@@ -123,7 +118,6 @@ public class LordOfTheFliesPlayer : ModPlayer
             }
         }
     }
-
 
     public void ReceivePlayerSync(BinaryReader reader)
     {

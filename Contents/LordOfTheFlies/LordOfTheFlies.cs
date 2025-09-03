@@ -1,9 +1,7 @@
 ﻿using LogSpiralLibrary;
-using MatterRecord.Contents.DonQuijoteDeLaMancha;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
-using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent;
@@ -27,6 +25,7 @@ public class LordOfTheFlies : ModItem
         Item.noMelee = true;
         base.SetDefaults();
     }
+
     public override bool CanUseItem(Player player)
     {
         ItemID.Sets.gunProj[Item.type] = true;
@@ -42,6 +41,7 @@ public class LordOfTheFlies : ModItem
         }
         return true;
     }
+
     public override void UseStyle(Player player, Rectangle heldItemFrame)
     {
         var mplr = player.GetModPlayer<LordOfTheFliesPlayer>();
@@ -77,7 +77,6 @@ public class LordOfTheFlies : ModItem
                             }
                         if (_chargeTimer == 120)
                             SoundEngine.PlaySound(SoundID.MaxMana, player.Center);
-
                     }
                     if (!mplr.IsChargingAnnihilation)
                     {
@@ -94,7 +93,7 @@ public class LordOfTheFlies : ModItem
                         if (Main.netMode == NetmodeID.MultiplayerClient && Main.myPlayer == player.whoAmI)
                             mplr.SyncPlayer(-1, player.whoAmI, false);
                         SoundEngine.PlaySound(SoundID.Item20);
-                        if (mplr.IsInTrialMode) 
+                        if (mplr.IsInTrialMode)
                         {
                             var box = player.Hitbox;
                             //box.Offset(0, -32);
@@ -119,7 +118,6 @@ public class LordOfTheFlies : ModItem
                     }
                 }
             }
-
         }
         if (player.altFunctionUse == 0)
         {
@@ -166,7 +164,6 @@ public class LordOfTheFlies : ModItem
                         {
                             NetMessage.SendData(MessageID.PlayerControls, -1, -1, null, Main.myPlayer);
                             NetMessage.SendData(MessageID.ShotAnimationAndSound, -1, -1, null, Main.myPlayer);
-
                         }
                     }
                     player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, player.itemRotation - (player.direction < 0 ? MathHelper.Pi : 0) - MathHelper.PiOver2);
@@ -196,7 +193,6 @@ public class LordOfTheFlies : ModItem
                             );
                         _chargeTimer = 0;
                     }
-
                 }
             }
             else
@@ -216,17 +212,17 @@ public class LordOfTheFlies : ModItem
                     {
                         NetMessage.SendData(MessageID.PlayerControls, -1, -1, null, Main.myPlayer);
                         NetMessage.SendData(MessageID.ShotAnimationAndSound, -1, -1, null, Main.myPlayer);
-
                     }
                 }
                 player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, player.itemRotation - (player.direction < 0 ? MathHelper.Pi : 0) - MathHelper.PiOver2);
-
             }
         }
         player.scope = false;
         base.UseStyle(player, heldItemFrame);
     }
+
     public override bool AltFunctionUse(Player player) => player.GetModPlayer<LordOfTheFliesPlayer>().RightCooldown <= 0;
+
     public override void HoldStyle(Player player, Rectangle heldItemFrame)
     {
         var mplr = player.GetModPlayer<LordOfTheFliesPlayer>();
@@ -247,6 +243,7 @@ public class LordOfTheFlies : ModItem
         }
         base.HoldStyle(player, heldItemFrame);
     }
+
     private static void ManualShoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
     {
         var mplr = player.GetModPlayer<LordOfTheFliesPlayer>();
@@ -294,7 +291,6 @@ public class LordOfTheFlies : ModItem
                 proj.MaxUpdates *= 2;
                 proj.GetGlobalProjectile<LordOfTheFliesGlobalProj>().IsFromTrialMode = true;
                 NetMessage.SendData(MessageID.SyncProjectile, -1, -1, null, proj.whoAmI);
-
             }
         }
         else
@@ -303,11 +299,11 @@ public class LordOfTheFlies : ModItem
             SoundEngine.PlaySound(SoundID.Item11, player.Center);
         }
     }
+
     public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
     {
         return false;
     }
-
 
     public override void ModifyTooltips(List<TooltipLine> tooltips)
     {
@@ -351,9 +347,11 @@ public class LordOfTheFlies : ModItem
     //    base.ModifyWeaponDamage(player, ref damage);
     //}
 }
-public class LordOfTheFliesAnnihilationBulletLayer : PlayerDrawLayer 
+
+public class LordOfTheFliesAnnihilationBulletLayer : PlayerDrawLayer
 {
     public override Position GetDefaultPosition() => new BeforeParent(PlayerDrawLayers.HeldItem);
+
     public override void Draw(ref PlayerDrawSet drawInfo)
     {
         if (Main.gameMenu) return;
@@ -384,14 +382,14 @@ public class LordOfTheFliesAnnihilationBulletLayer : PlayerDrawLayer
         drawInfo.DrawDataCache.Add(
             new DrawData(
                 TextureAssets.MagicPixel.Value,
-                center - Main.screenPosition, 
+                center - Main.screenPosition,
                 null,
                 color * factor,
-                rotation - MathHelper.PiOver2, 
+                rotation - MathHelper.PiOver2,
                 new Vector2(.5f),
-                new Vector2(2,1), 0, 0));
+                new Vector2(2, 1), 0, 0));
 
-        if (flag) 
+        if (flag)
         {
             drawInfo.DrawDataCache.Add(
                 new DrawData(
@@ -401,20 +399,20 @@ public class LordOfTheFliesAnnihilationBulletLayer : PlayerDrawLayer
                     color * factor3 * .25f,
                     rotation - MathHelper.PiOver2,
                     new Vector2(.5f),
-                    new Vector2(2 + factor2 * 16,1), 0, 0));
+                    new Vector2(2 + factor2 * 16, 1), 0, 0));
         }
 
         drawInfo.DrawDataCache.Add(
             new DrawData(
-                ModAsset.crosshair.Value, 
+                ModAsset.crosshair.Value,
                 Main.MouseScreen,
                 null,
-                color * .25f * factor, 
-                Main.GlobalTimeWrappedHourly * 4, 
-                new Vector2(32), 
+                color * .25f * factor,
+                Main.GlobalTimeWrappedHourly * 4,
+                new Vector2(32),
                 1f, 0, 0));
 
-        if (flag) 
+        if (flag)
         {
             drawInfo.DrawDataCache.Add(
                 new DrawData(
@@ -428,4 +426,3 @@ public class LordOfTheFliesAnnihilationBulletLayer : PlayerDrawLayer
         }
     }
 }
-

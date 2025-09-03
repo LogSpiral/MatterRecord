@@ -1,13 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Terraria.Audio;
 using Terraria.DataStructures;
-using Terraria.GameContent;
-using Terraria.ID;
 
 namespace MatterRecord.Contents.CantSeword
 {
@@ -28,7 +23,9 @@ namespace MatterRecord.Contents.CantSeword
             Item.channel = true;
             base.SetDefaults();
         }
+
         public override bool CanUseItem(Player player) => player.ownedProjectileCounts[Item.shoot] < 1;
+
         public override void Load()
         {
             On_PopupText.NewText_PopupTextContext_Item_int_bool_bool += CantSewordModify;
@@ -42,6 +39,7 @@ namespace MatterRecord.Contents.CantSeword
             return orig.Invoke(context, newItem, stack, noStack, longText);
         }
     }
+
     public class CantSewordProj : ModProjectile
     {
         public override void SetStaticDefaults()
@@ -49,12 +47,14 @@ namespace MatterRecord.Contents.CantSeword
             Main.projFrames[Type] = 28;
             base.SetStaticDefaults();
         }
+
         public override void SetDefaults()
         {
             Projectile.CloneDefaults(ProjectileID.Arkhalis);
             Projectile.aiStyle = -1;
             base.SetDefaults();
         }
+
         public override void AI()
         {
             var projectile = Projectile;
@@ -120,6 +120,7 @@ namespace MatterRecord.Contents.CantSeword
             player.SetDummyItemTime(num2);
             player.itemRotation = MathHelper.WrapAngle((float)Math.Atan2(projectile.velocity.Y * (float)projectile.direction, projectile.velocity.X * (float)projectile.direction) + num3);
         }
+
         public override bool PreDraw(ref Color lightColor)
         {
             //Main.NewText(Projectile.frame);
@@ -129,6 +130,7 @@ namespace MatterRecord.Contents.CantSeword
             return base.PreDraw(ref lightColor);
         }
     }
+
     public class CantSewordGrass : GlobalTile
     {
         private static readonly int[] grassTypes = [3, 24, 61, 110, 201, 529, 637, 73, 74, 113];

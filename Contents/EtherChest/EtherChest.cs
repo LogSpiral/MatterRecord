@@ -1,19 +1,13 @@
-using MatterRecord.Contents.EmeraldTablet;
 using Microsoft.Xna.Framework;
-using MonoMod.Cil;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.GameContent.Generation;
 using Terraria.GameContent.ObjectInteractions;
-using Terraria.ID;
 using Terraria.Localization;
-using Terraria.ModLoader;
 using Terraria.ObjectData;
 using Terraria.WorldBuilding;
 
@@ -31,6 +25,7 @@ namespace MatterRecord.Contents.EtherChest
             Item.rare = ItemRarityID.Green;
         }
     }
+
     public class EtherChest_Tile : ModTile
     {
         public override void SetStaticDefaults()
@@ -60,7 +55,7 @@ namespace MatterRecord.Contents.EtherChest
             AddMapEntry(new Color(200, 200, 200), this.GetLocalization("MapEntry"), MapChestName);
 
             // Style 1 is ExampleChest when locked. We want that tile style to drop the ExampleChest item as well. Use the Chest Lock item to lock this chest.
-            // No item places ExampleChest in the locked style, so the automatically determined item drop is unknown, this is why RegisterItemDrop is necessary in this situation. 
+            // No item places ExampleChest in the locked style, so the automatically determined item drop is unknown, this is why RegisterItemDrop is necessary in this situation.
             //RegisterItemDrop(ModContent.ItemType<EtherChest>(), 1);
             // Sometimes mods remove content, such as tile styles, or tiles accidentally get corrupted. We can, if desired, register a fallback item for any tile style that doesn't have an automatically determined item drop. This is done by omitting the tileStyles parameter.
             //RegisterItemDrop(ItemID.Chest);
@@ -84,7 +79,6 @@ namespace MatterRecord.Contents.EtherChest
             TileObjectData.addTile(Type);
         }
 
-
         public override ushort GetMapOption(int i, int j)
         {
             return (ushort)(Framing.GetTileSafely(i, j).TileFrameX / 36);
@@ -99,7 +93,6 @@ namespace MatterRecord.Contents.EtherChest
         {
             return true;
         }
-
 
         public static string MapChestName(string name, int i, int j)
         {
@@ -262,9 +255,10 @@ namespace MatterRecord.Contents.EtherChest
             }
         }
     }
+
     public class EtherChestPass : ILoadable
     {
-        void Detour_Shimmer(WorldGen.orig_GenPassDetour orig, object self, GenerationProgress progress, GameConfiguration configuration)
+        private void Detour_Shimmer(WorldGen.orig_GenPassDetour orig, object self, GenerationProgress progress, GameConfiguration configuration)
         {
             orig(self, progress, configuration);
             List<Rectangle> structArea = typeof(StructureMap).GetField("_structures", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(GenVars.structures) as List<Rectangle>;
@@ -278,11 +272,8 @@ namespace MatterRecord.Contents.EtherChest
                 for (int j = 0; j < 3; j++)
                     WorldGen.KillTile(point.X + i, point.Y + 30 - j, false, false, true);
 
-
             for (int i = 0; i < 2; i++)
                 WorldGen.PlaceTile(point.X + i * 3 - 1, point.Y + 28, TileID.Torches, false, true, -1, 23);
-
-
 
             int id = WorldGen.PlaceChest(point.X, point.Y + 30, (ushort)ModContent.TileType<EtherChest_Tile>());
             var chest = Main.chest[id];
@@ -291,10 +282,13 @@ namespace MatterRecord.Contents.EtherChest
             structArea.Add(s);
             protectArea.Add(p);
         }
+
         public void Load(Mod mod)
         {
             WorldGen.DetourPass((PassLegacy)WorldGen.VanillaGenPasses["Shimmer"], Detour_Shimmer);
         }
-        public void Unload() { }
+
+        public void Unload()
+        { }
     }
 }

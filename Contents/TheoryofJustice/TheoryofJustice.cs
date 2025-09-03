@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Terraria.GameContent.Bestiary;
-using Terraria.Localization;
 
 namespace MatterRecord.Contents.TheoryofJustice
 {
@@ -20,6 +15,7 @@ namespace MatterRecord.Contents.TheoryofJustice
             Item.rare = ItemRarityID.Orange;
             base.SetDefaults();
         }
+
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
             BestiaryUnlockProgressReport bestiaryProgressReport = Main.GetBestiaryProgressReport();
@@ -27,11 +23,12 @@ namespace MatterRecord.Contents.TheoryofJustice
             player.endurance += offsetEndurance;// * (Main.hardMode ? .5f : 1f);
             base.UpdateAccessory(player, hideVisual);
         }
+
         public override void ModifyTooltips(List<TooltipLine> tooltips)
         {
             BestiaryUnlockProgressReport bestiaryProgressReport = Main.GetBestiaryProgressReport();
             float offsetEndurance = (1 - bestiaryProgressReport.CompletionPercent) * .3f;
-            tooltips.Add(new TooltipLine(Mod, "JusticeEndurance",this.GetLocalizedValue("Endurance")+$"{offsetEndurance * 100:0.00}%"));
+            tooltips.Add(new TooltipLine(Mod, "JusticeEndurance", this.GetLocalizedValue("Endurance") + $"{offsetEndurance * 100:0.00}%"));
             base.ModifyTooltips(tooltips);
         }
     }

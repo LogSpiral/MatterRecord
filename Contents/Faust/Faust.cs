@@ -2,18 +2,11 @@
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Reflection.Emit;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent;
-using Terraria.Localization;
 using Terraria.ModLoader.Default;
 using Terraria.ModLoader.IO;
 using Terraria.UI;
@@ -23,11 +16,12 @@ namespace MatterRecord.Contents.Faust
     public class Faust : ModItem
     {
         //旧版物品说明
-        /*不行！不行！恶魔是利己主义者，   
-        对别人有益的事体，   
-			白白帮忙他决不干。   
-			你还是先说明条件！   
+        /*不行！不行！恶魔是利己主义者，
+        对别人有益的事体，
+			白白帮忙他决不干。
+			你还是先说明条件！
 			无条件的仆人会给家里带来危险*/
+
         //public override string Texture => $"Terraria/Images/Item_{ItemID.Book}";
         public override void SetDefaults()
         {
@@ -36,41 +30,46 @@ namespace MatterRecord.Contents.Faust
             Item.rare = ItemRarityID.Yellow;
             base.SetDefaults();
         }
+
         public static bool Active;
+
         public override void PostDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
         {
             if (Active)
             {
                 float factor = Main.GlobalTimeWrappedHourly % 1;
                 spriteBatch.Draw(TextureAssets.Item[Type].Value, position, frame, Color.Red with { A = 0 } * (0.5f - MathF.Cos(factor * MathHelper.TwoPi) * 0.5f), 0, origin, scale * (1 + .5f * MathF.Pow(factor, 3)), 0, 0);
-
             }
             base.PostDrawInInventory(spriteBatch, position, frame, drawColor, itemColor, origin, scale);
         }
+
         public override void PostDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI)
         {
             if (Active)
             {
                 float factor = Main.GlobalTimeWrappedHourly % 1;
                 spriteBatch.Draw(TextureAssets.Item[Type].Value, Item.Center - Main.screenPosition, null, Color.Red with { A = 0 } * (0.5f - MathF.Cos(factor * MathHelper.TwoPi) * 0.5f), rotation, new Vector2(18), scale * (1 + .5f * MathF.Pow(factor, 3)), 0, 0);
-
             }
             base.PostDrawInWorld(spriteBatch, lightColor, alphaColor, rotation, scale, whoAmI);
         }
+
         public override bool CanRightClick()
         {
             return true;
         }
+
         public override bool ConsumeItem(Player player)
         {
             return false;
         }
+
         public override void RightClick(Player player)
         {
             Active = !Active;
             SoundEngine.PlaySound(SoundID.Item4);
             base.RightClick(player);
         }
+
         public override void ModifyTooltips(List<TooltipLine> tooltips)
         {
             var money = (long)Main.LocalPlayer.GetModPlayer<FaustPlayer>().ConsumedMoney;
@@ -78,17 +77,19 @@ namespace MatterRecord.Contents.Faust
             string content;
 
             if (money > 0)
-                content = this.GetLocalizedValue("MoneySpent") + $"{Main.ValueToCoins(money)}" ;
+                content = this.GetLocalizedValue("MoneySpent") + $"{Main.ValueToCoins(money)}";
             else
                 content = this.GetLocalizedValue("WannaDeal");
 
-            tooltips.Add( new( Mod, "ConsumedMoney", content) {
-                    OverrideColor = Color.Lerp(Color.Gray, Color.Red, 0.5f + 0.5f * MathF.Cos(Main.GlobalTimeWrappedHourly))
-                });
+            tooltips.Add(new(Mod, "ConsumedMoney", content)
+            {
+                OverrideColor = Color.Lerp(Color.Gray, Color.Red, 0.5f + 0.5f * MathF.Cos(Main.GlobalTimeWrappedHourly))
+            });
 
             base.ModifyTooltips(tooltips);
         }
     }
+
     public class FaustGBItem : GlobalItem
     {
         public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)
@@ -159,16 +160,17 @@ namespace MatterRecord.Contents.Faust
                     color2 = new Color((byte)(246f * num17), (byte)(138f * num17), (byte)(96f * num17), Main.mouseTextColor);
 
                 tooltips.Add(new TooltipLine(Mod, "ThePrize", $"购买需要{text5}") { OverrideColor = color2 });
-
             }
             base.ModifyTooltips(item, tooltips);
         }
+
         public override void Load()
         {
             On_ItemSlot.TryItemSwap += On_ItemSlot_TryItemSwap;
             MonoModHooks.Add(typeof(ItemLoader).GetMethod(nameof(ItemLoader.RightClick), BindingFlags.Static | BindingFlags.Public), FaustModifyRightClick);
             base.Load();
         }
+
         public static void FaustModifyRightClick(Action<Item, Player> orig, Item item, Player player)
         {
             if (!Faust.Active) goto Label;
@@ -199,7 +201,6 @@ namespace MatterRecord.Contents.Faust
                         SoundEngine.PlaySound(SoundID.Coins);
                         ItemSlot.RefreshStackSplitCooldown();
                     }
-
                 }
 
                 //BlockConsumeCache = true;
@@ -208,12 +209,12 @@ namespace MatterRecord.Contents.Faust
         Label:
             orig.Invoke(item, player);
         }
+
         private void On_ItemSlot_TryItemSwap(On_ItemSlot.orig_TryItemSwap orig, Item item)
         {
             if (Faust.Active) return;
             orig.Invoke(item);
         }
-
 
         public override bool CanRightClick(Item item)
         {
@@ -230,6 +231,7 @@ namespace MatterRecord.Contents.Faust
 
             return false;
         }
+
         //public override bool ConsumeItem(Item item, Player player)
         //{
         //    if (BlockConsumeCache)
@@ -240,6 +242,7 @@ namespace MatterRecord.Contents.Faust
         //    return base.ConsumeItem(item, player);
         //}
         public static bool BlockConsumeCache;
+
         //public override void RightClick(Item item, Player player)
         //{
         //    if (!Faust.Active) return;
@@ -265,8 +268,8 @@ namespace MatterRecord.Contents.Faust
         //    }
         //    base.RightClick(item, player);
         //}
-
     }
+
     public class FaustPlayer : ModPlayer
     {
         public ulong ConsumedMoney;
@@ -276,6 +279,7 @@ namespace MatterRecord.Contents.Faust
             tag.Add(nameof(ConsumedMoney), ConsumedMoney);
             base.SaveData(tag);
         }
+
         public override void LoadData(TagCompound tag)
         {
             ConsumedMoney = tag.Get<ulong>(nameof(ConsumedMoney));
@@ -317,6 +321,7 @@ namespace MatterRecord.Contents.Faust
             //if (Player.statLifeMax2 < 100) Player.statLifeMax2 = 100;
             base.UpdateEquips();
         }
+
         public override void ModifyLuck(ref float luck)
         {
             luck -= ConsumedMoney / 1000000 * 0.01f;

@@ -667,3 +667,10 @@ Keybinds: {
 }
 
 DamageClasses.RangedMagicDamage.DisplayName: 魔法-远程伤害
+
+Sequence: {
+	MeleeAction: {
+		// DonQuijoteDeLaManchaDash.DisplayName: DonQuijoteDeLaManchaDash
+		// DonQuijoteDeLaManchaStab.DisplayName: DonQuijoteDeLaManchaStab
+	}
+}

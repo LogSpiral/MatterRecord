@@ -16,8 +16,9 @@ public abstract class BasicDream : ModItem
 
         HeadTexture = headTexture;
     }
-    Condition RecipeCondition { get; init; }
-    Asset<Texture2D> HeadTexture { get; init; }
+
+    private Condition RecipeCondition { get; init; }
+    private Asset<Texture2D> HeadTexture { get; init; }
     public override string Texture => $"Terraria/Images/Item_{ItemID.Cloud}";
 
     public override bool PreDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
@@ -34,6 +35,7 @@ public abstract class BasicDream : ModItem
 
         return false;
     }
+
     public override bool PreDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, ref float rotation, ref float scale, int whoAmI)
     {
         spriteBatch.Draw(TextureAssets.Item[Type].Value, Item.Center - Main.screenPosition, null, lightColor, rotation, new Vector2(8), scale, 0, 0);
@@ -61,6 +63,6 @@ public abstract class BasicDream : ModItem
         recipe.Register();
     }
 
-
-    public virtual void ExtraIngredient(Recipe recipe) { }
+    public virtual void ExtraIngredient(Recipe recipe)
+    { }
 }

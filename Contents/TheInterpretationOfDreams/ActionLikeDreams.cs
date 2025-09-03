@@ -1,5 +1,4 @@
-﻿using LogSpiralLibrary.CodeLibrary;
-using LogSpiralLibrary.CodeLibrary.Utilties;
+﻿using LogSpiralLibrary.CodeLibrary.Utilties;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
@@ -14,8 +13,8 @@ namespace MatterRecord.Contents.TheInterpretationOfDreams
     {
         protected ActionLikeDreams(int index, Func<bool> condition) : this(index == -1 ? null : TextureAssets.NpcHead[index], condition)
         {
-
         }
+
         public override string Texture => $"Terraria/Images/Item_{ItemID.Cloud}";
 
         public abstract void UseAction(Player player);
@@ -39,6 +38,7 @@ namespace MatterRecord.Contents.TheInterpretationOfDreams
             return base.UseItem(player);
         }
     }
+
     public class WizardDream() : ActionLikeDreams(10, () => NPC.savedWizard)
     {
         public override void SetDefaults()
@@ -47,6 +47,7 @@ namespace MatterRecord.Contents.TheInterpretationOfDreams
             Item.consumable = true;
             Item.maxStack = 10;
         }
+
         public override void UseAction(Player player)
         {
             var mplr = player.GetModPlayer<DreamPlayer>();
@@ -61,9 +62,12 @@ namespace MatterRecord.Contents.TheInterpretationOfDreams
                     Item.TurnToAir();
             }
         }
+
         public override bool ConsumeItem(Player player) => player.GetModPlayer<DreamPlayer>().WizardDreamCount < 10;
+
         public override void ExtraIngredient(Recipe recipe) => recipe.AddIngredient(ItemID.SpellTome);
     }
+
     public class ZoologiseDream() : ActionLikeDreams(26, () => Main.GetBestiaryProgressReport().CompletionPercent >= 0.1f)
     {
         public override void SetDefaults()
@@ -71,6 +75,7 @@ namespace MatterRecord.Contents.TheInterpretationOfDreams
             base.SetDefaults();
             Item.consumable = true;
         }
+
         public override void UseAction(Player player)
         {
             if (DreamWorld.UsedZoologistDream)
@@ -83,9 +88,12 @@ namespace MatterRecord.Contents.TheInterpretationOfDreams
                     Item.TurnToAir();
             }
         }
+
         public override bool ConsumeItem(Player player) => !DreamWorld.UsedZoologistDream;
+
         public override void ExtraIngredient(Recipe recipe) => recipe.AddIngredient(ItemID.LicenseCat);
     }
+
     public class GolferDream() : ActionLikeDreams(25, () => NPC.savedGolfer)
     {
         public override void UseAction(Player player)
@@ -95,8 +103,10 @@ namespace MatterRecord.Contents.TheInterpretationOfDreams
             else
                 Sandstorm.StartSandstorm();
         }
+
         public override void ExtraIngredient(Recipe recipe) => recipe.AddIngredient(ItemID.GolfBall);
     }
+
     public class PirateDream() : ActionLikeDreams(19, () => NPC.downedPirates)
     {
         public override void UseAction(Player player)
@@ -112,8 +122,10 @@ namespace MatterRecord.Contents.TheInterpretationOfDreams
                 Main.cloudAlpha = Main.maxRaining = 0f;
             }
         }
+
         public override void ExtraIngredient(Recipe recipe) => recipe.AddIngredient(ItemID.Cannonball);
     }
+
     public class BrokenDream() : ActionLikeDreams(-1, null)
     {
         public override void SetDefaults()
@@ -123,6 +135,7 @@ namespace MatterRecord.Contents.TheInterpretationOfDreams
             Item.maxStack = 9999;
             Item.rare = ItemRarityID.Blue;
         }
+
         public override void UseAction(Player player)
         {
             List<int> buffs = [];
@@ -144,7 +157,6 @@ namespace MatterRecord.Contents.TheInterpretationOfDreams
 
         public override void AddRecipes()
         {
-
         }
     }
 }

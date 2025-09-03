@@ -1,27 +1,17 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using MonoMod.Cil;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Terraria.ModLoader;
-using Terraria;
-using Terraria.ID;
-using Terraria.Localization;
-using Terraria.IO;
-using Terraria.WorldBuilding;
-using MonoMod.Cil;
-using System.Diagnostics;
-using Terraria.DataStructures;
 using Terraria.Audio;
-using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Graphics;
+using Terraria.DataStructures;
 using Terraria.GameContent;
-using Microsoft.Xna.Framework;
-using Terraria.UI.Chat;
-using Terraria.ModLoader.IO;
-using MatterRecord;
-using Basic.Reference.Assemblies;
 using Terraria.GameContent.ItemDropRules;
+using Terraria.ModLoader.IO;
+using Terraria.UI.Chat;
+using Terraria.WorldBuilding;
+
 namespace MatterRecord.Contents.EternalWine
 {
     public class EternalWine : ModItem
@@ -63,8 +53,6 @@ namespace MatterRecord.Contents.EternalWine
                 }
                 );
             cursor.EmitBrtrue(curLabel);
-
-
 
             for (int i = 0; i < 3; i++)//8
                 if (!cursor.TryGotoNext(i => i.MatchLdloc(5)))
@@ -139,7 +127,6 @@ namespace MatterRecord.Contents.EternalWine
                     continue;
                 }
 
-
                 int num4 = self.GetHealLife(item, true) - num;
                 if (item.type == ItemID.RestorationPotion && num4 < 0)
                 {
@@ -161,7 +148,6 @@ namespace MatterRecord.Contents.EternalWine
                     result = item;
                     num2 = num4;
                 }
-
             }
             if (self.potionDelay > 0 || result == null)
                 result = resultEternal;
@@ -194,7 +180,6 @@ namespace MatterRecord.Contents.EternalWine
                 return plr.potionDelay <= 0;
             });
             cursor.EmitBrtrue(label);
-
         }
 
         public override void Unload()
@@ -204,6 +189,7 @@ namespace MatterRecord.Contents.EternalWine
             On_Player.ApplyPotionDelay -= WineBanDelay;
             base.Unload();
         }
+
         public override void SetDefaults()
         {
             Item.ResearchUnlockCount = 1;
@@ -222,6 +208,7 @@ namespace MatterRecord.Contents.EternalWine
             Item.value = Item.buyPrice(gold: 1);
             Item.healLife = 100;
         }
+
         public override void ModifyTooltips(List<TooltipLine> tooltips)
         {
             TooltipLine line = tooltips.FirstOrDefault(x => x.Mod == "Terraria" && x.Name == "HealLife");
@@ -230,14 +217,17 @@ namespace MatterRecord.Contents.EternalWine
             //TooltipLine line1 = tooltips.FirstOrDefault(x => x.Mod == "Terraria" && x.Name == "BuffTime");
             //tooltips.Remove(line1);
         }
+
         public override bool? UseItem(Player player)
         {
             return base.UseItem(player);
         }
+
         public override bool CanUseItem(Player player)
         {
             return !player.HasBuff<LifeRegenStagnant>();
         }
+
         public override void GetHealLife(Player player, bool quickHeal, ref int healValue)
         {
             int buffTime;
@@ -271,27 +261,28 @@ namespace MatterRecord.Contents.EternalWine
                     packet.Send(-1, player.whoAmI);
                 }
             }
-
         }
-
-
     }
+
     public class EternalWinePlayer : ModPlayer
     {
         public float LifeDebt;
         public float LifeDebtMax;
+
         public override void SaveData(TagCompound tag)
         {
             tag["Debt"] = LifeDebt;
             tag["MaxDebt"] = LifeDebtMax;
             base.SaveData(tag);
         }
+
         public override void LoadData(TagCompound tag)
         {
             LifeDebt = tag.Get<float>("Debt");
             LifeDebtMax = tag.Get<float>("MaxDebt");
             base.LoadData(tag);
         }
+
         public override void SyncPlayer(int toWho, int fromWho, bool newPlayer)
         {
             ModPacket packet = Mod.GetPacket();
@@ -301,6 +292,7 @@ namespace MatterRecord.Contents.EternalWine
             packet.Write(LifeDebtMax);
             packet.Send(toWho, fromWho);
         }
+
         public override void Load()
         {
             IL_Player.UpdateLifeRegen += LifeDebtPaying;
@@ -333,6 +325,7 @@ namespace MatterRecord.Contents.EternalWine
 
             base.Unload();
         }
+
         public override void ResetEffects()
         {
             if (LifeDebt <= 0 && LifeDebtMax != -1)
@@ -344,11 +337,13 @@ namespace MatterRecord.Contents.EternalWine
                 Player.AddBuff(ModContent.BuffType<LifeRegenStagnant>(), 2);
             base.ResetEffects();
         }
+
         public override void UpdateDead()
         {
             LifeDebt = LifeDebtMax = -1;
             base.UpdateDead();
         }
+
         public override void ModifyDrawInfo(ref PlayerDrawSet drawInfo)
         {
             if (LifeDebtMax > 0 && Main.myPlayer == Player.whoAmI && !Player.DeadOrGhost)
@@ -364,6 +359,7 @@ namespace MatterRecord.Contents.EternalWine
             base.ModifyDrawInfo(ref drawInfo);
         }
     }
+
     public class EternalWineSystem : ModSystem
     {
         public override void ModifyWorldGenTasks(List<GenPass> tasks, ref double totalWeight)
@@ -373,17 +369,17 @@ namespace MatterRecord.Contents.EternalWine
             if (ChestIndex != -1)
             {
                 tasks.Insert(ChestIndex + 1, new EternalWinePass("EternalWineSpawn", 100f));
-
             }
             base.ModifyWorldGenTasks(tasks, ref totalWeight);
         }
     }
+
     public class EternalWinePass : GenPass
     {
         public EternalWinePass(string str, float value) : base(str, value)
         {
-
         }
+
         public override void ApplyPass(GenerationProgress progress, GameConfiguration configuration)
         {
             progress.Message = "永生之酒";
@@ -398,9 +394,9 @@ namespace MatterRecord.Contents.EternalWine
                     }
                 }
             }
-
         }
     }
+
     public class Eternal : ModBuff
     {
         public override void Update(Player player, ref int buffIndex)
@@ -409,8 +405,8 @@ namespace MatterRecord.Contents.EternalWine
             player.immuneTime = 2;
             base.Update(player, ref buffIndex);
         }
-
     }
+
     public class LifeRegenStagnant : ModBuff
     {
         public override void SetStaticDefaults()
@@ -421,6 +417,7 @@ namespace MatterRecord.Contents.EternalWine
             base.SetStaticDefaults();
         }
     }
+
     public class EternalWineGlobalItem : GlobalItem
     {
         public override void ModifyItemLoot(Item item, ItemLoot itemLoot)
@@ -443,7 +440,6 @@ namespace MatterRecord.Contents.EternalWine
                     list.Add(ItemDropRule.NotScalingWithLuck(ModContent.ItemType<EternalWine>()));
                     itemLoot.Add(new OneFromRulesRule(1, [.. list]));
                 }
-
             }
             base.ModifyItemLoot(item, itemLoot);
         }

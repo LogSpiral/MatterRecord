@@ -1,16 +1,7 @@
-﻿using MatterRecord.Contents.ZenithBoulder;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Terraria;
 using Terraria.DataStructures;
-using Terraria.GameContent;
-using Terraria.ID;
-using Terraria.ModLoader;
 
 namespace MatterRecord.Contents.TortoiseShell
 {
@@ -41,17 +32,21 @@ namespace MatterRecord.Contents.TortoiseShell
 
             base.SetDefaults();
         }
+
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
             //Main.hardMode = true;
             return base.Shoot(player, source, position, velocity, type, damage, knockback);
         }
+
         public override bool CanUseItem(Player player) => player.ownedProjectileCounts[Item.shoot] == 0;// && player.velocity.Y == 0
     }
+
     public class DashingTortoiseShell : ModProjectile
     {
         public override string Texture => base.Texture.Replace(nameof(DashingTortoiseShell), nameof(TortoiseShell));
         public Player player => Main.player[Projectile.owner];
+
         public override void SetDefaults()
         {
             Projectile.width = Projectile.height = 48;
@@ -66,6 +61,7 @@ namespace MatterRecord.Contents.TortoiseShell
             //Projectile.hide = true;
             base.SetDefaults();
         }
+
         public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
         {
             modifiers.FinalDamage *= player.velocity.Length() / 18f;
@@ -74,6 +70,7 @@ namespace MatterRecord.Contents.TortoiseShell
 
             base.ModifyHitNPC(target, ref modifiers);
         }
+
         public override void ModifyHitPlayer(Player target, ref Player.HurtModifiers modifiers)
         {
             modifiers.FinalDamage *= player.velocity.Length() / 18f;
@@ -101,7 +98,7 @@ namespace MatterRecord.Contents.TortoiseShell
             }
             base.ModifyHitPlayer(target, ref modifiers);
         }
-        
+
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             if (!target.CanBeChasedBy()) return;
@@ -128,6 +125,7 @@ namespace MatterRecord.Contents.TortoiseShell
             }
             base.OnHitNPC(target, hit, damageDone);
         }
+
         public override void AI()
         {
             Projectile.Center = player.Center;
@@ -149,9 +147,8 @@ namespace MatterRecord.Contents.TortoiseShell
                 if (Projectile.ai[1] == 0)
                 {
                     Projectile.damage = player.GetWeaponDamage(player.HeldItem);
-                    if (Main.myPlayer == Projectile.owner) 
+                    if (Main.myPlayer == Projectile.owner)
                     {
-
                         player.velocity = (Main.MouseWorld - player.Center).SafeNormalize(default) * mplr.timer * 36;
                         Projectile.ai[2] = player.velocity.ToRotation();
                         if (Main.netMode == NetmodeID.MultiplayerClient)
@@ -163,7 +160,6 @@ namespace MatterRecord.Contents.TortoiseShell
                             packet.Send();
                         }
                     }
-
                 }
                 Projectile.ai[1]++;
                 Projectile.friendly = true;
@@ -172,12 +168,10 @@ namespace MatterRecord.Contents.TortoiseShell
                     Projectile.timeLeft = 0;
                     player.itemAnimation = 0;
                     player.itemTime = player.itemAnimation = 0;
-
                 }
                 Projectile.rotation += player.velocity.Length() * .01f * (player.velocity.X == 0 ? 1 : Math.Sign(player.velocity.X));
-
             }
-            if (Main.netMode != NetmodeID.Server) 
+            if (Main.netMode != NetmodeID.Server)
             {
                 for (int n = ProjectileID.Sets.TrailCacheLength[Type] - 1; n > 0; n--)
                 {
@@ -191,6 +185,7 @@ namespace MatterRecord.Contents.TortoiseShell
             mplr.timer = MathHelper.Clamp(Projectile.ai[0] / 180, 0, 1f);
             base.AI();
         }
+
         public override bool PreDraw(ref Color lightColor)
         {
             var mplr = player.GetModPlayer<TortoiseShellPlayer>();
@@ -206,6 +201,7 @@ namespace MatterRecord.Contents.TortoiseShell
             return false;
         }
     }
+
     public class TortoiseShellPlayer : ModPlayer
     {
         public override void UpdateEquips()
@@ -222,11 +218,12 @@ namespace MatterRecord.Contents.TortoiseShell
             TortoiseDashing = false;
             base.UpdateEquips();
         }
+
         public override void PreUpdate()
         {
             if (TortoiseShellActive)
                 Player.maxFallSpeed = 40;
-            if (counter > 0) 
+            if (counter > 0)
             {
                 counter--;
                 Player.velocity = syncVelocity;
@@ -234,11 +231,12 @@ namespace MatterRecord.Contents.TortoiseShell
 
             base.PreUpdate();
         }
+
         public override void ResetEffects()
         {
-
             base.ResetEffects();
         }
+
         public override void ModifyDrawInfo(ref PlayerDrawSet drawInfo)
         {
             if (TortoiseShellActive)
@@ -248,6 +246,7 @@ namespace MatterRecord.Contents.TortoiseShell
             }
             base.ModifyDrawInfo(ref drawInfo);
         }
+
         public bool TortoiseShellActive;
         public bool TortoiseDashing;
         public float timer;

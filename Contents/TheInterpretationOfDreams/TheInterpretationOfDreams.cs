@@ -11,6 +11,7 @@ public class TheInterpretationOfDreams : ModItem
         ItemID.Sets.ShimmerTransformToItem[ItemID.BugNet] = Type;
         base.SetStaticDefaults();
     }
+
     public override void SetDefaults()
     {
         Item.useStyle = ItemUseStyleID.Swing;
@@ -26,6 +27,7 @@ public class TheInterpretationOfDreams : ModItem
         Item.scale = 1.15f;
         base.SetDefaults();
     }
+
     public override bool? UseItem(Player player)
     {
         if (player.whoAmI != Main.myPlayer) return true;
@@ -57,7 +59,6 @@ public class TheInterpretationOfDreams : ModItem
                     {
                         case 0:
                             {
-
                                 var targetName = NPCID.Search.GetName(npc.type);
                                 var names = typeof(DreamState).GetEnumNames();
                                 var index = Array.IndexOf(names, targetName);
@@ -133,7 +134,6 @@ public class TheInterpretationOfDreams : ModItem
                                         }
                                     case NPCID.Clothier:
                                         {
-
                                             var targetItem = mplr.dreamItemSlots[7];
                                             if (targetItem.stack == 9999)
                                                 goto Label;
@@ -173,7 +173,6 @@ public class TheInterpretationOfDreams : ModItem
                                             targetItem.SetDefaults(ModContent.ItemType<CybrogDream>());
                                             break;
                                         }
-
                                 }
                                 Main.NewText(this.GetLocalizedValue("SpecialDreamHint"), new Color(255, 255, 127));
                                 break;
@@ -210,6 +209,7 @@ public class TheInterpretationOfDreams : ModItem
             }
         return base.UseItem(player);
     }
+
     public override void UseStyle(Player player, Rectangle heldItemFrame)
     {
         player.itemRotation += MathHelper.PiOver4 * player.direction;
@@ -217,10 +217,12 @@ public class TheInterpretationOfDreams : ModItem
         //player.itemLocation += new Vector2(-12 * player.direction, 8);
         base.UseStyle(player, heldItemFrame);
     }
+
     public override bool AltFunctionUse(Player player)
     {
         return true;
     }
+
     public override bool CanUseItem(Player player)
     {
         if (player.altFunctionUse == 2)

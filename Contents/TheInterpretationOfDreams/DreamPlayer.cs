@@ -1,10 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Terraria;
-using Terraria.DataStructures;
 using Terraria.ModLoader.IO;
 
 namespace MatterRecord.Contents.TheInterpretationOfDreams
@@ -31,6 +26,7 @@ namespace MatterRecord.Contents.TheInterpretationOfDreams
         Nurse = 65536,
         TravellingMerchant = 131072
     }
+
     public class DreamPlayer : ModPlayer
     {
         //0 - 破碎
@@ -46,17 +42,20 @@ namespace MatterRecord.Contents.TheInterpretationOfDreams
         //10 - 电子人
         //11 - 胎儿之梦
         public Item[] dreamItemSlots = new Item[12];
+
         public DreamPlayer()
         {
             for (int n = 0; n < 12; n++)
                 dreamItemSlots[n] = new Item();
         }
+
         public List<int> LuckyTimer = [];
         public List<int> UnluckyTimer = [];
         public int WizardDreamCount = 0;
         public DreamState UnlockState;
         public DreamState ActiveState;
         public HashSet<int> todayCheckedNPC = [];
+
         public override void LoadData(TagCompound tag)
         {
             WizardDreamCount = tag.GetInt(nameof(WizardDreamCount));
@@ -72,6 +71,7 @@ namespace MatterRecord.Contents.TheInterpretationOfDreams
                     dreamItemSlots[i] = ItemIO.Load(tagcompound);
             base.LoadData(tag);
         }
+
         public override void SaveData(TagCompound tag)
         {
             tag[nameof(WizardDreamCount)] = WizardDreamCount;
@@ -84,16 +84,19 @@ namespace MatterRecord.Contents.TheInterpretationOfDreams
                 tag[nameof(dreamItemSlots) + "_" + i] = ItemIO.Save(dreamItemSlots[i]);
             base.SaveData(tag);
         }
+
         public override void ModifyLuck(ref float luck)
         {
             luck += (LuckyTimer.Count - UnluckyTimer.Count) * .01f;
             base.ModifyLuck(ref luck);
         }
+
         public override void ModifyManaCost(Item item, ref float reduce, ref float mult)
         {
             //mult *= (1 - .01f * WizardDreamCount);
             base.ModifyManaCost(item, ref reduce, ref mult);
         }
+
         public override void UpdateEquips()
         {
             Player.manaCost -= .01f * WizardDreamCount;
@@ -110,11 +113,11 @@ namespace MatterRecord.Contents.TheInterpretationOfDreams
             if (CheckActive(DreamState.WitchDoctor))
                 Player.maxMinions += 1;
 
-
             if (CheckActive(DreamState.Truffle))
                 Player.aggro -= 100;
             base.UpdateEquips();
         }
+
         public override void ResetEffects()
         {
             //UnlockState = ActiveState  = (DreamState)(2 * 131072 - 1);
@@ -176,13 +179,12 @@ namespace MatterRecord.Contents.TheInterpretationOfDreams
             if (Main.netMode == NetmodeID.MultiplayerClient)
                 NetMessage.SendData(148, -1, -1, null, num37);
 
-
             base.OnHitNPC(target, hit, damageDone);
         }
     }
 
     public static class DreamHelper
     {
-        public static bool CheckDreamActive(this Player player, DreamState flag)  =>  player.GetModPlayer<DreamPlayer>().CheckActive(flag);
+        public static bool CheckDreamActive(this Player player, DreamState flag) => player.GetModPlayer<DreamPlayer>().CheckActive(flag);
     }
 }

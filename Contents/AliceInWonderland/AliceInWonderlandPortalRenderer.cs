@@ -40,7 +40,6 @@ public class AliceInWonderlandInteractionChecker : AHoverInteractionChecker
             mplr.CurrentPortalEnd = null;
             mplr.CurrentPortalStart = null;
 
-
             int count = Main.rand.Next(40, 60);
             for (int n = 0; n < count; n++)
             {
@@ -89,6 +88,7 @@ internal class AliceInWonderlandPortalRenderer : IPlayerRenderer
     private void DrawReturnGateInMap(Camera camera, Player player)
     {
     }
+
     public static bool TryGetGateHitbox(Player player, out Rectangle homeHitbox)
     {
         var mplr = player.GetModPlayer<AliceInWonderlandPlayer>();
@@ -103,6 +103,7 @@ internal class AliceInWonderlandPortalRenderer : IPlayerRenderer
         homeHitbox = Utils.CenteredRectangle(center, new Vector2(24f, 40f));
         return true;
     }
+
     private void DrawReturnGateInWorld(Camera camera, Player player)
     {
         var mplr = player.GetModPlayer<AliceInWonderlandPlayer>();

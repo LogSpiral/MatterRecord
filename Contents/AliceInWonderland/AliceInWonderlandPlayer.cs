@@ -1,23 +1,15 @@
-﻿using MatterRecord.Contents.TheInterpretationOfDreams;
-using MatterRecord.Contents.TheoryOfFreedom;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Terraria.GameContent;
-using Terraria.Localization;
 using Terraria.ModLoader.IO;
 
 namespace MatterRecord.Contents.AliceInWonderland;
 
 public class AliceInWonderlandPlayer : ModPlayer
 {
-    static AliceInWonderlandPortalRenderer AliceInWonderlandPortalRenderer { get; } = new AliceInWonderlandPortalRenderer();
+    private static AliceInWonderlandPortalRenderer AliceInWonderlandPortalRenderer { get; } = new AliceInWonderlandPortalRenderer();
+
     public override void Load()
     {
         On_Main.DrawPlayers_BehindNPCs += WonderLandPortal_BN;
@@ -50,7 +42,6 @@ public class AliceInWonderlandPlayer : ModPlayer
             spriteBatch.Draw(value, vec, rectangle, Main.DiscoColor, 0f, rectangle.Size() / 2f, drawScale, SpriteEffects.None, 0f);
             if (Utils.CenteredRectangle(vec, rectangle.Size() * drawScale).Contains(Main.MouseScreen.ToPoint()))
                 mouseTextString = ModContent.GetInstance<AliceInWonderlandWatch>().GetLocalizedValue("End");
-
         }
     }
 
@@ -73,6 +64,7 @@ public class AliceInWonderlandPlayer : ModPlayer
                 mouseTextString = ModContent.GetInstance<AliceInWonderlandWatch>().GetLocalizedValue("Start");
         }
     }
+
     private static void WonderLandPortal_AP(On_Main.orig_DrawPlayers_AfterProjectiles orig, Main self)
     {
         AliceInWonderlandPortalRenderer.DrawPlayers(Main.Camera, Main.instance._playersThatDrawAfterProjectiles.Where(p => p.GetModPlayer<AliceInWonderlandPlayer>().CurrentPortalStart.HasValue));
@@ -83,7 +75,6 @@ public class AliceInWonderlandPlayer : ModPlayer
     {
         AliceInWonderlandPortalRenderer.DrawPlayers(Main.Camera, Main.instance._playersThatDrawBehindNPCs.Where(p => p.GetModPlayer<AliceInWonderlandPlayer>().CurrentPortalStart.HasValue));
         orig.Invoke(self);
-
     }
 
     public bool CapturedAliceRabbit;
@@ -149,13 +140,9 @@ public class AliceInWonderlandPlayer : ModPlayer
                     dust.noGravity = true;
                 }
             }
-
         }
         base.ResetEffects();
     }
-
-
-
 
     public void ReceivePlayerSync(BinaryReader reader)
     {
@@ -164,7 +151,7 @@ public class AliceInWonderlandPlayer : ModPlayer
             CurrentPortalStart = reader.ReadVector2();
             CurrentPortalEnd = reader.ReadVector2();
         }
-        else 
+        else
         {
             CurrentPortalStart = null;
             CurrentPortalEnd = null;
@@ -194,7 +181,7 @@ public class AliceInWonderlandPlayer : ModPlayer
         packet.Write((byte)Player.whoAmI);
         bool hasValue = CurrentPortalEnd.HasValue;
         packet.Write(hasValue);
-        if (hasValue) 
+        if (hasValue)
         {
             packet.WriteVector2(CurrentPortalStart.Value);
             packet.WriteVector2(CurrentPortalEnd.Value);

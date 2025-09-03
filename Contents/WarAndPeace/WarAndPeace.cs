@@ -1,13 +1,6 @@
-﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Terraria.Audio;
 using Terraria.GameContent;
-using Terraria.Graphics.Shaders;
 
 namespace MatterRecord.Contents.WarAndPeace;
 
@@ -21,7 +14,9 @@ public class WarAndPeace : ModItem
         Item.width = Item.height = 32;
         base.SetDefaults();
     }
+
     public static bool IsPeace => ((int)(8 * Math.Sin(8 * DateTime.Now.Day)) + 8) % 2 == 1;
+
     public override void UpdateAccessory(Player player, bool hideVisual)
     {
         var dayOfWeek = DateTime.Now.DayOfWeek;
@@ -41,6 +36,7 @@ public class WarAndPeace : ModItem
         base.UpdateAccessory(player, hideVisual);
     }
 }
+
 public class WarAndPeaceGlobalItem : GlobalItem
 {
     public override void OnConsumeItem(Item item, Player player)
@@ -51,15 +47,16 @@ public class WarAndPeaceGlobalItem : GlobalItem
         base.OnConsumeItem(item, player);
     }
 }
+
 public class WarAndPeacePlayer : ModPlayer
 {
     public override void ModifyHitByNPC(NPC npc, ref Player.HurtModifiers modifiers)
     {
         if (Player.HasBuff<Peace>())
             modifiers.FinalDamage.Flat -= 5;
-
     }
 }
+
 public class War : ModBuff
 {
     public override void SetStaticDefaults()
@@ -67,13 +64,14 @@ public class War : ModBuff
         Main.buffNoTimeDisplay[Type] = true;
         //Main.vanityPet[Type] = true;
     }
+
     public override void Update(Player player, ref int buffIndex)
     { // This method gets called every frame your buff is active on your player.
         bool unused = false;
         player.BuffHandle_SpawnPetIfNeeded(ref unused, ModContent.ProjectileType<WarCat>(), buffIndex);
-
     }
 }
+
 public class Peace : ModBuff
 {
     public override void SetStaticDefaults()
@@ -81,12 +79,14 @@ public class Peace : ModBuff
         Main.buffNoTimeDisplay[Type] = true;
         //Main.vanityPet[Type] = true;
     }
+
     public override void Update(Player player, ref int buffIndex)
     { // This method gets called every frame your buff is active on your player.
         bool unused = false;
         player.BuffHandle_SpawnPetIfNeeded(ref unused, ModContent.ProjectileType<PeaceCat>(), buffIndex);
     }
 }
+
 public class Holiday_War : ModBuff
 {
     public override void SetStaticDefaults()
@@ -94,12 +94,14 @@ public class Holiday_War : ModBuff
         Main.buffNoTimeDisplay[Type] = true;
         //Main.vanityPet[Type] = true;
     }
+
     public override void Update(Player player, ref int buffIndex)
     { // This method gets called every frame your buff is active on your player.
         bool unused = false;
         player.BuffHandle_SpawnPetIfNeeded(ref unused, ModContent.ProjectileType<WarCat>(), buffIndex);
     }
 }
+
 public class Holiday_Peace : ModBuff
 {
     public override void SetStaticDefaults()
@@ -107,12 +109,14 @@ public class Holiday_Peace : ModBuff
         Main.buffNoTimeDisplay[Type] = true;
         //Main.vanityPet[Type] = true;
     }
+
     public override void Update(Player player, ref int buffIndex)
     { // This method gets called every frame your buff is active on your player.
         bool unused = false;
         player.BuffHandle_SpawnPetIfNeeded(ref unused, ModContent.ProjectileType<PeaceCat>(), buffIndex);
     }
 }
+
 public abstract class CatProj : ModProjectile
 {
     public override void SetStaticDefaults()
@@ -132,6 +136,7 @@ public abstract class CatProj : ModProjectile
             .WithCode(DelegateMethods.CharacterPreview.Float);
         base.SetStaticDefaults();
     }
+
     public override void SetDefaults()
     {
         Projectile.CloneDefaults(ProjectileID.BlackCat); // Copy the stats of the Zephyr Fish
@@ -143,6 +148,7 @@ public abstract class CatProj : ModProjectile
         Projectile.aiStyle = -1;
         base.SetDefaults();
     }
+
     public override bool PreAI()
     {
         Player player = Main.player[Projectile.owner];
@@ -151,29 +157,38 @@ public abstract class CatProj : ModProjectile
 
         return true;
     }
+
     public void ResetFrameData()
     {
         FrameCounter = 0;
         Frame = 0;
         helpCounter = 0;
     }
+
     public override void AI()
     {
         #region 玩家检测
+
         var player = Main.player[Projectile.owner];
         if (!player.active)
         {
             Projectile.active = false;
             return;
         }
-        #endregion
+
+        #endregion 玩家检测
+
         #region 基本量与初始化
+
         bool goRight = false;
         bool goLeft = false;
         bool jump = false;
         int range = 12;
-        #endregion
+
+        #endregion 基本量与初始化
+
         #region 位置检测
+
         float offset = -32 * player.direction;
         float targetX = player.Center.X + offset;
         var cenX = Projectile.Center.X;
@@ -181,26 +196,34 @@ public abstract class CatProj : ModProjectile
             goRight = true;
         else if (targetX > cenX + range)
             goLeft = true;
-        #endregion
+
+        #endregion 位置检测
+
         #region 起飞
+
         if (player.rocketDelay2 > 0 && state != KoishiState.Recover)
             Projectile.ai[0] = 1f;
         if (Projectile.ai[0] != 0f && state != KoishiState.Recover)
         {
             #region 声明&初始化变量
+
             float modifyStep = 0.2f;
             int length = 200;
             Projectile.tileCollide = false;
             Vector2 target = player.Center - Projectile.Center;
             float distance = target.Length();
-            #endregion
+
+            #endregion 声明&初始化变量
+
             if (distance > 1440)
             {
                 Projectile.Center = player.Center;
             }
+
             #region 检测并切换状态
+
             if (distance < length &&//小于最大距离
-                player.velocity.Y == 0f &&//玩家站在地面上 
+                player.velocity.Y == 0f &&//玩家站在地面上
                 Projectile.Center.Y <= player.Center.Y && //在玩家中心以上
                 !Collision.SolidCollision(Projectile.position, Projectile.width, Projectile.height)//我不到啊，物块碰撞检测？
                 )
@@ -243,8 +266,11 @@ public abstract class CatProj : ModProjectile
                     Projectile.velocity.Y = -6f;
                 return;
             }
-            #endregion
+
+            #endregion 检测并切换状态
+
             #region 典中典之速度渐进
+
             if (distance < 60f)
             {
                 target = Projectile.velocity;
@@ -287,8 +313,11 @@ public abstract class CatProj : ModProjectile
                 if (Projectile.velocity.Y > 0f)
                     Projectile.velocity.Y -= modifyStep * 1.5f;
             }
-            #endregion
+
+            #endregion 典中典之速度渐进
+
             #region 动画处理
+
             FrameCounter++;
             if (FrameCounter % 4 == 0)
                 Frame++;
@@ -296,10 +325,14 @@ public abstract class CatProj : ModProjectile
             if (MathF.Abs(Projectile.velocity.X) > .5f)
                 Projectile.spriteDirection = Math.Sign(Projectile.velocity.X);
             Projectile.rotation = MathHelper.PiOver2 * Projectile.direction * (1 - 1 / (Math.Abs(Projectile.velocity.X) / 24f + 1));
-            #endregion
+
+            #endregion 动画处理
         }
-        #endregion
+
+        #endregion 起飞
+
         #region 平地
+
         else //走路ai
         {
             if (state == KoishiState.Recover)
@@ -319,7 +352,6 @@ public abstract class CatProj : ModProjectile
                     }
                     Projectile.velocity.X *= .975f;
                     Projectile.velocity.Y = 0;
-
                 }
                 else
                 {
@@ -351,7 +383,9 @@ public abstract class CatProj : ModProjectile
                     Projectile.localAI[1] = Projectile.Center.Y - 64;
                 }
                 else if (dis > 256) Projectile.ai[0] = 1;
+
                 #region 走路/跑步/转向
+
                 float acc = 0.2f;
                 float speedMax = 6f;
                 if (speedMax < Math.Abs(player.velocity.X) + Math.Abs(player.velocity.Y))
@@ -379,8 +413,11 @@ public abstract class CatProj : ModProjectile
                     if (Projectile.velocity.X >= 0f - acc && Projectile.velocity.X <= acc)
                         Projectile.velocity.X = 0f;
                 }
-                #endregion
+
+                #endregion 走路/跑步/转向
+
                 #region 跳跃判定
+
                 if (goRight || goLeft)
                 {
                     Point point = (Projectile.Center / 16).ToPoint();
@@ -394,7 +431,9 @@ public abstract class CatProj : ModProjectile
                     if (WorldGen.SolidTile(point))
                         jump = true;
                 }
-                #endregion
+
+                #endregion 跳跃判定
+
                 Collision.StepUp(ref Projectile.position, ref Projectile.velocity, Projectile.width, Projectile.height, ref Projectile.stepSpeed, ref Projectile.gfxOffY);
                 if (Projectile.velocity.Y == 0f) //站在地面上
                 {
@@ -436,16 +475,23 @@ public abstract class CatProj : ModProjectile
                         ResetFrameData();
                     }
                 }
+
                 #region 速度与朝向处理
+
                 if (Projectile.velocity.X > speedMax)
                     Projectile.velocity.X = speedMax;
 
                 if (Projectile.velocity.X < -speedMax)
                     Projectile.velocity.X = -speedMax;
-                #endregion
+
+                #endregion 速度与朝向处理
+
                 #region 动画处理
+
                 //Projectile.spriteDirection = Projectile.direction;
+
                 #region 翻转
+
                 var dVx = Projectile.velocity.X - Projectile.oldVelocity.X;//计算速度变化量
                 var tarX = player.Center.X - Projectile.Center.X;
                 //Main.NewText((tarX * Projectile.velocity.X < 0, dVx * tarX > 0, state != KoishiState.Flip));
@@ -470,7 +516,6 @@ public abstract class CatProj : ModProjectile
                         //Projectile.spriteDirection = Math.Sign(helpCounter);
                         state = KoishiState.Walk;
                         ResetFrameData();
-
                     }
                     else if (t > 1) //转回去    ////应该不会发生
                     {
@@ -481,13 +526,15 @@ public abstract class CatProj : ModProjectile
                     //if (helpCounter != 0)
                     Frame = (int)((1 - t) * 9);
                     if (Frame > MaxFrame) { Frame = MaxFrame - 1; }
-
                 }
-                #endregion
+
+                #endregion 翻转
+
                 #region 跳跃
+
                 else if (state == KoishiState.Jump)
                 {
-                     Projectile.spriteDirection = Math.Sign(Projectile.velocity.X);
+                    Projectile.spriteDirection = Math.Sign(Projectile.velocity.X);
                     if (Projectile.velocity.Y != 0)
                     {
                         if (helpCounter < 15)
@@ -501,15 +548,18 @@ public abstract class CatProj : ModProjectile
                         //    helpCounter--;
                         //}
                         //Frame = 3 - helpCounter / 3;
-                        //if (helpCounter == 0) 
+                        //if (helpCounter == 0)
                         //{
                         state = KoishiState.Walk;
                         ResetFrameData();
                         //}
                     }
                 }
-                #endregion
+
+                #endregion 跳跃
+
                 #region 站立
+
                 else if (Projectile.oldPosition == Projectile.position)
                 {
                     Frame = 0;
@@ -534,8 +584,11 @@ public abstract class CatProj : ModProjectile
                     //    }
                     //}
                 }
-                #endregion
+
+                #endregion 站立
+
                 #region 移动
+
                 else
                 {
                     if (Projectile.velocity.Y != 0) { state = KoishiState.Jump; ResetFrameData(); }
@@ -560,18 +613,22 @@ public abstract class CatProj : ModProjectile
 
                     //}
                 }
-                #endregion
 
+                #endregion 移动
 
-                #endregion
+                #endregion 动画处理
+
                 #region 迫真重力
+
                 Projectile.velocity.Y += 0.4f;
                 if (Projectile.velocity.Y > 10f)
                     Projectile.velocity.Y = 10f;
-                #endregion
+
+                #endregion 迫真重力
             }
         }
-        #endregion
+
+        #endregion 平地
 
         if (Frame >= MaxFrame) Frame = MaxFrame - 1;
         if (Frame < 0) Frame = 0;
@@ -580,8 +637,8 @@ public abstract class CatProj : ModProjectile
         {
             Projectile.spriteDirection = player.direction;
         }
-
     }
+
     public enum KoishiState
     {
         Idle,
@@ -597,19 +654,23 @@ public abstract class CatProj : ModProjectile
         Swim,
         Sleep
     }
+
     public KoishiState state;
     public int helpCounter;
     public int MaxFrame => 4;
+
     public int FrameCounter
     {
         get => Projectile.frameCounter;
         set => Projectile.frameCounter = value;
     }
+
     public int Frame
     {
         get => Projectile.frame;
         set => Projectile.frame = value;
     }
+
     public override bool PreDraw(ref Color lightColor)
     {
         Main.EntitySpriteDraw(TextureAssets.Projectile[Type].Value, Projectile.Center - Main.screenPosition - Vector2.UnitY * 4,
@@ -617,21 +678,21 @@ public abstract class CatProj : ModProjectile
         return false;
     }
 }
+
 public class WarCat : CatProj
 {
-
     public override void AI()
     {
         Player player = Main.player[Projectile.owner];
 
         // Keep the projectile from disappearing as long as the player isn't dead and has the pet buff.
 
-
         base.AI();
         if (!player.dead && (player.HasBuff(ModContent.BuffType<War>()) || player.HasBuff(ModContent.BuffType<Holiday_War>())))
             Projectile.timeLeft = 2;
     }
 }
+
 public class PeaceCat : CatProj
 {
     public override void AI()

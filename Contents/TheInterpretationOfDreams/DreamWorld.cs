@@ -1,18 +1,10 @@
-﻿using System;
+﻿using MonoMod.Cil;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Reflection;
+using Terraria.Audio;
 using Terraria.Graphics.Shaders;
 using Terraria.ModLoader.IO;
-using System.Reflection;
-using MonoMod.Cil;
-using Stubble.Core.Exceptions;
-using Terraria.ID;
-using Terraria.Audio;
-using Terraria.Net;
-using Microsoft.Xna.Framework;
-using System.Drawing;
 
 namespace MatterRecord.Contents.TheInterpretationOfDreams;
 
@@ -22,16 +14,16 @@ public class DreamWorld : ModSystem
 
     public static bool UsedZoologistDream;
     public static List<int> availableDyeId = [];
+
     public override void PostSetupContent()
     {
-
-
         availableDyeId.Clear();
         Dictionary<int, int> dict = (Dictionary<int, int>)typeof(ArmorShaderDataSet).GetField("_shaderLookupDictionary", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(GameShaders.Armor);
         foreach (var key in dict.Keys)
             availableDyeId.Add(key);
         base.PostSetupContent();
     }
+
     public override void Load()
     {
         MonoModHooks.Modify(typeof(NPCShopDatabase).GetMethod("RegisterSkeletonMerchant", BindingFlags.Static | BindingFlags.NonPublic), ilContext =>
@@ -57,8 +49,6 @@ public class DreamWorld : ModSystem
             });
         });
 
-
-
         IL_Player.SetTalkNPC += PrincessModify;
 
         IL_Main.GUIChatDrawInner += NurseModify;
@@ -72,7 +62,6 @@ public class DreamWorld : ModSystem
         IL_Main.GUIChatDrawInner += AnglerModify;
 
         On_Player.ApplyCoating += PainterModify;
-
 
         On_Main.UpdateTime_SpawnTownNPCs += PartyGirlModify;
 
@@ -97,6 +86,7 @@ public class DreamWorld : ModSystem
         });
         base.Load();
     }
+
     private static double GetWeightFromPrefix(int prefix, Item targetItem)
     {
         if (Main.gameMenu) return 1;
@@ -122,7 +112,6 @@ public class DreamWorld : ModSystem
 
         float num = 1f * dmg * (2f - spd) * (2f - mcst) * size * kb * shtspd * (1f + (float)crt * 0.02f);
 
-
         if (prefix == 62 || prefix == 69 || prefix == 73 || prefix == 77)
             num *= 1.05f;
 
@@ -139,6 +128,7 @@ public class DreamWorld : ModSystem
 
         return Math.Pow(num, 2.0);
     }
+
     private void PartyGirlModify2(On_WorldGen.orig_TrySpawningTownNPC orig, int x, int y)
     {
         orig.Invoke(x, y);
@@ -146,7 +136,6 @@ public class DreamWorld : ModSystem
             for (int n = 0; n < 3; n++)
                 orig.Invoke(Main.rand.Next(10, Main.maxTilesX - 10),
                     Main.rand.Next((int)Main.worldSurface - 1, Main.maxTilesY - 20));
-
     }
 
     private void PartyGirlModify(On_Main.orig_UpdateTime_SpawnTownNPCs orig)
@@ -169,7 +158,6 @@ public class DreamWorld : ModSystem
                     if (targetItem.stack <= 0)
                         targetItem.SetDefaults();
                 }
-
 
                 if (applyItemAnimation)
                     self.ApplyItemTime(self.inventory[self.selectedItem], self.wallSpeed);
@@ -267,7 +255,7 @@ public class DreamWorld : ModSystem
         cursor.EmitDelegate<Func<int, int>>(value => (int)(value * (Main.LocalPlayer.CheckDreamActive(DreamState.Nurse) ? .8f : 1f)));
     }
 
-    static bool GlobalHasCheck(DreamState flag)
+    private static bool GlobalHasCheck(DreamState flag)
     {
         if (Main.netMode == NetmodeID.SinglePlayer)
             return Main.LocalPlayer.CheckDreamActive(flag);
@@ -287,6 +275,7 @@ public class DreamWorld : ModSystem
         UsedZoologistDream = tag.GetBool(nameof(UsedZoologistDream));
         base.LoadWorldData(tag);
     }
+
     public override void SaveWorldData(TagCompound tag)
     {
         tag[nameof(UsedZoologistDream)] = UsedZoologistDream;

@@ -1,14 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoMod.Cil;
-using ReLogic.Graphics;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Terraria.DataStructures;
-using Terraria.GameContent;
 
 namespace MatterRecord.Contents.ProtagonistAura
 {
@@ -17,7 +11,7 @@ namespace MatterRecord.Contents.ProtagonistAura
     {
         public override void Load()
         {
-            if (Main.netMode == NetmodeID.Server)
+            if (Main.dedServ)
                 return;
 
             // 注册上相应部位的贴图
@@ -25,10 +19,11 @@ namespace MatterRecord.Contents.ProtagonistAura
             EquipLoader.AddEquipTexture(Mod, $"{Texture}_{EquipType.Body}", EquipType.Body, this);
             EquipLoader.AddEquipTexture(Mod, $"{Texture}_{EquipType.Legs}", EquipType.Legs, this);
         }
+
         private void SetupDrawing()
         {
             // Since the equipment textures weren't loaded on the server, we can't have this code running server-side
-            if (Main.netMode == NetmodeID.Server)
+            if (Main.dedServ)
                 return;
 
             // 初始化一些信息
@@ -52,11 +47,13 @@ namespace MatterRecord.Contents.ProtagonistAura
             player.GetModPlayer<ProtagonistAuraPlayer>().HasProtagonistAura = !hideVisual;
             base.UpdateAccessory(player, hideVisual);
         }
+
         public override void UpdateVanity(Player player)
         {
             player.GetModPlayer<ProtagonistAuraPlayer>().HasProtagonistAura = true;
             base.UpdateVanity(player);
         }
+
         public override void SetDefaults()
         {
             Item.width = 18;
@@ -67,15 +64,18 @@ namespace MatterRecord.Contents.ProtagonistAura
             Item.accessory = true;
         }
     }
+
     public class ProtagonistAuraPlayer : ModPlayer
     {
         public bool HasProtagonistAura;
         public int cDye;
+
         public override void ResetEffects()
         {
             HasProtagonistAura = false;
             base.ResetEffects();
         }
+
         public override void Load()
         {
             IL_Player.PlayerFrame += ProtagonistAuraModify;
@@ -105,6 +105,7 @@ namespace MatterRecord.Contents.ProtagonistAura
             }
             base.ModifyDrawInfo(ref drawInfo);
         }
+
         private void ProtagonistAuraModify(MonoMod.Cil.ILContext il)
         {
             var cursor = new ILCursor(il);
@@ -129,6 +130,7 @@ namespace MatterRecord.Contents.ProtagonistAura
             cursor.EmitLdarg0();
         }
     }
+
     public class ClothierModify : GlobalNPC
     {
         public override void ModifyShop(NPCShop shop)
@@ -138,11 +140,13 @@ namespace MatterRecord.Contents.ProtagonistAura
             base.ModifyShop(shop);
         }
     }
+
     public class AuraLayer : PlayerDrawLayer
     {
         // 这里是给红染料 绿染料 灰染料加了光环效果
         // 你应该用不着(
         public override Position GetDefaultPosition() => new AfterParent(PlayerDrawLayers.Head);
+
         public override void Draw(ref PlayerDrawSet drawInfo)
         {
             if (drawInfo.colorArmorHead == default) return;
@@ -170,15 +174,15 @@ namespace MatterRecord.Contents.ProtagonistAura
                 _ => 0
             };
             float t = MathHelper.SmoothStep(0, 1, Main.GlobalTimeWrappedHourly % 1);
-            
+
             drawInfo.DrawDataCache.Add(new DrawData(ModContent.Request<Texture2D>("MatterRecord/Contents/ProtagonistAura/Aura_Glow").Value,
     center + new Vector2(4 + (plr.direction < 0 ? -8 : 0), (-23 + offsetY) * plr.gravDir), new Rectangle(offset * 32, 0, 32, 32), (Color.White * (1 - MathF.Cos(MathHelper.TwoPi * MathF.Sqrt(t))) * .75f) with { A = 0 }, 0, new(16), new Vector2(1, 0.6f) * (1 + .5f * t), drawInfo.playerEffect, 0));
-            
+
             drawInfo.DrawDataCache.Add(new DrawData(ModContent.Request<Texture2D>("MatterRecord/Contents/ProtagonistAura/Aura").Value,
                 center + new Vector2(4 + (plr.direction < 0 ? -8 : 0), (-23 + offsetY) * plr.gravDir), new Rectangle(offset * 32, 0, 32, 32), Color.White, 0, new(16), new Vector2(1, 0.6f), drawInfo.playerEffect, 0));
 
             drawInfo.DrawDataCache.Add(new DrawData(ModContent.Request<Texture2D>("MatterRecord/Contents/ProtagonistAura/Aura").Value,
-    center + new Vector2(4 + (plr.direction < 0 ? -8 : 0), (-21 + offsetY) * plr.gravDir + (plr.gravDir < 1 ? 18:0)), new Rectangle(96, 0, 32, offset == 2 ? 12 : 14), drawInfo.colorArmorHead, 0, new(16), 1, drawInfo.playerEffect, 0));
+    center + new Vector2(4 + (plr.direction < 0 ? -8 : 0), (-21 + offsetY) * plr.gravDir + (plr.gravDir < 1 ? 18 : 0)), new Rectangle(96, 0, 32, offset == 2 ? 12 : 14), drawInfo.colorArmorHead, 0, new(16), 1, drawInfo.playerEffect, 0));
             //Main.spriteBatch.DrawString(FontAssets.MouseText.Value, (plr.bodyFrame.Top / 56).ToString(), center + Vector2.UnitX * 32, Color.White);
             /*switch (mplr.cDye)
             {

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using static Terraria.Recipe;
 
 namespace MatterRecord.Contents.EmeraldTablet
@@ -18,6 +14,7 @@ namespace MatterRecord.Contents.EmeraldTablet
             base.SetDefaults();
         }
     }
+
     public class EmeraldTabltAlchemy : ModSystem
     {
         public static IngredientQuantityCallback EmeraldTabltAlchemyMethod = (Recipe recipe, int type, ref int amount, bool isDecrafting) =>
@@ -41,6 +38,7 @@ namespace MatterRecord.Contents.EmeraldTablet
             }
             amount = amountUsed;
         };
+
         public override void PostAddRecipes()
         {
             foreach (var recipe in Main.recipe)
