@@ -92,7 +92,7 @@ public class LordOfTheFlies : ModItem
                         mplr.IsInTrialMode = !mplr.IsInTrialMode;
                         if (Main.netMode == NetmodeID.MultiplayerClient && Main.myPlayer == player.whoAmI)
                             mplr.SyncPlayer(-1, player.whoAmI, false);
-                        SoundEngine.PlaySound(SoundID.Item20);
+                        SoundEngine.PlaySound(SoundID.Item20, player.Center);
                         if (mplr.IsInTrialMode)
                         {
                             var box = player.Hitbox;
@@ -106,7 +106,7 @@ public class LordOfTheFlies : ModItem
                         mplr.ChargingEnergy = 0;
                         if (Main.netMode == NetmodeID.MultiplayerClient && Main.myPlayer == player.whoAmI)
                             mplr.SyncPlayer(-1, player.whoAmI, false);
-                        SoundEngine.PlaySound(SoundID.Item45);
+                        SoundEngine.PlaySound(SoundID.Item45, player.Center);
                         mplr.RightCooldown = 30;
                     }
                     _chargeTimer = 0;

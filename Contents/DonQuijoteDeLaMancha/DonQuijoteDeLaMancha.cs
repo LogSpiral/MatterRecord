@@ -1,6 +1,7 @@
 ﻿using LogSpiralLibrary;
 using LogSpiralLibrary.CodeLibrary.DataStructures.Drawing.RenderDrawingContents;
 using LogSpiralLibrary.CodeLibrary.DataStructures.SequenceStructures.Contents.Melee;
+using LogSpiralLibrary.CodeLibrary.DataStructures.SequenceStructures.Contents.Melee.Core;
 using LogSpiralLibrary.CodeLibrary.DataStructures.SequenceStructures.Contents.Melee.StandardMelee;
 using LogSpiralLibrary.CodeLibrary.DataStructures.SequenceStructures.System;
 using LogSpiralLibrary.CodeLibrary.Utilties;
@@ -395,7 +396,7 @@ public class DonQuijoteDeLaManchaProj : MeleeSequenceProj
             {
                 current.timeLeft = (byte)MathHelper.Lerp(current.timeLeftMax, 0, Utils.GetLerpValue(0.25f, 1, Factor, true));
                 current.xScaler = 2 + Owner.velocity.Length() / 32;
-                current.scaler = StandardInfo.VertexStandard.scaler * ModifyData.Size * offsetSize / 3 * 4f * current.xScaler;
+                current.scaler = StandardInfo.VertexStandard.scaler * ModifyData.Size * OffsetSize / 3 * 4f * current.xScaler;
                 current.center = Owner.Center - Rotation.ToRotationVector2() * current.scaler * .5f;
                 current.rotation = Rotation;
                 current.negativeDir = Flip;
@@ -427,7 +428,7 @@ public class DonQuijoteDeLaManchaProj : MeleeSequenceProj
 
         public override void OnStartAttack()
         {
-            SoundEngine.PlaySound(SoundID.Item92);
+            SoundEngine.PlaySound(SoundID.Item92, Owner.Center);
             var rand = Main.rand.NextFloat(0.25f, 0.5f);
             originVelocity = Owner.velocity;
             //if (Owner is Player plr) plr.AddBuff(ModContent.BuffType<DoggoBoost>(), 180);
@@ -469,7 +470,7 @@ public class DonQuijoteDeLaManchaProj : MeleeSequenceProj
             var verS = StandardInfo.VertexStandard;
             if (verS.active)
             {
-                var u = UltraStab.NewUltraStabOnDefaultCanvas(verS.timeLeft, verS.scaler * ModifyData.Size * offsetSize / 3 * 8f, Owner.Center - targetedVector);
+                var u = UltraStab.NewUltraStabOnDefaultCanvas(verS.timeLeft, verS.scaler * ModifyData.Size * OffsetSize / 3 * 8f, Owner.Center - targetedVector);
                 u.heatMap = verS.heatMap;
                 u.negativeDir = Flip;
                 u.rotation = Rotation;
@@ -542,7 +543,7 @@ public class DonQuijoteDeLaManchaProj : MeleeSequenceProj
 
         public override void OnEndAttack()
         {
-            SoundEngine.PlaySound(SoundID.Item96 with { Volume = 0.5f * SoundID.Item96.Volume });//MaxInstances =-1,
+            SoundEngine.PlaySound(SoundID.Item96 with { Volume = 0.5f * SoundID.Item96.Volume }, Owner.Center);//MaxInstances =-1,
             base.OnEndAttack();
         }
     }

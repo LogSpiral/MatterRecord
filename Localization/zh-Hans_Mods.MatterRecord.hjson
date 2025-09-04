@@ -1,9 +1,3 @@
-MeleeAction: {
-	DonQuijoteDeLaManchaDash.DisplayName: 堂吉诃德-冲锋
-	DonQuijoteDeLaManchaStab.DisplayName: 堂吉诃德-突刺
-	// Category.: ""
-}
-
 Condition: {
 	DonQuijoteDeLaManchaDashCoolDownFinished: 堂吉诃德-冲锋冷却结束
 	DonQuijoteDeLaManchaStabing: 堂吉诃德-突刺状态
@@ -670,7 +664,7 @@ DamageClasses.RangedMagicDamage.DisplayName: 魔法-远程伤害
 
 Sequence: {
 	MeleeAction: {
-		// DonQuijoteDeLaManchaDash.DisplayName: DonQuijoteDeLaManchaDash
-		// DonQuijoteDeLaManchaStab.DisplayName: DonQuijoteDeLaManchaStab
+		DonQuijoteDeLaManchaDash.DisplayName: 堂吉诃德-冲锋
+		DonQuijoteDeLaManchaStab.DisplayName: 堂吉诃德-突刺
 	}
 }

@@ -1,9 +1,3 @@
-MeleeAction: {
-	DonQuijoteDeLaManchaDash.DisplayName: Don Quijote Dash
-	DonQuijoteDeLaManchaStab.DisplayName: Don Quijote Stab
-	Category.: ""
-}
-
 Condition: {
 	DonQuijoteDeLaManchaDashCoolDownFinished: Don Quijote Dash Cooldown Finished
 	DonQuijoteDeLaManchaStabing: Don Quijote Stab State
@@ -639,7 +633,7 @@ DamageClasses.RangedMagicDamage.DisplayName: Ranged Magic Damage
 
 Sequence: {
 	MeleeAction: {
-		DonQuijoteDeLaManchaDash.DisplayName: DonQuijoteDeLaManchaDash
-		DonQuijoteDeLaManchaStab.DisplayName: DonQuijoteDeLaManchaStab
+		DonQuijoteDeLaManchaDash.DisplayName: Don Quijote Dash
+		DonQuijoteDeLaManchaStab.DisplayName: Don Quijote Stab
 	}
 }
