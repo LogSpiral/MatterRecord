@@ -1,4 +1,5 @@
-﻿using LogSpiralLibrary;
+﻿// using LogSpiralLibrary;
+using MatterRecord.Contents.DonQuijoteDeLaMancha;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
@@ -269,7 +270,7 @@ public class LordOfTheFlies : ModItem
                 proj.MaxUpdates *= 2;
                 proj.GetGlobalProjectile<LordOfTheFliesGlobalProj>().IsFromTrialMode = true;
                 NetMessage.SendData(MessageID.SyncProjectile, -1, -1, null, proj.whoAmI);
-                player.GetModPlayer<LogSpiralLibraryPlayer>().strengthOfShake += 5.0f;
+                player.GetModPlayer<MatterRecordPlayer>().strengthOfShake += 5.0f;
             }
             else
             {

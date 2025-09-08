@@ -6,16 +6,16 @@
 	<!-- General -->
 	<PropertyGroup>
 		<AssemblyName>MatterRecord</AssemblyName>
-		<LangVersion>latest</LangVersion>
+		<LangVersion>preview</LangVersion>
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="Solaestas.tModLoader.ModBuilder" Version="1.6.1" />
 	</ItemGroup>
 	<ItemGroup>
-	  <ProjectReference Include="..\LogSpiralLibrary\LogSpiralLibrary.csproj" />
+		<AdditionalFiles Include="**/*.xml;**/*.xnb" Exclude="bin/**/*;obj/**/*" Pack="true" ModPath="%(Identity)" />
 	</ItemGroup>
 	<ItemGroup>
-		<AdditionalFiles Include="**/*.xml;**/*.xnb" Exclude="bin/**/*;obj/**/*" Pack="true" ModPath="%(Identity)" />
+	  <Folder Include="Assets\Images\" />
 	</ItemGroup>
 
 	<!-- References -->

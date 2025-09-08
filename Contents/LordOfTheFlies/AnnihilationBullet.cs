@@ -1,7 +1,4 @@
-﻿using LogSpiralLibrary;
-using LogSpiralLibrary.CodeLibrary.Utilties;
-using LogSpiralLibrary.CodeLibrary.Utilties.Extensions;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.GameContent;
 
@@ -83,7 +80,9 @@ public class AnnihilationBullet : ModProjectile
     public override bool PreDraw(ref Color lightColor)
     {
         SpriteBatch spriteBatch = Main.spriteBatch;
-        spriteBatch.DrawShaderTail(Projectile, LogSpiralLibraryMod.HeatMap[6].Value, LogSpiralLibraryMod.AniTex[0].Value, LogSpiralLibraryMod.BaseTex[12].Value, 20, new Vector2(Projectile.width, Projectile.height) * .5f, (1 - Projectile.timeLeft / 180f).HillFactor2());
+        // ↓效果一般，且用到前置库代码，下次另外制作
+        // TODO 湮灭弹重做
+        // spriteBatch.DrawShaderTail(Projectile, LogSpiralLibraryMod.HeatMap[6].Value, LogSpiralLibraryMod.AniTex[0].Value, LogSpiralLibraryMod.BaseTex[12].Value, 20, new Vector2(Projectile.width, Projectile.height) * .5f, (1 - Projectile.timeLeft / 180f).HillFactor2());
         spriteBatch.Draw(TextureAssets.Projectile[Type].Value, Projectile.Center - Main.screenPosition, null, Color.White, Projectile.rotation, new Vector2(10, 3), new Vector2(2, 1), 0, 0);
         return false;
     }
