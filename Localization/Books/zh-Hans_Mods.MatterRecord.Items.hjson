@@ -1,0 +1,171 @@
+﻿TheoryOfFreedom: {
+	DisplayName: 《自由论》
+	Tooltip:
+		'''
+		对所有钩爪进行修改
+		消耗1%最大生命值可以暂时钩在半空中
+		如果钩住空气飞行时间不会重置
+		提升钩爪速度并在牵引时增加10%免伤
+		视为翅膀
+		按下对应按键可切换钩爪是否无视平台
+		[c/66CCFF:“知道枷锁的性质比用鲜花装饰它们要好”]
+		'''
+	CanHookOnPlatform: 现在可以钩至平台
+	CantHookOnPlatform: 现在禁用钩至平台
+	GotFreedom: "{0}获得了「自由」"
+}
+
+TheAdventureofSherlockHolmes: {
+	DisplayName: 《福尔摩斯探案集》
+	Tooltip:
+		'''
+		在快捷栏内手持并打开大地图时
+		可右键地图消耗一银币咨询地图上27x27的位置
+		[c/66CCFF:“只是一些简单的推理罢了，华生医生”]
+		'''
+}
+
+Faust: {
+	DisplayName: 《浮士德》
+	Tooltip:
+		'''
+		[c/FF0000:背包内右键]以激活/取消
+		激活后右键背包内物品，可使用其售价20倍购买
+		每消费1铂金币降低0.01幸运
+		[c/66CCFF:"我签下契约，追寻那超越凡人的体验，]
+		[c/66CCFF:但谁来拯救我的灵魂？"]
+		'''
+	WannaDeal: 怎么，要来场交易吗？
+	MoneySpent: 你已经在恶魔这里消费了
+}
+
+LittlePrince: {
+	DisplayName: 《小王子》
+	Tooltip:
+		'''
+		你死亡时将不再生成墓石，也不再掉落钱币
+		[c/66CCFF:"但是，这就好象剥落的旧树皮一样，]
+		[c/66CCFF:旧树皮，并没什么可悲的。"]
+		'''
+}
+
+TheOldManAndTheSea: {
+	DisplayName: 《老人与海》
+	Tooltip:
+		'''
+		手持该鱼竿时，怪物生成速率大大提升
+		可以在熔岩中钓鱼
+		[c/66CCFF:"破晓前天很冷，老头抵着木头取暖，他想鱼能支撑多久他就能支撑多久。]
+		[c/66CCFF:他用温柔的语调大声说:‘鱼啊，只要我不死就要同你周旋到底’"]
+		'''
+}
+
+DonQuijoteDeLaMancha: {
+	DisplayName: 《堂吉诃德》
+	Tooltip:
+		'''
+		右键召唤一座风车向其冲锋并免疫伤害
+		冲锋时根据距离计算伤害并必定暴击
+		冲锋后短时间内攻击转为突刺，按住up时突刺以获得小幅位移，右键取消该状态
+		突刺命中减少冲锋冷却时间
+		持握时敌人更有可能以你为目标
+		[c/66CCFF:“堂吉诃德对他的侍从桑丘说:]
+		[c/66CCFF:‘我的朋友，前面出现了几十个巨人，]
+		[c/66CCFF:我要去和他们决斗，我要打败他们，]
+		[c/66CCFF:这是一场正义的决斗，]
+		[c/66CCFF:我要消灭这些侵略地球的坏家伙’”]
+		'''
+	DashCooldown: 冲刺冷却
+	CancelStabState: 解除突刺状态
+	InheritedFrom: 目前属性继承自武器
+	SheepDamage: +500%对绵羊大军伤害
+	FindItemHint: 请[c/FF0000:背包内右键]激活后再[c/FF0000:右键某个近战武器]以继承属性
+}
+
+EmeraldTablet: {
+	DisplayName: 《翠玉录》
+	Tooltip:
+		'''
+		50%的几率不消耗制作材料的药水
+		你只需要将它带在身上
+		[c/66CCFF:“上为其下，下为其上，以成太一之奇迹”]
+		'''
+}
+
+TheoryofJustice: {
+	DisplayName: 《正义论》
+	Tooltip:
+		'''
+		根据你的生物图鉴获得减伤效果
+		未点亮图鉴越多，减伤越高, 最高30%
+		[c/66CCFF:“无知即正义”]
+		'''
+	Endurance: 现在提供减伤
+}
+
+TheInterpretationOfDreams: {
+	DisplayName: 《梦的解析》
+	Tooltip:
+		'''
+		左键对原版NPC使用时获取梦境，右键打开梦匣
+		破碎之梦50%:杂乱无序的梦境，合成用品
+		专属梦境10%:居民们的梦中奇想
+		美梦20%:获得1金币，一段时间内提高幸运值
+		噩梦20%:一段时间内降低幸运值
+		解锁类梦境不会重复获取
+		[c/66CCFF:“梦是潜意识欲望的表达”]
+		'''
+	Unlocked: 已经解锁过了
+	BrokenDreamHint: 捕获到了破碎之梦
+	SweetDreamHint: 捕获到了美梦
+	NightmareHint: 捕获到了噩梦
+	NoDreamHint: 看来暂时不会做新的梦了
+	SpecialDreamHint: 一个特殊的梦境被捕获了
+	// Unlock: (Locked)
+	Hint: （左键点击以激活/取消激活）
+	UnlockHint: 使用以解锁，通过梦的解析的面板进行控制
+}
+
+WarAndPeace: {
+	DisplayName: 《战争与和平》
+	Tooltip:
+		'''
+		根据当前星期获取不同的buff
+		一三五获得战争，提高伤害
+		二四六获得和平，获得减伤
+		[c/66CCFF:"在巴格拉季翁部队里，人们对整个战局毫无所知]
+		[c/66CCFF:他们谈论和平，但不相信和平有可能实现；]
+		[c/66CCFF:谈论打仗，又不相信战斗在即"]
+		'''
+}
+
+AliceInWonderlandWatch: {
+	DisplayName: 《爱丽丝漫游仙境》
+	Tooltip:
+		'''
+		装备后随机产生传送门，右键传送门即可传送
+		每天最多生成三个传送门，生成时散发粒子进行指引
+		优先传送至未被探索的区域
+
+		[c/66CCFF:“哦，天哪！哦，天哪！我要迟到了！”]
+		'''
+	Start: 奇怪的传送门入口
+	End: 奇怪的传送门出口
+}
+
+LordOfTheFlies: {
+	DisplayName: 《蝇王》
+	Tooltip:
+		'''
+		根据装甲属性提升属性，暴击时造成额外伤害
+		右键进入审判模式，审判模式时源质无法自然恢复
+		审判模式下每次射击消耗5源质,获得100%暴击和20护甲穿透
+		长按右键消耗200源质储存源质堙灭弹，至多六枚
+		审判模式时长按瞄准以消耗32源质发射源质堙灭弹
+		源质堙灭弹附加5%最大生命值的伤害
+		[c/66CCFF:“凡不长久的，多将以悲剧”]
+		'''
+	Clatter: 咔哒
+	// NPCKillCount: 这把武器已经击杀了 {0} 个目标
+	// KillCount: 这把武器已经杀死了 {0} 位玩家
+}

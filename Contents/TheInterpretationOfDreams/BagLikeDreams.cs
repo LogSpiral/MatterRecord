@@ -55,7 +55,7 @@ namespace MatterRecord.Contents.TheInterpretationOfDreams
         public override void ExtraIngredient(Recipe recipe) => recipe.AddIngredient(ItemID.GuideVoodooDoll);
     }
 
-    public class TavernkeepDream() : BagLikeDreams(24, () => NPC.savedBartender, 0, 0, () => [(ItemID.DefenderMedal, NPC.downedGolemBoss ? 8 : NPC.downedMechBossAny ? 4 : 2)])
+    public class TavernkeepDream() : BagLikeDreams(24, () => NPC.savedBartender, 0, 0, () => [(ItemID.DefenderMedal, NPC.downedGolemBoss ? 12 : NPC.downedMechBossAny ? 8 : 4)])
     {
         public override void ExtraIngredient(Recipe recipe) => recipe.AddIngredient(ItemID.DD2ElderCrystal);
     }

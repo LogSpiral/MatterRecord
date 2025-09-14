@@ -7,24 +7,24 @@ namespace MatterRecord.Contents.TheInterpretationOfDreams
     [Flags]
     public enum DreamState
     {
-        SkeletonMerchant = 1,
-        Princess = 2,
-        SantaClaus = 4,
-        GoblinTinkerer = 8,
-        Merchant = 16,
-        Mechanic = 32,
-        Demolitionist = 64,
-        TaxCollector = 128,
-        Steampunker = 256,
-        Dryad = 512,
-        WitchDoctor = 1024,
-        Painter = 2048,
-        Truffle = 4096,
-        PartyGirl = 8192,
-        ArmsDealer = 16384,
-        Angler = 32768,
-        Nurse = 65536,
-        TravellingMerchant = 131072
+        SkeletonMerchant = 1 << 0,
+        Princess = 1 << 1,
+        SantaClaus = 1 << 2,
+        GoblinTinkerer = 1 << 3,
+        Merchant = 1 << 4,
+        Mechanic = 1 << 5,
+        Demolitionist = 1 << 6,
+        TaxCollector = 1 << 7,
+        Steampunker = 1 << 8,
+        Dryad = 1 << 9,
+        WitchDoctor = 1 << 10,
+        Painter = 1 << 11,
+        Truffle = 1 << 12,
+        PartyGirl = 1 << 13,
+        ArmsDealer = 1 << 14,
+        Angler = 1 << 15,
+        Nurse = 1 << 16,
+        TravellingMerchant = 1 << 17
     }
 
     public class DreamPlayer : ModPlayer

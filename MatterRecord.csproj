@@ -15,7 +15,25 @@
 		<AdditionalFiles Include="**/*.xml;**/*.xnb" Exclude="bin/**/*;obj/**/*" Pack="true" ModPath="%(Identity)" />
 	</ItemGroup>
 	<ItemGroup>
+	  <AdditionalFiles Remove="Localization\Books\en-US_Mods.MatterRecord.Items.hjson" />
+	  <AdditionalFiles Remove="Localization\Books\zh-Hans_Mods.MatterRecord.Items.hjson" />
+	  <AdditionalFiles Remove="localization\buffs\en-US_Mods.MatterRecord.Buffs.hjson" />
+	  <AdditionalFiles Remove="localization\buffs\zh-Hans_Mods.MatterRecord.Buffs.hjson" />
+	  <AdditionalFiles Remove="localization\configs\en-US_Mods.MatterRecord.Configs.hjson" />
+	  <AdditionalFiles Remove="localization\configs\zh-Hans_Mods.MatterRecord.Configs.hjson" />
+	  <AdditionalFiles Remove="Localization\Dreams\en-US_Mods.MatterRecord.Items.hjson" />
+	  <AdditionalFiles Remove="Localization\Dreams\zh-Hans_Mods.MatterRecord.Items.hjson" />
+	  <AdditionalFiles Remove="localization\miscitems\en-US_Mods.MatterRecord.Items.hjson" />
+	  <AdditionalFiles Remove="localization\miscitems\zh-Hans_Mods.MatterRecord.Items.hjson" />
+	  <AdditionalFiles Remove="localization\projectiles\en-US_Mods.MatterRecord.Projectiles.hjson" />
+	  <AdditionalFiles Remove="localization\projectiles\zh-Hans_Mods.MatterRecord.Projectiles.hjson" />
+	</ItemGroup>
+	<ItemGroup>
 	  <Folder Include="Assets\Images\" />
+	  <Folder Include="Localization\MiscItems\" />
+	  <Folder Include="Localization\Buffs\" />
+	  <Folder Include="Localization\Projectiles\" />
+	  <Folder Include="Localization\Configs\" />
 	</ItemGroup>
 
 	<!-- References -->

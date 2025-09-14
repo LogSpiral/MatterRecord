@@ -1,0 +1,42 @@
+﻿LifeRegenStagnant: {
+	DisplayName: 生命停滞
+	Description: 有借有还
+}
+
+Eternal: {
+	DisplayName: 永生
+	Description: 即便只是须臾……
+}
+
+Holiday: {
+	DisplayName: 休假！
+	Description: 见鬼，难道你要让猫猫星期日加班？
+}
+
+Peace: {
+	DisplayName: 和平
+	Description:
+		'''
+		和平是灵魂的宁静
+		所受伤害降低10%，在此基础上再降低5
+		'''
+}
+
+War: {
+	DisplayName: 战争
+	Description:
+		'''
+		战争是心灵的风暴
+		造成伤害增加10%，在此基础上再增加5
+		'''
+}
+
+Holiday_Peace: {
+	DisplayName: 休假！
+	Description: 见鬼，难道你要让猫猫星期日加班？
+}
+
+Holiday_War: {
+	DisplayName: 休假！
+	Description: 见鬼，难道你要让猫猫星期日加班？
+}

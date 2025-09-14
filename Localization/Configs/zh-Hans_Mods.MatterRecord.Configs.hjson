@@ -1,0 +1,13 @@
+﻿MatterRecordConfig: {
+	DisplayName: 事象网罗配置
+
+	DonQuijoteSlashActive: {
+		Label: "[i:MatterRecord/DonQuijoteDeLaMancha]堂吉诃德左键挥砍模式"
+		Tooltip: 开启后使用手持弹幕模式，默认关闭
+	}
+
+	LordOfTheFliesUIReset: {
+		Label: "[i:MatterRecord/LordOfTheFlies]重置蝇王的UI位置为默认值"
+		Tooltip: ""
+	}
+}

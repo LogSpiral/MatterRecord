@@ -1,0 +1,300 @@
+﻿ClothierDream: {
+	RecipeCondition: 服装商可入住
+	DisplayName: 裁缝之梦
+	Tooltip:
+		'''
+		使用后获得一把金钥匙，消耗品
+		“也许我当时应该打开几个宝箱？我刚刚梦到它们了”
+		'''
+}
+StylistDream: {
+	RecipeCondition: 理发师可入住
+	DisplayName: 理发师之梦
+	Tooltip:
+		'''
+		使用后获得鸿蒙剪刀
+		“在梦里，我意识到剪刀除了剪头发还能剪些其他的！”
+		'''
+	Unlock: 被一个强大的丛林生物所诅咒
+}
+
+DyeTraderDream: {
+	RecipeCondition: 染料商可入住
+	DisplayName: 染料商之梦
+	Tooltip:
+		'''
+		使用后获得随机三种染料
+		“亲爱的，试试这个染料吧，我刚获得的新灵感”
+		'''
+}
+
+GolferDream: {
+	RecipeCondition: 高尔夫球手可入住
+	DisplayName: 高尔夫手之梦
+	Tooltip:
+		'''
+		使用后召唤沙尘暴，再次使用以取消
+		“是沙坑？真是一场噩梦，对高尔夫球和我都是”
+		'''
+}
+
+GuideDream: {
+	RecipeCondition: 向导可入住
+	DisplayName: 向导之梦
+	Tooltip:
+		'''
+		使用后获得四职业徽章各一枚
+		“久违的安眠，你最近应该没有探索地狱吧？没有……吧？”
+		'''
+	Unlock: 目前被向导自身所诅咒
+}
+
+PirateDream: {
+	RecipeCondition: 海盗船长可入住
+	DisplayName: 海盗船长之梦
+	Tooltip:
+		'''
+		使用后召唤暴雨，再次使用以取消
+		“嗝……风暴，风暴就要来了，大副，扬帆！”
+		'''
+}
+
+TavernkeepDream: {
+	RecipeCondition: 酒馆老板可入住
+	DisplayName: 酒馆老板之梦
+	Tooltip:
+		'''
+		右键使用随军团难度提升获得4/8/12护卫勋章
+		“那些哥布林没进来吧？”
+		'''
+}
+
+WizardDream: {
+	RecipeCondition: 巫师可入住
+	ReachedLimit: 已达到上限
+	DisplayName: 巫师之梦
+	Tooltip:
+		'''
+		使用后永久减少1%法力消耗
+		“我在梦中领悟了一些新的魔法，你要学吗？嗯？为什么这么看我，得交钱”
+		'''
+}
+
+ZoologiseDream: {
+	RecipeCondition: 动物学家可入住
+	DisplayName: 动物学家之梦
+	Tooltip:
+		'''
+		使用后召唤一只奇怪的城镇史莱姆(未实装十来亩)
+		“我梦到了一只新品种的史莱姆，等等，你说那不是梦？”
+		'''
+	TheSameSlime: 史莱姆已经到了！
+}
+
+BrokenDream: {
+	RecipeCondition: None
+	DisplayName: 破碎之梦
+	Tooltip: 左键使用获得随机原版药水buff
+}
+
+CybrogDream: {
+	RecipeCondition: 机器侠可入住
+	DisplayName: 机器侠之梦
+	Tooltip:
+		'''
+		召唤一只电子羊(未实装)
+		“未装载睡眠模拟，所以，我认为我并不会梦到电子羊”
+		'''
+}
+
+AnglerDream: {
+	RecipeCondition: 渔夫可入住
+	DisplayName: 渔夫之梦
+	Tooltip:
+		'''
+		激活时，渔夫任务交付时获得两次奖励
+		“你是我的头号仆人，连梦里都在为我捕鱼，哈哈”
+		'''
+}
+
+ArmsDealerDream: {
+	RecipeCondition: 军火商可入住
+	DisplayName: 军火商之梦
+	Tooltip:
+		'''
+		激活时，15%概率不消耗弹药
+		“太荒谬了，我的子弹居然打光了”
+		'''
+}
+
+DemolitionistDream: {
+	RecipeCondition: 爆破专家可入住
+	DisplayName: 爆破专家之梦
+	Tooltip:
+		'''
+		激活时，玩家引起的爆炸不会使自己受伤
+		“我净化了整个世界！等等，那是梦？”
+		'''
+}
+
+DryadDream: {
+	RecipeCondition: 树妖可入住
+	DisplayName: 树妖之梦
+	Tooltip:
+		'''
+		激活时，获得永久的树妖祝福buff
+		“为了泰拉瑞亚的净化，也许我需要给你一点帮助，我的梦？在梦里你的内脏变成了外脏”
+		'''
+}
+
+GoblinTinkererDream: {
+	RecipeCondition: 哥布林工匠可入住
+	DisplayName: 哥布林工匠之梦
+	Tooltip:
+		'''
+		激活时，越高级的前缀越有可能被重铸到
+		“谢天谢地，我教会了他们用指南针，虽然是在梦里”
+		'''
+}
+
+MechanicDream: {
+	RecipeCondition: 机械师可入住
+	DisplayName: 机械师之梦
+	Tooltip:
+		'''
+		激活时，使用电线不消耗
+		“我看到了一个机械王国，去把它变为现实吧”
+		'''
+}
+
+MerchantDream: {
+	RecipeCondition: 商人可入住
+	DisplayName: 商人之梦
+	Tooltip:
+		'''
+		激活时，出售时的价格系数提升为30%
+		“我梦见镇子里装上了很多路灯……是的，路灯……咳咳”
+		'''
+}
+
+NurseDream: {
+	RecipeCondition: 护士可入住
+	DisplayName: 护士之梦
+	Tooltip:
+		'''
+		激活时，护士治疗费用减少20%
+		“呃......你可以转过身去吗？抱歉，梦中你的伤势有点惨烈，我得稍微缓缓”
+		'''
+}
+
+PainterDream: {
+	RecipeCondition: None
+	DisplayName: 画家之梦
+	Tooltip:
+		'''
+		激活时，使用油漆不消耗
+		“你很有艺术细胞，在梦里我和你办了一次画展！”
+		'''
+}
+
+PartyGirlDream: {
+	RecipeCondition: 派对女孩可入住
+	DisplayName: 派对女孩之梦
+	Tooltip:
+		'''
+		激活时，npc死亡后刷新加快
+		“世界上最棒的派对！是梦？那我会办一场更大的派对！”
+		'''
+}
+
+PrincessDream: {
+	RecipeCondition: 公主可入住
+	DisplayName: 公主之梦
+	Tooltip:
+		'''
+		激活时，NPC幸福感增加，物品售价修正为原来的90%(不影响晶塔)
+		“在梦里，我的臣民们都很幸福，你也一样！”
+		'''
+}
+
+SantaClausDream: {
+	RecipeCondition: 圣诞老人可入住
+	DisplayName: 圣诞老人之梦
+	Tooltip:
+		'''
+		激活时，游戏时间视为圣诞节
+		“哦……今天是圣诞节，你想坐雪橇吗？”
+		'''
+}
+
+SkeletonMerchantDream: {
+	RecipeCondition: None
+	DisplayName: 骷髅商人之梦
+	Tooltip:
+		'''
+		激活时，骷髅商人售卖所有商品
+		“我梦到大家都住到地下了，所以今天是骷髅大放送”
+		'''
+}
+
+SteampunkerDream: {
+	RecipeCondition: 蒸汽朋克可入住
+	DisplayName: 蒸汽朋克之梦
+	Tooltip:
+		'''
+		激活时，飞行时间+2秒，火箭背包额外+5秒
+		“在我梦里你是一名出色的空盗！”
+		'''
+}
+
+TaxCollectorDream: {
+	RecipeCondition: 税收官可入住
+	DisplayName: 税收官之梦
+	Tooltip:
+		'''
+		激活时，对城镇npc造成伤害使他们爆金币(臭虫剑或者臭蛋)(对税收官除外)
+		“你知道的，哪怕是在梦里，他们也不愿意缴税”
+		'''
+}
+
+TravellingMerchatDream: {
+	RecipeCondition: None
+	DisplayName: 旅行商人之梦
+	Tooltip:
+		'''
+		激活时，旅行商人每天都会到来
+		“我梦到货物又滞销了，带着这些东西旅行是有点累赘了，所以只能恳请你来多消费消费了”
+		'''
+}
+
+TruffleDream: {
+	RecipeCondition: 松露人可入住
+	DisplayName: 松露人之梦
+	Tooltip:
+		'''
+		激活时，仇恨值-100，但你无法食用蘑菇回血
+		“我又梦到有人在啃我的脚，更糟糕的是，醒来后我发现这是真的”
+		'''
+}
+
+WitchDoctorDream: {
+	RecipeCondition: 巫医可入住
+	DisplayName: 巫医之梦
+	Tooltip:
+		'''
+		激活时，召唤栏+1
+		“森中的精灵在梦中告诉我，它们很喜欢你”
+		'''
+}
+
+TaijiNoYume: {
+	RecipeCondition: None
+	DisplayName: 胎儿之梦
+	Tooltip:
+		'''
+		 “胎儿啊胎儿你为何要跳动，
+		   胎儿啊胎儿你为何要跳动，
+		   是因为明白了母亲的心，
+		   而感到害怕吗......”
+		'''
+}

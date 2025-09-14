@@ -1,0 +1,145 @@
+﻿TheoryOfFreedom: {
+	DisplayName: Theory of Freedom
+	Tooltip:
+		'''
+		"To understand shackles is better than adorning them with flowers."
+		All hooks can latch onto mid-air
+		Costs 1% HP per grapple use
+		Grappling mid-air no longer restores flight time
+		'''
+	CanHookOnPlatform: Hook on to the platforms enabled.
+	CantHookOnPlatform: Hook on to the platforms disabled.
+	GotFreedom: "{0} has got 「Freedom」"
+}
+
+TheAdventureofSherlockHolmes: {
+	DisplayName: The Adventures of Sherlock Holmes
+	Tooltip:
+		'''
+		Right-click the world map while holding to consult a 27x27 area for 1 Silver
+		"Elementary deductions, Dr. Watson."
+		'''
+}
+
+Faust: {
+	DisplayName: Faust
+	Tooltip:
+		'''
+		"I signed the pact for transcendent power, but who will save my soul?"
+		Right-click in inventory to activate/deactivate
+		Activate to duplicate an item at 20x its sell value
+		Lose 0.01 luck per Platinum spent
+		'''
+	WannaDeal: Well, Do ya wanna a deal?
+	MoneySpent: You have spent these Money with demons:
+}
+
+LittlePrince: {
+	DisplayName: The Little Prince
+	Tooltip:
+		'''
+		"It is like shedding old bark; there is nothing sad about old bark."
+		No tombstones on death
+		No coin loss on death
+		'''
+}
+
+TheOldManAndTheSea: {
+	DisplayName: The Old Man and the Sea
+	Tooltip:
+		'''
+		"At dawn, the old man leaned against the wood for warmth. He vowed to endure as long as the fish."
+		Greatly increases enemy spawn rate while held
+		Allows lava fishing
+		'''
+}
+
+DonQuijoteDeLaMancha: {
+	DisplayName: Don Quijote
+	Tooltip:
+		'''
+		"Don Quijote said to Sancho: 'Behold, giants approach! I shall vanquish them in righteous combat!'"
+		Right-click to summon a windmill and charge toward it, granting immunity to the next hit
+		Charge damage scales with distance (guaranteed crit)
+		Post-charge, attacks become stabs (reduces charge cooldown)
+		Right-click to cancel
+		Taking damage during charge extends cooldown
+		Enemies prioritize targeting you while held
+		'''
+	DashCooldown: Dash Cooldown
+	CancelStabState: Cancel Stabing State
+	InheritedFrom: The current property inherites from
+	SheepDamage: +500% damage to the sheep army
+	FindItemHint: Please [c/FF0000:Right click in Inventory] to activate it and then [c/FF0000:Right click another melee weapon]to get it's property.
+}
+
+
+
+EmeraldTablet: {
+	DisplayName: Emerald Tablet
+	Tooltip:
+		'''
+		"As above, so below. Thus is the miracle of the One."
+		50% chance to not consume materials when crafting potions
+		Carry it in your inventory
+		'''
+}
+
+TheoryofJustice: {
+	DisplayName: Theory of Justice
+	Tooltip:
+		'''
+		"Ignorance is justice."
+		Grants damage reduction based on undiscovered Bestiary entries
+		Up to 30% reduction
+		'''
+	Endurance: Now reduce damage by
+}
+
+TheInterpretationOfDreams: {
+	DisplayName: The Interpretation of Dreams
+	Tooltip:
+		'''
+		"Dreams are the royal road to the unconscious."
+		Use on NPCs to collect dreams (once daily). Right-click to open Dream Vault
+		(50% Broken Dream, 20% Sweet Dream, 20% Nightmare, 10% Unique Dream)
+		Unique Dreams are non-repeating per player
+		'''
+	Unlocked: Has been unlocked
+	BrokenDreamHint: You capture a broken dream
+	SweetDreamHint: You capture a sweet dream
+	NightmareHint: You capture a nightmare
+	NoDreamHint: It seems that there's no more dream now
+	SpecialDreamHint: A special dream is captured.
+	Unlock: (Locked)
+	Hint: (Left-click to activate/deactivate)
+	UnlockHint: Use to unlock, manipulate the state in the Menu of The Interpretation of Dreams
+}
+
+WarAndPeace: {
+	DisplayName: War And Peace
+	Tooltip:
+		'''
+		Buffs are obtained depending on the current week
+		Monday Wednesday Friday to get war, increase damage
+		Tuesday Thursday Saturday was made peace, and injuries were reduced
+		"In Bagration's troops, people don't know anything about the whole situation
+		They talk about peace, but they don't believe that peace is possible;
+		Talking about war, but not believing that war is imminent"
+		'''
+}
+
+AliceInWonderlandWatch: {
+	DisplayName: Alice In Wonderland Watch
+	Tooltip: ""
+	Start: Wierd Portal Entrance
+	End: Wierd Portal Exit
+}
+
+LordOfTheFlies: {
+	DisplayName: Lord Of The Flies
+	Tooltip: ""
+	Clatter: Clatter
+	// NPCKillCount: This weapon has killed {0} Targets
+	// KillCount: This weapon has killed {0} Players
+}

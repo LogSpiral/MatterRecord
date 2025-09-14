@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Terraria.ModLoader.IO;
@@ -99,10 +100,23 @@ public class AliceInWonderlandPlayer : ModPlayer
             PortalSpawnedToday = count;
         base.LoadData(tag);
     }
-
+    private static HashSet<int> BunnyTypes { get; } = 
+        [
+        NPCID.Bunny,
+        NPCID.BunnySlimed,
+        NPCID.BunnyXmas,
+        NPCID.GemBunnyAmber,
+        NPCID.GemBunnyAmethyst,
+        NPCID.GemBunnyDiamond,
+        NPCID.GemBunnyEmerald,
+        NPCID.GemBunnyRuby,
+        NPCID.GemBunnySapphire,
+        NPCID.GemBunnyTopaz,
+        NPCID.PartyBunny
+        ];
     public override bool? CanCatchNPC(NPC target, Item item)
     {
-        if (target is { type: NPCID.Bunny, SpawnedFromStatue: false } && !CapturedAliceRabbit)
+        if (target is { SpawnedFromStatue: false } && BunnyTypes.Contains(target.type) && (!CapturedAliceRabbit || Main.rand.NextBool(100)))
         {
             target.SpawnedFromStatue = true;
             CapturedAliceRabbit = true;

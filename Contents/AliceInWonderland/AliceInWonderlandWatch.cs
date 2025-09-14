@@ -2,7 +2,7 @@
 
 namespace MatterRecord.Contents.AliceInWonderland;
 
-internal class AliceInWonderlandWatch : ModItem
+public class AliceInWonderlandWatch : ModItem
 {
     public override string Texture => $"Terraria/Images/Item_{ItemID.PlatinumWatch}";
 
@@ -19,7 +19,7 @@ internal class AliceInWonderlandWatch : ModItem
         if (player.whoAmI != Main.myPlayer) return;
         var mplr = player.GetModPlayer<AliceInWonderlandPlayer>();
         if (mplr.CurrentPortalStart.HasValue && Vector2.Distance(mplr.CurrentPortalStart.Value, player.MountedCenter) < 1000) return;
-        if ((int)Main.time % 60 == 0 && !mplr.PortalSpawnLock && mplr.PortalSpawnedToday < 3 && Main.rand.NextBool(10))
+        if ((int)Main.time % 60 == 0 && !mplr.PortalSpawnLock && mplr.PortalSpawnedToday < 3 && Main.rand.NextBool(200))
         {
             var end = FindTargetPoint(out bool failed);
             if (failed)

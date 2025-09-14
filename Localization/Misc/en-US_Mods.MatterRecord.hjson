@@ -1,0 +1,22 @@
+﻿Condition: {
+	DonQuijoteDeLaManchaDashCoolDownFinished: Don Quijote Dash Cooldown Finished
+	DonQuijoteDeLaManchaStabing: Don Quijote Stab State
+}
+
+Tiles: {
+	LittlePrinceRose.MapEntry: The Little Prince's Rose
+	EtherChest_Tile.MapEntry: Ether Chest
+}
+
+Keybinds: {
+	CanHookPlatform.DisplayName: Can Hook Platform
+}
+
+DamageClasses.RangedMagicDamage.DisplayName: Ranged Magic Damage
+
+Sequence: {
+	MeleeAction: {
+		DonQuijoteDeLaManchaDash.DisplayName: Don Quijote Dash
+		DonQuijoteDeLaManchaStab.DisplayName: Don Quijote Stab
+	}
+}

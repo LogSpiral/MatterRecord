@@ -1,0 +1,53 @@
+﻿EternalWine: {
+	DisplayName: 永生之酒
+	Tooltip:
+		'''
+		借贷生命，初始75，困难模式125，击败月球领主后175
+		获得短暂无敌帧(0.5s / 1.0s / 1.5s)
+		饮用后你的生命恢复将会用于偿还所借贷的生命
+		可通过快速治疗与快速增益快捷键触发，优先使用治疗药水
+		“使人升华，却又引人堕落，除了所谓的神酒，还有什么呢？”
+		'''
+	RestoreLifeText: 恢复生命
+}
+
+TortoiseShell: {
+	DisplayName: 巨型陆龟壳
+	Tooltip:
+		'''
+		长按左键缩进龟壳，蓄力至多3s之后可发射
+		蓄力时获得高额减伤
+		根据蓄力时间决定发射速度
+		发射速度与发射角决定伤害
+		“和好友对撞的绝佳选择”
+		'''
+}
+
+ZenithBoulder: {
+	DisplayName: 天顶巨石
+	Tooltip: “我猜创世神肯定会喜欢这个”
+}
+
+EtherChest: {
+	DisplayName: 以太宝箱
+	Tooltip: 容积是边长为两个物块的正十二面体的体积
+}
+
+
+
+CosmosScissors: {
+	DisplayName: 鸿蒙剪刀
+	Tooltip: “裁剪空间...抱歉做不到”
+}
+
+
+
+CantSeword: {
+	DisplayName: 看不剑
+	Tooltip: 真正的真空刃！
+}
+
+ProtagonistAura: {
+	DisplayName: 主角光环
+	Tooltip: “如果我帮助你……咳咳……你会感谢我吗？”
+}

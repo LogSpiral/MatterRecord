@@ -1,0 +1,22 @@
+Condition: {
+	DonQuijoteDeLaManchaDashCoolDownFinished: 堂吉诃德-冲锋冷却结束
+	DonQuijoteDeLaManchaStabing: 堂吉诃德-突刺状态
+}
+
+Tiles: {
+	LittlePrinceRose.MapEntry: 小王子玫瑰
+	EtherChest_Tile.MapEntry: 以太宝箱
+}
+
+Keybinds: {
+	CanHookPlatform.DisplayName: 可以钩至平台
+}
+
+DamageClasses.RangedMagicDamage.DisplayName: 魔法-远程伤害
+
+Sequence: {
+	MeleeAction: {
+		DonQuijoteDeLaManchaDash.DisplayName: 堂吉诃德-冲锋
+		DonQuijoteDeLaManchaStab.DisplayName: 堂吉诃德-突刺
+	}
+}

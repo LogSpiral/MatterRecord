@@ -1,0 +1,42 @@
+﻿LifeRegenStagnant: {
+	DisplayName: Life Regeneration Stagnation
+	Description: Debts must be repaid
+}
+
+Eternal: {
+	DisplayName: Eternal
+	Description: Ironically, this is but fleeting invincibility
+}
+
+Holiday: {
+	DisplayName: Holiday!
+	Description: Damn, are you going to make the cat work overtime on Sundays?
+}
+
+Peace: {
+	DisplayName: Peace
+	Description:
+		'''
+		Peace is the tranquility of the soul
+		Reduces damage taken by 10%, then by 5
+		'''
+}
+
+War: {
+	DisplayName: War
+	Description:
+		'''
+		War is a storm of the heart
+		Damage is increased by 10%, then by 5
+		'''
+}
+
+Holiday_Peace: {
+	DisplayName: Holiday!
+	Description: Damn, are you going to make the cat work overtime on Sundays?
+}
+
+Holiday_War: {
+	DisplayName: Holiday!
+	Description: Damn, are you going to make the cat work overtime on Sundays?
+}

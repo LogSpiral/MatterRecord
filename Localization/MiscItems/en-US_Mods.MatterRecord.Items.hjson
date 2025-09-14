@@ -1,0 +1,58 @@
+﻿EternalWine: {
+	DisplayName: Eternal Wine
+	Tooltip:
+		'''
+		"A sublime yet corrupting nectar, akin to divine ambrosia."
+		Borrows life: 75 (pre-Hardmode), 125 (Hardmode), 175 (post-Moon Lord)
+		Grants brief invincibility (0.5s / 1.0s / 1.5s)
+		After consumption, natural life regeneration repays the borrowed life
+
+		Can be used via Quick Heal (prioritizes healing potions)
+		Can be activated via Quick Buff even at full health, triggering the borrowing effect
+		'''
+	RestoreLifeText: Restore Life
+}
+
+TortoiseShell: {
+	DisplayName: Giant Tortoise Shell
+	Tooltip:
+		'''
+		"My friend, never mock a retreating tortoise."
+		Retract into the shell and charge for up to 3s before launching
+
+		Damage scales with speed and launch angle
+		Higher angles yield greater speed and damage
+
+		Elastic collisions with targets
+		Knockback depends on relative size (volume = mass)
+		Large targets rebound you
+		Medium targets partially rebound both
+		Small targets are sent flying without affecting your speed
+		Equal mass results in velocity exchange
+		'''
+}
+
+ZenithBoulder: {
+	DisplayName: Zenith Boulder
+	Tooltip: Celestial Orb, kid!
+}
+
+EtherChest: {
+	DisplayName: Ether Chest
+	Tooltip: Volume equals a dodecahedron with 2-block edges
+}
+
+CosmosScissors: {
+	DisplayName: Cosmos Scissors
+	Tooltip: To sever the fabric of space... Not really.
+}
+
+CantSeword: {
+	DisplayName: CantSeword
+	Tooltip: The True Void Edge!
+}
+
+ProtagonistAura: {
+	DisplayName: Protagonist Aura
+	Tooltip: ""
+}

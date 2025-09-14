@@ -31,7 +31,7 @@ namespace MatterRecord.Contents.LittlePrince
 
         public override void UpdateEquips()
         {
-            Player.buffImmune[BuffID.ManaSickness] = EquippedRose;
+            // Player.buffImmune[BuffID.ManaSickness] = EquippedRose;
 
             base.UpdateEquips();
         }
