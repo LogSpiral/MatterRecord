@@ -347,6 +347,7 @@ public class DonQuijoteDeLaManchaProj : MeleeSequenceProj
 
         public override void OnEndAttack()
         {
+            if (Projectile.owner != Main.myPlayer) return;
             Owner.velocity *= MathHelper.Clamp(.05f * (1 + MathF.Sqrt(originVelocity.Length())), 0, 1);
             Owner.velocity += originVelocity * MathF.Pow(0.9f, originVelocity.Length());//
             if (Owner is Player plr)
@@ -443,9 +444,10 @@ public class DonQuijoteDeLaManchaProj : MeleeSequenceProj
                 windMill.Projectile.netUpdate = true;
                 NetMessage.SendData(MessageID.SyncProjectile, -1, -1, null, windMill.Projectile.whoAmI);
             }
-            Owner.velocity += targetedVector.SafeNormalize(default) * (1200 / TimerMax + 45);
             if (Owner is Player plr && plr.whoAmI == Main.myPlayer)
             {
+                var adder = targetedVector.SafeNormalize(default) * (1200 / TimerMax + 45);
+                Owner.velocity += adder;
                 var mplr = plr.GetModPlayer<DonQuijoteDeLaManchaPlayer>();
                 mplr.NextHitImmune = true;
                 mplr.Dashing = true;
@@ -456,7 +458,8 @@ public class DonQuijoteDeLaManchaProj : MeleeSequenceProj
                 mplr.DashCoolDownMax = mplr.DashCoolDown;
                 mplr.startPoint = plr.Center;
                 mplr.SendSyncAI();
-                Owner.velocity *= ((Main.MouseWorld - plr.Center).Length()) / 1440 + 1 / 6f - .1f;
+                var scaler = ((Main.MouseWorld - plr.Center).Length()) / 1440 + 1 / 6f - .1f;
+                Owner.velocity *= scaler;
                 if (Main.netMode is NetmodeID.MultiplayerClient)
                 {
                     var packet = MatterRecord.Instance.GetPacket();
@@ -525,6 +528,7 @@ public class DonQuijoteDeLaManchaProj : MeleeSequenceProj
 
         public override void OnEndSingle()
         {
+            if (Projectile.owner != Main.myPlayer) return;
             Owner.velocity += targetedVector.SafeNormalize(default) * 12;
             Owner.velocity = Owner.velocity.SafeNormalize(default) * 12;
             if (Owner is Player plr && Main.netMode is NetmodeID.MultiplayerClient)
@@ -560,6 +564,7 @@ public class DonQuijoteDeLaManchaProj : MeleeSequenceProj
             Projectile.Kill();
             return;
         }
+        
         base.AI();
     }
 

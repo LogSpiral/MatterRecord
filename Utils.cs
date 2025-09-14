@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using Terraria.Audio;
+using Terraria.GameContent;
 using Terraria.Graphics.Shaders;
 using static Microsoft.Xna.Framework.Graphics.SpriteBatch;
 
@@ -1292,6 +1293,30 @@ public static class MySoundID
 
 public static class DrawingMethods 
 {
+    public static void DrawLine(
+    this SpriteBatch spriteBatch,
+    Vector2 start,
+    Vector2 end,
+    Color color,
+    float width = 4f,
+    bool offset = false,
+    Vector2 drawOffset = default)
+    {
+        if (offset)
+        {
+            end += start;
+        }
+
+        spriteBatch.Draw(
+            TextureAssets.MagicPixel.Value,
+            (start + end) * .5f + drawOffset,
+            new Rectangle(0, 0, 1, 1),
+            color,
+            (end - start).ToRotation(),
+            new Vector2(.5f, .5f),
+            new Vector2((start - end).Length(), width),
+            0, 0);
+    }
     public static CustomVertexInfo[] CreateTriList(CustomVertexInfo[] source, Vector2 center, float scaler, bool addedCenter = false, bool createNormalGraph = false)
     {
         var length = source.Length;

@@ -21,7 +21,7 @@ namespace MatterRecord.Contents.DonQuijoteDeLaMancha.Core;
 // 其中重写函数按如下顺序排序
 // Update -> Active -> Single -> Charge -> Attack -> Collide -> Draw -> Net(目前无效)
 // Start -> End
-public partial class MeleeAction : ISequenceElement
+public partial class MeleeAction : ISequenceElement, ILoadable
 {
     #region 参数属性
 
@@ -135,4 +135,14 @@ public partial class MeleeAction : ISequenceElement
     public int CurrentDamage => Owner is Player plr ? (int)(plr.GetWeaponDamage(plr.HeldItem) * ModifyData.Damage * OffsetDamage) : Projectile.damage;
 
     #endregion 辅助属性
+
+    public void Load(Mod mod) 
+    {
+        var type = GetType();
+        MeleeSequenceProj.ElementTypeLookup.Add(type.Name, type);
+    }
+    public void Unload()
+    {
+
+    }
 }

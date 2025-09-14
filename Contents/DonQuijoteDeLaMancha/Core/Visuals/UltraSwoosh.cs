@@ -87,8 +87,8 @@ public class UltraSwoosh : MeleeVertexInfo
             //adder = default;
             var realColor = Color.White;//color.Invoke(f);
             realColor.A = (byte)((1 - (float)Math.Cos(MathHelper.TwoPi * MathF.Sqrt(1 - f))) * 0.5f * 255);
-            realColor.A = 255;
-            VertexInfos[2 * i] = new CustomVertexInfo(center + offsetVec + adder, realColor, new Vector3(1 - f, 1, 1));
+            // realColor.A = 255;
+            VertexInfos[2 * i] = new CustomVertexInfo(center + offsetVec + adder, realColor, new Vector3(f, 1, 1));
             VertexInfos[2 * i + 1] = new CustomVertexInfo(center + adder, realColor, new Vector3(0, 0, 1));
         }
     }

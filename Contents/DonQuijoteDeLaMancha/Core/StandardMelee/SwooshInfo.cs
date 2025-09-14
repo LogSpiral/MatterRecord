@@ -189,13 +189,16 @@ public class SwooshInfo : MeleeAction
     public override void OnStartSingle()
     {
         base.OnStartSingle();
+        if (Projectile.owner == Main.myPlayer) 
+        {
+            hitCounter = 0;
+            if (randAngleRange > 0)
+                Rotation += Main.rand.NextFloat(0, randAngleRange) * Main.rand.Next([-1, 1]);
+            KValue = minKValue + Main.rand.NextFloat(0, KValueRange);
+            if (mode == SwooshMode.Slash)
+                Flip ^= true;
+        }
 
-        hitCounter = 0;
-        if (randAngleRange > 0)
-            Rotation += Main.rand.NextFloat(0, randAngleRange) * Main.rand.Next([-1, 1]);
-        KValue = minKValue + Main.rand.NextFloat(0, KValueRange);
-        if (mode == SwooshMode.Slash)
-            Flip ^= true;
         NewSwoosh();
     }
 
