@@ -1,6 +1,4 @@
-﻿// using LogSpiralLibrary;
-using MatterRecord.Contents.DonQuijoteDeLaMancha;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using Terraria.Audio;
@@ -308,6 +306,7 @@ public class LordOfTheFlies : ModItem
 
     public override void ModifyTooltips(List<TooltipLine> tooltips)
     {
+        /*
         var index = tooltips.FindIndex(0, line => line.Name.StartsWith("Prefix"));
         if (index == -1)
             index = tooltips.FindIndex(0, line => line.Name == "JourneyResearch");
@@ -332,7 +331,7 @@ public class LordOfTheFlies : ModItem
             if (count2 > 0)
                 tooltips.Insert(index + 1, line2);
         }
-
+        */
         base.ModifyTooltips(tooltips);
     }
 

@@ -69,7 +69,7 @@ public class StabInfo : MeleeAction
         {
             var pair = StandardInfo.VertexStandard.stabTexIndex;
             UltraStab u;
-            float size = verS.scaler * ModifyData.Size * OffsetSize * 1.75f;
+            float size = verS.scaler * ModifyData.Size * OffsetSize * 1.25f;
             u = UltraStab.NewUltraStab(string.Empty, (int)(verS.timeLeft * 1.2f), size, Owner.Center);
             u.heatMap = verS.heatMap;
             u.negativeDir = Flip;

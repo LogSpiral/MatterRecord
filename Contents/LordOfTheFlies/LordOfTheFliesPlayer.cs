@@ -13,8 +13,9 @@ public class LordOfTheFliesPlayer : ModPlayer
 
     public int ChargingEnergy;
 
-    public int PlayerKillCount { get; set; }
-    public int NPCKillCount { get; set; }
+    // 移除击杀数加成机制
+    /*public int PlayerKillCount { get; set; }
+    public int NPCKillCount { get; set; }*/
 
     public bool IsChargingAnnihilation { get; set; }
 
@@ -25,8 +26,8 @@ public class LordOfTheFliesPlayer : ModPlayer
     public override void SaveData(TagCompound tag)
     {
         tag.Add(nameof(StoredAmmoCount), StoredAmmoCount);
-        tag.Add(nameof(PlayerKillCount), PlayerKillCount);
-        tag.Add(nameof(NPCKillCount), NPCKillCount);
+        // tag.Add(nameof(PlayerKillCount), PlayerKillCount);
+        // tag.Add(nameof(NPCKillCount), NPCKillCount);
         base.SaveData(tag);
     }
 
@@ -34,22 +35,22 @@ public class LordOfTheFliesPlayer : ModPlayer
     {
         if (tag.TryGet(nameof(StoredAmmoCount), out int amount))
             StoredAmmoCount = amount;
-        if (tag.TryGet(nameof(PlayerKillCount), out int count))
+        /* if (tag.TryGet(nameof(PlayerKillCount), out int count))
             PlayerKillCount = count;
         if (tag.TryGet(nameof(NPCKillCount), out int count2))
-            NPCKillCount = count2;
+            NPCKillCount = count2; */
         base.LoadData(tag);
     }
 
     public override void UpdateEquips()
     {
         if (Player.HeldItem?.ModItem is not LordOfTheFlies) return;
-        var count = NPCKillCount;
+        /*var count = NPCKillCount;
         var factor = count / (count + 200f);
         var count2 = PlayerKillCount;
         var factor2 = count2 / (count2 + 20f);
         Player.rangedDamage.Additive += factor * .5f;
-        Player.rangedDamage.Additive += factor2;
+        Player.rangedDamage.Additive += factor2;*/
         base.UpdateEquips();
     }
 
@@ -70,21 +71,6 @@ public class LordOfTheFliesPlayer : ModPlayer
         base.PreUpdate();
     }
 
-    /*static ModKeybind AnnihilationModeKeyBind { get; set; }
-    public override void Load()
-    {
-        AnnihilationModeKeyBind = KeybindLoader.RegisterKeybind(Mod, nameof(AnnihilationModeKeyBind), "Mouse3");
-        base.Load();
-    }
-    public override void ProcessTriggers(TriggersSet triggersSet)
-    {
-        if(AnnihilationModeKeyBind.JustPressed)
-            ControlUseAnnihilation = true;
-        else if(AnnihilationModeKeyBind.JustReleased)
-            ControlUseAnnihilation= false;
-        base.ProcessTriggers(triggersSet);
-    }*/
-
     public override void ModifyHurt(ref Player.HurtModifiers modifiers)
     {
         modifiers.DamageSource.TryGetCausingEntity(out var causing);
@@ -100,7 +86,7 @@ public class LordOfTheFliesPlayer : ModPlayer
         base.ModifyHurt(ref modifiers);
     }
 
-    public override void OnHurt(Player.HurtInfo info)
+    /*public override void OnHurt(Player.HurtInfo info)
     {
         info.DamageSource.TryGetCausingEntity(out var causing);
         if (causing is Player plr && info.DamageSource.SourceProjectileLocalIndex != -1)
@@ -117,7 +103,7 @@ public class LordOfTheFliesPlayer : ModPlayer
                 }
             }
         }
-    }
+    }*/
 
     public void ReceivePlayerSync(BinaryReader reader)
     {
@@ -125,8 +111,8 @@ public class LordOfTheFliesPlayer : ModPlayer
         IsInTrialMode = reader.ReadBoolean();
         ChargeTimer = reader.ReadByte();
         ChargingEnergy = reader.ReadByte();
-        PlayerKillCount = reader.ReadInt32();
-        NPCKillCount = reader.ReadInt32();
+        // PlayerKillCount = reader.ReadInt32();
+        // NPCKillCount = reader.ReadInt32();
     }
 
     public override void CopyClientState(ModPlayer targetCopy)
@@ -136,7 +122,8 @@ public class LordOfTheFliesPlayer : ModPlayer
         clone.IsInTrialMode = IsInTrialMode;
         clone.ChargeTimer = ChargeTimer;
         clone.ChargingEnergy = ChargingEnergy;
-        clone.PlayerKillCount = PlayerKillCount;
+        // clone.PlayerKillCount = PlayerKillCount;
+        // clone.NPCKillCount = NPCKillCount;
     }
 
     public override void SendClientChanges(ModPlayer clientPlayer)
@@ -145,7 +132,8 @@ public class LordOfTheFliesPlayer : ModPlayer
 
         if (StoredAmmoCount != clone.StoredAmmoCount
             || IsInTrialMode != clone.IsInTrialMode
-            || PlayerKillCount != clone.PlayerKillCount)
+            /*|| PlayerKillCount != clone.PlayerKillCount*/
+            /*|| NPCKillCount != clone.NPCKillCount*/)
             SyncPlayer(toWho: -1, fromWho: Main.myPlayer, newPlayer: false);
     }
 
@@ -158,8 +146,8 @@ public class LordOfTheFliesPlayer : ModPlayer
         packet.Write(IsInTrialMode);
         packet.Write((byte)ChargeTimer);
         packet.Write((byte)ChargingEnergy);
-        packet.Write(PlayerKillCount);
-        packet.Write(NPCKillCount);
+        // packet.Write(PlayerKillCount);
+        // packet.Write(NPCKillCount);
         packet.Send(toWho, fromWho);
         base.SyncPlayer(toWho, fromWho, newPlayer);
     }

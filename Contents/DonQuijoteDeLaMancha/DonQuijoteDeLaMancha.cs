@@ -1,12 +1,4 @@
-﻿// using LogSpiralLibrary;
-// using LogSpiralLibrary.CodeLibrary.DataStructures.Drawing.RenderDrawingContents;
-// using LogSpiralLibrary.CodeLibrary.DataStructures.SequenceStructures.Contents.Melee;
-// using LogSpiralLibrary.CodeLibrary.DataStructures.SequenceStructures.Contents.Melee.Core;
-// using LogSpiralLibrary.CodeLibrary.DataStructures.SequenceStructures.Contents.Melee.StandardMelee;
-// using LogSpiralLibrary.CodeLibrary.DataStructures.SequenceStructures.System;
-// using LogSpiralLibrary.CodeLibrary.Utilties;
-// using LogSpiralLibrary.CodeLibrary.Utilties.Extensions;
-using MatterRecord.Contents.DonQuijoteDeLaMancha.Core;
+﻿using MatterRecord.Contents.DonQuijoteDeLaMancha.Core;
 using MatterRecord.Contents.DonQuijoteDeLaMancha.Core.BuiltInGroups;
 using MatterRecord.Contents.DonQuijoteDeLaMancha.Core.MeleeCore;
 using MatterRecord.Contents.DonQuijoteDeLaMancha.Core.StandardMelee;
@@ -39,7 +31,6 @@ public class DonQuijoteDeLaMancha : MeleeSequenceItem<DonQuijoteDeLaManchaProj>
         base.SetDefaults();
         Item.width = 66;
         Item.height = 66;
-
         Item.rare = ItemRarityID.Red;
         Item.UseSound = SoundID.Item71;
         /*Item.damage = 155;
@@ -176,26 +167,23 @@ public class DonQuijoteDeLaMancha : MeleeSequenceItem<DonQuijoteDeLaManchaProj>
     public override void HoldItem(Player player)
     {
         player.aggro += 400;
-        if (player.whoAmI == Main.myPlayer)
+        if (player.altFunctionUse != 2 && player.GetModPlayer<DonQuijoteDeLaManchaPlayer>().StabTimeLeft <= 0 && !SlashActive)
         {
-            if (player.altFunctionUse != 2 && player.GetModPlayer<DonQuijoteDeLaManchaPlayer>().StabTimeLeft <= 0 && !SlashActive)
-            {
-                Item.shoot = ProjectileID.None;
-                Item.noUseGraphic = false;
-                Item.noMelee = false;
-                Item.useStyle = ItemUseStyleID.Swing;
-                Item.channel = false;
-                if (player.itemAnimation == player.itemAnimationMax)
-                    player.lastVisualizedSelectedItem = Item.Clone();
-            }
-            else
-            {
-                Item.shoot = ModContent.ProjectileType<DonQuijoteDeLaManchaProj>();
-                Item.noUseGraphic = true;
-                Item.noMelee = true;
-                Item.useStyle = ItemUseStyleID.Shoot;
-                Item.channel = true;
-            }
+            Item.shoot = ProjectileID.None;
+            Item.noUseGraphic = false;
+            Item.noMelee = false;
+            Item.useStyle = ItemUseStyleID.Swing;
+            Item.channel = false;
+            if (player.itemAnimation == player.itemAnimationMax)
+                player.lastVisualizedSelectedItem = Item.Clone();
+        }
+        else
+        {
+            Item.shoot = ModContent.ProjectileType<DonQuijoteDeLaManchaProj>();
+            Item.noUseGraphic = true;
+            Item.noMelee = true;
+            Item.useStyle = ItemUseStyleID.Shoot;
+            Item.channel = true;
         }
         base.HoldItem(player);
     }
@@ -390,6 +378,7 @@ public class DonQuijoteDeLaManchaProj : MeleeSequenceProj
                 //plr.velocity += targetedVector * 0.05f;
                 //plr.immune = true;
                 //plr.immuneTime = 6;
+                plr.noKnockback = true;
             }
             var rand = Main.rand.NextFloat(0.25f, 0.5f);
             for (int k = 0; k < 15; k++)
@@ -529,8 +518,10 @@ public class DonQuijoteDeLaManchaProj : MeleeSequenceProj
         public override void OnEndSingle()
         {
             if (Projectile.owner != Main.myPlayer) return;
-            Owner.velocity += targetedVector.SafeNormalize(default) * 12;
-            Owner.velocity = Owner.velocity.SafeNormalize(default) * 12;
+            if (Owner is Player player && !player.controlUp) return;
+            Owner.velocity += targetedVector.SafeNormalize(default) * 9;
+            if (Owner.velocity.Length() > 12)
+                Owner.velocity = Owner.velocity.SafeNormalize(default) * 12;
             if (Owner is Player plr && Main.netMode is NetmodeID.MultiplayerClient)
             {
                 var packet = MatterRecord.Instance.GetPacket();
@@ -549,6 +540,11 @@ public class DonQuijoteDeLaManchaProj : MeleeSequenceProj
             base.OnStartSingle();
         }
 
+        public override void UpdateStatus(bool triggered)
+        {
+            base.UpdateStatus(triggered);
+        }
+
         public override void OnEndAttack()
         {
             SoundEngine.PlaySound(SoundID.Item96 with { Volume = 0.5f * SoundID.Item96.Volume }, Owner.Center);//MaxInstances =-1,
@@ -564,18 +560,20 @@ public class DonQuijoteDeLaManchaProj : MeleeSequenceProj
             Projectile.Kill();
             return;
         }
-        
+
         base.AI();
     }
 
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
     {
-        /*float delta = Main.rand.NextFloat(0.85f, 1.15f) * (damageDone / MathHelper.Clamp(player.GetWeaponDamage(player.HeldItem), 1, int.MaxValue));
-        player.GetModPlayer<LogSpiralLibraryPlayer>().strengthOfShake += delta * .15f;//
+        var player = Player;
+        float delta = Main.rand.NextFloat(0.85f, 1.15f) * (damageDone / MathHelper.Clamp(player.GetWeaponDamage(player.HeldItem), 1, int.MaxValue));
+        player.GetModPlayer<MatterRecordPlayer>().strengthOfShake += delta * .15f;
         for (int n = 0; n < 30 * delta * (StandardInfo.dustAmount + .2f); n++)
-            OtherMethods.FastDust(target.Center + Main.rand.NextVector2Unit() * Main.rand.NextFloat(0, 16f), Main.rand.NextVector2Unit() * Main.rand.NextFloat(Main.rand.NextFloat(0, 8), 16), StandardInfo.standardColor);*/
+            MiscMethods.FastDust(target.Center + Main.rand.NextVector2Unit() * Main.rand.NextFloat(0, 16f), Main.rand.NextVector2Unit() * Main.rand.NextFloat(Main.rand.NextFloat(0, 8), 16), StandardInfo.standardColor);
         base.OnHitNPC(target, hit, damageDone);
-        Projectile.localNPCHitCooldown = Math.Clamp(StandardInfo.standardTimer, 1, 514);
+        Projectile.localNPCHitCooldown = Math.Clamp(StandardInfo.standardTimer / 2, 1, 514);
+
     }
 
     private static Condition MouseLeft { get; set; }
@@ -595,11 +593,13 @@ public class DonQuijoteDeLaManchaProj : MeleeSequenceProj
 
     protected override void SetupSequence(Sequence sequence)
     {
+        var mplr = Player.GetModPlayer<DonQuijoteDeLaManchaPlayer>();
+        mplr.Dashing = false;
         var outerGroup = new ConditionalMultiGroup();
         var innerGroup = new ConditionalMultiGroup();
 
-        innerGroup.DataList.Add(new() { Wrapper = new Wrapper(new DonQuijoteDeLaManchaStab() { givenCycle = 1, rangeOffsetMin = 0, rangeOffsetMax = 1, ModifyData = new(1.00f, 1.00f, 1.00f, 1.50f, 0, 1.00f) }), Argument = new(StabActive) });
-        innerGroup.DataList.Add(new() { Wrapper = new Wrapper(new SwooshInfo()), Argument = new(Always) });
+        innerGroup.DataList.Add(new() { Wrapper = new Wrapper(new DonQuijoteDeLaManchaStab() { givenCycle = 1, rangeOffsetMin = 0, rangeOffsetMax = 1, ModifyData = new(1.00f, .5f, .5f, 1.50f, 0, 1.00f) }), Argument = new(StabActive) });
+        innerGroup.DataList.Add(new() { Wrapper = new Wrapper(new SwooshInfo() { ModifyData = new(1, 1, 1, 1.25f, 0, 1) }), Argument = new(Always) });
         var innerSequence = new Sequence();
         innerSequence.Groups.Add(innerGroup);
 
@@ -678,19 +678,27 @@ public class DonQuijoteDeLaManchaPlayer : ModPlayer
     public override void ResetEffects()
     {
         if (StabTimeLeft > 0)
+        {
             StabTimeLeft--;
+            if (Player.ownedProjectileCounts[ModContent.ProjectileType<DonQuijoteDeLaManchaProj>()] > 0)
+                Player.endurance += 20;
+        }
         if (DashCoolDown > 0)
             DashCoolDown--;
+
+        if (Dashing)
+            Player.noKnockback = true;
+
         base.ResetEffects();
     }
 
     public override void OnHitByNPC(NPC npc, Player.HurtInfo hurtInfo)
     {
-        if (Dashing)
-        {
-            DashCoolDown += 30;
-            DashCoolDownMax += 30;
-        }
+        //if (Dashing)
+        //{
+        //    DashCoolDown += 30;
+        //    DashCoolDownMax += 30;
+        //}
 
         base.OnHitByNPC(npc, hurtInfo);
     }

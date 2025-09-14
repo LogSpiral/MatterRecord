@@ -53,10 +53,10 @@ public partial class MeleeSequenceProj
     {
         if (CurrentElement is null) return;
         DelegateMethods.tilecut_0 = TileCuttingContext.AttackProjectile;
-        Utils.TileActionAttempt cut = new Utils.TileActionAttempt(DelegateMethods.CutTiles);
+        Utils.TileActionAttempt cut = new(DelegateMethods.CutTiles);
         Vector2 beamStartPos = Projectile.Center;
-        Vector2 beamEndPos = Projectile.Center + CurrentElement.targetedVector;
-        Utils.PlotTileLine(beamStartPos, beamEndPos, 16, cut);
+        Vector2 beamEndPos = Projectile.Center + CurrentElement.targetedVector * 1.2f;
+        Utils.PlotTileLine(beamStartPos, beamEndPos, 48, cut);
         base.CutTiles();
     }
 }

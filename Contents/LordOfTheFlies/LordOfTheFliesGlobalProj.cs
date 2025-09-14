@@ -59,16 +59,16 @@ public class LordOfTheFliesGlobalProj : GlobalProjectile
                 info.Damage = (int)dmg;
                 info.Knockback = 0;
                 target.StrikeNPC(info);
-                if (flag && target.life <= 0)
-                {
-                    mplr.NPCKillCount++;
-                }
+                // if (flag && target.life <= 0)
+                // {
+                //     mplr.NPCKillCount++;
+                // }
                 NetMessage.SendStrikeNPC(target, info);
             }
-            if (target.life <= 0)
-            {
-                mplr.NPCKillCount++;
-            }
+            // if (target.life <= 0)
+            // {
+            //     mplr.NPCKillCount++;
+            // }
         }
         base.OnHitNPC(projectile, target, hit, damageDone);
     }

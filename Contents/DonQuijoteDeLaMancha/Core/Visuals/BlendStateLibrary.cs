@@ -18,7 +18,7 @@ public class BlendStateLibrary:ILoadable
     {
         AllOne = new BlendState
         {
-            Name = "LogSpiralLibraryMod.AllOne",
+            Name = "MatterRecord.AllOne",
             ColorSourceBlend = Blend.One,
             AlphaSourceBlend = Blend.One,
             ColorDestinationBlend = Blend.One,
@@ -26,7 +26,7 @@ public class BlendStateLibrary:ILoadable
         };
         InverseColor = new BlendState()
         {
-            Name = "LogSpiralLibraryMod.InverseColor",
+            Name = "MatterRecord.InverseColor",
             ColorDestinationBlend = Blend.InverseSourceColor,
             ColorSourceBlend = Blend.InverseDestinationColor,
             AlphaDestinationBlend = Blend.One,
@@ -34,7 +34,7 @@ public class BlendStateLibrary:ILoadable
         };
         SoftAdditive = new BlendState()
         {
-            Name = "LogSpiralLibraryMod.SoftAdditve",
+            Name = "MatterRecord.SoftAdditve",
             ColorDestinationBlend = Blend.One,
             ColorSourceBlend = Blend.InverseDestinationColor,
             AlphaDestinationBlend = Blend.One,
@@ -42,7 +42,7 @@ public class BlendStateLibrary:ILoadable
         };
         NonPremultipliedFullAlpha = new BlendState()
         {
-            Name = "LogSpiralLibraryMod.NonPremultipliedFullAlpha",
+            Name = "MatterRecord.NonPremultipliedFullAlpha",
             ColorSourceBlend = Blend.SourceAlpha,
             AlphaSourceBlend = Blend.One,
             ColorDestinationBlend = Blend.InverseSourceAlpha,

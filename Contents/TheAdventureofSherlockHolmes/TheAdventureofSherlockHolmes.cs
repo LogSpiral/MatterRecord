@@ -1,9 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
+using System;
 
 namespace MatterRecord.Contents.TheAdventureofSherlockHolmes
 {
     public class TASHSystem : ModSystem
     {
+        public static int TASHPrice => Main.LocalPlayer.discountEquipped ? 80 : 100;
         public override void Load()
         {
             Main.OnPostFullscreenMapDraw += Main_OnPostFullscreenMapDraw;
@@ -22,13 +24,20 @@ namespace MatterRecord.Contents.TheAdventureofSherlockHolmes
 
         private static void LightOnMap(Point worldCoord)
         {
-            for (int i = worldCoord.X - 3; i < worldCoord.X + 4; i++)
+            for (int i = -18; i < 19; i++)
             {
-                for (int j = worldCoord.Y - 3; j < worldCoord.Y + 4; j++)
+                for (int j = -18; j < 19; j++)
                 {
-                    if (WorldGen.InWorld(i, j))
+                    int x = worldCoord.X + i;
+                    int y = worldCoord.Y + j;
+                    if (WorldGen.InWorld(x, y))
                     {
-                        Main.Map.Update(i, j, byte.MaxValue);
+                        var oldLight = Main.Map[x, y].Light;
+                        var newLight = (byte)(255
+                            * Utils.GetLerpValue(18, 13, MathF.Abs(i), true)
+                            * Utils.GetLerpValue(18, 13, MathF.Abs(j), true));
+                        if (newLight > oldLight)
+                            Main.Map.Update(x, y, newLight);
                     }
                 }
             }
@@ -37,14 +46,14 @@ namespace MatterRecord.Contents.TheAdventureofSherlockHolmes
 
         private void Main_OnPostFullscreenMapDraw(Vector2 arg1, float arg2)
         {
-            if (Main.netMode == NetmodeID.MultiplayerClient && readyToShow && cachePoint.HasValue && Main.LocalPlayer.BuyItem(Item.buyPrice(0, 0, Main.LocalPlayer.discountEquipped ? 8 : 10, 0)))
+            if (Main.netMode == NetmodeID.MultiplayerClient && readyToShow && cachePoint.HasValue && Main.LocalPlayer.BuyItem(TASHPrice))
             {
                 LightOnMap(cachePoint.Value);
                 cachePoint = null;
                 readyToShow = false;
                 return;
             }
-            if (Main.gameMenu || !Main.mouseRight || Main.LocalPlayer.HeldItem.type != ModContent.ItemType<TheAdventureofSherlockHolmes>() || coolDown >= 0 || !Main.LocalPlayer.CanAfford(Item.buyPrice(0, 0, Main.LocalPlayer.discountEquipped ? 8 : 10, 0)))
+            if (Main.gameMenu || !Main.mouseRight || Main.LocalPlayer.HeldItem.type != ModContent.ItemType<TheAdventureofSherlockHolmes>() || coolDown >= 0 || !Main.LocalPlayer.CanAfford(TASHPrice))
             {
                 coolDown--;
                 return;
@@ -57,7 +66,7 @@ namespace MatterRecord.Contents.TheAdventureofSherlockHolmes
             {
                 if (Main.netMode == NetmodeID.SinglePlayer)
                 {
-                    if (Main.LocalPlayer.BuyItem(Item.buyPrice(0, 0, Main.LocalPlayer.discountEquipped ? 8 : 10, 0)))
+                    if (Main.LocalPlayer.BuyItem(TASHPrice))
                         LightOnMap(worldCoord);
                     coolDown = 30;
                 }
