@@ -15,51 +15,58 @@ namespace MatterRecord.Contents.TheInterpretationOfDreams;
 public class DreamSlotUI : UIState
 {
     public static bool Visible;
+    public static bool Active;
+    private static int _timer;
     public static DreamSlotUI instance;
 
     public static void Open()
     {
+        if (!Visible)
+            instance?.Mask?.Height = StyleDimension.Empty;
         Visible = true;
+        Active = true;
         SoundEngine.PlaySound(SoundID.MenuOpen);
-        instance.RemoveAllChildren();
-        instance.OnInitialize();
-
-        instance.mainPanel.Width = new(174, 0);
-
         var vec = Main.MouseScreen;
         vec -= Main.ScreenSize.ToVector2() * .5f;
         vec *= Main.GameViewMatrix.Zoom.X;
         vec += Main.ScreenSize.ToVector2() * .5f;
         vec /= Main.UIScale;
-        instance.mainPanel.Left = new((int)vec.X, 0);
-        instance.mainPanel.Top = new((int)vec.Y, 0);
-        instance.mainPanel.Height = new(540, 0);
-        instance.Height = new(600, 0);
+        instance.Mask.Left = new((int)vec.X, 0);
+        instance.Mask.Top = new((int)vec.Y, 0);
+        instance.Height = new(540, 0);
         instance.Recalculate();
     }
 
     public static void Close()
     {
-        Visible = false;
+        Active = false;
         SoundEngine.PlaySound(SoundID.MenuClose);
     }
 
     private DraggablePanel mainPanel;
-
+    private UIElement Mask;
     public override void OnInitialize()
     {
         instance = this;
-        mainPanel = new DraggablePanel()
+        Mask = new()
         {
             Width = new(174, 0),
-            Height = new(540, 0)
+            Height = new(540, 0),
+            OverflowHidden = true
+        };
+        Append(Mask);
+        mainPanel = new DraggablePanel()
+        {
+            MinWidth = new(174, 0),
+            MinHeight = new(540, 0),
+            ControlTarget = Mask
         };
         mainPanel.OnUpdate += elem =>
         {
             if (mainPanel.IsMouseHovering)
                 Main.LocalPlayer.mouseInterface = true;
         };
-        Append(mainPanel);
+        Mask.Append(mainPanel);
 
         for (int n = 0; n < 12; n++)
         {
@@ -67,10 +74,12 @@ public class DreamSlotUI : UIState
             int j = n / 3;
             DreamItemSlot slot = new()
             {
-                Width = new(40, 0),
-                Height = new(40, 0),
-                Left = new(5 + 50 * i, 0),
-                Top = new(10 + 50 * j, 0),
+                BackgroundColor = Color.Black * .15f,
+                BorderColor = default,
+                Width = new(48, 0),
+                Height = new(48, 0),
+                HAlign = i * .5f,
+                Top = new(2 + 50 * j, 0),
                 index = n,
             };
             mainPanel.Append(slot);
@@ -87,9 +96,11 @@ public class DreamSlotUI : UIState
             int j = n / 3;
             DreamPowerSlot slot = new()
             {
-                Width = new(40, 0),
-                Height = new(40, 0),
-                Left = new(5 + 50 * i, 0),
+                BackgroundColor = Color.Black * .15f,
+                BorderColor = default,
+                Width = new(48, 0),
+                Height = new(48, 0),
+                HAlign = i * .5f,
                 Top = new(220 + 50 * j, 0),
                 targetState = (DreamState)(1 << n)
             };
@@ -97,10 +108,29 @@ public class DreamSlotUI : UIState
         }
         base.OnInitialize();
     }
+
+    public override void Update(GameTime gameTime)
+    {
+        int oldTimer = _timer;
+        _timer += Active ? 1 : -1;
+        if (_timer > 15) _timer = 15;
+        if (_timer <= 0)
+        {
+            _timer = 0;
+            Visible = false;
+        }
+        if (_timer != oldTimer)
+        {
+            Mask.Height = new(MathHelper.SmoothStep(0, 540, _timer / 15f), 0);
+            Mask.Recalculate();
+        }
+        base.Update(gameTime);
+    }
 }
 
 public class DraggablePanel : UIPanel
 {
+    public UIElement ControlTarget { get; set; }
     public bool Dragging = false;
     public Vector2 Offset;
 
@@ -109,8 +139,8 @@ public class DraggablePanel : UIPanel
         if (evt.Target == this)
         {
             Dragging = true;
-            var dimension = GetDimensions();
-            Offset = new Vector2(evt.MousePosition.X - Left.Pixels, evt.MousePosition.Y - Top.Pixels);
+            var element = ControlTarget ?? this;
+            Offset = new Vector2(evt.MousePosition.X - element.Left.Pixels, evt.MousePosition.Y - element.Top.Pixels);
         }
         base.LeftMouseDown(evt);
     }
@@ -125,9 +155,10 @@ public class DraggablePanel : UIPanel
     {
         if (Dragging)
         {
-            Left.Set(Main.mouseX - Offset.X, 0f);
-            Top.Set(Main.mouseY - Offset.Y, 0f);
-            Recalculate();
+            var element = ControlTarget ?? this;
+            element.Left.Set(Main.mouseX - Offset.X, 0f);
+            element.Top.Set(Main.mouseY - Offset.Y, 0f);
+            element.Recalculate();
         }
         base.Update(gameTime);
     }
@@ -219,7 +250,7 @@ public class DreamItemSlot : UIPanel
             5 => ModContent.ItemType<GuideDream>(),
             6 => ModContent.ItemType<TavernkeepDream>(),
             7 => ModContent.ItemType<ClothierDream>(),
-            8 => ModContent.ItemType<PartyGirlDream>(),
+            8 => ModContent.ItemType<StylistDream>(),
             9 => ModContent.ItemType<DyeTraderDream>(),
             10 => ModContent.ItemType<CybrogDream>(),
             11 or _ => ModContent.ItemType<TaijiNoYume.TaijiNoYume>()
@@ -229,13 +260,16 @@ public class DreamItemSlot : UIPanel
         ItemSlot.DrawItemIcon(iconItem, 0, spriteBatch, position, 1f, 40, Color.White);
         if (BindItem.stack > 1)
             ChatManager.DrawColorCodedStringWithShadow(spriteBatch, FontAssets.MouseText.Value, BindItem.stack.ToString(), position, Color.White, 0, default, Vector2.One * .75f);
+
         if (IsMouseHovering)
         {
             string content = iconItem.HoverName;
             var m = iconItem.ToolTip.Lines;
             for (int n = 0; n < m; n++)
                 content += "\n" + iconItem.ToolTip.GetLine(n);
-            UICommon.TooltipMouseText(content);
+
+            if (index != 11 || BindItem.stack > 1)
+                UICommon.TooltipMouseText(content);
         }
     }
 }
@@ -308,9 +342,8 @@ public class DreamUISystem : ModSystem
     public override void UpdateUI(GameTime gameTime)
     {
         if (DreamSlotUI.Visible)
-        {
             userInterface?.Update(gameTime);
-        }
+
         base.UpdateUI(gameTime);
     }
 

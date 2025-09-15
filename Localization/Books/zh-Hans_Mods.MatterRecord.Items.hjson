@@ -1,4 +1,4 @@
-﻿TheoryOfFreedom: {
+TheoryOfFreedom: {
 	DisplayName: 《自由论》
 	Tooltip:
 		'''
@@ -121,7 +121,7 @@ TheInterpretationOfDreams: {
 	NightmareHint: 捕获到了噩梦
 	NoDreamHint: 看来暂时不会做新的梦了
 	SpecialDreamHint: 一个特殊的梦境被捕获了
-	// Unlock: (Locked)
+	Locked: (未解锁)
 	Hint: （左键点击以激活/取消激活）
 	UnlockHint: 使用以解锁，通过梦的解析的面板进行控制
 }
@@ -166,6 +166,4 @@ LordOfTheFlies: {
 		[c/66CCFF:“凡不长久的，多将以悲剧”]
 		'''
 	Clatter: 咔哒
-	// NPCKillCount: 这把武器已经击杀了 {0} 个目标
-	// KillCount: 这把武器已经杀死了 {0} 位玩家
 }

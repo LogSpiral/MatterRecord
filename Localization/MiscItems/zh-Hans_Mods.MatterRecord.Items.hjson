@@ -1,4 +1,4 @@
-﻿EternalWine: {
+EternalWine: {
 	DisplayName: 永生之酒
 	Tooltip:
 		'''
@@ -33,14 +33,10 @@ EtherChest: {
 	Tooltip: 容积是边长为两个物块的正十二面体的体积
 }
 
-
-
 CosmosScissors: {
 	DisplayName: 鸿蒙剪刀
 	Tooltip: “裁剪空间...抱歉做不到”
 }
-
-
 
 CantSeword: {
 	DisplayName: 看不剑

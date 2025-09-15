@@ -1,4 +1,4 @@
-﻿TheoryOfFreedom: {
+TheoryOfFreedom: {
 	DisplayName: Theory of Freedom
 	Tooltip:
 		'''
@@ -73,8 +73,6 @@ DonQuijoteDeLaMancha: {
 	FindItemHint: Please [c/FF0000:Right click in Inventory] to activate it and then [c/FF0000:Right click another melee weapon]to get it's property.
 }
 
-
-
 EmeraldTablet: {
 	DisplayName: Emerald Tablet
 	Tooltip:
@@ -111,7 +109,7 @@ TheInterpretationOfDreams: {
 	NightmareHint: You capture a nightmare
 	NoDreamHint: It seems that there's no more dream now
 	SpecialDreamHint: A special dream is captured.
-	Unlock: (Locked)
+	Locked: (Locked)
 	Hint: (Left-click to activate/deactivate)
 	UnlockHint: Use to unlock, manipulate the state in the Menu of The Interpretation of Dreams
 }
@@ -140,6 +138,4 @@ LordOfTheFlies: {
 	DisplayName: Lord Of The Flies
 	Tooltip: ""
 	Clatter: Clatter
-	// NPCKillCount: This weapon has killed {0} Targets
-	// KillCount: This weapon has killed {0} Players
 }

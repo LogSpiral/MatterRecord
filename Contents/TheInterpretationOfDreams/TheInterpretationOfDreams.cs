@@ -228,7 +228,7 @@ public class TheInterpretationOfDreams : ModItem
         if (player.altFunctionUse == 2)
         {
             player.itemTime = player.itemAnimation = 0;
-            if (!DreamSlotUI.Visible)
+            if (!DreamSlotUI.Active)
                 DreamSlotUI.Open();
             else
                 DreamSlotUI.Close();

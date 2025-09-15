@@ -1,4 +1,4 @@
-﻿Condition: {
+Condition: {
 	DonQuijoteDeLaManchaDashCoolDownFinished: Don Quijote Dash Cooldown Finished
 	DonQuijoteDeLaManchaStabing: Don Quijote Stab State
 }
@@ -8,10 +8,7 @@ Tiles: {
 	EtherChest_Tile.MapEntry: Ether Chest
 }
 
-Keybinds: {
-	CanHookPlatform.DisplayName: Can Hook Platform
-}
-
+Keybinds.CanHookPlatform.DisplayName: Can Hook Platform
 DamageClasses.RangedMagicDamage.DisplayName: Ranged Magic Damage
 
 Sequence: {

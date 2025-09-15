@@ -1,4 +1,4 @@
-﻿ClothierDream: {
+ClothierDream: {
 	RecipeCondition: 服装商可入住
 	DisplayName: 裁缝之梦
 	Tooltip:
@@ -7,6 +7,7 @@
 		“也许我当时应该打开几个宝箱？我刚刚梦到它们了”
 		'''
 }
+
 StylistDream: {
 	RecipeCondition: 理发师可入住
 	DisplayName: 理发师之梦

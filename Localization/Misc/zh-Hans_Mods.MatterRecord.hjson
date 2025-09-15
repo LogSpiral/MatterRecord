@@ -8,10 +8,7 @@ Tiles: {
 	EtherChest_Tile.MapEntry: 以太宝箱
 }
 
-Keybinds: {
-	CanHookPlatform.DisplayName: 可以钩至平台
-}
-
+Keybinds.CanHookPlatform.DisplayName: 可以钩至平台
 DamageClasses.RangedMagicDamage.DisplayName: 魔法-远程伤害
 
 Sequence: {
