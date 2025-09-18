@@ -19,7 +19,10 @@ namespace MatterRecord.Contents.TheOldManAndTheSea
         }
 
         private static Asset<Texture2D> itemTex;
-
+        public override void AddRecipes()
+        {
+            this.RegisterBookRecipe(ItemID.ObsidianSwordfish);
+        }
         public override void SetDefaults()
         {
             // These are copied through the CloneDefaults method:

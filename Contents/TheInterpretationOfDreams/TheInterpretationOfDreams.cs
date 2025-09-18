@@ -27,7 +27,10 @@ public class TheInterpretationOfDreams : ModItem
         Item.scale = 1.15f;
         base.SetDefaults();
     }
-
+    public override void AddRecipes()
+    {
+        this.RegisterBookRecipe(ItemID.BugNet);
+    }
     public override bool? UseItem(Player player)
     {
         if (player.whoAmI != Main.myPlayer) return true;

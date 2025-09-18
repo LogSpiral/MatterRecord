@@ -81,6 +81,11 @@ public class DonQuijoteDeLaMancha : MeleeSequenceItem<DonQuijoteDeLaManchaProj>
         return base.UseItem(player);
     }
 
+    public override void AddRecipes()
+    {
+        this.RegisterBookRecipe(ItemID.EoCShield);
+        base.AddRecipes();
+    }
     public override bool AltFunctionUse(Player player)
     {
         var mplr = player.GetModPlayer<DonQuijoteDeLaManchaPlayer>();

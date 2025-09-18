@@ -22,7 +22,6 @@ namespace MatterRecord.Contents.LittlePrince
             On_Player.DropTombstone += PrinceBanDropTombstone;
             base.Load();
         }
-
         private static void PrinceBanDropTombstone(On_Player.orig_DropTombstone orig, Player self, long coinsOwned, Terraria.Localization.NetworkText deathText, int hitDirection)
         {
             if (self.GetModPlayer<LittlePrincePlayer>().EquippedRose) return;
@@ -57,6 +56,11 @@ namespace MatterRecord.Contents.LittlePrince
 
     public class LittlePrince : ModItem
     {
+        public override void AddRecipes()
+        {
+            this.RegisterBookRecipe(ItemID.AbigailsFlower);
+            base.AddRecipes();
+        }
         //public override string Texture => $"Terraria/Images/Item_{ItemID.JungleRose}";
         public override void SetDefaults()
         {

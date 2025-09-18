@@ -25,7 +25,11 @@ public class LordOfTheFlies : ModItem
         ItemID.Sets.ItemsThatAllowRepeatedRightClick[Type] = true;
         base.SetDefaults();
     }
-
+    public override void AddRecipes()
+    {
+        this.RegisterBookRecipe(ItemID.Musket);
+        this.RegisterBookRecipe(ItemID.TheUndertaker);
+    }
     public override bool CanUseItem(Player player)
     {
         ItemID.Sets.gunProj[Item.type] = true;

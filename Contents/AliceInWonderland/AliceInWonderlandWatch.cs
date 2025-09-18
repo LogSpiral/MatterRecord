@@ -35,7 +35,12 @@ public class AliceInWonderlandWatch : ModItem
         }
         base.UpdateAccessory(player, hideVisual);
     }
-
+    public override void AddRecipes()
+    {
+        this.RegisterBookRecipe(ItemID.SilverWatch);
+        this.RegisterBookRecipe(ItemID.TungstenWatch);
+        base.AddRecipes();
+    }
     private static Vector2 FindStartPoint(Vector2 currentCenter, out bool failed)
     {
         failed = false;

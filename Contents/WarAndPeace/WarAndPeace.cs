@@ -14,7 +14,10 @@ public class WarAndPeace : ModItem
         Item.width = Item.height = 32;
         base.SetDefaults();
     }
-
+    public override void AddRecipes()
+    {
+        this.RegisterBookRecipe(ItemID.LicenseCat);
+    }
     public static bool IsPeace => ((int)(8 * Math.Sin(8 * DateTime.Now.Day)) + 8) % 2 == 1;
 
     public override void UpdateAccessory(Player player, bool hideVisual)

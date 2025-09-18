@@ -30,7 +30,11 @@ namespace MatterRecord.Contents.Faust
             Item.rare = ItemRarityID.Yellow;
             base.SetDefaults();
         }
-
+        public override void AddRecipes()
+        {
+            this.RegisterBookRecipe(ItemID.Glass);
+            base.AddRecipes();
+        }
         public static bool Active;
 
         public override void PostDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)

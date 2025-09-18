@@ -48,6 +48,10 @@ public class TheoryOfFreedom : ModItem
     {
         ArmorIDs.Wing.Sets.Stats[Item.wingSlot] = new WingStats(-300);
     }
+    public override void AddRecipes()
+    {
+        this.RegisterBookRecipe(ItemID.ChlorophyteBar);
+    }
     public override void SetDefaults()
     {
         Item.width = Item.height = 32;

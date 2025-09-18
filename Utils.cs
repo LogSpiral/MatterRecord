@@ -1291,7 +1291,7 @@ public static class MySoundID
     public static SoundStyle Scythe => SoundID.Item71;
 }
 
-public static class DrawingMethods 
+public static class DrawingMethods
 {
     public static void DrawLine(
     this SpriteBatch spriteBatch,
@@ -1543,7 +1543,7 @@ public static class DrawingMethods
 
     }
 }
-public static class MiscMethods 
+public static class MiscMethods
 {
     public static Dust FastDust(Vector2 Center, Vector2 velocity, Color color, float scaler, int? shaderID = null)
     {
@@ -1561,4 +1561,14 @@ public static class MiscMethods
     }
 
     public static Dust FastDust(Vector2 Center, Vector2 velocity, Color color) => FastDust(Center, velocity, color, 1f);
+
+    public static void RegisterBookRecipe<T>(this T modItem, int extraIngredient) where T : ModItem
+    {
+        modItem.CreateRecipe()
+            .AddIngredient(ItemID.Book)
+            .AddTile(TileID.Bookcases)
+            .AddIngredient(extraIngredient)
+            .DisableDecraft()
+            .Register();
+    }
 }
