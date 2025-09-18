@@ -353,7 +353,7 @@ public class LordOfTheFlies : ModItem
         //int defense = player.statDefense;
         int defense = player.armor[0].defense + player.armor[1].defense + player.armor[2].defense;
 
-        damage.Multiplicative *= Math.Max(defense * (0.75f + rangeFactor + critFactor) / (1 + genericFactor), 1);
+        damage.Multiplicative *= Math.Max(defense * (0.75f + rangeFactor + critFactor) / (1 + genericFactor * .5f), 1);
         //var mplr = player.GetModPlayer<LordOfTheFliesPlayer>();
         //var count = mplr.NPCKillCount;
         //var factor = count / (count + 200f);

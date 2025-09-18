@@ -54,7 +54,9 @@ public class LordOfTheFliesGlobalProj : GlobalProjectile
                 var rangedModifier = owner.rangedDamage;
                 //rangedModifier.Additive *= .1f;
                 //rangedModifier.Multiplicative = (rangedModifier.Multiplicative - 1) * .25f + 1;
-                var dmg = rangedModifier.ApplyTo(Main.DamageVar(target.lifeMax * MathHelper.Clamp(owner.GetTotalCritChance(DamageClass.Ranged), 0, 1) * 0.0005f, owner.luck));
+                var critChance = owner.GetTotalCritChance(DamageClass.Ranged) * 0.01f;
+                critChance = MathHelper.Clamp(critChance, 0, 1);
+                var dmg = rangedModifier.ApplyTo(Main.DamageVar(target.lifeMax * critChance * 0.0005f + 5, owner.luck));
                 bool flag = target.life > 0;
                 NPC.HitInfo info = hit;
                 info.Damage = (int)dmg;
