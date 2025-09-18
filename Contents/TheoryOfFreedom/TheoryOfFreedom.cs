@@ -46,7 +46,7 @@ public class TheoryOfFreedom : ModItem
     }
     public override void SetStaticDefaults()
     {
-        ArmorIDs.Wing.Sets.Stats[Item.wingSlot] = new WingStats(0);
+        ArmorIDs.Wing.Sets.Stats[Item.wingSlot] = new WingStats(-300);
     }
     public override void SetDefaults()
     {
