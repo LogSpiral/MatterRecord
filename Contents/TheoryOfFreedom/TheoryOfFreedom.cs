@@ -9,6 +9,7 @@ using Terraria.ModLoader.IO;
 
 namespace MatterRecord.Contents.TheoryOfFreedom;
 
+[AutoloadEquip(EquipType.Wings)]
 public class TheoryOfFreedom : ModItem
 {
     public override void UpdateAccessory(Player player, bool hideVisual)
@@ -43,7 +44,10 @@ public class TheoryOfFreedom : ModItem
         }
         base.UpdateAccessory(player, hideVisual);
     }
-
+    public override void SetStaticDefaults()
+    {
+        ArmorIDs.Wing.Sets.Stats[Item.wingSlot] = new WingStats(0);
+    }
     public override void SetDefaults()
     {
         Item.width = Item.height = 32;
@@ -53,11 +57,20 @@ public class TheoryOfFreedom : ModItem
         base.SetDefaults();
     }
 
+    //public override bool CanAccessoryBeEquippedWith(Item equippedItem, Item incomingItem, Player player)
+    //{
+    //    if (equippedItem.ModItem is TheoryOfFreedom)
+    //        return incomingItem.wingSlot == -1;
+    //    if(incomingItem.ModItem is TheoryOfFreedom)
+    //        return equippedItem.wingSlot == -1;
+    //    return true;
+    //}
+
     public override void Load()
     {
         //On_Player.GrappleMovement += On_Player_GrappleMovement;
-        On_Player.RefreshMovementAbilities += On_Player_RefreshMovementAbilities;
-        On_Player.RefreshDoubleJumps += On_Player_RefreshDoubleJumps;
+        // On_Player.RefreshMovementAbilities += On_Player_RefreshMovementAbilities;
+        // On_Player.RefreshDoubleJumps += On_Player_RefreshDoubleJumps;
         base.Load();
     }
 
@@ -129,8 +142,8 @@ public class TheoryOfFreedom : ModItem
 
     public override void Unload()
     {
-        On_Player.RefreshMovementAbilities -= On_Player_RefreshMovementAbilities;
-        On_Player.RefreshDoubleJumps -= On_Player_RefreshDoubleJumps;
+        // On_Player.RefreshMovementAbilities -= On_Player_RefreshMovementAbilities;
+        // On_Player.RefreshDoubleJumps -= On_Player_RefreshDoubleJumps;
 
         base.Unload();
     }
@@ -241,10 +254,14 @@ public class TOFGlobalProjectile : GlobalProjectile
     {
         var mplr = player.GetModPlayer<FreedomPlayer>();
         if (!mplr.EquippedTOF) return null;
+
         if ((type < ProjectileID.LunarHookSolar || type > ProjectileID.LunarHookStardust) && type != ProjectileID.Web)
             for (int num7 = 0; num7 < 1000; num7++)
             {
-                if (Main.projectile[num7].active && Main.projectile[num7].owner == Main.myPlayer && Main.projectile[num7].type == type && Main.projectile[num7].ai[0] != 2f)
+                if (Main.projectile[num7].active 
+                    && Main.projectile[num7].owner == Main.myPlayer 
+                    && Main.projectile[num7].type == type 
+                    && Main.projectile[num7].ai[0] != 2f)
                     return null;
             }
         else if (type == ProjectileID.Web)
@@ -252,7 +269,10 @@ public class TOFGlobalProjectile : GlobalProjectile
             int c = 0;
             for (int num7 = 0; num7 < 1000; num7++)
             {
-                if (Main.projectile[num7].active && Main.projectile[num7].owner == Main.myPlayer && Main.projectile[num7].type == type && Main.projectile[num7].ai[0] != 2f)
+                if (Main.projectile[num7].active
+                    && Main.projectile[num7].owner == Main.myPlayer 
+                    && Main.projectile[num7].type == type 
+                    && Main.projectile[num7].ai[0] != 2f)
                     c++;
             }
             if (c >= 9)
@@ -263,11 +283,15 @@ public class TOFGlobalProjectile : GlobalProjectile
             int c = 0;
             for (int num7 = 0; num7 < 1000; num7++)
             {
-                if (Main.projectile[num7].active && Main.projectile[num7].owner == Main.myPlayer && Main.projectile[num7].ai[0] != 2f)// && Main.projectile[num7].type == type
+                if (Main.projectile[num7].active 
+                    && Main.projectile[num7].owner == Main.myPlayer 
+                    && Main.projectile[num7].type is >= ProjectileID.LunarHookSolar and <= ProjectileID.LunarHookStardust 
+                    && Main.projectile[num7].ai[0] != 2f)// && Main.projectile[num7].type == type
                     c++;
             }
             if (c >= 4)
                 return null;
+
         }
 
         int num17 = 3;

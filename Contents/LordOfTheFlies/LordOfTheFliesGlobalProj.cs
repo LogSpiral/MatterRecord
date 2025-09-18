@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using Microsoft.Xna.Framework;
+using System.IO;
 using Terraria.DataStructures;
 using Terraria.ModLoader.IO;
 
@@ -53,7 +54,7 @@ public class LordOfTheFliesGlobalProj : GlobalProjectile
                 var rangedModifier = owner.rangedDamage;
                 //rangedModifier.Additive *= .1f;
                 //rangedModifier.Multiplicative = (rangedModifier.Multiplicative - 1) * .25f + 1;
-                var dmg = rangedModifier.ApplyTo(Main.DamageVar(hit.SourceDamage, owner.luck)) * .1f;
+                var dmg = rangedModifier.ApplyTo(Main.DamageVar(target.lifeMax * MathHelper.Clamp(owner.GetTotalCritChance(DamageClass.Ranged), 0, 1) * 0.0005f, owner.luck));
                 bool flag = target.life > 0;
                 NPC.HitInfo info = hit;
                 info.Damage = (int)dmg;

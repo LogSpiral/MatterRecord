@@ -29,11 +29,8 @@ public abstract class ActionLikeDreams(Asset<Texture2D> icon, Func<bool> conditi
 
     public override bool? UseItem(Player player)
     {
-        var mplr = player.GetModPlayer<DreamPlayer>();
-        if (player.itemAnimation == 1)
-        {
+        if (player.itemAnimation == 1 && player.whoAmI == Main.myPlayer)
             UseAction(player);
-        }
         return base.UseItem(player);
     }
 }

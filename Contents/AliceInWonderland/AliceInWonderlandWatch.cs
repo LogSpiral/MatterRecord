@@ -4,7 +4,7 @@ namespace MatterRecord.Contents.AliceInWonderland;
 
 public class AliceInWonderlandWatch : ModItem
 {
-    public override string Texture => $"Terraria/Images/Item_{ItemID.PlatinumWatch}";
+    // public override string Texture => $"Terraria/Images/Item_{ItemID.PlatinumWatch}";
 
     public override void SetDefaults()
     {
@@ -82,6 +82,24 @@ public class AliceInWonderlandWatch : ModItem
 
     private static Vector2 FindTargetPoint(out bool failed)
     {
+        if (!Main.rand.NextBool(3)) 
+        {
+            bool canSpawn = false;
+            int teleportStartX = 100;
+            int teleportRangeX = Main.maxTilesX - 200;
+            int teleportStartY = 100;
+            int underworldLayer = Main.UnderworldLayer;
+            Vector2 vector = Main.LocalPlayer.CheckForGoodTeleportationSpot(ref canSpawn, teleportStartX, teleportRangeX, teleportStartY, underworldLayer, new Player.RandomTeleportationAttemptSettings
+            {
+                avoidLava = true,
+                avoidHurtTiles = true,
+                maximumFallDistanceFromOrignalPoint = 100,
+                attemptsBeforeGivingUp = 1000
+            });
+
+            failed = !canSpawn;
+            return vector;
+        }
         failed = false;
         Chest targetChest;
         int tryTime = 0;

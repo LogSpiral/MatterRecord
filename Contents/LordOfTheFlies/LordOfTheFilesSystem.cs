@@ -83,7 +83,7 @@ public class LordOfTheFilesSystem : ModSystem
         #endregion icon
 
         if (destination.ToRectangle().Contains(Main.MouseScreen.ToPoint()))
-            Main.instance.MouseText((elementBarValue * 100).ToString("0.0") + "%");
+            Main.instance.MouseText($"{(int)(elementBarValue * 200)}");
     }
 
     public static void DrawAmmoBar_Internal(CalculatedStyle destination, float elementBarProgress, float elementBarValue)
@@ -131,8 +131,8 @@ public class LordOfTheFilesSystem : ModSystem
 
         #endregion icon
 
-        if (destination.ToRectangle().Contains(Main.MouseScreen.ToPoint()))
-            Main.instance.MouseText((elementBarValue * 100).ToString("0.0") + "%");
+        // if (destination.ToRectangle().Contains(Main.MouseScreen.ToPoint()))
+        //     Main.instance.MouseText($"{(int)(6 * (elementBarValue + 0.01f))}/6");
     }
 
     public static bool DrawChargeBar()

@@ -151,6 +151,8 @@ public class DonQuijoteDeLaMancha : MeleeSequenceItem<DonQuijoteDeLaManchaProj>
         var mplr = player.GetModPlayer<DonQuijoteDeLaManchaPlayer>();
         var definition = mplr.itemDefinition;
         var item = new Item(definition.Type);
+        if (item.shoot != ProjectileID.None && item.noMelee && item.useTime > 0)
+            return item.useTime / 60f;
         if (item.useAnimation == 0) return 1f;
         return item.useAnimation / 60f;
     }
@@ -160,6 +162,8 @@ public class DonQuijoteDeLaMancha : MeleeSequenceItem<DonQuijoteDeLaManchaProj>
         var mplr = player.GetModPlayer<DonQuijoteDeLaManchaPlayer>();
         var definition = mplr.itemDefinition;
         var item = new Item(definition.Type);
+        if (item.shoot != ProjectileID.None && item.noMelee && item.useTime > 0)
+            return item.useTime / 60f;
         if (item.useAnimation == 0) return 1f;
         return item.useAnimation / 60f;
     }
@@ -314,7 +318,13 @@ public class DonQuijoteDeLaManchaProj : MeleeSequenceProj
         int type = mplr.itemDefinition.Type;
         int timer = 60;
         if (type != 0)
-            timer = ContentSamples.ItemsByType[type].useTime;
+        {
+            var item = ContentSamples.ItemsByType[type];
+            if (item.shoot != ProjectileID.None && item.noMelee && item.useTime > 0)
+                timer = item.useTime;
+            else if (item.useAnimation != 0)
+                timer = item.useAnimation;
+        }
         standardInfo.standardColor = Color.DarkRed * (Player.GetModPlayer<DonQuijoteDeLaManchaPlayer>().StabTimeLeft > 0 ? 0.3f : 0.1f);
         standardInfo.standardTimer = Player.controlUseItem && !Player.controlUseTile ? Math.Clamp(timer, 1, 30) : 10;
         standardInfo.standardOrigin = Player.GetModPlayer<DonQuijoteDeLaManchaPlayer>().StabTimeLeft > 0 ? new Vector2(.3f, .7f) : new Vector2(.1f, .9f);

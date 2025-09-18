@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using Terraria.Audio;
@@ -7,12 +8,11 @@ using Terraria.GameContent;
 using Terraria.Localization;
 
 namespace MatterRecord.Contents.LordOfTheFlies;
-
 public class LordOfTheFlies : ModItem
 {
     public override void SetDefaults()
     {
-        Item.damage = 50;
+        Item.damage = 1;
         Item.useTime = Item.useAnimation = 15;
         Item.useStyle = ItemUseStyleID.Shoot;
         Item.useAmmo = AmmoID.Bullet;
@@ -22,6 +22,7 @@ public class LordOfTheFlies : ModItem
         Item.rare = ItemRarityID.Lime;
         Item.holdStyle = ItemHoldStyleID.HoldHeavy;
         Item.noMelee = true;
+        ItemID.Sets.ItemsThatAllowRepeatedRightClick[Type] = true;
         base.SetDefaults();
     }
 
@@ -40,7 +41,7 @@ public class LordOfTheFlies : ModItem
         }
         return true;
     }
-
+    private static SoundStyle SwitchModeSoundEffect { get; } = new SoundStyle("MatterRecord/Assets/Sounds/shotgun_reload_clip3");
     public override void UseStyle(Player player, Rectangle heldItemFrame)
     {
         var mplr = player.GetModPlayer<LordOfTheFliesPlayer>();
@@ -54,6 +55,8 @@ public class LordOfTheFlies : ModItem
                 {
                     player.itemAnimation = 2;
                     _chargeTimer++;
+                    if (mplr.ChargingEnergy != 120 && mplr.StoredAmmoCount < 6 && _chargeTimer == 10 && !mplr.IsInTrialMode)
+                        _chargeTimer--;
                     if (_chargeTimer > 10)
                     {
                         float factor = Utils.GetLerpValue(10, 120, _chargeTimer, true);
@@ -86,12 +89,12 @@ public class LordOfTheFlies : ModItem
                 }
                 else
                 {
-                    if (_chargeTimer <= 10)
+                    if (_chargeTimer < 9 || (_chargeTimer <= 10 && mplr.IsInTrialMode))
                     {
                         mplr.IsInTrialMode = !mplr.IsInTrialMode;
                         if (Main.netMode == NetmodeID.MultiplayerClient && Main.myPlayer == player.whoAmI)
                             mplr.SyncPlayer(-1, player.whoAmI, false);
-                        SoundEngine.PlaySound(SoundID.Item20, player.Center);
+                        SoundEngine.PlaySound(SwitchModeSoundEffect, player.Center);
                         if (mplr.IsInTrialMode)
                         {
                             var box = player.Hitbox;
@@ -99,6 +102,7 @@ public class LordOfTheFlies : ModItem
                             CombatText.NewText(box, Color.Green, this.GetLocalizedValue("Clatter"));
                         }
                     }
+
                     else if (_chargeTimer > 120)
                     {
                         mplr.StoredAmmoCount++;
@@ -335,17 +339,26 @@ public class LordOfTheFlies : ModItem
         base.ModifyTooltips(tooltips);
     }
 
-    //public override void ModifyWeaponDamage(Player player, ref StatModifier damage)
-    //{
-    //    var mplr = player.GetModPlayer<LordOfTheFliesPlayer>();
-    //    var count = mplr.NPCKillCount;
-    //    var factor = count / (count + 200f);
-    //    var count2 = mplr.PlayerKillCount;
-    //    var factor2 = count / (count + 20f);
-    //    damage.Additive += factor * .5f;
-    //    damage.Additive += factor2;
-    //    base.ModifyWeaponDamage(player, ref damage);
-    //}
+    public override void ModifyWeaponDamage(Player player, ref StatModifier damage)
+    {
+        float rangeFactor = player.GetTotalDamage(DamageClass.Ranged).ApplyTo(1f);
+        float genericFactor = player.GetTotalDamage(DamageClass.Generic).ApplyTo(1f);
+
+        rangeFactor -= genericFactor;
+        genericFactor += rangeFactor - 1;
+
+        var critFactor = player.GetTotalCritChance(DamageClass.Ranged) * .01f;
+        critFactor += .04f;
+        damage.Multiplicative *= Math.Max(player.statDefense * (0.75f + rangeFactor + critFactor) / (1 + genericFactor), 1);
+        //var mplr = player.GetModPlayer<LordOfTheFliesPlayer>();
+        //var count = mplr.NPCKillCount;
+        //var factor = count / (count + 200f);
+        //var count2 = mplr.PlayerKillCount;
+        //var factor2 = count / (count + 20f);
+        //damage.Additive += factor * .5f;
+        //damage.Additive += factor2;
+        //base.ModifyWeaponDamage(player, ref damage);
+    }
 }
 
 public class LordOfTheFliesAnnihilationBulletLayer : PlayerDrawLayer
@@ -363,6 +376,7 @@ public class LordOfTheFliesAnnihilationBulletLayer : PlayerDrawLayer
         float chargeTimer = mplr.ChargeTimer;
         if (chargeTimer < 3) return;
         float factor = Utils.GetLerpValue(3, 40, chargeTimer, true);
+        float fac2 = MathHelper.SmoothStep(0, 1, factor);
         factor = factor == 1 ? 1 : factor * .5f;
 
         float factor2 = 0;
@@ -378,6 +392,7 @@ public class LordOfTheFliesAnnihilationBulletLayer : PlayerDrawLayer
 
         var center = player.RotatedRelativePoint(player.MountedCenter);
         float rotation = (Main.MouseWorld - center).ToRotation();
+        center -= (rotation + MathHelper.PiOver2 * player.direction).ToRotationVector2() * 6;
         var color = Color.White with { A = 0 };
         drawInfo.DrawDataCache.Add(
             new DrawData(
@@ -387,7 +402,7 @@ public class LordOfTheFliesAnnihilationBulletLayer : PlayerDrawLayer
                 color * factor,
                 rotation - MathHelper.PiOver2,
                 new Vector2(.5f),
-                new Vector2(2, 1), 0, 0));
+                new Vector2(2, fac2 * 1.5f), 0, 0));
 
         if (flag)
         {
@@ -399,7 +414,7 @@ public class LordOfTheFliesAnnihilationBulletLayer : PlayerDrawLayer
                     color * factor3 * .25f,
                     rotation - MathHelper.PiOver2,
                     new Vector2(.5f),
-                    new Vector2(2 + factor2 * 16, 1), 0, 0));
+                    new Vector2(2 + factor2 * 16, fac2 * 1.5f), 0, 0));
         }
 
         drawInfo.DrawDataCache.Add(

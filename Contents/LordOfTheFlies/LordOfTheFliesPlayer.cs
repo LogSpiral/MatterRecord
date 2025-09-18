@@ -61,7 +61,7 @@ public class LordOfTheFliesPlayer : ModPlayer
         ChargingEnergy = 120;
 #endif
         RightCooldown--;
-        if (Player.HeldItem?.ModItem is not LordOfTheFlies)
+        if (Player.HeldItem?.ModItem is not LordOfTheFlies || ChargingEnergy < 3)
             IsInTrialMode = false;
         //ChargingEnergy = 0;
         if (!IsInTrialMode && ChargingEnergy < 120 && (int)(Main.GlobalTimeWrappedHourly * 60) % 5 == 0)

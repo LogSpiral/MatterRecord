@@ -16,6 +16,7 @@
 	</ItemGroup>
 	<ItemGroup>
 	  <Folder Include="Assets\Images\" />
+	  <Folder Include="Assets\Sounds\" />
 	  <Folder Include="Localization\MiscItems\" />
 	  <Folder Include="Localization\Buffs\" />
 	  <Folder Include="Localization\Projectiles\" />

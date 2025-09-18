@@ -138,4 +138,5 @@ LordOfTheFlies: {
 	DisplayName: Lord Of The Flies
 	Tooltip: ""
 	Clatter: Clatter
+	NoEnoughEnergy: No Enough Energy
 }
