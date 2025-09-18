@@ -553,6 +553,11 @@ public class DonQuijoteDeLaManchaProj : MeleeSequenceProj
         public override void UpdateStatus(bool triggered)
         {
             base.UpdateStatus(triggered);
+            if (Owner is Player plr) 
+            {
+                var mplr = plr.GetModPlayer<DonQuijoteDeLaManchaPlayer>();
+                mplr.pendingEndurance = 5;
+            }
         }
 
         public override void OnEndAttack()
@@ -641,7 +646,7 @@ public class DonQuijoteDeLaManchaPlayer : ModPlayer
     public int StabTimeLeft;
     public Vector2 startPoint;
     public ItemDefinition itemDefinition = new();
-
+    public int pendingEndurance;
     public override void SaveData(TagCompound tag)
     {
         tag.Add("targetItem", itemDefinition);
@@ -688,10 +693,12 @@ public class DonQuijoteDeLaManchaPlayer : ModPlayer
     public override void ResetEffects()
     {
         if (StabTimeLeft > 0)
-        {
             StabTimeLeft--;
-            if (Player.ownedProjectileCounts[ModContent.ProjectileType<DonQuijoteDeLaManchaProj>()] > 0)
-                Player.endurance += 20;
+
+        if (pendingEndurance > 0)
+        {
+            Player.endurance += 0.2f;
+            pendingEndurance--;
         }
         if (DashCoolDown > 0)
             DashCoolDown--;
