@@ -376,7 +376,7 @@ public class DonQuijoteDeLaManchaProj : MeleeSequenceProj
             //Owner.velocity += targetedVector * .125f * (1 - Factor).HillFactor2();
             if (Owner is Player plr)
             {
-                plr.GetModPlayer<MatterRecordPlayer>().strengthOfShake += 1f / (1f + TimerMax / 30f);
+                plr.GetModPlayer<MatterRecordPlayer>().strengthOfShake += 2f / (1f + TimerMax / 30f);
                 plr.GetModPlayer<MatterRecordPlayer>().ultraFallEnable = true;
 
                 //if (!plr.controlUseTile && !plr.controlUseItem && !givenUp)
@@ -518,7 +518,7 @@ public class DonQuijoteDeLaManchaProj : MeleeSequenceProj
                 }
             }
             float delta = Main.rand.NextFloat(0.85f, 1.15f) * damageDone;
-            Main.LocalPlayer.GetModPlayer<MatterRecordPlayer>().strengthOfShake += delta * .15f;
+            // Main.LocalPlayer.GetModPlayer<MatterRecordPlayer>().strengthOfShake += delta * .15f;
             for (int n = 0; n < 30 * delta * (StandardInfo.dustAmount + .2f); n++)
                 MiscMethods.FastDust(victim.Center + Main.rand.NextVector2Unit() * Main.rand.NextFloat(0, 16f), Main.rand.NextVector2Unit() * Main.rand.NextFloat(Main.rand.NextFloat(0, 8), 16), StandardInfo.standardColor);
         }
@@ -583,7 +583,7 @@ public class DonQuijoteDeLaManchaProj : MeleeSequenceProj
     {
         var player = Player;
         float delta = Main.rand.NextFloat(0.85f, 1.15f) * (damageDone / MathHelper.Clamp(player.GetWeaponDamage(player.HeldItem), 1, int.MaxValue));
-        player.GetModPlayer<MatterRecordPlayer>().strengthOfShake += delta * .15f;
+        // player.GetModPlayer<MatterRecordPlayer>().strengthOfShake += delta * .15f;
         for (int n = 0; n < 30 * delta * (StandardInfo.dustAmount + .2f); n++)
             MiscMethods.FastDust(target.Center + Main.rand.NextVector2Unit() * Main.rand.NextFloat(0, 16f), Main.rand.NextVector2Unit() * Main.rand.NextFloat(Main.rand.NextFloat(0, 8), 16), StandardInfo.standardColor);
         base.OnHitNPC(target, hit, damageDone);

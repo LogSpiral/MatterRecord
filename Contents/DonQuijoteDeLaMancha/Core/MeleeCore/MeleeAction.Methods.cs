@@ -168,8 +168,8 @@ public partial class MeleeAction // : ModType
             damageDone /= MathHelper.Clamp(player.GetWeaponDamage(player.HeldItem), 1, int.MaxValue);
         float delta = Main.rand.NextFloat(0.85f, 1.15f) * MathF.Log(damageDone + 1);
 
-        if (Main.LocalPlayer.GetModPlayer<MatterRecordPlayer>().strengthOfShake < 4f)
-            Main.LocalPlayer.GetModPlayer<MatterRecordPlayer>().strengthOfShake += delta;
+        //if (Main.LocalPlayer.GetModPlayer<MatterRecordPlayer>().strengthOfShake < 4f)
+        //    Main.LocalPlayer.GetModPlayer<MatterRecordPlayer>().strengthOfShake += delta;
 
         for (int n = 0; n < 30 * delta * (StandardInfo.dustAmount + .2f); n++)
             MiscMethods.FastDust(victim.Center + Main.rand.NextVector2Unit() * Main.rand.NextFloat(0, 16f), Main.rand.NextVector2Unit() * Main.rand.NextFloat(Main.rand.NextFloat(0, 8), 16), StandardInfo.standardColor);
