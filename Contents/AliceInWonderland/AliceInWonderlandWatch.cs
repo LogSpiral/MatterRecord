@@ -19,7 +19,7 @@ public class AliceInWonderlandWatch : ModItem
         if (player.whoAmI != Main.myPlayer) return;
         var mplr = player.GetModPlayer<AliceInWonderlandPlayer>();
         if (mplr.CurrentPortalStart.HasValue && Vector2.Distance(mplr.CurrentPortalStart.Value, player.MountedCenter) < 1000) return;
-        if ((int)Main.time % 60 == 0 && !mplr.PortalSpawnLock && mplr.PortalSpawnedToday < 3 && Main.rand.NextBool(200))
+        if ((int)(Main.GlobalTimeWrappedHourly * 60) % 60 == 0 && !mplr.PortalSpawnLock && mplr.PortalSpawnedToday < 3 && Main.rand.NextBool(100))
         {
             var end = FindTargetPoint(out bool failed);
             if (failed)
@@ -82,7 +82,7 @@ public class AliceInWonderlandWatch : ModItem
 
     private static Vector2 FindTargetPoint(out bool failed)
     {
-        if (!Main.rand.NextBool(3)) 
+        if (!Main.rand.NextBool(3))
         {
             bool canSpawn = false;
             int teleportStartX = 100;

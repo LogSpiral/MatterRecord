@@ -614,7 +614,7 @@ public class DonQuijoteDeLaManchaProj : MeleeSequenceProj
         var innerGroup = new ConditionalMultiGroup();
 
         innerGroup.DataList.Add(new() { Wrapper = new Wrapper(new DonQuijoteDeLaManchaStab() { givenCycle = 1, rangeOffsetMin = 0, rangeOffsetMax = 1, ModifyData = new(1.00f, .5f, .5f, 1.50f, 0, 1.00f) }), Argument = new(StabActive) });
-        innerGroup.DataList.Add(new() { Wrapper = new Wrapper(new SwooshInfo() { ModifyData = new(1, 1, 1, 1.25f, 0, 1) }), Argument = new(Always) });
+        innerGroup.DataList.Add(new() { Wrapper = new Wrapper(new SwooshInfo() /*{ ModifyData = new(1, 1, 1, 1f, 0, 1) }*/), Argument = new(Always) });
         var innerSequence = new Sequence();
         innerSequence.Groups.Add(innerGroup);
 
