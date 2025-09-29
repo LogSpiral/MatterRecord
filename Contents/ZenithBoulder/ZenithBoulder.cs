@@ -314,7 +314,7 @@ namespace MatterRecord.Contents.ZenithBoulder
 
         public override void ApplyPass(GenerationProgress progress, GameConfiguration configuration)
         {
-            progress.Message = "西西弗斯";
+            progress.Message = Language.GetTextValue("Mods.MatterRecord.Items.ZenithBoulder.Sisyphus");
             var type = ModContent.TileType<ZenithBoulderTile>();
 
             List<(int, int)> selectedTiles = [];

@@ -736,25 +736,14 @@ public class DonQuijoteDeLaManchaPlayer : ModPlayer
         base.OnHitByProjectile(proj, hurtInfo);
     }
 
-    /*public override void ModifyDrawInfo(ref PlayerDrawSet drawInfo)
-    {
-        if (DashCoolDown > 0)
-        {
-            //DrawData drawData = new DrawData(TextureAssets.Projectile[ModContent.ProjectileType<DonQuijoteDeLaManchaProj>()].Value,Player.Center - Main.screenPosition,nu);
-            //drawInfo.DrawDataCache.Add(drawData);
-            Main.spriteBatch.DrawString(FontAssets.MouseText.Value, $"冲刺冷却{DashCoolDown / 60f:0.0}/{DashCoolDownMax / 60f:0.0}", Player.Center - Main.screenPosition + new Vector2(-48, -54), Color.White);
-        }
-        base.ModifyDrawInfo(ref drawInfo);
-    }*/
-
     public override void ModifyDrawInfo(ref PlayerDrawSet drawInfo)
     {
         if (DashCoolDown > 0 && Main.myPlayer == Player.whoAmI && !Player.DeadOrGhost)
         {
             Vector2 cen = Player.Center + Player.gfxOffY * Vector2.UnitY - Main.screenPosition - new Vector2(16, 160);
-            drawInfo.DrawDataCache.Add(new DrawData(ModContent.Request<Texture2D>("MatterRecord/Contents/DonQuijoteDeLaMancha/DashCooldown_Recover").Value, cen, null, Color.White, 0, new Vector2(), 1f, 0));
+            drawInfo.DrawDataCache.Add(new DrawData(ModAsset.DashCooldown_Recover.Value, cen, null, Color.White, 0, new Vector2(), 1f, 0));
 
-            drawInfo.DrawDataCache.Add(new DrawData(ModContent.Request<Texture2D>("MatterRecord/Contents/DonQuijoteDeLaMancha/DashCooldown").Value, cen, new Rectangle(0, 0, 32, (int)(32f * DashCoolDown / DashCoolDownMax)), Color.White, 0, new Vector2(), 1f, 0));
+            drawInfo.DrawDataCache.Add(new DrawData(ModAsset.DashCooldown.Value, cen, new Rectangle(0, 0, 32, (int)(32f * DashCoolDown / DashCoolDownMax)), Color.White, 0, new Vector2(), 1f, 0));
             string text = Language.GetTextValue("Mods.MatterRecord.Items.DonQuijoteDeLaMancha.DashCooldown") + $"{DashCoolDown / 60f:0.0}/{DashCoolDownMax / 60f:0.0}";
 
             ChatManager.DrawColorCodedStringWithShadow(Main.spriteBatch, FontAssets.MouseText.Value, text, cen + new Vector2(16, 48), Color.White, Color.Black, 0, FontAssets.MouseText.Value.MeasureString(text) * .5f, Vector2.One);

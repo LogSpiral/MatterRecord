@@ -161,7 +161,7 @@ public class LordOfTheFlies : ModItem
                     if (player.whoAmI == Main.myPlayer)
                     {
                         Vector2 target = Main.MouseWorld - player.RotatedRelativePoint(player.MountedCenter);
-                        float rotation = target.ToRotation();
+                        float rotation = target.ToRotation() ;
                         player.direction = Math.Sign(target.X);
                         player.itemRotation = rotation;
                         if (player.direction < 0)
@@ -173,7 +173,7 @@ public class LordOfTheFlies : ModItem
                             NetMessage.SendData(MessageID.ShotAnimationAndSound, -1, -1, null, Main.myPlayer);
                         }
                     }
-                    player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, player.itemRotation - (player.direction < 0 ? MathHelper.Pi : 0) - MathHelper.PiOver2);
+                    player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, player.itemRotation * player.gravDir - (player.direction < 0 ? MathHelper.Pi : 0) - MathHelper.PiOver2);
                 }
                 else
                 {
@@ -210,7 +210,7 @@ public class LordOfTheFlies : ModItem
                     float rotation = target.ToRotation();
                     player.direction = Math.Sign(target.X);
 
-                    rotation -= player.direction * (player.itemTime / (float)player.itemTimeMax) * .5f;
+                    rotation -= player.direction * (player.itemTime / (float)player.itemTimeMax) * .5f * player.gravDir;
 
                     player.itemRotation = rotation;
                     if (player.direction < 0)
@@ -221,7 +221,7 @@ public class LordOfTheFlies : ModItem
                         NetMessage.SendData(MessageID.ShotAnimationAndSound, -1, -1, null, Main.myPlayer);
                     }
                 }
-                player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, player.itemRotation - (player.direction < 0 ? MathHelper.Pi : 0) - MathHelper.PiOver2);
+                player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, player.itemRotation * player.gravDir - (player.direction < 0 ? MathHelper.Pi : 0) - MathHelper.PiOver2);
             }
         }
         player.scope = false;
@@ -238,7 +238,7 @@ public class LordOfTheFlies : ModItem
             Item.UseSound = null;
         if (mplr.IsInTrialMode)
         {
-            player.itemRotation += MathHelper.PiOver4 * player.direction;
+            player.itemRotation += MathHelper.PiOver4 * player.direction * player.gravDir;
             player.itemLocation -= player.itemRotation.ToRotationVector2() * 8 * player.direction;
             Item.holdStyle = ItemHoldStyleID.HoldHeavy;
             // Item.DamageType = ModContent.GetInstance<RangedMagicDamage>();
@@ -400,7 +400,7 @@ public class LordOfTheFliesAnnihilationBulletLayer : PlayerDrawLayer
 
         var center = player.RotatedRelativePoint(player.MountedCenter);
         float rotation = (Main.MouseWorld - center).ToRotation();
-        center -= (rotation + MathHelper.PiOver2 * player.direction).ToRotationVector2() * 6;
+        center -= (rotation + MathHelper.PiOver2 * player.direction).ToRotationVector2() * 6 * player.gravDir;
         var color = Color.White with { A = 0 };
         drawInfo.DrawDataCache.Add(
             new DrawData(
@@ -428,7 +428,7 @@ public class LordOfTheFliesAnnihilationBulletLayer : PlayerDrawLayer
         drawInfo.DrawDataCache.Add(
             new DrawData(
                 ModAsset.crosshair.Value,
-                Main.MouseScreen,
+                Main.MouseWorld - Main.screenPosition,
                 null,
                 color * .25f * factor,
                 Main.GlobalTimeWrappedHourly * 4,
@@ -440,7 +440,7 @@ public class LordOfTheFliesAnnihilationBulletLayer : PlayerDrawLayer
             drawInfo.DrawDataCache.Add(
                 new DrawData(
                     ModAsset.crosshair.Value,
-                    Main.MouseScreen,
+                    Main.MouseWorld - Main.screenPosition,
                     null,
                     color * .25f * factor3,
                     Main.GlobalTimeWrappedHourly * 4,

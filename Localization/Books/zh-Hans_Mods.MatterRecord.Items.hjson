@@ -35,6 +35,8 @@ Faust: {
 		'''
 	WannaDeal: 怎么，要来场交易吗？
 	MoneySpent: 你已经在恶魔这里消费了
+	CantButIt: 此物品无法购买
+	BuyPrice: 购买需要
 }
 
 LittlePrince: {

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Reflection;
 using Terraria.Audio;
 using Terraria.GameContent;
+using Terraria.Localization;
 using Terraria.ModLoader.Default;
 using Terraria.ModLoader.IO;
 using Terraria.UI;
@@ -111,7 +112,7 @@ namespace MatterRecord.Contents.Faust
             tooltips.Clear();
             tooltips.Add(dummy);
             if (item.value == 0 || item.type == ModContent.ItemType<Faust>() || Main.ItemDropsDB.GetRulesForItemID(item.type).Any() || (item.type >= ItemID.CopperCoin && item.type <= ItemID.PlatinumCoin))
-                tooltips.Add(new TooltipLine(Mod, "CantBuyIt", "此物品无法购买") { OverrideColor = Color.Lerp(Color.Gray, Color.DarkGray, MathF.Cos(Main.GlobalTimeWrappedHourly) * .5f + .5f) });
+                tooltips.Add(new TooltipLine(Mod, "CantBuyIt", Language.GetTextValue("Mods.MatterRecord.Items.Faust.CantButIt")) { OverrideColor = Color.Lerp(Color.Gray, Color.DarkGray, MathF.Cos(Main.GlobalTimeWrappedHourly) * .5f + .5f) });
             else
             {
                 var text5 = "";
@@ -163,7 +164,7 @@ namespace MatterRecord.Contents.Faust
                 else if (num15 > 0)
                     color2 = new Color((byte)(246f * num17), (byte)(138f * num17), (byte)(96f * num17), Main.mouseTextColor);
 
-                tooltips.Add(new TooltipLine(Mod, "ThePrize", $"购买需要{text5}") { OverrideColor = color2 });
+                tooltips.Add(new TooltipLine(Mod, "ThePrice", $"{Language.GetTextValue("Mods.MatterRecord.Items.Faust.BuyPrice")}{text5}") { OverrideColor = color2 });
             }
             base.ModifyTooltips(item, tooltips);
         }

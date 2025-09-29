@@ -32,6 +32,8 @@ Faust: {
 		'''
 	WannaDeal: Well, Do ya wanna a deal?
 	MoneySpent: You have spent these Money with demons:
+	CantButIt: This item can't be bought
+	BuyPrice: You neet paid
 }
 
 LittlePrince: {

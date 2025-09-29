@@ -9,6 +9,7 @@ EternalWine: {
 		“使人升华，却又引人堕落，除了所谓的神酒，还有什么呢？”
 		'''
 	RestoreLifeText: 恢复生命
+	LifeDebt: 待偿还生命值
 }
 
 TortoiseShell: {
@@ -26,6 +27,7 @@ TortoiseShell: {
 ZenithBoulder: {
 	DisplayName: 天顶巨石
 	Tooltip: “我猜创世神肯定会喜欢这个”
+	Sisyphus: 西西弗斯
 }
 
 EtherChest: {

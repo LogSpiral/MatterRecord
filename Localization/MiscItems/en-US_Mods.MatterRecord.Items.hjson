@@ -11,6 +11,7 @@ EternalWine: {
 		Can be activated via Quick Buff even at full health, triggering the borrowing effect
 		'''
 	RestoreLifeText: Restore Life
+	LifeDebt: Life to compensate
 }
 
 TortoiseShell: {
@@ -35,6 +36,7 @@ TortoiseShell: {
 ZenithBoulder: {
 	DisplayName: Zenith Boulder
 	Tooltip: Celestial Orb, kid!
+	Sisyphus: Sisyphus
 }
 
 EtherChest: {

@@ -56,7 +56,7 @@ public class LordOfTheFliesPlayer : ModPlayer
 
     public override void PreUpdate()
     {
-#if false
+#if true
         StoredAmmoCount = 6;
         ChargingEnergy = 120;
 #endif

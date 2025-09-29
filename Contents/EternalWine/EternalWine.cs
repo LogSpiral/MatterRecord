@@ -8,6 +8,7 @@ using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.GameContent.ItemDropRules;
+using Terraria.Localization;
 using Terraria.ModLoader.IO;
 using Terraria.UI.Chat;
 using Terraria.WorldBuilding;
@@ -349,11 +350,42 @@ namespace MatterRecord.Contents.EternalWine
             if (LifeDebtMax > 0 && Main.myPlayer == Player.whoAmI && !Player.DeadOrGhost)
             {
                 Vector2 cen = Player.Center + Player.gfxOffY * Vector2.UnitY - Main.screenPosition - new Vector2(16, 128);
-                drawInfo.DrawDataCache.Add(new DrawData(ModContent.Request<Texture2D>("MatterRecord/Contents/EternalWine/LifeRegenStagnant_Recover").Value, cen, null, Color.White, 0, new Vector2(), 1f, 0));
+                // var direction = Player.gravDir < 0 ? SpriteEffects.FlipVertically : SpriteEffects.None;
+                var direction = SpriteEffects.None;
+                drawInfo.DrawDataCache.Add(
+                    new DrawData(
+                        ModAsset.LifeRegenStagnant_Recover.Value,
+                        cen,
+                        null,
+                        Color.White,
+                        0,
+                        new Vector2(),
+                        1f,
+                        direction));
 
-                drawInfo.DrawDataCache.Add(new DrawData(ModContent.Request<Texture2D>("MatterRecord/Contents/EternalWine/LifeRegenStagnant").Value, cen, new Rectangle(0, 0, 32, (int)(32f * LifeDebt / LifeDebtMax)), Color.White, 0, new Vector2(), 1f, 0));
-                string text = $"待偿还生命值{LifeDebt}/{LifeDebtMax}";
-                ChatManager.DrawColorCodedStringWithShadow(Main.spriteBatch, FontAssets.MouseText.Value, text, cen + new Vector2(16, 48), Color.White, Color.Black, 0, FontAssets.MouseText.Value.MeasureString(text) * .5f, Vector2.One);
+                drawInfo.DrawDataCache.Add(
+                    new DrawData(
+                        ModAsset.LifeRegenStagnant.Value,
+                        cen, // + (Player.gravDir < 0 ? Vector2.UnitY * (int)(32 - 32f * LifeDebt / LifeDebtMax) : Vector2.Zero)
+                        new Rectangle(0, 0, 32, (int)(32f * LifeDebt / LifeDebtMax)),
+                        Color.White,
+                        0,
+                        new Vector2(),
+                        1f,
+                        direction));
+
+                string text = $"{Language.GetTextValue("Mods.MatterRecord.Items.EternalWine.LifeDebt")}{LifeDebt}/{LifeDebtMax}";
+                ChatManager.DrawColorCodedStringWithShadow(
+                    Main.spriteBatch,
+                    FontAssets.MouseText.Value,
+                    text,
+                    cen + new Vector2(16, 48),
+                    Color.White,
+                    Color.Black,
+                    0,
+                    FontAssets.MouseText.Value.MeasureString(text) * .5f,
+                    Vector2.One);
+
                 //Main.spriteBatch.DrawString(FontAssets.MouseText.Value,, cen + Vector2.UnitY * 48, Color.White);
             }
             base.ModifyDrawInfo(ref drawInfo);
@@ -382,7 +414,7 @@ namespace MatterRecord.Contents.EternalWine
 
         public override void ApplyPass(GenerationProgress progress, GameConfiguration configuration)
         {
-            progress.Message = "永生之酒";
+            progress.Message = Language.GetTextValue("Mods.MatterRecord.Items.EternalWine.DisplayName");
             foreach (var chest in Main.chest)
             {
                 if (chest != null)
