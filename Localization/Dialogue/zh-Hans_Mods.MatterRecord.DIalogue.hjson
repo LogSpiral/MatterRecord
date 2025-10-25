@@ -1,0 +1,51 @@
+Recorder: {
+	FirstMeet: 初次见面。
+	StandardDialogue1: 总有一天人们会讲述<玩家名称>的传奇……
+	StandardDialogue2: 在天国尚未曾陨落的时候，人世间一切宝贵的智慧都能够在损失之前得以保存……在死之后
+	StandardDialogue3: 我曾在统辖局呆过一段时间，他们把我这种外派出差称为休假
+	StandardDialogue4: 我的工作是追寻那些散佚的事象记录，如果你找到它们的话记得来找我
+	// 持有特殊物品对话
+	AliceInWonderLandUnlocked: 爱丽丝掉进了兔子洞，我被一份填错的出差单丢到这里，本质上没什么不同
+	DonQuijoteDeLaManchaUnlocked: 多好的一个地方啊，巨人、军队、魔法师，甚至还有巨龙和公主，准备好书写传奇了吗
+	LittlePrinceUnlocked: 如果你驯服了我，我们就会彼此需要。不过我的驯服费很贵，大概591铂金吧
+	TheOldManAndTheSeaUnlocked: 人可以被消灭，但不能被打败。但如果你被一只史莱姆消灭了，那还是回炉重造吧
+	TheoryOfFreedomUnloked: 你也要献出心脏？哦……我开玩笑的，快把那玩意塞回去
+	WarAndPeaceUnlocked: 养猫很麻烦，尤其是在猫和量子力学搭上关系的时候
+	TheInterpretationOfDreamsUnlocked: 严格来说我没有所谓的梦境，放弃吧，为什么这样看着我？这是实话
+	TheAdventureofSherlockHolmesUnlocked: 哎，福尔摩斯先生现在已经变成了八卦记者，令人感叹
+	TheoryofJusticeUnlocked: 无知即正义其实不是这个意思……看起来你好像没有理解我的幽默
+	EmeraldTabletUnlocked: 我炼金学水平有限，只有事象炼金术因为先天原因还算不错……要来几个抄本吗？
+	LordOfTheFliesUnlocked: 蝇王前辈大概是对我复制抄本没什么意见的，他虽然没同意，但我也没让他知道
+	// 找到宠物史莱姆时的奖励对话
+	PetFoundDialogue:
+		'''
+		又跑出来了？真是的，走丢了我可不去找你
+		作为谢礼，这把枪就送你，别担心，我还有很多
+		'''
+	// 持有未解锁物品对话
+	AliceInWonderlandUnocking: 掉进兔子洞，喝下会变小的药水……一种相当低效的旅行方式
+	DonQuijoteDeLaManchaUnlocking: 我不得不提醒你，这家伙有着鼓动持有者挑战风车的……不良记录
+	LittlePrinceUnlocking: 我猜你把玫瑰花看成了阿比盖尔……
+	TheOldManAndTheSeaUnlocking: 我没有和大鱼搏斗过，但我试过跟渔夫讲道理，我把左轮按到他的脑门上时他才承认这是老子的海
+	TheoryOfFreedomUnlocking: 没有什么东西是完全自由的，就连鸟儿也被天空束缚——以及我被工作束缚
+	WarAndPeaceUnlocking: 哦，了不起，你找到了遗失的另一半，我看看能不能凭着记忆复原它
+	TheInterpretationOfDreamsUnlocing: 它试图为混沌赋予秩序，精神可嘉，就像试图让史莱姆排成整齐的队列一样
+	// 收集任务奖励
+	HolmesCollected: 福尔摩斯先生能够帮你注意到一些被忽略的细节
+	JusticeCollected: 我把无知之幕做成了斗篷，合身吗，不合身我也不会改的
+	EmeraldCollected: 现世已经不需要太一了，不过作为炼金术入门还算不错
+	// 幸福度相关
+	Homeless: 有椅子和工作台就行，监狱也无所谓，我只是想有个地方能休息
+	FarfromHome: 好像走太远了……完全找不到回去的路
+	FewNeighbor: 这里安静得让人有点不自在，我该建议搬几个邻居过来
+	CrowdedNeighbor: 声音在这里无处可去，总能飘进我的耳朵里，也许这里太挤了
+	NearOcean: 海洋，沙土，阳光，还有轻柔的海风，一切都完美的不像话
+	InUnderworld: 这里热的让人头昏眼花，地狱带给人的可怕意象与其相比简直不算什么
+	CloseToNurse: 我喜欢<护士名称>，她是我见过唯一能把绷带打得比废话还快的人
+	CloseToPartygirl: <派对女孩名称>总是邀请我参加她的派对
+	CloseToAngler: <渔夫名称>在我身边的时候，我的佩枪就一直响，我应该给他来上一发吗？
+	NeutralHappiness: 这个地方还不错……如果忽略掉那些小麻烦的话
+	// NPC相关闲聊
+	GuideDialogue: <向导名称>似乎很可疑，你有想过为什么他懂的这么多吗？
+	AnglerDialogue: 为什么我附近会住着一个死小孩？我希望下次钓鱼时你能把他绑鱼竿上
+}
