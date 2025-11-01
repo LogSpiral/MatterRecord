@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using MatterRecord.Contents.Recorder;
+using Microsoft.Xna.Framework;
 using System;
 
 namespace MatterRecord.Contents.TheAdventureofSherlockHolmes;
@@ -46,6 +47,7 @@ public class TASHSystem : ModSystem
 
     private void Main_OnPostFullscreenMapDraw(Vector2 arg1, float arg2)
     {
+        if (!RecorderSystem.CheckUnlock(ItemRecords.TheAdventureofSherlockHolmes)) return;
         if (Main.netMode == NetmodeID.MultiplayerClient && readyToShow && cachePoint.HasValue && Main.LocalPlayer.BuyItem(TASHPrice))
         {
             LightOnMap(cachePoint.Value);
@@ -84,8 +86,9 @@ public class TASHSystem : ModSystem
     }
 }
 
-public class TheAdventureofSherlockHolmes : ModItem
+public class TheAdventureofSherlockHolmes : ModItem,IRecordBookItem
 {
+    ItemRecords IRecordBookItem.RecordType => ItemRecords.TheAdventureofSherlockHolmes;
     public override void SetDefaults()
     {
         Item.width = Item.height = 48;

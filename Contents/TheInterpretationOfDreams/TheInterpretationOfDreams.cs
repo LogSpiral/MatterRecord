@@ -1,10 +1,12 @@
-﻿using Microsoft.Xna.Framework;
+﻿using MatterRecord.Contents.Recorder;
+using Microsoft.Xna.Framework;
 using System;
 
 namespace MatterRecord.Contents.TheInterpretationOfDreams;
 
-public class TheInterpretationOfDreams : ModItem
+public class TheInterpretationOfDreams : ModItem,IRecordBookItem
 {
+    ItemRecords IRecordBookItem.RecordType => ItemRecords.TheInterpretationOfDreams;
     public override void SetStaticDefaults()
     {
         ItemID.Sets.ShimmerTransformToItem[Type] = ItemID.BugNet;

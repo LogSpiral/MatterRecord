@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using MatterRecord.Contents.Recorder;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
@@ -8,8 +9,9 @@ using Terraria.GameContent;
 using Terraria.Localization;
 
 namespace MatterRecord.Contents.LordOfTheFlies;
-public class LordOfTheFlies : ModItem
+public class LordOfTheFlies : ModItem,IRecordBookItem
 {
+    ItemRecords IRecordBookItem.RecordType => ItemRecords.LordOfTheFlies;
     public override void SetDefaults()
     {
         Item.damage = 1;

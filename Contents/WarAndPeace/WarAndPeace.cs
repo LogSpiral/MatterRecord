@@ -1,11 +1,13 @@
-﻿using Microsoft.Xna.Framework;
+﻿using MatterRecord.Contents.Recorder;
+using Microsoft.Xna.Framework;
 using System;
 using Terraria.GameContent;
 
 namespace MatterRecord.Contents.WarAndPeace;
 
-public class WarAndPeace : ModItem
+public class WarAndPeace : ModItem,IRecordBookItem
 {
+    ItemRecords IRecordBookItem.RecordType => ItemRecords.WarAndPeace;
     public override void SetDefaults()
     {
         Item.accessory = true;

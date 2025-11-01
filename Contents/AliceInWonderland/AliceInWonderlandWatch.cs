@@ -1,9 +1,12 @@
-﻿using Microsoft.Xna.Framework;
+﻿using MatterRecord.Contents.Recorder;
+using Microsoft.Xna.Framework;
 
 namespace MatterRecord.Contents.AliceInWonderland;
 
-public class AliceInWonderlandWatch : ModItem
+public class AliceInWonderlandWatch : ModItem, IRecordBookItem
 {
+    ItemRecords IRecordBookItem.RecordType => ItemRecords.AliceInWonderland;
+
     // public override string Texture => $"Terraria/Images/Item_{ItemID.PlatinumWatch}";
 
     public override void SetDefaults()
@@ -13,7 +16,8 @@ public class AliceInWonderlandWatch : ModItem
 
         base.SetDefaults();
     }
-
+    public override bool CanEquipAccessory(Player player, int slot, bool modded) => this.IsRecordUnlocked;
+    
     public override void UpdateAccessory(Player player, bool hideVisual)
     {
         if (player.whoAmI != Main.myPlayer) return;

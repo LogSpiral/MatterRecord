@@ -1,10 +1,13 @@
-﻿using System.Linq;
+﻿using MatterRecord.Contents.Recorder;
+using System.Linq;
 using static Terraria.Recipe;
 
 namespace MatterRecord.Contents.EmeraldTablet;
 
-public class EmeraldTablet : ModItem
+public class EmeraldTablet : ModItem,IRecordBookItem
 {
+    ItemRecords IRecordBookItem.RecordType => ItemRecords.EmeraldTablet;
+
     public override void SetDefaults()
     {
         Item.width = 22;
@@ -24,6 +27,7 @@ public class EmeraldTabltAlchemy : ModSystem
 {
     public static IngredientQuantityCallback EmeraldTabltAlchemyMethod = (Recipe recipe, int type, ref int amount, bool isDecrafting) =>
     {
+        if (!RecorderSystem.CheckUnlock(ItemRecords.EmeraldTablet)) return;
         bool flag = false;
         foreach (var item in Main.LocalPlayer.inventory.Union(Main.LocalPlayer.bank.item).Union(Main.LocalPlayer.bank.item).Union(Main.LocalPlayer.bank2.item).Union(Main.LocalPlayer.bank3.item).Union(Main.LocalPlayer.bank4.item))
         {

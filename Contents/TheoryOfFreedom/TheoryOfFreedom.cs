@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using MatterRecord.Contents.Recorder;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
 using System.IO;
@@ -10,8 +11,9 @@ using Terraria.ModLoader.IO;
 namespace MatterRecord.Contents.TheoryOfFreedom;
 
 [AutoloadEquip(EquipType.Wings)]
-public class TheoryOfFreedom : ModItem
+public class TheoryOfFreedom : ModItem,IRecordBookItem
 {
+    ItemRecords IRecordBookItem.RecordType => ItemRecords.TheoryOfFreedom;
     public override void UpdateAccessory(Player player, bool hideVisual)
     {
         var mplr = player.GetModPlayer<FreedomPlayer>();

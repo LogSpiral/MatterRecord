@@ -3,6 +3,7 @@ using MatterRecord.Contents.DonQuijoteDeLaMancha.Core.BuiltInGroups;
 using MatterRecord.Contents.DonQuijoteDeLaMancha.Core.MeleeCore;
 using MatterRecord.Contents.DonQuijoteDeLaMancha.Core.StandardMelee;
 using MatterRecord.Contents.DonQuijoteDeLaMancha.Core.Visuals;
+using MatterRecord.Contents.Recorder;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
@@ -22,8 +23,9 @@ using Terraria.UI.Chat;
 
 namespace MatterRecord.Contents.DonQuijoteDeLaMancha;
 
-public class DonQuijoteDeLaMancha : MeleeSequenceItem<DonQuijoteDeLaManchaProj>
+public class DonQuijoteDeLaMancha : MeleeSequenceItem<DonQuijoteDeLaManchaProj>,IRecordBookItem
 {
+    ItemRecords IRecordBookItem.RecordType => ItemRecords.DonQuijoteDeLaMancha;
     public static bool SlashActive => MatterRecordConfig.Instance.DonQuijoteSlashActive;
 
     public override void SetDefaults()
@@ -221,7 +223,7 @@ public class DonQuijoteDeLaMancha : MeleeSequenceItem<DonQuijoteDeLaManchaProj>
 
     public override bool CanRightClick()
     {
-        return true;
+        return RecorderSystem.CheckUnlock(ItemRecords.DonQuijoteDeLaMancha);
     }
 
     public override bool ConsumeItem(Player player)
