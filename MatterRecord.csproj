@@ -7,6 +7,7 @@
 	<PropertyGroup>
 		<AssemblyName>MatterRecord</AssemblyName>
 		<LangVersion>preview</LangVersion>
+		<DebugMod>DragonLens</DebugMod>
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="Solaestas.tModLoader.ModBuilder" Version="1.6.1" />

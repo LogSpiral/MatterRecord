@@ -49,3 +49,14 @@ ProtagonistAura: {
 	DisplayName: 主角光环
 	Tooltip: “如果我帮助你……咳咳……你会感谢我吗？”
 }
+
+HallowBucket.SetHint: 可激活神圣盔甲套装奖励
+
+InternalDocument: {
+	DisplayName: 内部文剑
+	Tooltip:
+		'''
+		根据启用模组数量增加伤害
+		文件越来越多……
+		'''
+}

@@ -58,3 +58,14 @@ ProtagonistAura: {
 	DisplayName: Protagonist Aura
 	Tooltip: ""
 }
+
+HallowBucket.SetHint: Can activate Hallow Armor Set bonus.
+
+InternalDocument: {
+	DisplayName: Internal DocumentsWord
+	Tooltip:
+		'''
+		Increases damage depending on the count of enabled mods
+		More and more documents...
+		'''
+}
