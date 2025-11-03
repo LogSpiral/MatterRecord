@@ -2,17 +2,9 @@
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using Terraria.Audio;
-using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.GameContent.Bestiary;
-using Terraria.GameContent.ItemDropRules;
 using Terraria.GameContent.Personalities;
-using Terraria.GameContent.UI;
-using Terraria.Localization;
-using Terraria.ModLoader.IO;
-using Terraria.Utilities;
 
 namespace MatterRecord.Contents.Recorder;
 
@@ -23,15 +15,15 @@ public partial class Recorder : ModNPC
 
     public override void SetStaticDefaults()
     {
-        Main.npcFrameCount[Type] = 25; // The total amount of frames the NPC has
+        Main.npcFrameCount[Type] = 23; // The total amount of frames the NPC has
 
         NPCID.Sets.ExtraFramesCount[Type] = 9; // Generally for Town NPCs, but this is how the NPC does extra things such as sitting in a chair and talking to other NPCs. This is the remaining frames after the walking frames.
         NPCID.Sets.AttackFrameCount[Type] = 4; // The amount of frames in the attacking animation.
         NPCID.Sets.DangerDetectRange[Type] = 700; // The amount of pixels away from the center of the NPC that it tries to attack enemies.
-        NPCID.Sets.AttackType[Type] = 2; // The type of attack the Town NPC performs. 0 = throwing, 1 = shooting, 2 = magic, 3 = melee
-        NPCID.Sets.AttackTime[Type] = 90; // The amount of time it takes for the NPC's attack animation to be over once it starts.
-        NPCID.Sets.AttackAverageChance[Type] = 30; // The denominator for the chance for a Town NPC to attack. Lower numbers make the Town NPC appear more aggressive.
-        NPCID.Sets.HatOffsetY[Type] = 4; 
+        NPCID.Sets.AttackType[Type] = 1; // The type of attack the Town NPC performs. 0 = throwing, 1 = shooting, 2 = magic, 3 = melee
+        NPCID.Sets.AttackTime[Type] = 60; // The amount of time it takes for the NPC's attack animation to be over once it starts.
+        NPCID.Sets.AttackAverageChance[Type] = 1; // The denominator for the chance for a Town NPC to attack. Lower numbers make the Town NPC appear more aggressive.
+        NPCID.Sets.HatOffsetY[Type] = 4;
         // Influences how the NPC looks in the Bestiary
         NPCID.Sets.NPCBestiaryDrawModifiers drawModifiers = new NPCID.Sets.NPCBestiaryDrawModifiers()
         {
@@ -49,12 +41,12 @@ public partial class Recorder : ModNPC
         // 喜欢派对女孩
         // 憎恶渔夫
         NPC.Happiness
-            .SetBiomeAffection<OceanBiome>(AffectionLevel.Like) 
-            .SetBiomeAffection<UnderworldBiome>(AffectionLevel.Dislike) 
+            .SetBiomeAffection<OceanBiome>(AffectionLevel.Like)
+            .SetBiomeAffection<UnderworldBiome>(AffectionLevel.Dislike)
             .SetNPCAffection(NPCID.Nurse, AffectionLevel.Love)
             .SetNPCAffection(NPCID.PartyGirl, AffectionLevel.Like)
             .SetNPCAffection(NPCID.Angler, AffectionLevel.Hate)
-        ; 
+        ;
         ContentSamples.NpcBestiaryRarityStars[Type] = 3;
     }
 
@@ -72,7 +64,7 @@ public partial class Recorder : ModNPC
         NPC.DeathSound = SoundID.NPCDeath1;
         NPC.knockBackResist = 0.5f;
 
-        AnimationType = NPCID.Guide;
+        AnimationType = NPCID.Steampunker;
     }
 
     public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
@@ -130,7 +122,49 @@ public partial class Recorder : ModNPC
 
     public override void TownNPCAttackStrength(ref int damage, ref float knockback)
     {
-        damage = 20;
+        if (Main.netMode == NetmodeID.SinglePlayer)
+        {
+            var player = Main.LocalPlayer;
+            float rangeFactor = player.GetTotalDamage(DamageClass.Ranged).ApplyTo(1f);
+            float genericFactor = player.GetTotalDamage(DamageClass.Generic).ApplyTo(1f);
+
+            rangeFactor -= genericFactor;
+            genericFactor += rangeFactor - 1;
+
+            var critFactor = player.GetTotalCritChance(DamageClass.Ranged) * .01f;
+            critFactor += .04f;
+
+            //int defense = player.statDefense;
+            int defense = player.armor[0].defense + player.armor[1].defense + player.armor[2].defense;
+
+            damage = (int)Math.Max(defense * (0.75f + rangeFactor + critFactor) / (1 + genericFactor * .5f), 1);
+        }
+        else
+        {
+            foreach (var player in Main.player)
+            {
+                if (!player.active) continue;
+                float rangeFactor = player.GetTotalDamage(DamageClass.Ranged).ApplyTo(1f);
+                float genericFactor = player.GetTotalDamage(DamageClass.Generic).ApplyTo(1f);
+
+                rangeFactor -= genericFactor;
+                genericFactor += rangeFactor - 1;
+
+                var critFactor = player.GetTotalCritChance(DamageClass.Ranged) * .01f;
+                critFactor += .04f;
+
+                //int defense = player.statDefense;
+                int defense = player.armor[0].defense + player.armor[1].defense + player.armor[2].defense;
+
+                int curDamage = (int)(Math.Max(defense * (0.75f + rangeFactor + critFactor) / (1 + genericFactor * .5f), 1));
+                if (curDamage > damage)
+                    damage = curDamage;
+            }
+        }
+        Main.NewText(damage);
+        Console.WriteLine(damage);
+        damage = damage * 2 / 5;
+        if (damage < 1) damage = 1;
         knockback = 4f;
     }
 
@@ -139,20 +173,28 @@ public partial class Recorder : ModNPC
         cooldown = 30;
         randExtraCooldown = 30;
     }
-    
+
     public override void TownNPCAttackProj(ref int projType, ref int attackDelay)
     {
-        projType = ProjectileID.TerraBeam;
+        projType = ProjectileID.Bullet;
         attackDelay = 1;
     }
     public override void TownNPCAttackShoot(ref bool inBetweenShots)
     {
+        Main.NewText(inBetweenShots);
         base.TownNPCAttackShoot(ref inBetweenShots);
+    }
+    public override void DrawTownAttackGun(ref Texture2D item, ref Rectangle itemFrame, ref float scale, ref int horizontalHoldoutOffset)
+    {
+        item = ModAsset.LordOfTheFlies.Value;
+        itemFrame = new Rectangle(0, 0, item.Width, item.Height);
+        horizontalHoldoutOffset = -8;
+        base.DrawTownAttackGun(ref item, ref itemFrame, ref scale, ref horizontalHoldoutOffset);
     }
     public override void TownNPCAttackProjSpeed(ref float multiplier, ref float gravityCorrection, ref float randomOffset)
     {
-        multiplier = 12f;
-        randomOffset = 2f;
+        multiplier = 16f;
+
         // SparklingBall is not affected by gravity, so gravityCorrection is left alone.
     }
 }

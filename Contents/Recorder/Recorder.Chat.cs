@@ -19,12 +19,11 @@ public partial class Recorder
 
     public override void SetChatButtons(ref string button, ref string button2)
     {
-        button = "我去";
-        button2 = "太草了！";
+        button = "抄写";
+        button2 = "收集";
     }
 
     public override void OnChatButtonClicked(bool firstButton, ref string shopName)
     {
-        Main.NewText("何意味何意味何意味");
     }
 }

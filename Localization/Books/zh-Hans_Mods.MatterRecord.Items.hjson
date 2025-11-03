@@ -27,6 +27,8 @@ Faust: {
 	DisplayName: 《浮士德》
 	Tooltip:
 		'''
+		使用以获取一个未解锁记录的提示
+
 		[c/FF0000:背包内右键]以激活/取消
 		激活后右键背包内物品，可使用其售价20倍购买
 		每消费1铂金币降低0.01幸运
@@ -37,6 +39,14 @@ Faust: {
 	MoneySpent: 你已经在恶魔这里消费了
 	CantButIt: 此物品无法购买
 	BuyPrice: 购买需要
+	NoMoreHints: ......
+	AliceInWonderlandHint: 追寻雪白的跳跃者，用轻柔的网邀它共赴奇境
+	DonQuijoteDeLaManchaHint: 持盾冲向幻想的大敌，在无畏的突进中将其击碎
+	LittlePrinceHint: 于永恒的安眠之地，寻找一朵特别的花
+	TheOldManAndTheSeaHint: 与海中的巨兽搏斗，直至浪潮归于平静
+	WarAndPeaceHint: 与绒爪的夜行者立约，驯服一个永恒的谜题
+	TheInterpretationOfDreamsHint: 怀揣罗网沉入梦乡，在虚幻中打捞真实的碎片
+	TheoryOfFreedomHint: 毁去一朵娇艳的花，而后直面它的本质
 }
 
 LittlePrince: {

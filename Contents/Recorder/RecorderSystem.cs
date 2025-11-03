@@ -22,6 +22,8 @@ public class RecorderSystem : ModSystem
 
         if (tag.TryGet<ulong>("LR", out var records))
             _itemLockRecords = records;
+
+        _itemLockRecords[(int)ItemRecords.Faust] = true;
         base.LoadWorldData(tag);
     }
     public override void SaveWorldData(TagCompound tag)

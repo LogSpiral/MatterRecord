@@ -74,16 +74,20 @@ public class TheOldManAndTheSea : ModItem,IRecordBookItem
 
     public override bool PreDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
     {
-        itemTex ??= ModContent.Request<Texture2D>("MatterRecord/Contents/TheOldManAndTheSea/TheOldManAndTheSea_full");
-        spriteBatch.Draw(itemTex.Value, position, null, drawColor, 0, origin, scale, 0, 0);
+        if (RecorderSystem.CheckUnlock(ItemRecords.TheOldManAndTheSea)) 
+        {
+            itemTex ??= ModContent.Request<Texture2D>("MatterRecord/Contents/TheOldManAndTheSea/TheOldManAndTheSea_full");
+            spriteBatch.Draw(itemTex.Value, position, null, drawColor, 0, origin, scale, 0, 0);
+        }
         return false;
     }
-
     public override bool PreDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, ref float rotation, ref float scale, int whoAmI)
     {
-        itemTex ??= ModContent.Request<Texture2D>("MatterRecord/Contents/TheOldManAndTheSea/TheOldManAndTheSea_full");
-        spriteBatch.Draw(itemTex.Value, Item.position - Main.screenPosition, null, lightColor, rotation, itemTex.Size() * .5f, scale, 0, 0);
-
+        if (RecorderSystem.CheckUnlock(ItemRecords.TheOldManAndTheSea))
+        {
+            itemTex ??= ModContent.Request<Texture2D>("MatterRecord/Contents/TheOldManAndTheSea/TheOldManAndTheSea_full");
+            spriteBatch.Draw(itemTex.Value, Item.position - Main.screenPosition, null, lightColor, rotation, itemTex.Size() * .5f, scale, 0, 0);
+        }
         return false;
     }
 }

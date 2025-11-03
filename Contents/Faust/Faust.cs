@@ -8,6 +8,7 @@ using System.Linq;
 using System.Reflection;
 using Terraria.Audio;
 using Terraria.GameContent;
+using Terraria.GameContent.Drawing;
 using Terraria.Localization;
 using Terraria.ModLoader.Default;
 using Terraria.ModLoader.IO;
@@ -15,7 +16,7 @@ using Terraria.UI;
 
 namespace MatterRecord.Contents.Faust;
 
-public class Faust : ModItem,IRecordBookItem
+public class Faust : ModItem, IRecordBookItem
 {
     ItemRecords IRecordBookItem.RecordType => ItemRecords.Faust;
     //旧版物品说明
@@ -31,6 +32,9 @@ public class Faust : ModItem,IRecordBookItem
         Item.width = Item.height = 36;
         Item.value = Item.sellPrice(0, 1, 0, 0);
         Item.rare = ItemRarityID.Yellow;
+        Item.useTime = Item.useAnimation = 60;
+        Item.useStyle = ItemUseStyleID.HoldUp;
+        Item.noUseGraphic = true;
         base.SetDefaults();
     }
     public override void AddRecipes()
@@ -39,7 +43,65 @@ public class Faust : ModItem,IRecordBookItem
         base.AddRecipes();
     }
     public static bool Active;
+    public override bool? UseItem(Player player)
+    {
+        if (player.whoAmI != Main.myPlayer) return null;
+        var unit = Main.rand.NextVector2Unit();
+        float factor = player.itemAnimation / 60f;
+        var dust = Dust.NewDustPerfect(
+            player.Center + unit * 64 * factor,
+            DustID.DungeonSpirit,
+            -unit * 4f + player.velocity,
+            0,
+            default,
+            Main.rand.NextFloat(0.25f, 0.75f));
+        dust.noGravity = true;
+        if (player.itemAnimation == 1)
+        {
+            List<string> hints = [];
 
+            if (!RecorderSystem.CheckUnlock(ItemRecords.AliceInWonderland))
+                hints.Add("AliceInWonderlandHint");
+            if (!RecorderSystem.CheckUnlock(ItemRecords.DonQuijoteDeLaMancha))
+                hints.Add("DonQuijoteDeLaManchaHint");
+            if (!RecorderSystem.CheckUnlock(ItemRecords.LittlePrince))
+                hints.Add("LittlePrinceHint");
+            if (!RecorderSystem.CheckUnlock(ItemRecords.TheOldManAndTheSea))
+                hints.Add("TheOldManAndTheSeaHint");
+            if (!RecorderSystem.CheckUnlock(ItemRecords.WarAndPeace))
+                hints.Add("WarAndPeaceHint");
+            if (!RecorderSystem.CheckUnlock(ItemRecords.TheInterpretationOfDreams))
+                hints.Add("TheInterpretationOfDreamsHint");
+            if (!RecorderSystem.CheckUnlock(ItemRecords.TheoryOfFreedom))
+                hints.Add("TheoryOfFreedomHint");
+
+            if (hints.Count > 0)
+                CombatText.NewText(
+                    player.Hitbox,
+                    Color.MediumPurple,
+                    this.GetLocalizedValue(Main.rand.Next(hints)));
+            else
+                CombatText.NewText(
+                    player.Hitbox,
+                    Color.MediumPurple,
+                    this.GetLocalizedValue("NoMoreHints"));
+            SoundEngine.PlaySound(SoundID.Item4);
+            ParticleOrchestrator.Spawn_NightsEdge(new ParticleOrchestraSettings() { IndexOfPlayerWhoInvokedThis = (byte)Main.myPlayer, PositionInWorld = player.Center });
+            for (int n = 0; n < 60; n++)
+            {
+                unit = Main.rand.NextVector2Unit() * new Vector2(2, 1);
+                Dust.NewDustPerfect(
+                    player.Center,
+                    DustID.DungeonSpirit,
+                    -unit * 8f + player.velocity,
+                    0,
+                    Color.White with { A = 0 },
+                    Main.rand.NextFloat(0.5f, 1.5f))
+                    .noGravity = true;
+            }
+        }
+        return null;
+    }
     public override void PostDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
     {
         if (Active)
