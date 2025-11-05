@@ -1,8 +1,11 @@
 ﻿using MatterRecord.Contents.Recorder;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using MonoMod.Cil;
+using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using Terraria.DataStructures;
 using Terraria.GameInput;
 using Terraria.Localization;
@@ -11,7 +14,7 @@ using Terraria.ModLoader.IO;
 namespace MatterRecord.Contents.TheoryOfFreedom;
 
 [AutoloadEquip(EquipType.Wings)]
-public class TheoryOfFreedom : ModItem,IRecordBookItem
+public class TheoryOfFreedom : ModItem, IRecordBookItem
 {
     ItemRecords IRecordBookItem.RecordType => ItemRecords.TheoryOfFreedom;
     public override void UpdateAccessory(Player player, bool hideVisual)
@@ -77,7 +80,23 @@ public class TheoryOfFreedom : ModItem,IRecordBookItem
         //On_Player.GrappleMovement += On_Player_GrappleMovement;
         // On_Player.RefreshMovementAbilities += On_Player_RefreshMovementAbilities;
         // On_Player.RefreshDoubleJumps += On_Player_RefreshDoubleJumps;
+        IL_WorldGen.CheckJunglePlant += SpawnRecordFreedom;
         base.Load();
+    }
+
+    private static void SpawnRecordFreedom(ILContext il)
+    {
+        var cursor = new ILCursor(il);
+        if (!cursor.TryGotoNext(i => i.MatchCall(typeof(NPC).GetMethod(nameof(NPC.SpawnOnPlayer), BindingFlags.Static | BindingFlags.Public)))) return;
+        cursor.Index++;
+        cursor.EmitLdloc(18);
+        cursor.EmitLdarg0();
+        cursor.EmitLdarg1();
+        cursor.EmitDelegate<Action<int, int, int>>((index, i, j) =>
+        {
+            if (RecorderSystem.ShouldSpawnRecordItem<TheoryOfFreedom>())
+                Main.player[index].QuickSpawnItem(WorldGen.GetItemSource_FromTileBreak(i, j), ModContent.ItemType<TheoryOfFreedom>());
+        });
     }
 
     private void On_Player_RefreshDoubleJumps(On_Player.orig_RefreshDoubleJumps orig, Player self)
@@ -264,9 +283,9 @@ public class TOFGlobalProjectile : GlobalProjectile
         if ((type < ProjectileID.LunarHookSolar || type > ProjectileID.LunarHookStardust) && type != ProjectileID.Web)
             for (int num7 = 0; num7 < 1000; num7++)
             {
-                if (Main.projectile[num7].active 
-                    && Main.projectile[num7].owner == Main.myPlayer 
-                    && Main.projectile[num7].type == type 
+                if (Main.projectile[num7].active
+                    && Main.projectile[num7].owner == Main.myPlayer
+                    && Main.projectile[num7].type == type
                     && Main.projectile[num7].ai[0] != 2f)
                     return null;
             }
@@ -276,8 +295,8 @@ public class TOFGlobalProjectile : GlobalProjectile
             for (int num7 = 0; num7 < 1000; num7++)
             {
                 if (Main.projectile[num7].active
-                    && Main.projectile[num7].owner == Main.myPlayer 
-                    && Main.projectile[num7].type == type 
+                    && Main.projectile[num7].owner == Main.myPlayer
+                    && Main.projectile[num7].type == type
                     && Main.projectile[num7].ai[0] != 2f)
                     c++;
             }
@@ -289,9 +308,9 @@ public class TOFGlobalProjectile : GlobalProjectile
             int c = 0;
             for (int num7 = 0; num7 < 1000; num7++)
             {
-                if (Main.projectile[num7].active 
-                    && Main.projectile[num7].owner == Main.myPlayer 
-                    && Main.projectile[num7].type is >= ProjectileID.LunarHookSolar and <= ProjectileID.LunarHookStardust 
+                if (Main.projectile[num7].active
+                    && Main.projectile[num7].owner == Main.myPlayer
+                    && Main.projectile[num7].type is >= ProjectileID.LunarHookSolar and <= ProjectileID.LunarHookStardust
                     && Main.projectile[num7].ai[0] != 2f)// && Main.projectile[num7].type == type
                     c++;
             }

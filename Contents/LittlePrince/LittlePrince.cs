@@ -55,7 +55,7 @@ public class LittlePrincePlayer : ModPlayer
     }
 }
 
-public class LittlePrince : ModItem,IRecordBookItem
+public class LittlePrince : ModItem, IRecordBookItem
 {
     ItemRecords IRecordBookItem.RecordType => ItemRecords.LittlePrince;
     public override void AddRecipes()
@@ -177,7 +177,7 @@ public class LittlePrinceRoseSpawn : GlobalTile
             if (!Main.rand.NextBool(chance)) continue;
             int num2 = WorldGen.genRand.Next(Math.Max(10, i - 10), Math.Min(Main.maxTilesX - 10, i + 10));
             int num3 = WorldGen.genRand.Next(Math.Max(10, j - 10), Math.Min(Main.maxTilesY - 10, j + 10));
-            if (HasValidGroundForAbigailsFlowerBelowSpot(num2, num3) && NoNearbyAbigailsFlower(num2, num3) && WorldGen.PlaceTile(num2, num3, ModContent.TileType<LittlePrinceRose>(), mute: true))
+            if (HasValidGroundForAbigailsFlowerBelowSpot(num2, num3) && NoNearbyAbigailsFlower(num2, num3) && RecorderSystem.ShouldSpawnRecordItem<LittlePrince>() && WorldGen.PlaceTile(num2, num3, ModContent.TileType<LittlePrinceRose>(), mute: true))
             {
                 if (Main.dedServ && Framing.GetTileSafely(num2, num3) != null && Framing.GetTileSafely(num2, num3).HasTile)
                     NetMessage.SendTileSquare(-1, num2, num3);

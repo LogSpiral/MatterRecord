@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using MatterRecord.Contents.Recorder;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 using System.IO;
@@ -78,7 +79,6 @@ public class AliceInWonderlandPlayer : ModPlayer
         orig.Invoke(self);
     }
 
-    public bool CapturedAliceRabbit;
     public int PortalSpawnedToday;
     public bool PortalSpawnLock;
     public Vector2? CurrentPortalStart;
@@ -87,15 +87,12 @@ public class AliceInWonderlandPlayer : ModPlayer
 
     public override void SaveData(TagCompound tag)
     {
-        tag.Add(nameof(CapturedAliceRabbit), CapturedAliceRabbit);
         tag.Add(nameof(PortalSpawnedToday), PortalSpawnedToday);
         base.SaveData(tag);
     }
 
     public override void LoadData(TagCompound tag)
     {
-        if (tag.TryGet(nameof(CapturedAliceRabbit), out bool flag))
-            CapturedAliceRabbit = flag;
         if (tag.TryGet(nameof(PortalSpawnedToday), out int count))
             PortalSpawnedToday = count;
         base.LoadData(tag);
@@ -116,10 +113,11 @@ public class AliceInWonderlandPlayer : ModPlayer
         ];
     public override bool? CanCatchNPC(NPC target, Item item)
     {
-        if (target is { SpawnedFromStatue: false } && BunnyTypes.Contains(target.type) && (!CapturedAliceRabbit || Main.rand.NextBool(100)))
+        var flag = RecorderSystem.ShouldSpawnRecordItem<AliceInWonderlandWatch>();
+        Main.NewText(flag);
+        if (target is { SpawnedFromStatue: false } && BunnyTypes.Contains(target.type) && flag)
         {
             target.SpawnedFromStatue = true;
-            CapturedAliceRabbit = true;
             Player.QuickSpawnItem(Player.GetSource_CatchEntity(target), ModContent.ItemType<AliceInWonderlandWatch>());
         }
         return null;

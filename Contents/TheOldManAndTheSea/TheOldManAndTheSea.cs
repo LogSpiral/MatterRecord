@@ -6,7 +6,7 @@ using Terraria.DataStructures;
 
 namespace MatterRecord.Contents.TheOldManAndTheSea;
 
-public class TheOldManAndTheSea : ModItem,IRecordBookItem
+public class TheOldManAndTheSea : ModItem, IRecordBookItem
 {
     ItemRecords IRecordBookItem.RecordType => ItemRecords.TheOldManAndTheSea;
     //public override string Texture => $"Terraria/Images/Item_{ItemID.GoldenFishingRod}";
@@ -74,7 +74,7 @@ public class TheOldManAndTheSea : ModItem,IRecordBookItem
 
     public override bool PreDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
     {
-        if (RecorderSystem.CheckUnlock(ItemRecords.TheOldManAndTheSea)) 
+        if (RecorderSystem.CheckUnlock(ItemRecords.TheOldManAndTheSea))
         {
             itemTex ??= ModContent.Request<Texture2D>("MatterRecord/Contents/TheOldManAndTheSea/TheOldManAndTheSea_full");
             spriteBatch.Draw(itemTex.Value, position, null, drawColor, 0, origin, scale, 0, 0);
@@ -139,5 +139,40 @@ public class TheOldManAndTheSeaNPCSpawnRate : GlobalNPC
         maxSpawns *= 6;
 
         base.EditSpawnRate(player, ref spawnRate, ref maxSpawns);
+    }
+}
+
+public class TheOldManAndTheSeaRecordSpawnNPC : GlobalNPC
+{
+    public override void OnKill(NPC npc)
+    {
+        if (Main.netMode == NetmodeID.MultiplayerClient) return;
+        if (npc.type != NPCID.DukeFishron) return;
+        if (npc.lastInteraction != 255 && Main.player[npc.lastInteraction] is { active: true } player && RecorderSystem.ShouldSpawnRecordItem<TheOldManAndTheSea>())
+            player.QuickSpawnItem(npc.GetItemSource_Loot(), ModContent.ItemType<TheOldManAndTheSea>());
+
+    }
+}
+public class TheOldManAndTheSeaRecordSpawnPlayer : ModPlayer
+{
+    public override void Kill(double damage, int hitDirection, bool pvp, PlayerDeathReason damageSource)
+    {
+        if (Main.netMode == NetmodeID.MultiplayerClient) return;
+        int index = NPC.FindFirstNPC(NPCID.DukeFishron);
+        if (index != -1)
+        {
+            var npc = Main.npc[index];
+            bool flag = true;
+            foreach (var player in Main.player)
+            {
+                if (!player.active || player.dead || Vector2.Distance(player.Center, npc.Center) > 5600f)
+                    continue;
+                flag = false;
+                break;
+            }
+            if (flag && RecorderSystem.ShouldSpawnRecordItem<TheOldManAndTheSea>())
+                Player.QuickSpawnItem(npc.GetItemSource_Loot(), ModContent.ItemType<TheOldManAndTheSea>());
+
+        }
     }
 }

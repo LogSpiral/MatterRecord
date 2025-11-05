@@ -1,16 +1,15 @@
 ﻿using MatterRecord.Contents.Recorder;
 using Microsoft.Xna.Framework;
 using System;
+using Terraria.GameContent;
 
 namespace MatterRecord.Contents.TheInterpretationOfDreams;
 
-public class TheInterpretationOfDreams : ModItem,IRecordBookItem
+public class TheInterpretationOfDreams : ModItem, IRecordBookItem
 {
     ItemRecords IRecordBookItem.RecordType => ItemRecords.TheInterpretationOfDreams;
     public override void SetStaticDefaults()
     {
-        ItemID.Sets.ShimmerTransformToItem[Type] = ItemID.BugNet;
-        ItemID.Sets.ShimmerTransformToItem[ItemID.BugNet] = Type;
         base.SetStaticDefaults();
     }
 
@@ -29,6 +28,24 @@ public class TheInterpretationOfDreams : ModItem,IRecordBookItem
         Item.scale = 1.15f;
         base.SetDefaults();
     }
+
+    public override void Load()
+    {
+        On_PlayerSleepingHelper.StartSleeping += SpawnRecordDream;
+    }
+
+    private static void SpawnRecordDream(On_PlayerSleepingHelper.orig_StartSleeping orig, ref PlayerSleepingHelper self, Player player, int x, int y)
+    {
+        orig?.Invoke(ref self, player, x, y);
+        if (RecorderSystem.ShouldSpawnRecordItem<TheInterpretationOfDreams>())
+        {
+            foreach (var item in player.inventory)
+                if (item.type == ItemID.BugNet)
+                    player.QuickSpawnItem(player.GetSource_Misc("Sleeping"), ModContent.ItemType<TheInterpretationOfDreams>());
+
+        }
+    }
+
     public override void AddRecipes()
     {
         this.RegisterBookRecipe(ItemID.BugNet);

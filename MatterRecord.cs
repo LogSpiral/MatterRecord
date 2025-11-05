@@ -241,30 +241,6 @@ public enum PacketType : byte
     LordOfFilesChargingSync,
     AliceInWonderLandSync,
 }
-
-public class ContentsLoots : GlobalNPC
-{
-    public override void ModifyNPCLoot(NPC npc, NPCLoot npcLoot)
-    {
-        int itemtype = npc.type switch
-        {
-            NPCID.KingSlime => ModContent.ItemType<TheAdventureofSherlockHolmes>(),
-            NPCID.DukeFishron => ModContent.ItemType<TheOldManAndTheSea>(),
-            NPCID.Plantera => ModContent.ItemType<TheoryOfFreedom>(),
-            NPCID.EyeofCthulhu => ModContent.ItemType<DonQuijoteDeLaMancha>(),
-            NPCID.DD2DarkMageT1 or NPCID.DD2DarkMageT3 => ModContent.ItemType<TheoryofJustice>(),
-            NPCID.BrainofCthulhu => ModContent.ItemType<Faust>(),
-            _ => -1
-        };
-        if (itemtype != -1)
-            npcLoot.Add(ItemDropRule.Common(itemtype));
-
-        if (npc.type is NPCID.EaterofWorldsHead or NPCID.EaterofWorldsBody or NPCID.EaterofWorldsTail)
-            npcLoot.Add(ItemDropRule.ByCondition(new Conditions.LegacyHack_IsABoss(), ModContent.ItemType<Faust>()));
-        base.ModifyNPCLoot(npc, npcLoot);
-    }
-}
-
 public class MatterRecordConfig : ModConfig
 {
     public static MatterRecordConfig Instance => ModContent.GetInstance<MatterRecordConfig>();

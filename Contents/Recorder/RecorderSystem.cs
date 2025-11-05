@@ -46,4 +46,60 @@ public class RecorderSystem : ModSystem
     {
         Instance = null;
     }
+
+
+    public static bool ShouldSpawnRecordItem<T>() where T : ModItem
+    {
+        int recordType = ModContent.ItemType<T>();
+        if (Main.dedServ)
+        {
+            foreach (var player in Main.player)
+            {
+                if (!player.active) continue;
+                Item[][] inventories =
+                [
+                    player.inventory,
+                    player.armor,
+                    player.dye,
+                    player.miscEquips,
+                    player.miscDyes,
+                    [player.trashItem],
+                    player.bank.item,
+                    player.bank2.item,
+                    player.bank3.item,
+                    player.bank4.item
+                ];
+                foreach (var inventory in inventories)
+                    foreach (var item in inventory)
+                    {
+                        if (item.type == recordType)
+                            return false;
+                    }
+            }
+        }
+        else
+        {
+            var player = Main.LocalPlayer;
+            Item[][] inventories =
+            [
+                player.inventory,
+                player.armor,
+                player.dye,
+                player.miscEquips,
+                player.miscDyes,
+                [player.trashItem],
+                player.bank.item,
+                player.bank2.item,
+                player.bank3.item,
+                player.bank4.item
+            ];
+            foreach (var inventory in inventories)
+                foreach (var item in inventory)
+                {
+                    if (item.type == recordType)
+                        return false;
+                }
+        }
+        return true;
+    }
 }

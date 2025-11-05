@@ -6,6 +6,7 @@ using MatterRecord.Contents.DonQuijoteDeLaMancha.Core.Visuals;
 using MatterRecord.Contents.Recorder;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoMod.Cil;
 using ReLogic.Content;
 using System;
 using System.Collections.Generic;
@@ -23,7 +24,7 @@ using Terraria.UI.Chat;
 
 namespace MatterRecord.Contents.DonQuijoteDeLaMancha;
 
-public class DonQuijoteDeLaMancha : MeleeSequenceItem<DonQuijoteDeLaManchaProj>,IRecordBookItem
+public class DonQuijoteDeLaMancha : MeleeSequenceItem<DonQuijoteDeLaManchaProj>, IRecordBookItem
 {
     ItemRecords IRecordBookItem.RecordType => ItemRecords.DonQuijoteDeLaMancha;
     public static bool SlashActive => MatterRecordConfig.Instance.DonQuijoteSlashActive;
@@ -560,7 +561,7 @@ public class DonQuijoteDeLaManchaProj : MeleeSequenceProj
         public override void UpdateStatus(bool triggered)
         {
             base.UpdateStatus(triggered);
-            if (Owner is Player plr) 
+            if (Owner is Player plr)
             {
                 var mplr = plr.GetModPlayer<DonQuijoteDeLaManchaPlayer>();
                 mplr.pendingEndurance = 5;
@@ -694,7 +695,31 @@ public class DonQuijoteDeLaManchaPlayer : ModPlayer
         //    new Condition(
         //        Language.GetOrRegister("Mods.MatterRecord.Condition.DonQuijoteDeLaManchaStabing"),
         //        () => Main.LocalPlayer.GetModPlayer<DonQuijoteDeLaManchaPlayer>().StabTimeLeft > 0));
+
+        IL_Player.DashMovement += SpawnRecordMovement;
+
         base.Load();
+    }
+
+    private static void SpawnRecordMovement(ILContext il)
+    {
+        var cursor = new ILCursor(il);
+        if (!cursor.TryGotoNext(
+            i => i
+            .MatchCall(typeof(Player).
+            GetMethod(nameof(Player.ApplyDamageToNPC),
+            BindingFlags.Instance | BindingFlags.Public))))
+            return;
+
+        cursor.Index++;
+        cursor.EmitLdarg0();
+        cursor.EmitLdloc2();
+        cursor.EmitDelegate<Action<Player, NPC>>((player, npc) =>
+        {
+            if (npc.life < 0 && RecorderSystem.ShouldSpawnRecordItem<DonQuijoteDeLaMancha>())
+                player.QuickSpawnItem(npc.GetItemSource_Loot(), ModContent.ItemType<DonQuijoteDeLaMancha>());
+
+        });
     }
 
     public override void ResetEffects()
@@ -894,5 +919,15 @@ public class WindMill : ModProjectile
         lightColor *= MathHelper.SmoothStep(0, 1, (90 - MathF.Abs(90 - Projectile.timeLeft)) / 10f);
         Main.spriteBatch.Draw(wheelTex.Value, Projectile.Center + new Vector2(0, -12) - Main.screenPosition, null, lightColor, Projectile.ai[1], new Vector2(53, 55), 1f, 0, 0);
         base.PostDraw(lightColor);
+    }
+}
+
+
+public class DonQuijoteSpawnRecordNPC : GlobalNPC
+{
+    public override void OnHitByItem(NPC npc, Player player, Item item, NPC.HitInfo hit, int damageDone)
+    {
+        Main.NewText(item);
+        base.OnHitByItem(npc, player, item, hit, damageDone);
     }
 }
