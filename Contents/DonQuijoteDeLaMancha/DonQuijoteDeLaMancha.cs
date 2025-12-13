@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent;
@@ -696,11 +697,13 @@ public class DonQuijoteDeLaManchaPlayer : ModPlayer
         //        Language.GetOrRegister("Mods.MatterRecord.Condition.DonQuijoteDeLaManchaStabing"),
         //        () => Main.LocalPlayer.GetModPlayer<DonQuijoteDeLaManchaPlayer>().StabTimeLeft > 0));
 
-        IL_Player.DashMovement += SpawnRecordMovement;
+        // 原先由克盾冲刺击败敌人生成，后因为克盾为专家专属而调整
+        // IL_Player.DashMovement += SpawnRecordMovement;
 
         base.Load();
     }
 
+    /*
     private static void SpawnRecordMovement(ILContext il)
     {
         var cursor = new ILCursor(il);
@@ -721,6 +724,7 @@ public class DonQuijoteDeLaManchaPlayer : ModPlayer
 
         });
     }
+    */
 
     public override void ResetEffects()
     {
@@ -829,6 +833,16 @@ public class DonQuijoteDeLaManchaPlayer : ModPlayer
         if (itemDefinition.ToString() != clone.itemDefinition.ToString())
             SyncPlayer(toWho: -1, fromWho: Main.myPlayer, newPlayer: false);
     }
+
+
+    public override void OnHitNPCWithProj(Projectile projectile, NPC npc, NPC.HitInfo hit, int damageDone)
+    {
+        if (projectile.type is ProjectileID.JoustingLance or ProjectileID.HallowJoustingLance or ProjectileID.ShadowJoustingLance)
+        {
+            if (npc.life < 0 && RecorderSystem.ShouldSpawnRecordItem<DonQuijoteDeLaMancha>())
+                Player.QuickSpawnItem(npc.GetItemSource_Loot(), ModContent.ItemType<DonQuijoteDeLaMancha>());
+        }
+    }
 }
 
 public class DonQuijoteGBItem : GlobalItem
@@ -919,15 +933,5 @@ public class WindMill : ModProjectile
         lightColor *= MathHelper.SmoothStep(0, 1, (90 - MathF.Abs(90 - Projectile.timeLeft)) / 10f);
         Main.spriteBatch.Draw(wheelTex.Value, Projectile.Center + new Vector2(0, -12) - Main.screenPosition, null, lightColor, Projectile.ai[1], new Vector2(53, 55), 1f, 0, 0);
         base.PostDraw(lightColor);
-    }
-}
-
-
-public class DonQuijoteSpawnRecordNPC : GlobalNPC
-{
-    public override void OnHitByItem(NPC npc, Player player, Item item, NPC.HitInfo hit, int damageDone)
-    {
-        Main.NewText(item);
-        base.OnHitByItem(npc, player, item, hit, damageDone);
     }
 }
