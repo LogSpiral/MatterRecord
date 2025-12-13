@@ -4,14 +4,14 @@ namespace MatterRecord.Contents.Recorder;
 
 public class RecorderPlayer : ModPlayer
 {
-    public double UniqueIDForRecorder;
+    public bool MetWithRecorder;
     public override void LoadData(TagCompound tag)
     {
-        tag.TryGet("UID",out UniqueIDForRecorder);
+        tag.TryGet("Met",out MetWithRecorder);
     }
     public override void SaveData(TagCompound tag)
     {
-        if (UniqueIDForRecorder != 0)
-            tag["UID"] = UniqueIDForRecorder;
+        if (MetWithRecorder)
+            tag["Met"] = true;
     }
 }

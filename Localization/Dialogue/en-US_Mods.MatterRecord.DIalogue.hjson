@@ -1,6 +1,12 @@
 Recorder: {
-	FirstMeet: 初次见面。
-	StandardDialogue1: 总有一天人们会讲述<玩家名称>的传奇……
+	FirstMeet:
+		'''
+		初次见面，我是{0}，目前正在寻找一些「事象记录」，有兴趣帮忙吗？
+		/有奖励吗？
+		当然，你把它们带回来，我就把抄本做成实用小道具，有兴趣帮忙吗？
+		这算预付款，能让你找起来轻松点
+		'''
+	StandardDialogue1: 总有一天人们会讲述{0}的传奇……
 	StandardDialogue2: 在天国尚未曾陨落的时候，人世间一切宝贵的智慧都能够在损失之前得以保存……在死之后
 	StandardDialogue3: 我曾在统辖局呆过一段时间，他们把我这种外派出差称为休假
 	StandardDialogue4: 我的工作是追寻那些散佚的事象记录，如果你找到它们的话记得来找我
@@ -23,13 +29,13 @@ Recorder: {
 		作为谢礼，这把枪就送你，别担心，我还有很多
 		'''
 	// 持有未解锁物品对话
-	AliceInWonderlandUnocking: 掉进兔子洞，喝下会变小的药水……一种相当低效的旅行方式
+	AliceInWonderlandUnlocking: 掉进兔子洞，喝下会变小的药水……一种相当低效的旅行方式
 	DonQuijoteDeLaManchaUnlocking: 我不得不提醒你，这家伙有着鼓动持有者挑战风车的……不良记录
 	LittlePrinceUnlocking: 我猜你把玫瑰花看成了阿比盖尔……
 	TheOldManAndTheSeaUnlocking: 我没有和大鱼搏斗过，但我试过跟渔夫讲道理，我把左轮按到他的脑门上时他才承认这是老子的海
 	TheoryOfFreedomUnlocking: 没有什么东西是完全自由的，就连鸟儿也被天空束缚——以及我被工作束缚
 	WarAndPeaceUnlocking: 哦，了不起，你找到了遗失的另一半，我看看能不能凭着记忆复原它
-	TheInterpretationOfDreamsUnlocing: 它试图为混沌赋予秩序，精神可嘉，就像试图让史莱姆排成整齐的队列一样
+	TheInterpretationOfDreamsUnlocking: 它试图为混沌赋予秩序，精神可嘉，就像试图让史莱姆排成整齐的队列一样
 	// 收集任务奖励
 	HolmesCollected: 福尔摩斯先生能够帮你注意到一些被忽略的细节
 	JusticeCollected: 我把无知之幕做成了斗篷，合身吗，不合身我也不会改的
@@ -46,6 +52,6 @@ Recorder: {
 	CloseToAngler: <渔夫名称>在我身边的时候，我的佩枪就一直响，我应该给他来上一发吗？
 	NeutralHappiness: 这个地方还不错……如果忽略掉那些小麻烦的话
 	// NPC相关闲聊
-	GuideDialogue: <向导名称>似乎很可疑，你有想过为什么他懂的这么多吗？
+	GuideDialogue: "{0}似乎很可疑，你有想过为什么他懂的这么多吗？"
 	AnglerDialogue: 为什么我附近会住着一个死小孩？我希望下次钓鱼时你能把他绑鱼竿上
 }

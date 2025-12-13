@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using MatterRecord.Contents.Recorder;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using System;
@@ -186,7 +187,7 @@ public class LordOfTheFilesSystem : ModSystem
         Player player = Main.LocalPlayer;
 
         float progressTarget = 0;
-        if (player.HeldItem.ModItem is LordOfTheFlies)
+        if (player.HeldItem.ModItem is LordOfTheFlies && RecorderSystem.CheckUnlock(ItemRecords.LordOfTheFlies))
         {
             var mplr = player.GetModPlayer<LordOfTheFliesPlayer>();
             var target = mplr.ChargingEnergy / 120f;

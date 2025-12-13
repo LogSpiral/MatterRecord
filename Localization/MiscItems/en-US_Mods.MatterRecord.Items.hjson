@@ -69,3 +69,12 @@ InternalDocument: {
 		More and more documents...
 		'''
 }
+
+ForgetPill: {
+	DisplayName: Forget Pill
+	Tooltip:
+		'''
+		Forget every records
+		[DEBUG ITEM]
+		'''
+}

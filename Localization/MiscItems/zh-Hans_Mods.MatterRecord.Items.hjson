@@ -60,3 +60,13 @@ InternalDocument: {
 		文件越来越多……
 		'''
 }
+
+ForgetPill: {
+	DisplayName: 遗忘胶囊
+	Tooltip:
+		'''
+		忘却所有事象记录
+		[调试用物品]
+		"嘿这个真的是药丸不是蜥蜴太阳电池！"
+		'''
+}

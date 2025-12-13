@@ -21,19 +21,21 @@ Sequence: {
 NPCs: {
 	Recorder: {
 		DisplayName: Recorder
+		Copy: Copy
+		Collect: Collect
 
 		TownNPCMood: {
-			Content: 我很满足。
-			NoHome: 我讨厌没有家。
-			FarFromHome: 我离家太远了。
-			LoveSpace: 我非常喜欢有这么大的空间。
-			DislikeCrowded: 我不喜欢这么拥挤。
-			HateCrowded: 我讨厌这么拥挤。
-			LikeBiome: 我喜欢{BiomeName}。
-			DislikeBiome: 我不喜欢{BiomeName}。
-			LoveNPC: 我非常喜欢{NPCName}。
-			LikeNPC: 我喜欢{NPCName}。
-			HateNPC: 我讨厌{NPCName}。
+			Content: 这个地方还不错……如果忽略掉那些小麻烦的话
+			NoHome: 有椅子和工作台就行，监狱也无所谓，我只是想有个地方能休息
+			FarFromHome: 好像走太远了……完全找不到回去的路
+			LoveSpace: 这里安静得让人有点不自在，我该建议搬几个邻居过来
+			DislikeCrowded: 声音在这里无处可去，总能飘进我的耳朵里，也许这里太挤了
+			HateCrowded: 声音在这里无处可去，总能飘进我的耳朵里，也许这里太挤了
+			LikeBiome: "{BiomeName}，沙土，阳光，还有轻柔的海风，一切都完美的不像话"
+			DislikeBiome: 这里热的让人头昏眼花，{BiomeName}带给人的可怕意象与其相比简直不算什么
+			LoveNPC: 我喜欢{NPCName}，她是我见过唯一能把绷带打得比废话还快的人
+			LikeNPC: "{NPCName}总是邀请我参加她的派对"
+			HateNPC: "{NPCName}在我身边的时候，我的佩枪就一直响，我应该给他来上一发吗？"
 			LikeNPC_Princess: 我喜欢 {NPCName}。
 			Princess_LovesNPC: 我喜欢 {NPCName}。
 		}
