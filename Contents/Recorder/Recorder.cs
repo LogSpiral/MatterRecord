@@ -110,10 +110,7 @@ public partial class Recorder : ModNPC
     public override List<string> SetNPCNameList()
     {
         return [
-                "Someone",
-                "Somebody",
-                "Blocky",
-                "Colorless"
+                this.GetLocalizedValue("Name")
             ];
     }
 
@@ -161,8 +158,6 @@ public partial class Recorder : ModNPC
                     damage = curDamage;
             }
         }
-        Main.NewText(damage);
-        Console.WriteLine(damage);
         damage = damage * 2 / 5;
         if (damage < 1) damage = 1;
         knockback = 4f;
@@ -178,11 +173,6 @@ public partial class Recorder : ModNPC
     {
         projType = ProjectileID.Bullet;
         attackDelay = 1;
-    }
-    public override void TownNPCAttackShoot(ref bool inBetweenShots)
-    {
-        Main.NewText(inBetweenShots);
-        base.TownNPCAttackShoot(ref inBetweenShots);
     }
     public override void DrawTownAttackGun(ref Texture2D item, ref Rectangle itemFrame, ref float scale, ref int horizontalHoldoutOffset)
     {

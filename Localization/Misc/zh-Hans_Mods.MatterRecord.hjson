@@ -21,8 +21,10 @@ Sequence: {
 NPCs: {
 	Recorder: {
 		DisplayName: 记录者
+		Name: 乐九
 		Copy: 抄写
 		Collect: 收集
+		Spawn: 正在生成记录者
 
 		TownNPCMood: {
 			Content: 这个地方还不错……如果忽略掉那些小麻烦的话

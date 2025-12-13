@@ -113,9 +113,7 @@ public class AliceInWonderlandPlayer : ModPlayer
         ];
     public override bool? CanCatchNPC(NPC target, Item item)
     {
-        var flag = RecorderSystem.ShouldSpawnRecordItem<AliceInWonderlandWatch>();
-        Main.NewText(flag);
-        if (target is { SpawnedFromStatue: false } && BunnyTypes.Contains(target.type) && flag)
+        if (target is { SpawnedFromStatue: false } && BunnyTypes.Contains(target.type) && RecorderSystem.ShouldSpawnRecordItem<AliceInWonderlandWatch>())
         {
             target.SpawnedFromStatue = true;
             Player.QuickSpawnItem(Player.GetSource_CatchEntity(target), ModContent.ItemType<AliceInWonderlandWatch>());

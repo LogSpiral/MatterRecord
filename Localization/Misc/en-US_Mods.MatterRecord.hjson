@@ -21,8 +21,10 @@ Sequence: {
 NPCs: {
 	Recorder: {
 		DisplayName: Recorder
+		Name: Joyce
 		Copy: Copy
 		Collect: Collect
+		Spawn: Spawning Recorder
 
 		TownNPCMood: {
 			Content: 这个地方还不错……如果忽略掉那些小麻烦的话

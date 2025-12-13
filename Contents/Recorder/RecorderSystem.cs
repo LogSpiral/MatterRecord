@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Terraria.DataStructures;
+using Terraria.Localization;
 using Terraria.ModLoader.IO;
 using Terraria.Utilities;
+using Terraria.WorldBuilding;
 
 namespace MatterRecord.Contents.Recorder;
 
@@ -94,5 +97,33 @@ public class RecorderSystem : ModSystem
                 }
         }
         return true;
+    }
+    public override void ModifyWorldGenTasks(List<GenPass> tasks, ref double totalWeight)
+    {
+        int GuideIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Guide"));
+
+        if (GuideIndex != -1)
+        {
+            tasks.Insert(GuideIndex + 1, new RecorderSpawnPass());
+        }
+    }
+}
+public class RecorderSpawnPass : GenPass
+{
+    public RecorderSpawnPass() : base("Recorder", 1)
+    {
+    }
+
+    public override void ApplyPass(GenerationProgress progress, GameConfiguration configuration)
+    {
+        progress.Set(1.0);
+
+        progress.Message = Language.GetTextValue("Mods.MatterRecord.NPCs.Recorder.Spawn");
+
+        int num297 = NPC.NewNPC(new EntitySource_WorldGen(), Main.spawnTileX * 16, Main.spawnTileY * 16, ModContent.NPCType<Recorder>());
+        Main.npc[num297].homeTileX = Main.spawnTileX;
+        Main.npc[num297].homeTileY = Main.spawnTileY;
+        Main.npc[num297].direction = 1;
+        Main.npc[num297].homeless = true;
     }
 }
