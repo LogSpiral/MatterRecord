@@ -256,7 +256,7 @@ namespace MatterRecord.Contents.EtherChest
         }
     }
 
-    public class EtherChestPass : ILoadable
+    /*public class EtherChestPass : ILoadable
     {
         private void Detour_Shimmer(WorldGen.orig_GenPassDetour orig, object self, GenerationProgress progress, GameConfiguration configuration)
         {
@@ -290,5 +290,5 @@ namespace MatterRecord.Contents.EtherChest
 
         public void Unload()
         { }
-    }
+    }*/
 }

@@ -84,16 +84,6 @@ public partial class Recorder : ModNPC
     // Returning false will allow you to manually draw your NPC
     public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
     {
-        // This code slowly rotates the NPC in the bestiary
-        // (simply checking NPC.IsABestiaryIconDummy and incrementing NPC.Rotation won't work here as it gets overridden by drawModifiers.Rotation each tick)
-        if (NPCID.Sets.NPCBestiaryDrawOffset.TryGetValue(Type, out NPCID.Sets.NPCBestiaryDrawModifiers drawModifiers))
-        {
-            drawModifiers.Rotation += 0.001f;
-
-            // Replace the existing NPCBestiaryDrawModifiers with our new one with an adjusted rotation
-            NPCID.Sets.NPCBestiaryDrawOffset.Remove(Type);
-            NPCID.Sets.NPCBestiaryDrawOffset.Add(Type, drawModifiers);
-        }
 
         return true;
     }
