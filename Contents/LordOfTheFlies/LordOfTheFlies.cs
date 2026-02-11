@@ -369,6 +369,11 @@ public class LordOfTheFlies : ModItem,IRecordBookItem
         //damage.Additive += factor2;
         //base.ModifyWeaponDamage(player, ref damage);
     }
+
+    public override void UpdateInventory(Player player)
+    {
+        Item.useAmmo = this.IsRecordUnlocked ? AmmoID.Bullet : AmmoID.None;
+    }
 }
 
 public class LordOfTheFliesAnnihilationBulletLayer : PlayerDrawLayer

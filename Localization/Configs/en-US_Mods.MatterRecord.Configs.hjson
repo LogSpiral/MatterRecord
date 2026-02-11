@@ -2,12 +2,12 @@ MatterRecordConfig: {
 	DisplayName: Matter Record Config
 
 	DonQuijoteSlashActive: {
-		Label: "[i:MatterRecord/DonQuijoteDeLaMancha]Don Quijote Left-Click Slash Mode"
+		Label: "[records:MatterRecord/DonQuijoteDeLaMancha]Don Quijote Left-Click Slash Mode"
 		Tooltip: Enables melee projectile mode (disabled by default)
 	}
 
 	LordOfTheFliesUIReset: {
-		Label: "[i:MatterRecord/LordOfTheFlies]Reset the position of LordOfTheFlies's UI To Default"
+		Label: "[records:MatterRecord/LordOfTheFlies]Reset the position of LordOfTheFlies's UI To Default"
 		Tooltip: ""
 	}
 }
