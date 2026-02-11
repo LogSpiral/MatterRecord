@@ -113,7 +113,7 @@ public class SteampunkerDream() : UnlockLikeDreams(DreamState.Steampunker, () =>
     public override void ExtraIngredient(Recipe recipe) => recipe.AddIngredient(ItemID.Cog);
 }
 
-public class DryadDream() : UnlockLikeDreams(DreamState.Dryad, NPC.SpawnAllowed_DyeTrader)
+public class DryadDream() : UnlockLikeDreams(DreamState.Dryad, () => NPC.downedBoss1 || NPC.downedBoss2 || NPC.downedBoss3)
 {
     public override void ExtraIngredient(Recipe recipe) => recipe.AddIngredient(ItemID.PurificationPowder);
 }
