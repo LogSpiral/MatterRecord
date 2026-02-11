@@ -4,207 +4,61 @@ using MonoMod.Cil;
 using System;
 using Terraria.DataStructures;
 
-namespace MatterRecord.Contents.ProtagonistAura
+namespace MatterRecord.Contents.ProtagonistAura;
+public class ProtagonistAura : ModItem
 {
-    //[AutoloadEquip(EquipType.Head,EquipType.Body,EquipType.Legs)]
-    public class ProtagonistAura : ModItem
+    public override void Load()
     {
-        public override void Load()
-        {
-            if (Main.dedServ)
-                return;
+        if (Main.dedServ)
+            return;
 
-            // 注册上相应部位的贴图
-            EquipLoader.AddEquipTexture(Mod, $"{Texture}_{EquipType.Head}", EquipType.Head, this);
-            EquipLoader.AddEquipTexture(Mod, $"{Texture}_{EquipType.Body}", EquipType.Body, this);
-            EquipLoader.AddEquipTexture(Mod, $"{Texture}_{EquipType.Legs}", EquipType.Legs, this);
-        }
-
-        private void SetupDrawing()
-        {
-            // Since the equipment textures weren't loaded on the server, we can't have this code running server-side
-            if (Main.dedServ)
-                return;
-
-            // 初始化一些信息
-            int equipSlotHead = EquipLoader.GetEquipSlot(Mod, Name, EquipType.Head);
-            int equipSlotBody = EquipLoader.GetEquipSlot(Mod, Name, EquipType.Body);
-            int equipSlotLegs = EquipLoader.GetEquipSlot(Mod, Name, EquipType.Legs);
-
-            ArmorIDs.Head.Sets.DrawHead[equipSlotHead] = false; // 隐藏原版头部绘制
-            ArmorIDs.Body.Sets.HidesTopSkin[equipSlotBody] = true; // 隐藏上身皮肤绘制
-            ArmorIDs.Body.Sets.HidesArms[equipSlotBody] = true; // 隐藏皮肤手臂
-            ArmorIDs.Legs.Sets.HidesBottomSkin[equipSlotLegs] = true; // 隐藏皮肤
-        }
-
-        public override void SetStaticDefaults()
-        {
-            SetupDrawing();
-        }
-
-        public override void UpdateAccessory(Player player, bool hideVisual)
-        {
-            player.GetModPlayer<ProtagonistAuraPlayer>().HasProtagonistAura = !hideVisual;
-            base.UpdateAccessory(player, hideVisual);
-        }
-
-        public override void UpdateVanity(Player player)
-        {
-            player.GetModPlayer<ProtagonistAuraPlayer>().HasProtagonistAura = true;
-            base.UpdateVanity(player);
-        }
-
-        public override void SetDefaults()
-        {
-            Item.width = 18;
-            Item.height = 14;
-            Item.vanity = true;
-            Item.rare = ItemRarityID.Pink;
-            Item.value = Item.buyPrice(0, 2);
-            Item.accessory = true;
-        }
+        // 注册上相应部位的贴图
+        EquipLoader.AddEquipTexture(Mod, $"{Texture}_{EquipType.Head}", EquipType.Head, this);
+        EquipLoader.AddEquipTexture(Mod, $"{Texture}_{EquipType.Body}", EquipType.Body, this);
+        EquipLoader.AddEquipTexture(Mod, $"{Texture}_{EquipType.Legs}", EquipType.Legs, this);
     }
 
-    public class ProtagonistAuraPlayer : ModPlayer
+    private void SetupDrawing()
     {
-        public bool HasProtagonistAura;
-        public int cDye;
+        // Since the equipment textures weren't loaded on the server, we can't have this code running server-side
+        if (Main.dedServ)
+            return;
 
-        public override void ResetEffects()
-        {
-            HasProtagonistAura = false;
-            base.ResetEffects();
-        }
+        // 初始化一些信息
+        int equipSlotHead = EquipLoader.GetEquipSlot(Mod, Name, EquipType.Head);
+        int equipSlotBody = EquipLoader.GetEquipSlot(Mod, Name, EquipType.Body);
+        int equipSlotLegs = EquipLoader.GetEquipSlot(Mod, Name, EquipType.Legs);
 
-        public override void Load()
-        {
-            IL_Player.PlayerFrame += ProtagonistAuraModify;
-            On_Player.UpdateItemDye += ProtagonistDye;
-            base.Load();
-        }
-
-        private static void ProtagonistDye(On_Player.orig_UpdateItemDye orig, Player self, bool isNotInVanitySlot, bool isSetToHidden, Item armorItem, Item dyeItem)
-        {
-            if (armorItem.ModItem is ProtagonistAura && !(isSetToHidden && isNotInVanitySlot))
-            {
-                var mplr = self.GetModPlayer<ProtagonistAuraPlayer>();
-                mplr.cDye = dyeItem.dye; // 获取当前饰品所染上的颜色，不知道有没有更好的做法，我记得example那边好像不支持染料
-                mplr.HasProtagonistAura = true;
-            }
-            else
-                orig.Invoke(self, isNotInVanitySlot, isSetToHidden, armorItem, dyeItem);
-        }
-
-        public override void ModifyDrawInfo(ref PlayerDrawSet drawInfo)
-        {
-            if (HasProtagonistAura)
-            {
-                drawInfo.cHead = 0; // 头发不染色(
-                drawInfo.cBody = cDye;
-                drawInfo.cLegs = cDye;
-            }
-            base.ModifyDrawInfo(ref drawInfo);
-        }
-
-        private void ProtagonistAuraModify(MonoMod.Cil.ILContext il)
-        {
-            var cursor = new ILCursor(il);
-            if (!cursor.TryGotoNext(i => i.MatchRet()))
-                return;
-            for (int n = 0; n < 3; n++)
-                if (!cursor.TryGotoPrev(i => i.MatchLdarg0()))
-                    return;
-            cursor.Index++;
-            cursor.EmitDelegate<Action<Player>>(player =>
-            {
-                if (player.GetModPlayer<ProtagonistAuraPlayer>().HasProtagonistAura)
-                {
-                    var mItem = ModContent.GetInstance<ProtagonistAura>();
-                    player.head = EquipLoader.GetEquipSlot(Mod, mItem.Name, EquipType.Head);
-                    player.body = EquipLoader.GetEquipSlot(Mod, mItem.Name, EquipType.Body);
-                    player.legs = EquipLoader.GetEquipSlot(Mod, mItem.Name, EquipType.Legs);
-                    // 如果有物品就换装
-                    // 哦不过如果是想要原版的头盔(铁桶)再套在上面，就得自己加绘制层了
-                }
-            });
-            cursor.EmitLdarg0();
-        }
+        ArmorIDs.Head.Sets.DrawHead[equipSlotHead] = false; // 隐藏原版头部绘制
+        ArmorIDs.Body.Sets.HidesTopSkin[equipSlotBody] = true; // 隐藏上身皮肤绘制
+        ArmorIDs.Body.Sets.HidesArms[equipSlotBody] = true; // 隐藏皮肤手臂
+        ArmorIDs.Legs.Sets.HidesBottomSkin[equipSlotLegs] = true; // 隐藏皮肤
     }
 
-    public class ClothierModify : GlobalNPC
+    public override void SetStaticDefaults()
     {
-        public override void ModifyShop(NPCShop shop)
-        {
-            if (shop.NpcType == NPCID.Clothier)
-                shop.Add<ProtagonistAura>(); // 单纯添加购买(
-            base.ModifyShop(shop);
-        }
+        SetupDrawing();
     }
 
-    public class AuraLayer : PlayerDrawLayer
+    public override void UpdateAccessory(Player player, bool hideVisual)
     {
-        // 这里是给红染料 绿染料 灰染料加了光环效果
-        // 你应该用不着(
-        public override Position GetDefaultPosition() => new AfterParent(PlayerDrawLayers.Head);
+        player.GetModPlayer<ProtagonistAuraPlayer>().HasProtagonistAura = !hideVisual;
+        base.UpdateAccessory(player, hideVisual);
+    }
 
-        public override void Draw(ref PlayerDrawSet drawInfo)
-        {
-            if (drawInfo.colorArmorHead == default) return;
-            if (drawInfo.drawPlayer.dead) return;
-            var plr = drawInfo.drawPlayer;
-            var mplr = plr.GetModPlayer<ProtagonistAuraPlayer>();
-            if (!mplr.HasProtagonistAura) return;
-            Vector2 center = plr.MountedCenter + Vector2.UnitY * plr.gfxOffY;
-            if (!Main.gameMenu)
-                center -= Main.screenPosition;
-            center = new Vector2((int)center.X, (int)center.Y);
+    public override void UpdateVanity(Player player)
+    {
+        player.GetModPlayer<ProtagonistAuraPlayer>().HasProtagonistAura = true;
+        base.UpdateVanity(player);
+    }
 
-            int offset = mplr.cDye switch
-            {
-                1 => 0,
-                17 => 1,
-                54 => 2,
-                _ => -1
-            };
-            if (offset < 0) return;
-            int offsetY = (plr.bodyFrame.Top / 56) switch
-            {
-                >= 7 and <= 9 => -2,
-                >= 14 and <= 16 => -2,
-                _ => 0
-            };
-            float t = MathHelper.SmoothStep(0, 1, Main.GlobalTimeWrappedHourly % 1);
-
-            drawInfo.DrawDataCache.Add(new DrawData(ModContent.Request<Texture2D>("MatterRecord/Contents/ProtagonistAura/Aura_Glow").Value,
-    center + new Vector2(4 + (plr.direction < 0 ? -8 : 0), (-23 + offsetY) * plr.gravDir), new Rectangle(offset * 32, 0, 32, 32), (Color.White * (1 - MathF.Cos(MathHelper.TwoPi * MathF.Sqrt(t))) * .75f) with { A = 0 }, 0, new(16), new Vector2(1, 0.6f) * (1 + .5f * t), drawInfo.playerEffect, 0));
-
-            drawInfo.DrawDataCache.Add(new DrawData(ModContent.Request<Texture2D>("MatterRecord/Contents/ProtagonistAura/Aura").Value,
-                center + new Vector2(4 + (plr.direction < 0 ? -8 : 0), (-23 + offsetY) * plr.gravDir), new Rectangle(offset * 32, 0, 32, 32), Color.White, 0, new(16), new Vector2(1, 0.6f), drawInfo.playerEffect, 0));
-
-            drawInfo.DrawDataCache.Add(new DrawData(ModContent.Request<Texture2D>("MatterRecord/Contents/ProtagonistAura/Aura").Value,
-    center + new Vector2(4 + (plr.direction < 0 ? -8 : 0), (-21 + offsetY) * plr.gravDir + (plr.gravDir < 1 ? 18 : 0)), new Rectangle(96, 0, 32, offset == 2 ? 12 : 14), drawInfo.colorArmorHead, 0, new(16), 1, drawInfo.playerEffect, 0));
-            //Main.spriteBatch.DrawString(FontAssets.MouseText.Value, (plr.bodyFrame.Top / 56).ToString(), center + Vector2.UnitX * 32, Color.White);
-            /*switch (mplr.cDye)
-            {
-                case 1:
-                    {
-                        drawInfo.DrawDataCache.Add(new DrawData(TextureAssets.MagicPixel.Value, center, new Rectangle(0, 0, 1, 1), Color.White, 0, new Vector2(.5f), new Vector2(128, 4), 0, 0));
-                        break;
-                    }
-                case 17:
-                    {
-                        break;
-                    }
-                case 54:
-                    {
-                        drawInfo.DrawDataCache.Add(new DrawData(TextureAssets.MagicPixel.Value, center + new Vector2(4, -24), new Rectangle(0, 0, 1, 1), Color.Gray, 0.1f, new Vector2(.5f), new Vector2(24, 4), 0, 0));
-                        drawInfo.DrawDataCache.Add(new DrawData(TextureAssets.MagicPixel.Value, center + new Vector2(4, -24), new Rectangle(0, 0, 1, 1), Color.Gray, -0.65f, new Vector2(.5f), new Vector2(18, 4), 0, 0));
-
-                        drawInfo.DrawDataCache.Add(new DrawData(TextureAssets.MagicPixel.Value, center + new Vector2(4, -24), new Rectangle(0, 0, 1, 1), Color.White, 0.1f, new Vector2(.5f), new Vector2(22, 2), 0, 0));
-                        drawInfo.DrawDataCache.Add(new DrawData(TextureAssets.MagicPixel.Value, center + new Vector2(4, -24), new Rectangle(0, 0, 1, 1), Color.White, -0.65f, new Vector2(.5f), new Vector2(16, 2), 0, 0));
-                        break;
-                    }
-            }*/
-        }
+    public override void SetDefaults()
+    {
+        Item.width = 18;
+        Item.height = 14;
+        Item.vanity = true;
+        Item.rare = ItemRarityID.Pink;
+        Item.value = Item.buyPrice(0, 2);
+        Item.accessory = true;
     }
 }

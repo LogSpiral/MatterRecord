@@ -6,7 +6,7 @@ public class InternalDocument : ModItem
     {
         Item.width = 40;
         Item.height = 40;
-        Item.useStyle = 1;
+        Item.useStyle = ItemUseStyleID.Swing;
         Item.useTime = 20;
         Item.useAnimation = 20;
         Item.autoReuse = true;
@@ -17,7 +17,7 @@ public class InternalDocument : ModItem
         Item.crit = 0;
 
         Item.value = Item.sellPrice(copper: 1);
-        Item.rare = 0;
+        Item.rare = ItemRarityID.White;
         Item.UseSound = SoundID.Item1;
     }
 

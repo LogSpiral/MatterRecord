@@ -2,9 +2,14 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.Graphics.Shaders;
+using Terraria.Localization;
+using Terraria.UI.Chat;
 using static Microsoft.Xna.Framework.Graphics.SpriteBatch;
 
 namespace MatterRecord;
@@ -1549,7 +1554,7 @@ public static class MiscMethods
     {
         var hsl = Main.rgbToHsl(color);//Color.MediumPurple
         var dustColor = Color.Lerp(Main.hslToRgb(Vector3.Clamp(hsl * new Vector3(1, 2, Main.rand.NextFloat(0.85f, 1.15f)), default, Vector3.One)), Color.White, Main.rand.NextFloat(0, 0.3f));
-        Dust dust = Dust.NewDustPerfect(Center, 278, velocity, 0, dustColor, 1f);
+        Dust dust = Dust.NewDustPerfect(Center, DustID.FireworksRGB, velocity, 0, dustColor, 1f);
         dust.scale = 0.4f + Main.rand.NextFloat(-1, 1) * 0.1f;
         dust.scale *= Main.rand.NextFloat(1, 2f) * scaler;
         dust.fadeIn = 0.4f + Main.rand.NextFloat() * 0.3f;
@@ -1570,5 +1575,113 @@ public static class MiscMethods
             .AddIngredient(extraIngredient)
             .DisableDecraft()
             .Register();
+    }
+
+    /// <summary>
+    /// 根据物品原Tooltip中的Tag标题文本生成详细文本列表
+    /// </summary>=
+    public static List<TooltipLine> GenerateDetailedTags(Mod Mod, ReadOnlyCollection<TooltipLine> tooltips, object arg = null)
+    {
+        List<TooltipLine> list = new();
+        foreach (TooltipLine line in tooltips)
+        {
+            if (line.Mod == Mod.Name)
+            {
+                // 一般的Tag提示
+                if (line.Name.StartsWith("TagDetailed"))
+                {
+                    RegularTagSetup();
+                    // Tag详细信息
+                    string[] parts = line.Name.Split('.');
+                    AddToList($"Tips.{parts[0]}Tip.{parts[1]}");
+                }
+
+                // 设置基本的Tag信息
+                void RegularTagSetup()
+                {
+                    // 一行空位隔开
+                    if (list.Count > 0)
+                    {
+                        list.Add(new(Mod, "Empty", ""));
+                    }
+                    // Tag名称
+                    list.Add(new(Mod, line.Name, line.Text)
+                    {
+                        OverrideColor = line.OverrideColor
+                    });
+                }
+
+                // 添加到list里面
+                void AddToList(string key)
+                {
+                    if (arg is not null)
+                    {
+                        list.Add(new(Mod, key, Language.GetTextValueWith(key, arg)));
+                    }
+                    else
+                    {
+                        list.Add(new(Mod, key, Language.GetTextValue(key)));
+                    }
+                }
+            }
+        }
+        return list;
+    }
+    /// <summary>
+    /// 绘制生成好的Tag详细文本
+    /// <br/> 名称为 Empty 的行会生成一行空行
+    /// <br/> 来自更好的体验
+    /// </summary>
+    /// <param name="tooltips">原物品Tooltip</param>
+    /// <param name="tagTooltips">Tag Tooltip文本</param>
+    /// <param name="x">原Tooltip文本绘制起始点 X 坐标</param>
+    /// <param name="y">原Tooltip文本绘制起始点 Y 坐标</param>
+    public static void DrawTagTooltips(ReadOnlyCollection<TooltipLine> tooltips, List<TooltipLine> tagTooltips, int x, int y)
+    {
+        var font = FontAssets.MouseText.Value;
+        int widthOffset = 14;
+        int heightOffset = 9;
+
+        float length = 0f;
+        foreach (TooltipLine line in tooltips)
+        {
+            length = Math.Max(length, ChatManager.GetStringSize(font, line.Text, Vector2.One).X);
+        }
+        x += (int)length + widthOffset * 2 + 6;
+
+        float lengthY = 0f;
+        length = 0f;
+        foreach (TooltipLine line in tagTooltips)
+        {
+            if (line.Name == "Empty")
+            {
+                lengthY += 24;
+                continue;
+            }
+            var stringSize = ChatManager.GetStringSize(font, line.Text, Vector2.One);
+            length = Math.Max(length, stringSize.X + 8);
+            lengthY += stringSize.Y;
+        }
+        if (Main.SettingsEnabled_OpaqueBoxBehindTooltips)
+        {
+            Utils.DrawInvBG(Main.spriteBatch, new Rectangle(x - widthOffset, y - heightOffset, (int)length + widthOffset * 2, (int)lengthY + heightOffset + heightOffset / 2), new Color(23, 25, 81, 255) * 0.925f);
+        }
+
+        foreach (TooltipLine line in tagTooltips)
+        {
+            if (line.Name == "Empty")
+            {
+                y += 24;
+                continue;
+            }
+            int drawX = x;
+            if (!line.Name.StartsWith("TagDetailed") && !line.Name.StartsWith("CombinedBuff"))
+            {
+                drawX += 8;
+            }
+            Color color = line.OverrideColor ?? new(0.7f, 0.7f, 0.7f);
+            ChatManager.DrawColorCodedStringWithShadow(Main.spriteBatch, font, line.Text, new(drawX, y), color, 0f, Vector2.Zero, Vector2.One, spread: 1.6f);
+            y += (int)ChatManager.GetStringSize(font, line.Text, Vector2.One).Y;
+        }
     }
 }

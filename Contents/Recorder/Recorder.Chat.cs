@@ -6,7 +6,6 @@ using Terraria.DataStructures;
 using Terraria.GameContent.Drawing;
 using Terraria.Localization;
 using Terraria.Utilities;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace MatterRecord.Contents.Recorder;
 

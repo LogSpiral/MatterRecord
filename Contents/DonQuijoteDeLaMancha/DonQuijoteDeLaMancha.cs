@@ -4,6 +4,7 @@ using MatterRecord.Contents.DonQuijoteDeLaMancha.Core.MeleeCore;
 using MatterRecord.Contents.DonQuijoteDeLaMancha.Core.StandardMelee;
 using MatterRecord.Contents.DonQuijoteDeLaMancha.Core.Visuals;
 using MatterRecord.Contents.Recorder;
+using MatterRecord.Contents.TortoiseShell;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoMod.Cil;
@@ -102,7 +103,7 @@ public class DonQuijoteDeLaMancha : MeleeSequenceItem<DonQuijoteDeLaManchaProj>,
             mplr.SendSyncAI();
             for (int n = 0; n < 30; n++)
             {
-                Dust.NewDustPerfect(player.Center, 27, Main.rand.NextVector2Unit() * Main.rand.NextFloat(0, 16));
+                Dust.NewDustPerfect(player.Center, DustID.Shadowflame, Main.rand.NextVector2Unit() * Main.rand.NextFloat(0, 16));
             }
             CombatText.NewText(player.Hitbox with { Y = player.Hitbox.Y + 64 }, Color.MediumPurple, this.GetLocalizedValue("CancelStabState"));
         }
@@ -300,7 +301,7 @@ public class DonQuijoteDeLaMancha : MeleeSequenceItem<DonQuijoteDeLaManchaProj>,
         bool flag = (player.altFunctionUse == 2 || player.GetModPlayer<DonQuijoteDeLaManchaPlayer>().StabTimeLeft > 0) && player.ownedProjectileCounts[ModContent.ProjectileType<DonQuijoteDeLaManchaProj>()] == 0;
         if (flag)
             return true;
-        Item.shoot = 0;
+        Item.shoot = ProjectileID.None;
         Item.noUseGraphic = false;
         Item.noMelee = false;
         Item.useStyle = ItemUseStyleID.Swing;
@@ -369,13 +370,7 @@ public class DonQuijoteDeLaManchaProj : MeleeSequenceProj
                 mplr.SendSyncAI();
 
                 if (Main.netMode is NetmodeID.MultiplayerClient)
-                {
-                    var packet = MatterRecord.Instance.GetPacket();
-                    packet.Write((byte)PacketType.PlayerVelocitySync);
-                    packet.Write((byte)plr.whoAmI);
-                    packet.WriteVector2(plr.velocity);
-                    packet.Send();
-                }
+                    VelocitySync.Get(plr.whoAmI, plr.velocity).Send();
             }
             base.OnEndAttack();
         }
@@ -469,13 +464,7 @@ public class DonQuijoteDeLaManchaProj : MeleeSequenceProj
                 var scaler = ((Main.MouseWorld - plr.Center).Length()) / 1440 + 1 / 6f - .1f;
                 Owner.velocity *= scaler;
                 if (Main.netMode is NetmodeID.MultiplayerClient)
-                {
-                    var packet = MatterRecord.Instance.GetPacket();
-                    packet.Write((byte)PacketType.PlayerVelocitySync);
-                    packet.Write((byte)plr.whoAmI);
-                    packet.WriteVector2(plr.velocity);
-                    packet.Send();
-                }
+                    VelocitySync.Get(plr.whoAmI, plr.velocity).Send();
             }
             for (int k = 0; k < 60; k++)
             {
@@ -542,13 +531,7 @@ public class DonQuijoteDeLaManchaProj : MeleeSequenceProj
             if (Owner.velocity.Length() > 12)
                 Owner.velocity = Owner.velocity.SafeNormalize(default) * 12;
             if (Owner is Player plr && Main.netMode is NetmodeID.MultiplayerClient)
-            {
-                var packet = MatterRecord.Instance.GetPacket();
-                packet.Write((byte)PacketType.PlayerVelocitySync);
-                packet.Write((byte)plr.whoAmI);
-                packet.WriteVector2(plr.velocity);
-                packet.Send();
-            }
+                VelocitySync.Get(plr.whoAmI, plr.velocity).Send();
 
             base.OnEndSingle();
         }
@@ -785,11 +768,7 @@ public class DonQuijoteDeLaManchaPlayer : ModPlayer
 
     public override void SyncPlayer(int toWho, int fromWho, bool newPlayer)
     {
-        ModPacket packet = Mod.GetPacket();
-        packet.Write((byte)PacketType.DonQuijoteDeLaManchaItemDefinition);
-        packet.Write((byte)Player.whoAmI);
-        packet.Write(itemDefinition.ToString());
-        packet.Send(toWho, fromWho);
+        DonQuijoteDeLaManchaItemDefinitionSync.Get(Player.whoAmI, itemDefinition.ToString()).Send(toWho, fromWho);
     }
 
     public void ReceivePlayerSyncItemDefinition(BinaryReader reader)
@@ -809,15 +788,15 @@ public class DonQuijoteDeLaManchaPlayer : ModPlayer
     public void SendSyncAI()
     {
         if (Main.netMode == NetmodeID.SinglePlayer) return;
-        ModPacket packet = Mod.GetPacket();
-        packet.Write((byte)PacketType.DonQuijoteDeLaManchaAI);
-        packet.Write((byte)Player.whoAmI);
-        packet.Write((ushort)DashCoolDown);
-        packet.Write((ushort)DashCoolDownMax);
-        packet.Write(Dashing);
-        packet.Write(NextHitImmune);
-        packet.Write((ushort)StabTimeLeft);
-        packet.Send();
+
+        DonQuijoteDeLaManchaAISync.Get(
+            Player.whoAmI,
+            DashCoolDown,
+            DashCoolDownMax, 
+            Dashing, 
+            NextHitImmune, 
+            StabTimeLeft)
+            .Send();
     }
 
     public override void CopyClientState(ModPlayer targetCopy)

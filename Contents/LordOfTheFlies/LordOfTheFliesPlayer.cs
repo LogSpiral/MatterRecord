@@ -139,30 +139,16 @@ public class LordOfTheFliesPlayer : ModPlayer
 
     public override void SyncPlayer(int toWho, int fromWho, bool newPlayer)
     {
-        ModPacket packet = Mod.GetPacket();
-        packet.Write((byte)PacketType.LordOfFilesPlayerSync);
-        packet.Write((byte)Player.whoAmI);
-        packet.Write((byte)StoredAmmoCount);
-        packet.Write(IsInTrialMode);
-        packet.Write((byte)ChargeTimer);
-        packet.Write((byte)ChargingEnergy);
-        // packet.Write(PlayerKillCount);
-        // packet.Write(NPCKillCount);
-        packet.Send(toWho, fromWho);
-        base.SyncPlayer(toWho, fromWho, newPlayer);
+        LordOfFilesPlayerSync.Get(
+            Player.whoAmI,
+            StoredAmmoCount,
+            IsInTrialMode,
+            ChargeTimer,
+            ChargingEnergy).Send(toWho, fromWho);
     }
 
     public void SyncAnniCharging(int toWho, int fromWho)
     {
-        ModPacket packet = Mod.GetPacket();
-        packet.Write((byte)PacketType.LordOfFilesChargingSync);
-        packet.Write((byte)Player.whoAmI);
-        packet.Write(IsChargingAnnihilation);
-        packet.Send(toWho, fromWho);
-    }
-
-    public void ReceiveAnniCharging(BinaryReader reader)
-    {
-        IsChargingAnnihilation = reader.ReadBoolean();
+        LordOfTheFliesAnniChargingSync.Get(Player.whoAmI, IsChargingAnnihilation).Send(toWho, fromWho);
     }
 }

@@ -186,17 +186,10 @@ public class AliceInWonderlandPlayer : ModPlayer
 
     public override void SyncPlayer(int toWho, int fromWho, bool newPlayer)
     {
-        ModPacket packet = Mod.GetPacket();
-        packet.Write((byte)PacketType.AliceInWonderLandSync);
-        packet.Write((byte)Player.whoAmI);
         bool hasValue = CurrentPortalEnd.HasValue;
-        packet.Write(hasValue);
         if (hasValue)
-        {
-            packet.WriteVector2(CurrentPortalStart.Value);
-            packet.WriteVector2(CurrentPortalEnd.Value);
-        }
-        packet.Send(toWho, fromWho);
-        base.SyncPlayer(toWho, fromWho, newPlayer);
+            AliceInWonderlandSync.Get(Player.whoAmI, CurrentPortalStart.Value, CurrentPortalEnd.Value).Send(toWho, fromWho);
+        else
+            AliceInWonderlandSync.Get(Player.whoAmI).Send(toWho, fromWho);
     }
 }

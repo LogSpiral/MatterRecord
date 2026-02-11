@@ -25,7 +25,7 @@ Faust: {
 	DisplayName: Faust
 	Tooltip:
 		'''
-		Use it to get a hint of a undiscovered record.
+		Use it to get a hint of a record.
 
 		"I signed the pact for transcendent power, but who will save my soul?"
 		Right-click in inventory to activate/deactivate
@@ -44,6 +44,10 @@ Faust: {
 	WarAndPeaceHint: 与绒爪的夜行者立约，驯服一个永恒的谜题
 	TheInterpretationOfDreamsHint: 怀揣罗网沉入梦乡，在虚幻中打捞真实的碎片
 	TheoryOfFreedomHint: 毁去一朵娇艳的花，而后直面它的本质
+	HintList: 记录提示如下:
+	HintNotFound: - {0}
+	HintFound: - {0} (已获取, 请在记录员处提交)
+	HintUnlocked: - {0} (已解锁)
 }
 
 LittlePrince: {

@@ -1,8 +1,11 @@
-﻿using MatterRecord.Contents.Recorder;
+﻿using MatterRecord.Contents.AliceInWonderland;
+using MatterRecord.Contents.Recorder;
+using Microsoft.Build.Utilities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -42,7 +45,9 @@ public class Faust : ModItem, IRecordBookItem
         this.RegisterBookRecipe(ItemID.Glass);
         base.AddRecipes();
     }
-    public static bool Active;
+    internal static bool Active;
+    private static int _updateTimer;
+
     public override bool? UseItem(Player player)
     {
         if (player.whoAmI != Main.myPlayer) return null;
@@ -58,33 +63,42 @@ public class Faust : ModItem, IRecordBookItem
         dust.noGravity = true;
         if (player.itemAnimation == 1)
         {
-            List<string> hints = [];
-
-            if (!RecorderSystem.CheckUnlock(ItemRecords.AliceInWonderland))
-                hints.Add("AliceInWonderlandHint");
-            if (!RecorderSystem.CheckUnlock(ItemRecords.DonQuijoteDeLaMancha))
-                hints.Add("DonQuijoteDeLaManchaHint");
-            if (!RecorderSystem.CheckUnlock(ItemRecords.LittlePrince))
-                hints.Add("LittlePrinceHint");
-            if (!RecorderSystem.CheckUnlock(ItemRecords.TheOldManAndTheSea))
-                hints.Add("TheOldManAndTheSeaHint");
-            if (!RecorderSystem.CheckUnlock(ItemRecords.WarAndPeace))
-                hints.Add("WarAndPeaceHint");
-            if (!RecorderSystem.CheckUnlock(ItemRecords.TheInterpretationOfDreams))
-                hints.Add("TheInterpretationOfDreamsHint");
-            if (!RecorderSystem.CheckUnlock(ItemRecords.TheoryOfFreedom))
-                hints.Add("TheoryOfFreedomHint");
+            List<string> hints = RecorderPlayer.GetNotHintedKeys();
 
             if (hints.Count > 0)
+            {
+                string key = Main.rand.Next(hints);
+                RecorderPlayer.SetHintedViaKey(key);
                 CombatText.NewText(
                     player.Hitbox,
                     Color.MediumPurple,
-                    this.GetLocalizedValue(Main.rand.Next(hints)));
+                    this.GetLocalizedValue(key));
+            }
             else
-                CombatText.NewText(
-                    player.Hitbox,
-                    Color.MediumPurple,
-                    this.GetLocalizedValue("NoMoreHints"));
+            {
+                hints = RecorderPlayer.GetLockedKeys();
+                if (hints.Count == 0)
+                {
+                    CombatText.NewText(
+                        player.Hitbox,
+                        Color.MediumPurple,
+                        this.GetLocalizedValue("NoMoreHints")
+                        );
+                }
+                else
+                {
+                    hints.Add("NoMoreHints");
+                    hints.Add("NoMoreHints");
+                    hints.Add("NoMoreHints");
+                    CombatText.NewText(
+                        player.Hitbox,
+                        Color.MediumPurple,
+                        this.GetLocalizedValue(Main.rand.Next(hints))
+                        );
+                }
+            }
+
+
             SoundEngine.PlaySound(SoundID.Item4);
             ParticleOrchestrator.Spawn_NightsEdge(new ParticleOrchestraSettings() { IndexOfPlayerWhoInvokedThis = (byte)Main.myPlayer, PositionInWorld = player.Center });
             for (int n = 0; n < 60; n++)
@@ -141,6 +155,51 @@ public class Faust : ModItem, IRecordBookItem
 
     public override void ModifyTooltips(List<TooltipLine> tooltips)
     {
+        if (_updateTimer <= 0)
+        {
+            _updateTimer = 30;
+
+            ItemRecords[] records =
+                [
+                    ItemRecords.AliceInWonderland,
+                    ItemRecords.DonQuijoteDeLaMancha,
+                    ItemRecords.LittlePrince,
+                    ItemRecords.TheOldManAndTheSea,
+                    ItemRecords.WarAndPeace,
+                    ItemRecords.TheInterpretationOfDreams,
+                    ItemRecords.TheoryOfFreedom
+                ];
+
+            var player = Main.LocalPlayer;
+            Item[][] inventories =
+            [
+                player.inventory,
+                    player.armor,
+                    player.dye,
+                    player.miscEquips,
+                    player.miscDyes,
+                    [player.trashItem],
+                    player.bank.item,
+                    player.bank2.item,
+                    player.bank3.item,
+                    player.bank4.item
+            ];
+            foreach (var inventory in inventories)
+                foreach (var item in inventory)
+                {
+                    if (item.ModItem is IRecordBookItem book && records.Contains(book.RecordType))
+                        RecorderPlayer.SetHintState(book.RecordType, RecordHintState.Found);
+                }
+
+            foreach (var record in records)
+            {
+                if (RecorderSystem.CheckUnlock(record))
+                    RecorderPlayer.SetHintState(record, RecordHintState.Unlocked);
+            }
+        }
+        _updateTimer--;
+
+
         var money = (long)Main.LocalPlayer.GetModPlayer<FaustPlayer>().ConsumedMoney;
 
         string content;
@@ -157,244 +216,42 @@ public class Faust : ModItem, IRecordBookItem
 
         base.ModifyTooltips(tooltips);
     }
-}
-
-public class FaustGBItem : GlobalItem
-{
-    public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)
+    public override bool PreDrawTooltip(ReadOnlyCollection<TooltipLine> lines, ref int x, ref int y)
     {
-        //if (Main.LocalPlayer.HeldItem.type != ModContent.ItemType<Faust>()) return;
-        if (!Faust.Active) return;
-
-        TooltipLine dummy = null;
-        foreach (var tip in tooltips)
+        List<TooltipLine> extraLines = [];
+        Dictionary<string, RecordHintState> hints = RecorderPlayer.GetHintedKeysWithState();
+        if (hints.Count == 0)
+            return true;
+        extraLines.Add(new TooltipLine(Mod, "RecordHintList", this.GetLocalizedValue("HintList")));
+        int counter = 0;
+        foreach (var (hint, state) in hints)
         {
-            if (tip.Name == "ItemName")
-                dummy = tip;
-            //Main.NewText(tip.Name);
-        }
-        tooltips.Clear();
-        tooltips.Add(dummy);
-        if (item.value == 0 || item.type == ModContent.ItemType<Faust>() || Main.ItemDropsDB.GetRulesForItemID(item.type).Any() || (item.type >= ItemID.CopperCoin && item.type <= ItemID.PlatinumCoin))
-            tooltips.Add(new TooltipLine(Mod, "CantBuyIt", Language.GetTextValue("Mods.MatterRecord.Items.Faust.CantButIt")) { OverrideColor = Color.Lerp(Color.Gray, Color.DarkGray, MathF.Cos(Main.GlobalTimeWrappedHourly) * .5f + .5f) });
-        else
-        {
-            var text5 = "";
-            var num16 = (long)item.GetStoreValue() * 4;
-            var num12 = 0L;
-            var num13 = 0L;
-            var num14 = 0L;
-            var num15 = 0L;
-            if (num16 >= 1000000)
+            var hintText = this.GetLocalizedValue(hint);
+            var localized = this.GetLocalization(state switch
             {
-                num12 = num16 / 1000000;
-                num16 -= num12 * 1000000;
-            }
-            if (num16 >= 10000)
+                RecordHintState.Hinted => "HintNotFound",
+                RecordHintState.Found => "HintFound",
+                RecordHintState.Unlocked => "HintUnlocked",
+                _ => "HintNotFound"
+            });
+            hintText = localized.Format([hintText]);
+            var line = new TooltipLine(Mod, "RecordHint" + counter, hintText)
             {
-                num13 = num16 / 10000;
-                num16 -= num13 * 10000;
-            }
-
-            if (num16 >= 100)
-            {
-                num14 = num16 / 100;
-                num16 -= num14 * 100;
-            }
-
-            if (num16 >= 1)
-                num15 = num16;
-
-            if (num12 > 0)
-                text5 = text5 + num12 + " " + Lang.inter[15].Value + " ";
-
-            if (num13 > 0)
-                text5 = text5 + num13 + " " + Lang.inter[16].Value + " ";
-
-            if (num14 > 0)
-                text5 = text5 + num14 + " " + Lang.inter[17].Value + " ";
-
-            if (num15 > 0)
-                text5 = text5 + num15 + " " + Lang.inter[18].Value + " ";
-
-            float num17 = (float)(int)Main.mouseTextColor / 255f;
-            var color2 = Color.White;
-            if (num12 > 0)
-                color2 = new Color((byte)(220f * num17), (byte)(220f * num17), (byte)(198f * num17), Main.mouseTextColor);
-            else if (num13 > 0)
-                color2 = new Color((byte)(224f * num17), (byte)(201f * num17), (byte)(92f * num17), Main.mouseTextColor);
-            else if (num14 > 0)
-                color2 = new Color((byte)(181f * num17), (byte)(192f * num17), (byte)(193f * num17), Main.mouseTextColor);
-            else if (num15 > 0)
-                color2 = new Color((byte)(246f * num17), (byte)(138f * num17), (byte)(96f * num17), Main.mouseTextColor);
-
-            tooltips.Add(new TooltipLine(Mod, "ThePrice", $"{Language.GetTextValue("Mods.MatterRecord.Items.Faust.BuyPrice")}{text5}") { OverrideColor = color2 });
-        }
-        base.ModifyTooltips(item, tooltips);
-    }
-
-    public override void Load()
-    {
-        On_ItemSlot.TryItemSwap += On_ItemSlot_TryItemSwap;
-        MonoModHooks.Add(typeof(ItemLoader).GetMethod(nameof(ItemLoader.RightClick), BindingFlags.Static | BindingFlags.Public), FaustModifyRightClick);
-        base.Load();
-    }
-
-    public static void FaustModifyRightClick(Action<Item, Player> orig, Item item, Player player)
-    {
-        if (!Faust.Active) goto Label;
-        if (item.value == 0) goto Label;
-        if (item.type == ModContent.ItemType<Faust>()) goto Label;
-        if (Main.ItemDropsDB.GetRulesForItemID(item.type).Any()) goto Label;
-        if (player.CanAfford((long)item.GetStoreValue() * 4))
-        {
-            if (Main.stackSplit > 1) return;
-            int m = Main.superFastStack + 1;
-            for (int n = 0; n < m; n++)
-            {
-                bool flag1 = Main.mouseItem.type == item.type && Main.mouseItem.stack < Main.mouseItem.maxStack;
-                bool flag2 = Main.mouseItem.type == ItemID.None;
-                if (!(flag1 || flag2)) return;
-
-                player.BuyItem((long)item.GetStoreValue() * 4);
-                player.GetModPlayer<FaustPlayer>().ConsumedMoney += (ulong)item.GetStoreValue() * 4UL;
-                if (flag1)
-                    Main.mouseItem.stack++;
-                else if (flag2)
+                OverrideColor = state switch
                 {
-                    Main.mouseItem = item.Clone();
-                    Main.mouseItem.stack = 1;
+                    RecordHintState.Hinted => Color.Gray,
+                    RecordHintState.Found => Color.MediumPurple,
+                    RecordHintState.Unlocked => Color.Yellow,
+                    _ => Color.Transparent
                 }
-                if (n == 0)
-                {
-                    SoundEngine.PlaySound(SoundID.Coins);
-                    ItemSlot.RefreshStackSplitCooldown();
-                }
-            }
-
-            //BlockConsumeCache = true;
-            return;
+            };
+            extraLines.Add(line);
+            counter++;
         }
-    Label:
-        orig.Invoke(item, player);
-    }
 
-    private void On_ItemSlot_TryItemSwap(On_ItemSlot.orig_TryItemSwap orig, Item item)
-    {
-        if (Faust.Active) return;
-        orig.Invoke(item);
-    }
-
-    public override bool CanRightClick(Item item)
-    {
-        if (item.type == ItemID.None) return false;
-        if (!Faust.Active) return false;
-        if (item.value == 0) return false;
-        if (item.type == ModContent.ItemType<UnloadedItem>()) return false;
-        if (item.type == ModContent.ItemType<Faust>()) return false;
-
-        if (!Main.LocalPlayer.CanAfford((long)item.GetStoreValue() * 4)) return false;
-        if (item.type >= ItemID.CopperCoin && item.type <= ItemID.PlatinumCoin) return false;
-        if (Faust.Active)
-            return Main.mouseRightRelease = true;
-
-        return false;
-    }
-
-    //public override bool ConsumeItem(Item item, Player player)
-    //{
-    //    if (BlockConsumeCache)
-    //    {
-    //        BlockConsumeCache = false;
-    //        return false;
-    //    }
-    //    return base.ConsumeItem(item, player);
-    //}
-    public static bool BlockConsumeCache;
-
-    //public override void RightClick(Item item, Player player)
-    //{
-    //    if (!Faust.Active) return;
-    //    if (item.value == 0) return;
-    //    if (item.type == ModContent.ItemType<Faust>()) return;
-    //    if (Main.ItemDropsDB.GetRulesForItemID(item.type).Any()) return;
-    //    if (player.CanAfford((long)item.GetStoreValue() * 4))
-    //    {
-    //        if (Main.mouseItem.type == ItemID.None)
-    //        {
-    //            player.BuyItem((long)item.GetStoreValue() * 4);
-    //            Main.mouseItem = item.Clone();
-    //            Main.mouseItem.stack = 1;
-    //            SoundEngine.PlaySound(SoundID.CoinPickup);
-    //        }
-    //        else if (Main.mouseItem.type == item.type && Main.mouseItem.stack < Main.mouseItem.maxStack)
-    //        {
-    //            player.BuyItem((long)item.GetStoreValue() * 4);
-    //            Main.mouseItem.stack++;
-    //            SoundEngine.PlaySound(SoundID.CoinPickup);
-    //        }
-    //        BlockConsumeCache = true;
-    //    }
-    //    base.RightClick(item, player);
-    //}
-}
-
-public class FaustPlayer : ModPlayer
-{
-    public ulong ConsumedMoney;
-
-    public override void SaveData(TagCompound tag)
-    {
-        tag.Add(nameof(ConsumedMoney), ConsumedMoney);
-        base.SaveData(tag);
-    }
-
-    public override void LoadData(TagCompound tag)
-    {
-        ConsumedMoney = tag.Get<ulong>(nameof(ConsumedMoney));
-        base.LoadData(tag);
-    }
-
-    public override void SyncPlayer(int toWho, int fromWho, bool newPlayer)
-    {
-        ModPacket packet = Mod.GetPacket();
-        packet.Write((byte)PacketType.FaustSync);
-        packet.Write((byte)Player.whoAmI);
-        packet.Write(ConsumedMoney);
-        packet.Send(toWho, fromWho);
-    }
-
-    // Called in ExampleMod.Networking.cs
-    public void ReceivePlayerSync(BinaryReader reader)
-    {
-        ConsumedMoney = reader.ReadUInt64();
-    }
-
-    public override void CopyClientState(ModPlayer targetCopy)
-    {
-        FaustPlayer clone = (FaustPlayer)targetCopy;
-        clone.ConsumedMoney = ConsumedMoney;
-    }
-
-    public override void SendClientChanges(ModPlayer clientPlayer)
-    {
-        FaustPlayer clone = (FaustPlayer)clientPlayer;
-
-        if (ConsumedMoney != clone.ConsumedMoney)
-            SyncPlayer(toWho: -1, fromWho: Main.myPlayer, newPlayer: false);
-    }
-
-    public override void UpdateEquips()
-    {
-        //Player.statLifeMax2 -= (int)(ConsumedMoney / 500000);
-        //if (Player.statLifeMax2 < 100) Player.statLifeMax2 = 100;
-        base.UpdateEquips();
-    }
-
-    public override void ModifyLuck(ref float luck)
-    {
-        luck -= ConsumedMoney / 1000000 * 0.01f;
-
-        base.ModifyLuck(ref luck);
+        MiscMethods.DrawTagTooltips(lines, extraLines, x, y);
+        return true;
     }
 }
+
+

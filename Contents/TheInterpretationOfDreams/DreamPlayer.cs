@@ -177,7 +177,7 @@ namespace MatterRecord.Contents.TheInterpretationOfDreams
             Main.item[num37].velocity.X = Main.rand.Next(10, 31) * 0.2f * hit.HitDirection;
             Main.item[num37].timeLeftInWhichTheItemCannotBeTakenByEnemies = 60;
             if (Main.netMode == NetmodeID.MultiplayerClient)
-                NetMessage.SendData(148, -1, -1, null, num37);
+                NetMessage.SendData(MessageID.SyncItemCannotBeTakenByEnemies, -1, -1, null, num37);
 
             base.OnHitNPC(target, hit, damageDone);
         }

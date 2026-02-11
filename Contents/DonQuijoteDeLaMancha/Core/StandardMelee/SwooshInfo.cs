@@ -112,7 +112,7 @@ public class SwooshInfo : MeleeAction
             var range = mode switch
             {
                 SwooshMode.Chop => (.875f, -1f),
-                SwooshMode.Slash => (.625f, -.75f),
+                SwooshMode.Slash or _ => (.625f, -.75f),
                 //SwooshMode.Storm or _ => (.625f, -.75f)
             };
             bool f = mode switch

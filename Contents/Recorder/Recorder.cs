@@ -2,7 +2,6 @@
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
-using Terraria.GameContent;
 using Terraria.GameContent.Bestiary;
 using Terraria.GameContent.Personalities;
 
@@ -11,8 +10,6 @@ namespace MatterRecord.Contents.Recorder;
 [AutoloadHead]
 public partial class Recorder : ModNPC
 {
-    private static Profiles.StackedNPCProfile NPCProfile;
-
     public override void SetStaticDefaults()
     {
         Main.npcFrameCount[Type] = 23; // The total amount of frames the NPC has
@@ -91,11 +88,6 @@ public partial class Recorder : ModNPC
 
     public override bool CanTownNPCSpawn(int numTownNPCs) => true;
 
-
-    public override ITownNPCProfile TownNPCProfile()
-    {
-        return NPCProfile;
-    }
 
     public override List<string> SetNPCNameList()
     {

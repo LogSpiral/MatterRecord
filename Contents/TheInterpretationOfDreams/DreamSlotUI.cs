@@ -302,8 +302,8 @@ public class DreamPowerSlot : UIPanel
 
         if (mplr.CheckActive(targetState))
         {
-            spriteBatch.Draw(TextureAssets.Extra[98].Value, position, null, Color.White with { A = 0 } * .75f, Main.GlobalTimeWrappedHourly, new Vector2(36), new Vector2(1, .25f), 0, 0);
-            spriteBatch.Draw(TextureAssets.Extra[98].Value, position, null, Color.White with { A = 0 } * .25f, Main.GlobalTimeWrappedHourly * -2f, new Vector2(36), new Vector2(2, .5f), 0, 0);
+            spriteBatch.Draw(TextureAssets.Extra[ExtrasID.SharpTears].Value, position, null, Color.White with { A = 0 } * .75f, Main.GlobalTimeWrappedHourly, new Vector2(36), new Vector2(1, .25f), 0, 0);
+            spriteBatch.Draw(TextureAssets.Extra[ExtrasID.SharpTears].Value, position, null, Color.White with { A = 0 } * .25f, Main.GlobalTimeWrappedHourly * -2f, new Vector2(36), new Vector2(2, .5f), 0, 0);
         }
 
         if (IsMouseHovering)

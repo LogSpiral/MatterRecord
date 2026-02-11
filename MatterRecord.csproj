@@ -1,16 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
-	<!-- Import tModLoader mod properties -->
-	<Import Project="..\tModLoader.targets" />
-
 	<!-- General -->
 	<PropertyGroup>
 		<AssemblyName>MatterRecord</AssemblyName>
 		<LangVersion>preview</LangVersion>
 		<DebugMod>DragonLens</DebugMod>
 	</PropertyGroup>
+	
 	<ItemGroup>
 		<PackageReference Include="Solaestas.tModLoader.ModBuilder" Version="1.6.1" />
+		<!-- 引用Cyril的NetSimplified -->
+		<Reference Include="NetSimplified">
+			<HintPath>lib\NetSimplified.dll</HintPath>
+		</Reference>
+		<ModReference Include="lib\*.dll" />
 	</ItemGroup>
 	<ItemGroup>
 		<AdditionalFiles Include="**/*.xml;**/*.xnb" Exclude="bin/**/*;obj/**/*" Pack="true" ModPath="%(Identity)" />
@@ -22,6 +24,7 @@
 	  <Folder Include="Localization\Buffs\" />
 	  <Folder Include="Localization\Projectiles\" />
 	  <Folder Include="Localization\Configs\" />
+	  <Folder Include="lib\" />
 	</ItemGroup>
 
 	<!-- References -->
