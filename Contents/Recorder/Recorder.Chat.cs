@@ -11,8 +11,12 @@ namespace MatterRecord.Contents.Recorder;
 
 public partial class Recorder
 {
+    private string currentChat;
+    private int chatTimer;
     public override string GetChat()
     {
+        chatTimer = 0;
+        string chatResult;
         string Dialogue(string key) => Language.GetTextValue($"Mods.MatterRecord.Dialogue.Recorder.{key}");
         string DialogueWithArgs(string key, params object[] args) => Language.GetTextValue($"Mods.MatterRecord.Dialogue.Recorder.{key}", args);
         var recordPlayer = Main.LocalPlayer.GetModPlayer<RecorderPlayer>();
@@ -23,15 +27,17 @@ public partial class Recorder
             var index = Item.NewItem(new EntitySource_Gift(NPC), Main.LocalPlayer.Hitbox, ModContent.ItemType<Faust.Faust>());
             if (Main.netMode == NetmodeID.MultiplayerClient)
                 NetMessage.SendData(MessageID.SyncItem, -1, -1, null, index, 1f);
-            return DialogueWithArgs("FirstMeet", NPC.GivenName);
+            chatResult = DialogueWithArgs("FirstMeet", NPC.GivenName);
+            currentChat = chatResult;
+            return " ";
         }
         // TODO 找到宠物时的对话与奖励
 
         // 解锁物品
         List<IRecordBookItem> recordBooks = [];
-        foreach (var item in Main.LocalPlayer.inventory) 
+        foreach (var item in Main.LocalPlayer.inventory)
         {
-            if (item.ModItem is IRecordBookItem recordBook) 
+            if (item.ModItem is IRecordBookItem recordBook)
             {
                 if (!recordBook.IsRecordUnlocked)
                 {
@@ -41,13 +47,15 @@ public partial class Recorder
                     {
                         IndexOfPlayerWhoInvokedThis = (byte)Main.myPlayer
                     };
-                    for (int n = 0; n < 10; n++) 
+                    for (int n = 0; n < 10; n++)
                     {
-                        settings.PositionInWorld = Main.LocalPlayer.Center + Main.rand.NextVector2Unit() * Main.rand.NextFloat(0, Main.rand.NextFloat(0, 256)) + new Vector2(0,256);
+                        settings.PositionInWorld = Main.LocalPlayer.Center + Main.rand.NextVector2Unit() * Main.rand.NextFloat(0, Main.rand.NextFloat(0, 256)) + new Vector2(0, 256);
                         settings.MovementVector = new Vector2(0, Main.rand.NextFloat(-64, -8));
                         ParticleOrchestrator.Spawn_PrincessWeapon(settings);
                     }
-                    return Dialogue(recordBook.RecordType.ToString() + "Unlocking");
+                    chatResult = Dialogue(recordBook.RecordType.ToString() + "Unlocking");
+                    currentChat = chatResult;
+                    return " ";
                 }
                 else
                     recordBooks.Add(recordBook);
@@ -56,7 +64,7 @@ public partial class Recorder
 
         // 闲聊
         WeightedRandom<string> chat = new WeightedRandom<string>();
-        chat.Add(DialogueWithArgs("StandardDialogue1",Main.LocalPlayer.name));
+        chat.Add(DialogueWithArgs("StandardDialogue1", Main.LocalPlayer.name));
         chat.Add(Dialogue("StandardDialogue2"));
         chat.Add(Dialogue("StandardDialogue3"));
         chat.Add(Dialogue("StandardDialogue4"));
@@ -73,12 +81,22 @@ public partial class Recorder
         int anglerIndex = NPC.FindFirstNPC(NPCID.Angler);
         if (anglerIndex != -1)
             chat.Add(Dialogue("AnglerDialogue"));
-
-        return chat;
+        chatResult = chat.Get();
+        currentChat = chatResult;
+        return " ";
     }
 
     public override void SetChatButtons(ref string button, ref string button2)
     {
+        if (chatTimer == 0 || (int)(Main.GlobalTimeWrappedHourly * 60) % 2 == 0)
+            chatTimer++;
+        if (currentChat != null)
+        {
+            int length = currentChat.Length;
+
+            if (chatTimer <= length)
+                Main.npcChatText = currentChat[..chatTimer];
+        }
         button = this.GetLocalizedValue("Copy");
         button2 = this.GetLocalizedValue("Collect");
     }
