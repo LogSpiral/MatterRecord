@@ -97,9 +97,9 @@ public class EternalWinePlayer : ModPlayer
     {
         if (_lifeDebtMax > 0 && Main.myPlayer == Player.whoAmI && !Player.DeadOrGhost)
         {
-            Vector2 cen = Player.Center + Player.gfxOffY * Vector2.UnitY - Main.screenPosition - new Vector2(16, 128);
-            // var direction = Player.gravDir < 0 ? SpriteEffects.FlipVertically : SpriteEffects.None;
-            var direction = SpriteEffects.None;
+            Vector2 cen = Player.Center + Player.gfxOffY * Vector2.UnitY - Main.screenPosition - new Vector2(16, Player.gravDir > 0 ? 128 : -96);
+            var direction = Player.gravDir < 0 ? SpriteEffects.FlipVertically : SpriteEffects.None;
+            //var direction = SpriteEffects.None;
             drawInfo.DrawDataCache.Add(
                 new DrawData(
                     ModAsset.LifeRegenStagnant_Recover.Value,
@@ -114,27 +114,27 @@ public class EternalWinePlayer : ModPlayer
             drawInfo.DrawDataCache.Add(
                 new DrawData(
                     ModAsset.LifeRegenStagnant.Value,
-                    cen, // + (Player.gravDir < 0 ? Vector2.UnitY * (int)(32 - 32f * LifeDebt / LifeDebtMax) : Vector2.Zero)
+                    cen + (Player.gravDir < 0 ? Vector2.UnitY * (int)(32 - 32f * _lifeDebt / _lifeDebtMax) : Vector2.Zero),
                     new Rectangle(0, 0, 32, (int)(32f * _lifeDebt / _lifeDebtMax)),
                     Color.White,
                     0,
                     new Vector2(),
                     1f,
                     direction));
-
             string text = $"{Language.GetTextValue("Mods.MatterRecord.Items.EternalWine.LifeDebt")}{_lifeDebt}/{_lifeDebtMax}";
+            var state = Main.graphics.GraphicsDevice.RasterizerState;
+            Main.graphics.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
             ChatManager.DrawColorCodedStringWithShadow(
                 Main.spriteBatch,
                 FontAssets.MouseText.Value,
                 text,
-                cen + new Vector2(16, 48),
+                cen + new Vector2(16, Player.gravDir < 0 ? -16 : 48),
                 Color.White,
                 Color.Black,
                 0,
                 FontAssets.MouseText.Value.MeasureString(text) * .5f,
-                Vector2.One);
-
-            //Main.spriteBatch.DrawString(FontAssets.MouseText.Value,, cen + Vector2.UnitY * 48, Color.White);
+                new Vector2(1, Player.gravDir));
+            Main.graphics.GraphicsDevice.RasterizerState = state;
         }
         base.ModifyDrawInfo(ref drawInfo);
     }

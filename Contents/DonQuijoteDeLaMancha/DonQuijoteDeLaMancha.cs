@@ -754,13 +754,34 @@ public class DonQuijoteDeLaManchaPlayer : ModPlayer
     {
         if (DashCoolDown > 0 && Main.myPlayer == Player.whoAmI && !Player.DeadOrGhost)
         {
-            Vector2 cen = Player.Center + Player.gfxOffY * Vector2.UnitY - Main.screenPosition - new Vector2(16, 160);
-            drawInfo.DrawDataCache.Add(new DrawData(ModAsset.DashCooldown_Recover.Value, cen, null, Color.White, 0, new Vector2(), 1f, 0));
+            Vector2 cen = Player.Center + Player.gfxOffY * Vector2.UnitY - Main.screenPosition - new Vector2(16, Player.gravDir < 0 ? -128 : 160);
+            var direction = Player.gravDir < 0 ? SpriteEffects.FlipVertically : SpriteEffects.None;
+            drawInfo.DrawDataCache.Add(new DrawData(ModAsset.DashCooldown_Recover.Value, cen, null, Color.White, 0, new Vector2(), 1f, direction));
 
-            drawInfo.DrawDataCache.Add(new DrawData(ModAsset.DashCooldown.Value, cen, new Rectangle(0, 0, 32, (int)(32f * DashCoolDown / DashCoolDownMax)), Color.White, 0, new Vector2(), 1f, 0));
+            drawInfo.DrawDataCache.Add(
+                new DrawData(
+                    ModAsset.DashCooldown.Value,
+                    cen + (Player.gravDir < 0 ? Vector2.UnitY * (int)(32 - 32f * DashCoolDown / DashCoolDownMax) : Vector2.Zero),
+                    new Rectangle(0, 0, 32, (int)(32f * DashCoolDown / DashCoolDownMax)),
+                    Color.White,
+                    0,
+                    new Vector2(),
+                    1f,
+                    direction));
             string text = Language.GetTextValue("Mods.MatterRecord.Items.DonQuijoteDeLaMancha.DashCooldown") + $"{DashCoolDown / 60f:0.0}/{DashCoolDownMax / 60f:0.0}";
+            var state = Main.graphics.GraphicsDevice.RasterizerState;
+            Main.graphics.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
+            ChatManager.DrawColorCodedStringWithShadow(
+                Main.spriteBatch,
+                FontAssets.MouseText.Value,
+                text, cen + new Vector2(16, Player.gravDir < 0 ? -16 : 48),
+                Color.White,
+                Color.Black,
+                0,
+                FontAssets.MouseText.Value.MeasureString(text) * .5f,
+                new Vector2(1, Player.gravDir));
+            Main.graphics.GraphicsDevice.RasterizerState = state;
 
-            ChatManager.DrawColorCodedStringWithShadow(Main.spriteBatch, FontAssets.MouseText.Value, text, cen + new Vector2(16, 48), Color.White, Color.Black, 0, FontAssets.MouseText.Value.MeasureString(text) * .5f, Vector2.One);
             //Main.spriteBatch.DrawString(FontAssets.MouseText.Value,, cen + Vector2.UnitY * 48, Color.White);
         }
         base.ModifyDrawInfo(ref drawInfo);
@@ -792,9 +813,9 @@ public class DonQuijoteDeLaManchaPlayer : ModPlayer
         DonQuijoteDeLaManchaAISync.Get(
             Player.whoAmI,
             DashCoolDown,
-            DashCoolDownMax, 
-            Dashing, 
-            NextHitImmune, 
+            DashCoolDownMax,
+            Dashing,
+            NextHitImmune,
             StabTimeLeft)
             .Send();
     }
