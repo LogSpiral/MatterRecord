@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework;
 
 namespace MatterRecord.Contents.TheAdventureofSherlockHolmes;
 
-public class TheAdventureofSherlockHolmesSystem:ModSystem
+public class TheAdventureofSherlockHolmesSystem : ModSystem
 {
     private static int TASHPrice => Main.LocalPlayer.discountEquipped ? 80 : 100;
     public override void Load()
@@ -37,8 +37,8 @@ public class TheAdventureofSherlockHolmesSystem:ModSystem
                     var newLight = (byte)(255
                         * Utils.GetLerpValue(18, 13, MathF.Abs(i), true)
                         * Utils.GetLerpValue(18, 13, MathF.Abs(j), true));
-                    if (newLight > oldLight)
-                        Main.Map.Update(x, y, newLight);
+
+                    Main.Map.Update(x, y, Math.Max(oldLight,newLight));
                 }
             }
         }
