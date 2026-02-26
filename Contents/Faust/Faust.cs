@@ -155,6 +155,7 @@ public class Faust : ModItem, IRecordBookItem
 
     public override void ModifyTooltips(List<TooltipLine> tooltips)
     {
+        if (!this.IsRecordUnlocked) return;
         if (_updateTimer <= 0)
         {
             _updateTimer = 30;
@@ -218,6 +219,7 @@ public class Faust : ModItem, IRecordBookItem
     }
     public override bool PreDrawTooltip(ReadOnlyCollection<TooltipLine> lines, ref int x, ref int y)
     {
+        if (!this.IsRecordUnlocked) return true;
         List<TooltipLine> extraLines = [];
         Dictionary<string, RecordHintState> hints = RecorderPlayer.GetHintedKeysWithState();
         if (hints.Count == 0)
