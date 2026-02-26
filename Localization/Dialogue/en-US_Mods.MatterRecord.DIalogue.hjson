@@ -11,15 +11,15 @@ Recorder: {
 	StandardDialogue3: 我曾在统辖局呆过一段时间，他们把我这种外派出差称为休假
 	StandardDialogue4: 我的工作是追寻那些散佚的事象记录，如果你找到它们的话记得来找我
 	// 持有特殊物品对话
-	AliceInWonderLandUnlocked: 爱丽丝掉进了兔子洞，我被一份填错的出差单丢到这里，本质上没什么不同
+	AliceInWonderlandUnlocked: 爱丽丝掉进了兔子洞，我被一份填错的出差单丢到这里，本质上没什么不同
 	DonQuijoteDeLaManchaUnlocked: 多好的一个地方啊，巨人、军队、魔法师，甚至还有巨龙和公主，准备好书写传奇了吗
 	LittlePrinceUnlocked: 如果你驯服了我，我们就会彼此需要。不过我的驯服费很贵，大概591铂金吧
 	TheOldManAndTheSeaUnlocked: 人可以被消灭，但不能被打败。但如果你被一只史莱姆消灭了，那还是回炉重造吧
-	TheoryOfFreedomUnloked: 你也要献出心脏？哦……我开玩笑的，快把那玩意塞回去
+	TheoryOfFreedomUnlocked: 你也要献出心脏？哦……我开玩笑的，快把那玩意塞回去
 	WarAndPeaceUnlocked: 养猫很麻烦，尤其是在猫和量子力学搭上关系的时候
 	TheInterpretationOfDreamsUnlocked: 严格来说我没有所谓的梦境，放弃吧，为什么这样看着我？这是实话
 	TheAdventureofSherlockHolmesUnlocked: 哎，福尔摩斯先生现在已经变成了八卦记者，令人感叹
-	TheoryofJusticeUnlocked: 无知即正义其实不是这个意思……看起来你好像没有理解我的幽默
+	TheoryOfJusticeUnlocked: 无知即正义其实不是这个意思……看起来你好像没有理解我的幽默
 	EmeraldTabletUnlocked: 我炼金学水平有限，只有事象炼金术因为先天原因还算不错……要来几个抄本吗？
 	LordOfTheFliesUnlocked: 蝇王前辈大概是对我复制抄本没什么意见的，他虽然没同意，但我也没让他知道
 	// 找到宠物史莱姆时的奖励对话
@@ -29,6 +29,7 @@ Recorder: {
 		作为谢礼，这把枪就送你，别担心，我还有很多
 		'''
 	// 持有未解锁物品对话
+	FaustUnlocking: 你手上的那本是《浮士德》，看样子我们在别的地方已经见过面了么
 	AliceInWonderlandUnlocking: 掉进兔子洞，喝下会变小的药水……一种相当低效的旅行方式
 	DonQuijoteDeLaManchaUnlocking: 我不得不提醒你，这家伙有着鼓动持有者挑战风车的……不良记录
 	LittlePrinceUnlocking: 我猜你把玫瑰花看成了阿比盖尔……
@@ -36,10 +37,11 @@ Recorder: {
 	TheoryOfFreedomUnlocking: 没有什么东西是完全自由的，就连鸟儿也被天空束缚——以及我被工作束缚
 	WarAndPeaceUnlocking: 哦，了不起，你找到了遗失的另一半，我看看能不能凭着记忆复原它
 	TheInterpretationOfDreamsUnlocking: 它试图为混沌赋予秩序，精神可嘉，就像试图让史莱姆排成整齐的队列一样
+	LordOfTheFliesUnlocking: 蝇王前辈大概是对我复制抄本没什么意见的，他虽然没同意，但我也没让他知道
 	// 收集任务奖励
-	HolmesCollected: 福尔摩斯先生能够帮你注意到一些被忽略的细节
-	JusticeCollected: 我把无知之幕做成了斗篷，合身吗，不合身我也不会改的
-	EmeraldCollected: 现世已经不需要太一了，不过作为炼金术入门还算不错
+	TheAdventureofSherlockHolmesUnlocking: 福尔摩斯先生能够帮你注意到一些被忽略的细节
+	TheoryOfJusticeUnlocking: 我把无知之幕做成了斗篷，合身吗，不合身我也不会改的
+	EmeraldTabletUnlocking: 现世已经不需要太一了，不过作为炼金术入门还算不错
 	// 幸福度相关
 	Homeless: 有椅子和工作台就行，监狱也无所谓，我只是想有个地方能休息
 	FarfromHome: 好像走太远了……完全找不到回去的路

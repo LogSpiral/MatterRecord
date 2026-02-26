@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using MatterRecord.Contents.Faust;
+using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using Terraria.Audio;
@@ -57,7 +58,7 @@ public partial class Recorder
                     currentChat = chatResult;
                     return " ";
                 }
-                else
+                else if(recordBook is not Faust.Faust)
                     recordBooks.Add(recordBook);
             }
         }
@@ -71,6 +72,7 @@ public partial class Recorder
 
         // 特殊物品闲聊
         foreach (var recordBook in recordBooks)
+
             chat.Add(Dialogue(recordBook.RecordType.ToString() + "Unlocked"));
 
         // NPC相关闲聊
