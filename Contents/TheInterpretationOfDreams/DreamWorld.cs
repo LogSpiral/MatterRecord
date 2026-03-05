@@ -269,7 +269,10 @@ public class DreamWorld : ModSystem
         }
         return false;
     }
-
+    public override void ClearWorld()
+    {
+        UsedZoologistDream = false;
+    }
     public override void LoadWorldData(TagCompound tag)
     {
         UsedZoologistDream = tag.GetBool(nameof(UsedZoologistDream));

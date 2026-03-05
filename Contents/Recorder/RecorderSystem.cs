@@ -17,6 +17,10 @@ public class RecorderSystem : ModSystem
     public static bool CheckUnlock(IRecordBookItem recordBookItem) => CheckUnlock(recordBookItem.RecordType);
     public static void SetUnlock(ItemRecords record) => Instance?._itemLockRecords[(int)record] = true;
     public static void SetUnlock(IRecordBookItem recordBookItem) => SetUnlock(recordBookItem.RecordType);
+    public override void ClearWorld()
+    {
+        _itemLockRecords = default;
+    }
     public override void LoadWorldData(TagCompound tag)
     {
         if (tag.TryGet<ulong>("LR", out var records))
