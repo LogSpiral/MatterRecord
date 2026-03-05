@@ -299,3 +299,8 @@ TaijiNoYume: {
 		Is it the mother's heart you fear?"
 		'''
 }
+
+RecordUnlockPill: {
+	DisplayName: Record Unlock Pill
+	Tooltip: ""
+}

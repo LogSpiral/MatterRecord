@@ -1,0 +1,21 @@
+void mainImage( out vec4 fragColor, in vec2 fragCoord )
+{
+    // Normalized pixel coordinates (from 0 to 1)
+    vec2 uv = fragCoord/iResolution.xy;
+    uv -= vec2(.5,.5);
+    uv.x *= iResolution.x / iResolution.y;
+    vec2 coord = fragCoord - iResolution.xy * .5;
+    // Time varying pixel color
+    float gray = (192.0 / length(coord) - 3.0) / 13.0;
+    gray = pow(gray,1.2);
+    vec3 col = vec3(gray,gray,gray);
+        col *= 1.0 - smoothstep(56.0,64.0,length(coord));
+
+    if(abs(coord.x) > 64.0 || abs(coord.y) > 64.0)
+    {
+        col = vec3(1.0,0.0,0.0);
+    }
+    
+    // Output to screen
+    fragColor = vec4(col,1.0);
+}

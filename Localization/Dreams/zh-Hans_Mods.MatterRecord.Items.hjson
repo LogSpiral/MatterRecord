@@ -299,3 +299,8 @@ TaijiNoYume: {
 		   而感到害怕吗......”
 		'''
 }
+
+RecordUnlockPill: {
+	// DisplayName: Record Unlock Pill
+	// Tooltip: ""
+}

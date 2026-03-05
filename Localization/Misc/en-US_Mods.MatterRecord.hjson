@@ -24,6 +24,7 @@ NPCs: {
 		Name: Joyce
 		Copy: Copy
 		Collect: Collect
+		Reward: Reward
 		Spawn: Spawning Recorder
 
 		TownNPCMood: {

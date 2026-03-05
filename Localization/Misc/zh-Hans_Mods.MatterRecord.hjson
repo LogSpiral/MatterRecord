@@ -24,6 +24,7 @@ NPCs: {
 		Name: 乐九
 		Copy: 抄写
 		Collect: 收集
+		Reward: 奖励
 		Spawn: 正在生成记录者
 
 		TownNPCMood: {

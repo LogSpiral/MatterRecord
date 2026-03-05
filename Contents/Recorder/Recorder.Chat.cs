@@ -12,14 +12,33 @@ namespace MatterRecord.Contents.Recorder;
 
 public partial class Recorder
 {
-    private string currentChat;
-    private int chatTimer;
+
+
+    private static string UnlockRecord(int type, IRecordBookItem recordBook)
+    {
+        static string Dialogue(string key) => Language.GetTextValue($"Mods.MatterRecord.Dialogue.Recorder.{key}");
+        RecorderSystem.SetUnlock(recordBook);
+        string chatResult = Dialogue(recordBook.RecordType.ToString() + "Unlocking");
+        currentChat = "...";
+        chatTimer = 0;
+        Main.npcChatText = "...";
+        RecorderSystem.StartUnlockAnimation(type);
+        RecorderSystem.OnEndAnimation = delegate
+        {
+            currentChat = chatResult;
+            chatTimer = 0;
+        };
+        return chatResult;
+    }
+
+    private static string currentChat;
+    private static int chatTimer;
     public override string GetChat()
     {
         chatTimer = 0;
         string chatResult;
-        string Dialogue(string key) => Language.GetTextValue($"Mods.MatterRecord.Dialogue.Recorder.{key}");
-        string DialogueWithArgs(string key, params object[] args) => Language.GetTextValue($"Mods.MatterRecord.Dialogue.Recorder.{key}", args);
+        static string Dialogue(string key) => Language.GetTextValue($"Mods.MatterRecord.Dialogue.Recorder.{key}");
+        static string DialogueWithArgs(string key, params object[] args) => Language.GetTextValue($"Mods.MatterRecord.Dialogue.Recorder.{key}", args);
         var recordPlayer = Main.LocalPlayer.GetModPlayer<RecorderPlayer>();
         // 首次见面奖励
         if (!recordPlayer.MetWithRecorder)
@@ -38,33 +57,26 @@ public partial class Recorder
         List<IRecordBookItem> recordBooks = [];
         foreach (var item in Main.LocalPlayer.inventory)
         {
+#if false
             if (item.ModItem is IRecordBookItem recordBook)
             {
                 if (!recordBook.IsRecordUnlocked)
                 {
-                    RecorderSystem.SetUnlock(recordBook);
-                    SoundEngine.PlaySound(SoundID.ResearchComplete);
-                    ParticleOrchestraSettings settings = new()
-                    {
-                        IndexOfPlayerWhoInvokedThis = (byte)Main.myPlayer
-                    };
-                    for (int n = 0; n < 10; n++)
-                    {
-                        settings.PositionInWorld = Main.LocalPlayer.Center + Main.rand.NextVector2Unit() * Main.rand.NextFloat(0, Main.rand.NextFloat(0, 256)) + new Vector2(0, 256);
-                        settings.MovementVector = new Vector2(0, Main.rand.NextFloat(-64, -8));
-                        ParticleOrchestrator.Spawn_PrincessWeapon(settings);
-                    }
-                    chatResult = Dialogue(recordBook.RecordType.ToString() + "Unlocking");
-                    currentChat = chatResult;
+                    chatResult = UnlockRecord(recordBook);
                     return " ";
                 }
                 else if(recordBook is not Faust.Faust)
                     recordBooks.Add(recordBook);
             }
+#else
+            if (item.ModItem is IRecordBookItem { RecordType: not ItemRecords.Faust } recordBook
+                && recordBook.IsRecordUnlocked)
+                recordBooks.Add(recordBook);
+#endif
         }
 
         // 闲聊
-        WeightedRandom<string> chat = new WeightedRandom<string>();
+        WeightedRandom<string> chat = new();
         chat.Add(DialogueWithArgs("StandardDialogue1", Main.LocalPlayer.name));
         chat.Add(Dialogue("StandardDialogue2"));
         chat.Add(Dialogue("StandardDialogue3"));
@@ -107,5 +119,16 @@ public partial class Recorder
     {
         if (firstButton)
             shopName = SHOPNAME;
+        else
+        {
+            foreach (var item in Main.LocalPlayer.inventory)
+            {
+                if (item.ModItem is not IRecordBookItem recordBook
+                    || recordBook.IsRecordUnlocked) continue;
+                UnlockRecord(item.type, recordBook);
+
+                break;
+            }
+        }
     }
 }
