@@ -1,0 +1,10 @@
+﻿namespace MatterRecord.Contents.JoustingLances;
+
+public class CopperJoustingLanceProjectile : JoustingLanceProjectileBase;
+public class TinJoustingLanceProjectile : JoustingLanceProjectileBase;
+public class IronJoustingLanceProjectile : JoustingLanceProjectileBase;
+public class LeadJoustingLanceProjectile : JoustingLanceProjectileBase;
+public class SilverJoustingLanceProjectile : JoustingLanceProjectileBase;
+public class TungstenJoustingLanceProjectile : JoustingLanceProjectileBase;
+public class GoldJoustingLanceProjectile : JoustingLanceProjectileBase;
+public class PlatinumJoustingLanceProjectile : JoustingLanceProjectileBase;

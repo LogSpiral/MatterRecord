@@ -70,3 +70,43 @@ ForgetPill: {
 		"嘿这个真的是药丸不是蜥蜴太阳电池！"
 		'''
 }
+
+CopperJoustingLanceItem: {
+	DisplayName: 铜制骑枪
+	Tooltip: 提升速度以增加攻击力
+}
+
+TinJoustingLanceItem: {
+	DisplayName: 锡制骑枪
+	Tooltip: 提升速度以增加攻击力
+}
+
+IronJoustingLanceItem: {
+	DisplayName: 铁制骑枪
+	Tooltip: 提升速度以增加攻击力
+}
+
+LeadJoustingLanceItem: {
+	DisplayName: 铅制骑枪
+	Tooltip: 提升速度以增加攻击力
+}
+
+SilverJoustingLanceItem: {
+	DisplayName: 银制骑枪
+	Tooltip: 提升速度以增加攻击力
+}
+
+TungstenJoustingLanceItem: {
+	DisplayName: 钨制骑枪
+	Tooltip: 提升速度以增加攻击力
+}
+
+GoldJoustingLanceItem: {
+	DisplayName: 金制骑枪
+	Tooltip: 提升速度以增加攻击力
+}
+
+PlatinumJoustingLanceItem: {
+	DisplayName: 铂制骑枪
+	Tooltip: 提升速度以增加攻击力
+}

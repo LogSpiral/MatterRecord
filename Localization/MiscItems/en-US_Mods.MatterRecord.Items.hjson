@@ -78,3 +78,43 @@ ForgetPill: {
 		[DEBUG ITEM]
 		'''
 }
+
+CopperJoustingLanceItem: {
+	DisplayName: Copper Jousting Lance
+	Tooltip: Build momentum to increase attack power
+}
+
+TinJoustingLanceItem: {
+	DisplayName: Tin Jousting Lance
+	Tooltip: Build momentum to increase attack power
+}
+
+IronJoustingLanceItem: {
+	DisplayName: Iron Jousting Lance
+	Tooltip: Build momentum to increase attack power
+}
+
+LeadJoustingLanceItem: {
+	DisplayName: Lead Jousting Lance
+	Tooltip: Build momentum to increase attack power
+}
+
+SilverJoustingLanceItem: {
+	DisplayName: Silver Jousting Lance
+	Tooltip: Build momentum to increase attack power
+}
+
+TungstenJoustingLanceItem: {
+	DisplayName: Tungsten Jousting Lance
+	Tooltip: Build momentum to increase attack power
+}
+
+GoldJoustingLanceItem: {
+	DisplayName: Gold Jousting Lance
+	Tooltip: Build momentum to increase attack power
+}
+
+PlatinumJoustingLanceItem: {
+	DisplayName: Platinum Jousting Lance
+	Tooltip: Build momentum to increase attack power
+}
