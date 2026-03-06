@@ -78,7 +78,8 @@ public class ZoologiseDream() : ActionLikeDreams(26, () => Main.GetBestiaryProgr
             Main.NewText(this.GetLocalizedValue("TheSameSlime"), Color.Pink);
         else
         {
-            DreamWorld.UsedZoologistDream = true;
+            DreamSlimeSpwanPack.Get(player.Center).Send(runLocally: true);
+            DreamSlimeUnlockPack.Get().Send(runLocally: true);
             Item.stack--;
             if (Item.stack <= 0)
                 Item.TurnToAir();

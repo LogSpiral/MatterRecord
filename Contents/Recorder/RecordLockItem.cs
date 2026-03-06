@@ -40,11 +40,11 @@ public class RecordLockItem : GlobalItem
     {
         if (item.ModItem is IRecordBookItem recordBookItem && !recordBookItem.IsRecordUnlocked && !UnlockStyleInventoryVisualMask)
         {
-            UnlockStyleInventoryVisualMask = false;
             spriteBatch.Draw(TextureAssets.Item[ItemID.SpellTome].Value, position, null, drawColor, 0, new Vector2(14, 16), 0.85f, 0, 0);
             spriteBatch.Draw(TextureAssets.Item[ItemID.SpellTome].Value, position, null, Color.Lerp(Color.Transparent, Color.White with { A = 0 }, MathF.Cos(Main.GlobalTimeWrappedHourly * 6) * .25f + .25f), 0, new Vector2(14, 16), 0.85f, 0, 0);
             return false;
         }
+        UnlockStyleInventoryVisualMask = false;
         return true;
     }
     public override bool PreDrawInWorld(Item item, SpriteBatch spriteBatch, Color lightColor, Color alphaColor, ref float rotation, ref float scale, int whoAmI)

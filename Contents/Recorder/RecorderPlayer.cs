@@ -160,4 +160,8 @@ public class RecorderPlayer : ModPlayer
             tag["Met"] = true;
         //tag["HR"] = (ulong)_hintedRecords;
     }
+    public override void OnEnterWorld()
+    {
+        RecorderSystem.RequestSyncingRecordData.Get().Send();
+    }
 }

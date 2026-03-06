@@ -13,5 +13,6 @@ public enum ItemRecords
     TheOldManAndTheSea,
     TheoryOfFreedom,
     TheoryOfJustice,
-    WarAndPeace
+    WarAndPeace,
+    Count
 }

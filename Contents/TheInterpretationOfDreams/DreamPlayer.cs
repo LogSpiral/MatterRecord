@@ -181,6 +181,10 @@ namespace MatterRecord.Contents.TheInterpretationOfDreams
 
             base.OnHitNPC(target, hit, damageDone);
         }
+        public override void OnEnterWorld()
+        {
+            DreamSlimeRequestPack.Get().Send();
+        }
     }
 
     public static class DreamHelper

@@ -23,9 +23,19 @@ NPCs: {
 		DisplayName: Recorder
 		Name: Joyce
 		Copy: Copy
-		Collect: Collect
+		Collect: Unlock
 		Reward: Reward
 		Spawn: Spawning Recorder
+		Progress: Collecting Progress{0}
+		FindSlime: Missing pet?
+		FindSlimeDialogue:
+			'''
+			Well, I had a pet slime, but it seems that I can't find it recently 
+			... would you help me to find it?
+			'''
+		HowManyRequiredForReward: Collect {0} more records, and you can get a new item from me, Keep it up
+		HowManyRequiredToFullClear: There's only {0} records left, you are almost done it!
+		AllRecordUnlocked: All the records known has been collected yet, thanks for your effort! Have fun
 
 		TownNPCMood: {
 			Content: 这个地方还不错……如果忽略掉那些小麻烦的话
@@ -43,4 +53,6 @@ NPCs: {
 			Princess_LovesNPC: 我喜欢 {NPCName}。
 		}
 	}
+
+	DreamSlime.DisplayName: Dream Slime
 }

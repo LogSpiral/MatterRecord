@@ -23,9 +23,19 @@ NPCs: {
 		DisplayName: 记录者
 		Name: 乐九
 		Copy: 抄写
-		Collect: 收集
+		Collect: 解锁
 		Reward: 奖励
 		Spawn: 正在生成记录者
+		Progress: 收集进展{0}
+		FindSlime: 走失的宠物？
+		FindSlimeDialogue:
+			'''
+			话说我有一只宠物史莱姆，但是最近好像找不到它了
+			...你能留心帮忙看看吗？
+			'''
+		HowManyRequiredForReward: 再收集{0}个记录，就能从我这里领取并解锁一个新的道具，加油哦
+		HowManyRequiredToFullClear: 还剩下{0}个记录未收集，你就快完成收集了!
+		AllRecordUnlocked: 已知的所有记录已经收集完毕，感谢您的付出！玩得开心哦
 
 		TownNPCMood: {
 			Content: 这个地方还不错……如果忽略掉那些小麻烦的话
@@ -43,4 +53,6 @@ NPCs: {
 			// Princess_LovesNPC: 我喜欢 {NPCName}。
 		}
 	}
+
+	// DreamSlime.DisplayName: Dream Slime
 }

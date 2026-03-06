@@ -1,6 +1,8 @@
 ﻿using MatterRecord.Contents.AliceInWonderland;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using NetSimplified;
+using NetSimplified.Syncing;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,11 +23,45 @@ namespace MatterRecord.Contents.Recorder;
 public class RecorderSystem : ModSystem
 {
     private Bits64 _itemLockRecords;
-    public static void ClearRecord() => Instance?._itemLockRecords = default;
+    public static void ClearRecord() 
+    {
+        if (Instance is not { } instance) return;
+        instance._itemLockRecords = default;
+        ReceiveSyncingRecordData.Get(instance._itemLockRecords).Send();
+    }
     public static bool CheckUnlock(ItemRecords record) => Instance._itemLockRecords[(int)record];
     public static bool CheckUnlock(IRecordBookItem recordBookItem) => CheckUnlock(recordBookItem.RecordType);
-    public static void SetUnlock(ItemRecords record) => Instance?._itemLockRecords[(int)record] = true;
+    public static void SetUnlock(ItemRecords record)
+    {
+        if (Instance is not { } instance) return;
+        instance._itemLockRecords[(int)record] = true;
+        ReceiveSyncingRecordData.Get(instance._itemLockRecords).Send();
+    }
     public static void SetUnlock(IRecordBookItem recordBookItem) => SetUnlock(recordBookItem.RecordType);
+    public static int GetUnlockCountWithoutRewards()
+    {
+        int count = 0;
+        for (int n = 0; n < (int)ItemRecords.Count; n++)
+        {
+            if ((ItemRecords)n
+                is ItemRecords.Faust
+                or ItemRecords.TheAdventureofSherlockHolmes
+                or ItemRecords.TheoryOfJustice
+                or ItemRecords.EmeraldTablet)
+                continue;
+
+            if (Instance._itemLockRecords[n]) count++;
+        }
+        return count;
+    }
+    public static int GetUnlockCount()
+    {
+        int count = 0;
+        for (int n = 0; n < (int)ItemRecords.Count; n++)
+            if (Instance._itemLockRecords[n]) count++;
+        return count;
+    }
+
     public override void ClearWorld()
     {
         _itemLockRecords = default;
@@ -36,7 +72,6 @@ public class RecorderSystem : ModSystem
             _itemLockRecords = records;
         else
             _itemLockRecords = default;
-
         _itemLockRecords[(int)ItemRecords.Faust] = true;
         base.LoadWorldData(tag);
     }
@@ -305,6 +340,33 @@ public class RecorderSystem : ModSystem
         }, InterfaceScaleType.Game));
     }
 
+
+    public class RequestSyncingRecordData : NetModule
+    {
+        public static RequestSyncingRecordData Get() => NetModuleLoader.Get<RequestSyncingRecordData>();
+        public override void Receive()
+        {
+            if (Main.dedServ)
+                ReceiveSyncingRecordData.Get(Instance._itemLockRecords).Send();
+        }
+    }
+    [AutoSync]
+    public class ReceiveSyncingRecordData : NetModule
+    {
+        private ulong _value;
+        public static ReceiveSyncingRecordData Get(Bits64 flags)
+        {
+            var packet = NetModuleLoader.Get<ReceiveSyncingRecordData>();
+            packet._value = flags;
+            return packet;
+        }
+        public override void Receive()
+        {
+            Instance._itemLockRecords = _value;
+            if (Main.dedServ)
+                Send(-1, Sender);
+        }
+    }
 }
 public class RecorderSpawnPass : GenPass
 {
