@@ -21,7 +21,8 @@ public class LordOfTheFlies : ModItem,IRecordBookItem
         Item.shoot = ProjectileID.Bullet;
         Item.shootSpeed = 16;
         Item.DamageType = DamageClass.Ranged;
-        Item.rare = ItemRarityID.Lime;
+        Item.value = Item.buyPrice(copper: 5);
+        Item.rare = ItemRarityID.Quest;
         Item.holdStyle = ItemHoldStyleID.HoldHeavy;
         Item.noMelee = true;
         ItemID.Sets.ItemsThatAllowRepeatedRightClick[Type] = true;
@@ -368,6 +369,23 @@ public class LordOfTheFlies : ModItem,IRecordBookItem
         //damage.Additive += factor * .5f;
         //damage.Additive += factor2;
         //base.ModifyWeaponDamage(player, ref damage);
+    }
+
+    //蝇王随伤害加成加攻速
+    public override float UseTimeMultiplier(Player player)
+    {
+        
+        float rangeMultiplier = player.GetTotalDamage(DamageClass.Ranged).ApplyTo(1f);
+       
+        float rangeBonus = rangeMultiplier - 1f;
+
+        float targetFrames = 20f / (1f + rangeBonus * 1.5f);
+
+        targetFrames = Math.Max(6f, Math.Min(20f, targetFrames));
+
+        float baseFrames = 15f;
+
+        return targetFrames / baseFrames;
     }
 
     public override void UpdateInventory(Player player)

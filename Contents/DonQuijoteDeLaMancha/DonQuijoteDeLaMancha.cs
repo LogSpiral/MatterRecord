@@ -36,7 +36,8 @@ public class DonQuijoteDeLaMancha : MeleeSequenceItem<DonQuijoteDeLaManchaProj>,
         base.SetDefaults();
         Item.width = 66;
         Item.height = 66;
-        Item.rare = ItemRarityID.Red;
+        Item.value = Item.buyPrice(copper: 5);
+        Item.rare = ItemRarityID.Quest;
         Item.UseSound = SoundID.Item71;
         /*Item.damage = 155;
         Item.useTime = 24;

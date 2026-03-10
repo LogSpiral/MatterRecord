@@ -16,8 +16,8 @@ public class TheInterpretationOfDreams : ModItem, IRecordBookItem
     public override void SetDefaults()
     {
         Item.useStyle = ItemUseStyleID.Swing;
-        Item.value = Item.sellPrice(0, 5);
-        Item.rare = ItemRarityID.LightRed;
+        Item.value = Item.buyPrice(copper: 5);
+        Item.rare = ItemRarityID.Quest;
         Item.useTurn = true;
         Item.useTime = 18;
         Item.useAnimation = 18;

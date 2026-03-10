@@ -8,16 +8,16 @@ public class AliceInWonderlandWatch : ModItem, IRecordBookItem
     ItemRecords IRecordBookItem.RecordType => ItemRecords.AliceInWonderland;
 
     // public override string Texture => $"Terraria/Images/Item_{ItemID.PlatinumWatch}";
-
     public override void SetDefaults()
     {
-        Item.CloneDefaults(ItemID.PlatinumWatch);
+        Item.CloneDefaults(ItemID.PlatinumWatch); // 继承铂金表基础属性
         Item.accessory = true;
+        Item.value = Item.buyPrice(copper: 5);
+        Item.rare = ItemRarityID.Quest; 
 
         base.SetDefaults();
     }
-    public override bool CanEquipAccessory(Player player, int slot, bool modded) => this.IsRecordUnlocked;
-    
+
     public override void UpdateAccessory(Player player, bool hideVisual)
     {
         if (player.whoAmI != Main.myPlayer) return;

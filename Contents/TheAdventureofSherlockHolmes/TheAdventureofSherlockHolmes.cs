@@ -6,8 +6,8 @@ public class TheAdventureofSherlockHolmes : ModItem,IRecordBookItem
     public override void SetDefaults()
     {
         Item.width = Item.height = 48;
-        Item.value = Item.sellPrice(0, 1, 0, 0);
-        Item.rare = ItemRarityID.Green;
+        Item.value = Item.buyPrice(copper: 5);
+        Item.rare = ItemRarityID.Quest;
         base.SetDefaults();
     }
 

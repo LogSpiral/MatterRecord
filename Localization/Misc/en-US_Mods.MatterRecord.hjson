@@ -21,7 +21,7 @@ Sequence: {
 NPCs: {
 	Recorder: {
 		DisplayName: Recorder
-		Name: Joyce
+		Name: Nina
 		Copy: Copy
 		Collect: Unlock
 		Reward: Reward

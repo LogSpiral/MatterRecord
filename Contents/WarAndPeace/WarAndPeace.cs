@@ -9,8 +9,8 @@ public class WarAndPeace : ModItem, IRecordBookItem
     public override void SetDefaults()
     {
         Item.accessory = true;
-        Item.rare = ItemRarityID.Green;
-        Item.value = Item.sellPrice(0, 1);
+        Item.value = Item.buyPrice(copper: 5);
+        Item.rare = ItemRarityID.Quest;
         Item.width = Item.height = 32;
         base.SetDefaults();
     }
@@ -35,7 +35,7 @@ public class WarAndPeace : ModItem, IRecordBookItem
         {
             player.AddBuff(ModContent.BuffType<War>(), 2);
             player.GetDamage(DamageClass.Generic) += .1f;
-            player.GetDamage(DamageClass.Generic).Flat += 5f;
+
         }
         base.UpdateAccessory(player, hideVisual);
     }

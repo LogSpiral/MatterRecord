@@ -8,7 +8,7 @@ public class CantSeword : ModItem
         Item.useStyle = ItemUseStyleID.Swing;
         Item.useTime = Item.useAnimation = 18;
         Item.width = Item.height = 80;
-        Item.damage = 20;
+        Item.damage = 15;
         Item.rare = ItemRarityID.Blue;
         Item.value = Item.sellPrice(0, 0, 1, 0);
         Item.shoot = ModContent.ProjectileType<CantSewordProj>();

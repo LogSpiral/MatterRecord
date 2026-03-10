@@ -55,8 +55,8 @@ public class TheoryOfFreedom : ModItem, IRecordBookItem
     {
         Item.width = Item.height = 32;
         Item.accessory = true;
-        Item.value = Item.sellPrice(0, 4, 0, 0);
-        Item.rare = ItemRarityID.Yellow;
+        Item.value = Item.buyPrice(copper: 5);
+        Item.rare = ItemRarityID.Quest;
         base.SetDefaults();
     }
 

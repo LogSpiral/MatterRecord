@@ -116,7 +116,7 @@ public partial class Recorder : ModNPC
             //int defense = player.statDefense;
             int defense = player.armor[0].defense + player.armor[1].defense + player.armor[2].defense;
 
-            damage = (int)Math.Max(defense * (0.75f + rangeFactor + critFactor) / (1 + genericFactor * .5f), 1);
+            damage = (int)Math.Max(defense * 0.85f, 12);
         }
         else
         {
@@ -135,7 +135,7 @@ public partial class Recorder : ModNPC
                 //int defense = player.statDefense;
                 int defense = player.armor[0].defense + player.armor[1].defense + player.armor[2].defense;
 
-                int curDamage = (int)(Math.Max(defense * (0.75f + rangeFactor + critFactor) / (1 + genericFactor * .5f), 1));
+                int curDamage = (int)(Math.Max(defense * 0.85f , 1));
                 if (curDamage > damage)
                     damage = curDamage;
             }

@@ -22,8 +22,8 @@ public class LittlePrince : ModItem, IRecordBookItem
     {
         Item.width = 20;
         Item.height = 27;
-        Item.rare = ItemRarityID.Yellow;
-        Item.value = Item.sellPrice(0, 1);
+        Item.value = Item.buyPrice(copper: 5);
+        Item.rare = ItemRarityID.Quest;
         Item.accessory = true;
         base.SetDefaults();
     }

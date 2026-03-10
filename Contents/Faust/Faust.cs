@@ -33,8 +33,8 @@ public class Faust : ModItem, IRecordBookItem
     public override void SetDefaults()
     {
         Item.width = Item.height = 36;
-        Item.value = Item.sellPrice(0, 1, 0, 0);
-        Item.rare = ItemRarityID.Yellow;
+        Item.value = Item.buyPrice(copper: 5);
+        Item.rare = ItemRarityID.Quest;
         Item.useTime = Item.useAnimation = 60;
         Item.useStyle = ItemUseStyleID.HoldUp;
         Item.noUseGraphic = true;

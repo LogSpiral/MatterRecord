@@ -12,8 +12,8 @@ public class EmeraldTablet : ModItem,IRecordBookItem
     {
         Item.width = 22;
         Item.height = 24;
-        Item.value = Item.sellPrice(0, 1);
-        Item.rare = ItemRarityID.Green;
+        Item.value = Item.buyPrice(copper: 5);
+        Item.rare = ItemRarityID.Quest;
         base.SetDefaults();
     }
 

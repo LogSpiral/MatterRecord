@@ -25,8 +25,8 @@ public class TheOldManAndTheSea : ModItem, IRecordBookItem
     public override void SetDefaults()
     {
         Item.CloneDefaults(ItemID.WoodFishingPole);
-        Item.value = Item.sellPrice(0, 5);
-        Item.rare = ItemRarityID.Yellow;
+        Item.value = Item.buyPrice(copper: 5);
+        Item.rare = ItemRarityID.Quest;
         Item.fishingPole = 75; // Sets the poles fishing power
         Item.shootSpeed = 12f; // Sets the speed in which the bobbers are launched. Wooden Fishing Pole is 9f and Golden Fishing Rod is 17f.
         Item.shoot = ModContent.ProjectileType<TheOldManAndTheSeaBobber>(); // The bobber projectile. Note that this will be overridden by Fishing Bobber accessories if present, so don't assume the bobber spawned is the specified projectile. https://terraria.wiki.gg/wiki/Fishing_Bobbers

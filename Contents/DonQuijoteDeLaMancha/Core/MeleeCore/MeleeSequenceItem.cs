@@ -20,7 +20,7 @@ public abstract class MeleeSequenceItem<T> : ModItem where T : MeleeSequenceProj
         Item.height = 62;
         Item.useTime = 24;
         Item.useAnimation = 24;
-        Item.rare = ItemRarityID.Red;
+        Item.rare = ItemRarityID.Quest;
         Item.UseSound = SoundID.Item1;
         Item.knockBack = 4.95f;
         Item.damage = 514;

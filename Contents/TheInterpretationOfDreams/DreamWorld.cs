@@ -198,7 +198,7 @@ public class DreamWorld : ModSystem
     {
         var state = orig.Invoke(self, wingID);
         if (self.CheckDreamActive(DreamState.Steampunker))
-            state.FlyTime += wingID == 4 ? 300 : 120;
+            state.FlyTime += wingID == 4 ? 30 : 12;
         return state;
     }
 
