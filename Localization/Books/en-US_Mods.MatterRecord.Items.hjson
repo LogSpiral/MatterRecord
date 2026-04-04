@@ -158,3 +158,14 @@ LordOfTheFlies: {
 	Clatter: Clatter
 	NoEnoughEnergy: No Enough Energy
 }
+
+TheTaleOfTheHeike: {
+	DisplayName: The Tale Of The Heike
+	Tooltip: ""
+}
+
+CompendiumOfMateriaMedica: {
+	DisplayName: Compendium Of Materia Medica
+	Tooltip: ""
+	ShiftTooltip: Mods.MatterRecord.Items.CompendiumOfMateriaMedica.ShiftTooltip
+}

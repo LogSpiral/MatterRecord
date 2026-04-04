@@ -110,3 +110,36 @@ PlatinumJoustingLanceItem: {
 	DisplayName: 铂制骑枪
 	Tooltip: 提升速度以增加攻击力
 }
+
+RecordUnlockPill: {
+	DisplayName: 记录解锁胶囊
+	Tooltip:
+		'''
+		播放解锁动画
+		[调试用物品]
+		"我们曾考虑动画结束在头顶生成一个巨石"
+		'''
+}
+
+ImperfectPage: {
+	DisplayName: 碎纸页
+	Tooltip:
+		'''
+		无论何时，将记录者传送至你身旁
+		在[c/FF0000:背包内右键]激活后[c/FF0000:右键某个子弹类弹药]使记录者更换弹药
+		'''
+	CurrentAmmo: 当前记录子弹：{0}
+	NoAmmo: 无子弹
+	// StatusInactive: Mods.MatterRecord.Items.ImperfectPage.StatusInactive
+	// StatusActive: Mods.MatterRecord.Items.ImperfectPage.StatusActive
+	// FavoriteAmmo: Mods.MatterRecord.Items.ImperfectPage.FavoriteAmmo
+}
+
+SystemControlSword: {
+	DisplayName: 系统控剑
+	Tooltip:
+		'''
+		挥动时打开控键绑定页面
+		命中时造成额外伤害
+		'''
+}

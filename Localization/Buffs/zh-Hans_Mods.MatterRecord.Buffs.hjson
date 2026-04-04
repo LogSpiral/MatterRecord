@@ -40,3 +40,8 @@ Holiday_War: {
 	DisplayName: 休假！
 	Description: 见鬼，难道你要让猫猫星期日加班？
 }
+
+FragrantHerbs: {
+	DisplayName: 百草生香
+	Description: 感谢大自然的馈赠
+}

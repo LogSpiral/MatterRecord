@@ -118,3 +118,23 @@ PlatinumJoustingLanceItem: {
 	DisplayName: Platinum Jousting Lance
 	Tooltip: Build momentum to increase attack power
 }
+
+RecordUnlockPill: {
+	DisplayName: Record Unlock Pill
+	Tooltip: ""
+}
+
+ImperfectPage: {
+	DisplayName: Imperfect Page
+	Tooltip: ""
+	CurrentAmmo: Mods.MatterRecord.Items.ImperfectPage.CurrentAmmo
+	NoAmmo: Mods.MatterRecord.Items.ImperfectPage.NoAmmo
+	StatusInactive: Mods.MatterRecord.Items.ImperfectPage.StatusInactive
+	StatusActive: Mods.MatterRecord.Items.ImperfectPage.StatusActive
+	FavoriteAmmo: Mods.MatterRecord.Items.ImperfectPage.FavoriteAmmo
+}
+
+SystemControlSword: {
+	DisplayName: System Control Sword
+	Tooltip: ""
+}

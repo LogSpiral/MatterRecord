@@ -50,8 +50,8 @@ Recorder: {
 	NearOcean: 海洋，沙土，阳光，还有轻柔的海风，一切都完美的不像话
 	InUnderworld: 这里热的让人头昏眼花，地狱带给人的可怕意象与其相比简直不算什么
 	CloseToNurse: 我喜欢<护士名称>，她是我见过唯一能把绷带打得比废话还快的人
-	CloseToPartygirl: <派对女孩名称>总是邀请我参加她的派对我该说蛋糕味道还不错吗？
-	CloseToAngler:  我喜欢海洋，但不喜欢鱼的味道，遗憾的是<渔夫名称>恰恰相反
+	CloseToPartygirl: <派对女孩名称>总是邀请我参加她的派对,我该说蛋糕味道还不错吗？
+	CloseToAngler: 我喜欢海洋，但不喜欢鱼的味道，遗憾的是<渔夫名称>恰恰相反
 	NeutralHappiness: 这个地方还不错……如果忽略掉那些小麻烦的话
 	// NPC相关闲聊
 	GuideDialogue: "{0}似乎很可疑，你有想过为什么他懂的这么多吗？"

@@ -8,7 +8,11 @@ Tiles: {
 	EtherChest_Tile.MapEntry: 以太宝箱
 }
 
-Keybinds.CanHookPlatform.DisplayName: 可以钩至平台
+Keybinds: {
+	CanHookPlatform.DisplayName: 可以钩至平台
+	// ResetRecorderTrigger.DisplayName: Reset Recorder Trigger
+}
+
 DamageClasses.RangedMagicDamage.DisplayName: 魔法-远程伤害
 
 Sequence: {
@@ -35,10 +39,10 @@ NPCs: {
 			'''
 		HowManyRequiredForReward: 距离下一个收集奖励还剩……{0}个？加油吧
 		HowManyRequiredToFullClear: 我能感觉到，剩余的事象记录已经很少了，大概有{0}个吧
-		AllRecordUnlocked: 
-		    '''
+		AllRecordUnlocked:
+			'''
 			似乎这里没有更多的事象记录了……
-            不过我并不打算马上回去加上六倍的班
+			不过我并不打算马上回去加上六倍的班
 			'''
 
 		TownNPCMood: {
@@ -52,7 +56,7 @@ NPCs: {
 			DislikeBiome: 这里热的让人头昏眼花，{BiomeName}带给人的可怕意象与其相比简直不算什么
 			LoveNPC: 我喜欢{NPCName}，她是我见过唯一能把绷带打得比废话还快的人
 			LikeNPC: "{NPCName}总是邀请我参加她的派对，我该说蛋糕味道还不错吗？"
-			HateNPC: "我喜欢海洋，但不喜欢鱼的味道，遗憾的是{NPCName}恰恰相反"
+			HateNPC: 我喜欢海洋，但不喜欢鱼的味道，遗憾的是{NPCName}恰恰相反
 			// LikeNPC_Princess: 我喜欢 {NPCName}。
 			// Princess_LovesNPC: 我喜欢 {NPCName}。
 		}

@@ -253,7 +253,7 @@ TaxCollectorDream: {
 	DisplayName: 税收官之梦
 	Tooltip:
 		'''
-		激活时，城镇npc受伤时掉落金币(税收官除外)
+		激活时，城镇npc受伤掉落金币(税收官除外)
 		“你知道的，哪怕是在梦里，他们也不愿意缴税”
 		'''
 }
@@ -298,9 +298,4 @@ TaijiNoYume: {
 		   是因为明白了母亲的心，
 		   而感到害怕吗......”
 		'''
-}
-
-RecordUnlockPill: {
-	// DisplayName: Record Unlock Pill
-	// Tooltip: ""
 }

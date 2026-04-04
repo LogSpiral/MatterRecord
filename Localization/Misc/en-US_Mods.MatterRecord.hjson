@@ -8,7 +8,11 @@ Tiles: {
 	EtherChest_Tile.MapEntry: Ether Chest
 }
 
-Keybinds.CanHookPlatform.DisplayName: Can Hook Platform
+Keybinds: {
+	CanHookPlatform.DisplayName: Can Hook Platform
+	ResetRecorderTrigger.DisplayName: Reset Recorder Trigger
+}
+
 DamageClasses.RangedMagicDamage.DisplayName: Ranged Magic Damage
 
 Sequence: {

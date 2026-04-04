@@ -40,3 +40,8 @@ Holiday_War: {
 	DisplayName: Holiday!
 	Description: Damn, are you going to make the cat work overtime on Sundays?
 }
+
+FragrantHerbs: {
+	DisplayName: Fragrant Herbs
+	Description: Mods.MatterRecord.Buffs.FragrantHerbs.Description
+}
