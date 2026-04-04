@@ -1,15 +1,14 @@
 ﻿using MatterRecord.Contents.Recorder;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent;
-using Terraria.Localization;
 
 namespace MatterRecord.Contents.LordOfTheFlies;
-public class LordOfTheFlies : ModItem,IRecordBookItem
+
+public class LordOfTheFlies : ModItem, IRecordBookItem
 {
     ItemRecords IRecordBookItem.RecordType => ItemRecords.LordOfTheFlies;
     public override void SetDefaults()
@@ -164,7 +163,7 @@ public class LordOfTheFlies : ModItem,IRecordBookItem
                     if (player.whoAmI == Main.myPlayer)
                     {
                         Vector2 target = Main.MouseWorld - player.RotatedRelativePoint(player.MountedCenter);
-                        float rotation = target.ToRotation() ;
+                        float rotation = target.ToRotation();
                         player.direction = Math.Sign(target.X);
                         player.itemRotation = rotation;
                         if (player.direction < 0)
@@ -191,7 +190,7 @@ public class LordOfTheFlies : ModItem,IRecordBookItem
                         bool canShoot = true;
                         player.PickAmmo(Item, ref projToShoot, ref speed, ref canShoot, ref Damage, ref KnockBack, out usedAmmoItemId);
 
-                        Vector2 center = player.RotatedRelativePoint(player.MountedCenter);
+                        Vector2 center = player.RotatedRelativePoint(player.MountedCenter) + new Vector2(0, -6);//测试
                         ManualShoot(
                             player,
                             (EntitySource_ItemUse_WithAmmo)player.GetSource_ItemUse_WithPotentialAmmo(Item, usedAmmoItemId),
@@ -374,9 +373,9 @@ public class LordOfTheFlies : ModItem,IRecordBookItem
     //蝇王随伤害加成加攻速
     public override float UseTimeMultiplier(Player player)
     {
-        
+
         float rangeMultiplier = player.GetTotalDamage(DamageClass.Ranged).ApplyTo(1f);
-       
+
         float rangeBonus = rangeMultiplier - 1f;
 
         float targetFrames = 20f / (1f + rangeBonus * 1.5f);
