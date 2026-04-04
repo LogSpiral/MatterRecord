@@ -1,11 +1,12 @@
 namespace MatterRecord.Contents.InternalDocument;
 
+using Microsoft.Xna.Framework;
 public class InternalDocument : ModItem
 {
     public override void SetDefaults()
     {
-        Item.width = 40;
-        Item.height = 40;
+        Item.width = 36;
+        Item.height = 38;
         Item.useStyle = ItemUseStyleID.Swing;
         Item.useTime = 20;
         Item.useAnimation = 20;
@@ -21,6 +22,12 @@ public class InternalDocument : ModItem
         Item.UseSound = SoundID.Item1;
     }
 
+    public override void UseStyle(Player player, Rectangle heldItemFrame)
+    {
+
+        player.itemLocation.X -= 1f;
+        player.itemLocation.Y += 6f;
+    }
     public override void ModifyWeaponDamage(Player player, ref StatModifier damage)
     {
         // 修正：使用正确的方法获取启用的模组数量
