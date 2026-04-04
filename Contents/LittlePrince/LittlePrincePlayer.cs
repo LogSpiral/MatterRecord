@@ -16,6 +16,7 @@ public class LittlePrincePlayer : ModPlayer
         On_Player.DropTombstone += PrinceBanDropTombstone;
         base.Load();
     }
+
     private static void PrinceBanDropTombstone(On_Player.orig_DropTombstone orig, Player self, long coinsOwned, Terraria.Localization.NetworkText deathText, int hitDirection)
     {
         if (self.GetModPlayer<LittlePrincePlayer>().EquippedRose) return;
@@ -25,7 +26,6 @@ public class LittlePrincePlayer : ModPlayer
     public override void UpdateEquips()
     {
         // Player.buffImmune[BuffID.ManaSickness] = EquippedRose;
-
         base.UpdateEquips();
     }
 
@@ -45,5 +45,14 @@ public class LittlePrincePlayer : ModPlayer
         On_Player.DropCoins -= PrinceBanDropCoins;
         On_Player.DropTombstone -= PrinceBanDropTombstone;
         base.Unload();
+    }
+
+    public override void OnConsumeMana(Item item, int manaConsumed)
+    {
+        if (EquippedRose && Player.statMana < Player.statManaMax2 / 2)
+        {
+            Player.statMana += 1;
+            Player.ManaEffect(1);
+        }
     }
 }
