@@ -189,7 +189,7 @@ public class SwooshInfo : MeleeAction
     public override void OnStartSingle()
     {
         base.OnStartSingle();
-        if (Projectile.owner == Main.myPlayer) 
+        if (Projectile.owner == Main.myPlayer)
         {
             hitCounter = 0;
             if (randAngleRange > 0)

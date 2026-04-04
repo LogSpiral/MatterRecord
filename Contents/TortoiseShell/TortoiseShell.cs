@@ -1,9 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
-using Terraria.DataStructures;
-
-namespace MatterRecord.Contents.TortoiseShell;
+﻿namespace MatterRecord.Contents.TortoiseShell;
 
 public class TortoiseShell : ModItem
 {

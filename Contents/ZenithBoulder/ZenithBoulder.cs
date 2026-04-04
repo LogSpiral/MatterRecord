@@ -1,14 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using Terraria.Audio;
-using Terraria.DataStructures;
-using Terraria.Localization;
-using Terraria.ObjectData;
-using Terraria.WorldBuilding;
-
-namespace MatterRecord.Contents.ZenithBoulder
+﻿namespace MatterRecord.Contents.ZenithBoulder
 {
     public class ZenithBoulder : ModItem
     {
@@ -38,11 +28,11 @@ namespace MatterRecord.Contents.ZenithBoulder
         }
     }
 
-    
 
-    
 
-    
 
-    
+
+
+
+
 }

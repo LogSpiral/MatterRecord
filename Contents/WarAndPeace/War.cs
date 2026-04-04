@@ -1,4 +1,5 @@
 ﻿namespace MatterRecord.Contents.WarAndPeace;
+
 public class War : ModBuff
 {
     public override void SetStaticDefaults()

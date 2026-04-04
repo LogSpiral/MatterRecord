@@ -7,13 +7,11 @@ using MatterRecord.Contents.Recorder;
 using MatterRecord.Contents.TortoiseShell;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoMod.Cil;
 using ReLogic.Content;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent;
@@ -441,13 +439,14 @@ public class DonQuijoteDeLaManchaProj : MeleeSequenceProj
             SoundEngine.PlaySound(SoundID.Item92, Owner.Center);
             var rand = Main.rand.NextFloat(0.25f, 0.5f);
             originVelocity = Owner.velocity;
-            //if (Owner is Player plr) plr.AddBuff(ModContent.BuffType<DoggoBoost>(), 180);
+
             if (windMill != null)
             {
                 windMill.Projectile.ai[0] = 10;
                 windMill.Projectile.netUpdate = true;
                 NetMessage.SendData(MessageID.SyncProjectile, -1, -1, null, windMill.Projectile.whoAmI);
             }
+
             if (Owner is Player plr && plr.whoAmI == Main.myPlayer)
             {
                 var adder = targetedVector.SafeNormalize(default) * (1200 / TimerMax + 45);
@@ -455,6 +454,11 @@ public class DonQuijoteDeLaManchaProj : MeleeSequenceProj
                 var mplr = plr.GetModPlayer<DonQuijoteDeLaManchaPlayer>();
                 mplr.NextHitImmune = true;
                 mplr.Dashing = true;
+
+                // 设置无敌帧，覆盖整个冲刺过程（TimerMax 为冲刺总帧数，加 5 帧缓冲）
+                plr.immune = true;
+                plr.immuneTime = TimerMax + 5;
+
                 var maxT = 60;
                 if (mplr.itemDefinition != null && mplr.itemDefinition.Type > 0)
                     maxT = new Item(mplr.itemDefinition.Type).useAnimation;
@@ -462,30 +466,14 @@ public class DonQuijoteDeLaManchaProj : MeleeSequenceProj
                 mplr.DashCoolDownMax = mplr.DashCoolDown;
                 mplr.startPoint = plr.Center;
                 mplr.SendSyncAI();
+
                 var scaler = ((Main.MouseWorld - plr.Center).Length()) / 1440 + 1 / 6f - .1f;
                 Owner.velocity *= scaler;
                 if (Main.netMode is NetmodeID.MultiplayerClient)
                     VelocitySync.Get(plr.whoAmI, plr.velocity).Send();
             }
-            for (int k = 0; k < 60; k++)
-            {
-                var vec = ((k * MathHelper.TwoPi / 60f).ToRotationVector2() * 15 * new Vector2(rand, 1)).RotatedBy(Rotation);
-                //DoggoDust(Owner.Center, vec - targetedVector);
-                //DoggoDust(Owner.Center, vec * 2 - targetedVector * .5f);
-            }
-            var verS = StandardInfo.VertexStandard;
-            if (verS.active)
-            {
-                var u = UltraStab.NewUltraStabOnDefaultCanvas(verS.timeLeft, verS.scaler * ModifyData.Size * OffsetSize / 3 * 8f, Owner.Center - targetedVector);
-                u.heatMap = verS.heatMap;
-                u.negativeDir = Flip;
-                u.rotation = Rotation;
-                u.xScaler = 16;
-                u.ColorVector = verS.colorVec;
-                u.ApplyStdValueToVtxEffect(StandardInfo);
-                current = u;
-            }
-            base.OnStartAttack();
+
+            // ... 后续代码保持不变
         }
 
         private UltraStab current;

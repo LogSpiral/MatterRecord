@@ -41,7 +41,7 @@ public class RecorderPlayer : ModPlayer
         return hints;
     }
 
-    public static List<string> GetHintKeys() 
+    public static List<string> GetHintKeys()
     {
         return
             [

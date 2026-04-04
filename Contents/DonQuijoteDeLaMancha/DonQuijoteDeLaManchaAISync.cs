@@ -39,11 +39,11 @@ internal class DonQuijoteDeLaManchaAISync : NetModule
         modPlayer.StabTimeLeft = _stabTimeLeft;
         if (Main.dedServ)
             Get(
-                _whoAmI, 
-                _dashCoolDown, 
-                _dashCoolDownMax, 
+                _whoAmI,
+                _dashCoolDown,
+                _dashCoolDownMax,
                 _dashing,
-                _nextHitImmune, 
+                _nextHitImmune,
                 _stabTimeLeft)
                 .Send(-1, Sender);
     }

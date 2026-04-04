@@ -43,7 +43,7 @@ public class TortoiseShellPlayer : ModPlayer
         base.ModifyDrawInfo(ref drawInfo);
     }
 
-    public void SetSyncVelocity(Vector2 velocity) 
+    public void SetSyncVelocity(Vector2 velocity)
     {
         _syncPending = 1;
         _syncVelocity = velocity;

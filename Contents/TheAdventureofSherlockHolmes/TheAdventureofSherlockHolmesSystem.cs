@@ -1,6 +1,6 @@
 ﻿using MatterRecord.Contents.Recorder;
-using System;
 using Microsoft.Xna.Framework;
+using System;
 
 namespace MatterRecord.Contents.TheAdventureofSherlockHolmes;
 
@@ -38,7 +38,7 @@ public class TheAdventureofSherlockHolmesSystem : ModSystem
                         * Utils.GetLerpValue(18, 13, MathF.Abs(i), true)
                         * Utils.GetLerpValue(18, 13, MathF.Abs(j), true));
 
-                    Main.Map.Update(x, y, Math.Max(oldLight,newLight));
+                    Main.Map.Update(x, y, Math.Max(oldLight, newLight));
                 }
             }
         }

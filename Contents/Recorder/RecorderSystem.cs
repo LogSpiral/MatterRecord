@@ -1,16 +1,13 @@
-﻿using MatterRecord.Contents.AliceInWonderland;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using NetSimplified;
 using NetSimplified.Syncing;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.GameContent.Drawing;
-using Terraria.GameContent.ItemDropRules;
 using Terraria.Localization;
 using Terraria.ModLoader.IO;
 using Terraria.UI;
@@ -23,7 +20,7 @@ namespace MatterRecord.Contents.Recorder;
 public class RecorderSystem : ModSystem
 {
     private Bits64 _itemLockRecords;
-    public static void ClearRecord() 
+    public static void ClearRecord()
     {
         if (Instance is not { } instance) return;
         instance._itemLockRecords = default;

@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using Terraria.GameContent;
 using Terraria.Localization;
-using Terraria.UI.Chat;
 using Terraria.Utilities;
 
 namespace MatterRecord.Contents.Recorder;

@@ -1,4 +1,5 @@
 ﻿namespace MatterRecord.Contents.TheOldManAndTheSea;
+
 public class TheOldManAndTheSeaNPCSpawnRate : GlobalNPC
 {
     public override void EditSpawnRange(Player player, ref int spawnRangeX, ref int spawnRangeY, ref int safeRangeX, ref int safeRangeY)

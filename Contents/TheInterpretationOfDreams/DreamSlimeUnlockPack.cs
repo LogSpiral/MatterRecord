@@ -1,5 +1,4 @@
 ﻿using NetSimplified;
-using static Terraria.ModLoader.BackupIO;
 
 namespace MatterRecord.Contents.TheInterpretationOfDreams;
 

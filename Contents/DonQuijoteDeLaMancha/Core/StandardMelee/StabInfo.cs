@@ -48,7 +48,7 @@ public class StabInfo : MeleeAction
             float max = TimerMax;
             float t = Timer;
 
-            return t>= k
+            return t >= k
                 ? MathHelper.SmoothStep(1, 1.125f, Utils.GetLerpValue(max, k, t, true))
                 : MathHelper.Hermite(0, -5, 1.125f, 0, t / k);
         }

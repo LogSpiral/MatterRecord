@@ -1,6 +1,7 @@
 ﻿using MatterRecord.Contents.Recorder;
 namespace MatterRecord.Contents.TheAdventureofSherlockHolmes;
-public class TheAdventureofSherlockHolmes : ModItem,IRecordBookItem
+
+public class TheAdventureofSherlockHolmes : ModItem, IRecordBookItem
 {
     ItemRecords IRecordBookItem.RecordType => ItemRecords.TheAdventureofSherlockHolmes;
     public override void SetDefaults()

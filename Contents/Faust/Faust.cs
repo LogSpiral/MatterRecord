@@ -1,21 +1,13 @@
-﻿using MatterRecord.Contents.AliceInWonderland;
-using MatterRecord.Contents.Recorder;
-using Microsoft.Build.Utilities;
+﻿using MatterRecord.Contents.Recorder;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.IO;
 using System.Linq;
-using System.Reflection;
 using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.GameContent.Drawing;
-using Terraria.Localization;
-using Terraria.ModLoader.Default;
-using Terraria.ModLoader.IO;
-using Terraria.UI;
 
 namespace MatterRecord.Contents.Faust;
 

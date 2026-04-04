@@ -2,6 +2,7 @@
 using System;
 using Terraria.DataStructures;
 namespace MatterRecord.Contents.ProtagonistAura;
+
 public class ProtagonistAuraPlayer : ModPlayer
 {
     public bool HasProtagonistAura;

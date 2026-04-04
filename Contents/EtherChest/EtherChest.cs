@@ -1,4 +1,5 @@
 namespace MatterRecord.Contents.EtherChest;
+
 public class EtherChest : ModItem
 {
     public override void SetDefaults()

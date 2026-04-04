@@ -13,7 +13,7 @@ public class AliceInWonderlandWatch : ModItem, IRecordBookItem
         Item.CloneDefaults(ItemID.PlatinumWatch); // 继承铂金表基础属性
         Item.accessory = true;
         Item.value = Item.buyPrice(copper: 5);
-        Item.rare = ItemRarityID.Quest; 
+        Item.rare = ItemRarityID.Quest;
 
         base.SetDefaults();
     }

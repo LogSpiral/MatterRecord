@@ -1,5 +1,4 @@
-﻿using System.IO;
-using Terraria.ModLoader.IO;
+﻿using Terraria.ModLoader.IO;
 
 namespace MatterRecord.Contents.Faust;
 

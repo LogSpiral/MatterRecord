@@ -97,7 +97,7 @@ public class AliceInWonderlandPlayer : ModPlayer
             PortalSpawnedToday = count;
         base.LoadData(tag);
     }
-    private static HashSet<int> BunnyTypes { get; } = 
+    private static HashSet<int> BunnyTypes { get; } =
         [
         NPCID.Bunny,
         NPCID.BunnySlimed,

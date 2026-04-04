@@ -226,7 +226,7 @@ public class EternalWine : ModItem
             player.GetModPlayer<EternalWinePlayer>().SetLifeDebt(healValue, healValue);
             if (Main.netMode == NetmodeID.MultiplayerClient && Main.myPlayer == player.whoAmI)
             {
-                EternalWineSync.Get(Main.myPlayer, healValue, healValue).Send(-1,Main.myPlayer);
+                EternalWineSync.Get(Main.myPlayer, healValue, healValue).Send(-1, Main.myPlayer);
             }
         }
     }

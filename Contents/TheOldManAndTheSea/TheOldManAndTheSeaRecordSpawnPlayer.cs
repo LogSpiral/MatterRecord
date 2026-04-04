@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Terraria.DataStructures;
 
 namespace MatterRecord.Contents.TheOldManAndTheSea;
+
 public class TheOldManAndTheSeaRecordSpawnPlayer : ModPlayer
 {
     public override void Kill(double damage, int hitDirection, bool pvp, PlayerDeathReason damageSource)

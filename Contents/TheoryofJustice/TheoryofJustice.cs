@@ -5,7 +5,7 @@ using Terraria.GameContent.Bestiary;
 namespace MatterRecord.Contents.TheoryofJustice;
 
 [AutoloadEquip(EquipType.Back, EquipType.Front)]
-public class TheoryofJustice : ModItem,IRecordBookItem
+public class TheoryofJustice : ModItem, IRecordBookItem
 {
     ItemRecords IRecordBookItem.RecordType => ItemRecords.TheoryOfJustice;
     public override void SetDefaults()

@@ -1,10 +1,5 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using MonoMod.Cil;
-using System;
-using Terraria.DataStructures;
+﻿namespace MatterRecord.Contents.ProtagonistAura;
 
-namespace MatterRecord.Contents.ProtagonistAura;
 public class ProtagonistAura : ModItem
 {
     public override void Load()

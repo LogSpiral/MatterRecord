@@ -1,11 +1,5 @@
-﻿using MatterRecord.Contents.TheoryOfFreedom;
-using NetSimplified;
+﻿using NetSimplified;
 using NetSimplified.Syncing;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MatterRecord.Contents.LordOfTheFlies;
 
@@ -37,10 +31,10 @@ internal class LordOfFilesPlayerSync : NetModule
         modPlayer.ChargingEnergy = _chargingEnergy;
         if (Main.dedServ)
             Get(
-                _whoAmI, 
-                _storedAmmoCount, 
+                _whoAmI,
+                _storedAmmoCount,
                 _isInTrialMode,
-                _chargeTimer, 
+                _chargeTimer,
                 _chargingEnergy)
                 .Send(-1, Sender);
     }

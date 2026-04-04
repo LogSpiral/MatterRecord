@@ -19,7 +19,7 @@ public sealed class WrapperArgPair<T>() : IWrapperArgPair<T> where T : IGroupArg
     public WrapperArgPair ToNonGeneric() => new() { Argument = Argument, Wrapper = Wrapper };
 }
 
-public class WrapperArgPair 
+public class WrapperArgPair
 {
     public IGroupArgument Argument { get; set; }
     public Wrapper Wrapper { get; set; }

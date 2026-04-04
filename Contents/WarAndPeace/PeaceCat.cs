@@ -1,4 +1,5 @@
 ﻿namespace MatterRecord.Contents.WarAndPeace;
+
 public class PeaceCat : CatProj
 {
     public override void AI()

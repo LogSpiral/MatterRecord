@@ -1,5 +1,4 @@
-﻿using MatterRecord.Contents.LordOfTheFlies;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using NetSimplified;
 using System.IO;
 

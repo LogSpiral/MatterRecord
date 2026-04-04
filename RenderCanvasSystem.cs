@@ -1,5 +1,4 @@
-﻿using MatterRecord;
-using MatterRecord.Contents.DonQuijoteDeLaMancha.Core.Visuals;
+﻿using MatterRecord.Contents.DonQuijoteDeLaMancha.Core.Visuals;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;

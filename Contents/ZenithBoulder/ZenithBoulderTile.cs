@@ -5,6 +5,7 @@ using Terraria.Localization;
 using Terraria.ObjectData;
 
 namespace MatterRecord.Contents.ZenithBoulder;
+
 public class ZenithBoulderTile : ModTile
 {
     public override void KillMultiTile(int i, int j, int frameX, int frameY)

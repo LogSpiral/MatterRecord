@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Terraria.GameContent.ObjectInteractions;
 namespace MatterRecord.Contents.AliceInWonderland;
+
 public class AliceInWonderlandInteractionChecker : AHoverInteractionChecker
 {
     public override bool? AttemptOverridingHoverStatus(Player player, Rectangle rectangle)

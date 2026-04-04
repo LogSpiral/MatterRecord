@@ -24,7 +24,7 @@ public abstract class MeleeVertexInfo : VertexDrawInfo
     public float alphaFactor = 2f;
     public float heatRotation;
 
-    public void ApplyStdValueToVtxEffect( StandardInfo std)
+    public void ApplyStdValueToVtxEffect(StandardInfo std)
     {
         var info = this;
         info.frame = std.frame;

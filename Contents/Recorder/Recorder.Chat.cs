@@ -1,5 +1,4 @@
 ﻿using MatterRecord.Contents.TheInterpretationOfDreams;
-using System;
 using System.Collections.Generic;
 using Terraria.DataStructures;
 using Terraria.Localization;

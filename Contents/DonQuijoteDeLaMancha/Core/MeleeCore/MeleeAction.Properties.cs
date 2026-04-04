@@ -136,7 +136,7 @@ public partial class MeleeAction : ISequenceElement, ILoadable
 
     #endregion 辅助属性
 
-    public void Load(Mod mod) 
+    public void Load(Mod mod)
     {
         var type = GetType();
         MeleeSequenceProj.ElementTypeLookup.Add(type.Name, type);

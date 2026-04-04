@@ -2,6 +2,7 @@
 using Terraria.Localization;
 using Terraria.WorldBuilding;
 namespace MatterRecord.Contents.ZenithBoulder;
+
 public class ZenithBoulderPass(string str, float value) : GenPass(str, value)
 {
     public override void ApplyPass(GenerationProgress progress, GameConfiguration configuration)

@@ -2,8 +2,6 @@
 using MatterRecord.Contents.Recorder;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Content;
-using ReLogic.Graphics;
 using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.GameContent.UI.Chat;
@@ -14,6 +12,7 @@ using Terraria.ModLoader.UI;
 using Terraria.UI;
 using Terraria.UI.Chat;
 namespace MatterRecord;
+
 public class MatterRecordConfig : ModConfig
 {
     public static MatterRecordConfig Instance => ModContent.GetInstance<MatterRecordConfig>();

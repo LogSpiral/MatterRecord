@@ -1,11 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
-using System.Linq;
 using Terraria.DataStructures;
 using Terraria.Localization;
 
 namespace MatterRecord.Contents.TheoryOfFreedom;
 
-public class TheoryOfFreedomGlobalProjectile:GlobalProjectile
+public class TheoryOfFreedomGlobalProjectile : GlobalProjectile
 {
     public override bool? GrappleCanLatchOnTo(Projectile projectile, Player player, int x, int y)
     {

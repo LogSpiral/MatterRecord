@@ -18,7 +18,7 @@ public class WarAndPeacePlayer : ModPlayer
             if (weapon != null && !weapon.IsAir && weapon.damage > 0)
             {
                 float extraDamage = weapon.damage * 0.1f;   // 武器基础伤害的 10%
-                modifiers.FlatBonusDamage += extraDamage;  
+                modifiers.FlatBonusDamage += extraDamage;
             }
         }
     }

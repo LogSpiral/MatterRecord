@@ -1,6 +1,4 @@
 ﻿using MatterRecord.Contents.DonQuijoteDeLaMancha.Core.Interfaces;
-using System.Collections.Generic;
-using System.Xml;
 
 namespace MatterRecord.Contents.DonQuijoteDeLaMancha.Core;
 

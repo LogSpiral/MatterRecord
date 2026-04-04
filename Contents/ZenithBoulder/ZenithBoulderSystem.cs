@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Terraria.WorldBuilding;
 namespace MatterRecord.Contents.ZenithBoulder;
+
 public class ZenithBoulderSystem : ModSystem
 {
     public override void ModifyWorldGenTasks(List<GenPass> tasks, ref double totalWeight)

@@ -1,13 +1,8 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MatterRecord.Contents.DonQuijoteDeLaMancha.Core.Visuals;
 
-public class BlendStateLibrary:ILoadable
+public class BlendStateLibrary : ILoadable
 {
     public static BlendState AllOne { get; private set; }
     public static BlendState InverseColor { get; private set; }

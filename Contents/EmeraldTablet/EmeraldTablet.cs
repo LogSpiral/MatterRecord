@@ -1,10 +1,8 @@
 ﻿using MatterRecord.Contents.Recorder;
-using System.Linq;
-using static Terraria.Recipe;
 
 namespace MatterRecord.Contents.EmeraldTablet;
 
-public class EmeraldTablet : ModItem,IRecordBookItem
+public class EmeraldTablet : ModItem, IRecordBookItem
 {
     ItemRecords IRecordBookItem.RecordType => ItemRecords.EmeraldTablet;
 

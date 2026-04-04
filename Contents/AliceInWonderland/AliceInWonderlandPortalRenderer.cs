@@ -8,6 +8,7 @@ using Terraria.Graphics;
 using Terraria.Graphics.Renderers;
 
 namespace MatterRecord.Contents.AliceInWonderland;
+
 internal class AliceInWonderlandPortalRenderer : IPlayerRenderer
 {
     private List<DrawData> _voidLensData = new List<DrawData>();

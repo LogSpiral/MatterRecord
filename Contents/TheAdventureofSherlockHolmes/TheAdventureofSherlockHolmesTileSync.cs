@@ -59,7 +59,7 @@ internal class TheAdventureofSherlockHolmesTileSync : NetModule
                 NetMessage.SendSection(_whoAmI, point.X / 200, point.Y / 150);
                 NetMessage.SendSection(_whoAmI, point.X / 200, point.Y / 150 + yoff);
             }
-            else 
+            else
             {
                 NetMessage.SendSection(_whoAmI, point.X / 200, point.Y / 150);
             }
