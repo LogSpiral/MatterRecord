@@ -60,3 +60,11 @@ NPCs: {
 
 	DreamSlime.DisplayName: Dream Slime
 }
+
+Bestiary: {
+	Recorder: {
+		Common: 她似乎对一切事物都不感兴趣，即便是对于自己的工作也是一样……(后面的字迹被涂抹掉了)
+		Request: "{0}？我有些话要和你说，用鼠标点一下这行字吧"
+		Warn: 偷看别人的个人信息可不算是礼貌的行为哦
+	}
+}

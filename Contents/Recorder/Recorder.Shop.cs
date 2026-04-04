@@ -5,7 +5,6 @@ public partial class Recorder
     const string SHOPNAME = "Shop";
     public override void AddShops()
     {
-
         var npcShop = new NPCShop(Type, SHOPNAME);
         foreach (var pair in ContentSamples.ItemsByType)
         {
@@ -14,5 +13,4 @@ public partial class Recorder
         }
         npcShop.Register();
     }
-
 }

@@ -6,6 +6,9 @@ using System;
 using System.Collections.Generic;
 using Terraria.GameContent.Bestiary;
 using Terraria.GameContent.Personalities;
+using Terraria.GameContent.UI.Elements;
+using Terraria.Localization;
+using Terraria.UI;
 
 namespace MatterRecord.Contents.Recorder;
 
@@ -59,7 +62,8 @@ public partial class Recorder : ModNPC
     {
         bestiaryEntry.Info.AddRange([
             BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Surface,
-            new FlavorTextBestiaryInfoElement("Mods.MatterRecord.Bestiary.Recorder")
+            new FlavorTextBestiaryInfoElement("Mods.MatterRecord.Bestiary.Recorder.Common"),
+            new RecorderWarnElement()
         ]);
     }
 
@@ -160,5 +164,67 @@ public partial class Recorder : ModNPC
         itemFrame = new Rectangle(0, 0, item.Width, item.Height);
         horizontalHoldoutOffset = -8;
         base.DrawTownAttackGun(ref item, ref itemFrame, ref scale, ref horizontalHoldoutOffset);
+    }
+}
+public class RecorderWarnElement : IBestiaryInfoElement
+{
+    private bool _clicked;
+    private int _textCounter = 0;
+    private static string _warn;
+    public UIElement ProvideUIElement(BestiaryUICollectionInfo info)
+    {
+        if (info.UnlockState < BestiaryEntryUnlockState.CanShowStats_2)
+        {
+            return null;
+        }
+
+        UIPanel obj = new UIPanel(Main.Assets.Request<Texture2D>("Images/UI/Bestiary/Stat_Panel"), null, 12, 7)
+        {
+            Width = new StyleDimension(-11f, 1f),
+            Height = new StyleDimension(109f, 0f),
+            BackgroundColor = new Color(43, 56, 101),
+            BorderColor = Color.Transparent,
+            Left = new StyleDimension(3f, 0f),
+            PaddingLeft = 4f,
+            PaddingRight = 4f
+        };
+        UIText uIText = new UIText("", 0.8f)
+        {
+            HAlign = 0f,
+            VAlign = 0f,
+            Width = StyleDimension.FromPixelsAndPercent(0f, 1f),
+            Height = StyleDimension.FromPixelsAndPercent(0f, 1f),
+            IsWrapped = true
+        };
+        uIText.SetText(Language.GetText("Mods.MatterRecord.Bestiary.Recorder.Request").Format(Main.gameMenu ? "" : Main.LocalPlayer.name ?? ""));
+        _warn = Language.GetTextValue("Mods.MatterRecord.Bestiary.Recorder.Warn");
+        uIText.OnLeftClick += delegate
+        {
+            _clicked = true;
+            uIText.TextColor = Color.Red;
+        };
+        uIText.OnUpdate += delegate
+        {
+            if (!_clicked) 
+            {
+                uIText.TextColor = Color.Lerp(uIText.TextColor, uIText.IsMouseHovering ? Color.White : Color.Gray, 0.1f); 
+                return;
+            }
+            _textCounter++;
+            int index = _textCounter / 10;
+            if (_textCounter % 10 == 0 && index <= _warn.Length)
+                uIText.SetText(_warn[0..index]);
+        };
+        AddDynamicResize(obj, uIText);
+        obj.Append(uIText);
+        return obj;
+    }
+
+    public static void AddDynamicResize(UIElement container, UIText text)
+    {
+        text.OnInternalTextChange += delegate
+        {
+            container.Height = new StyleDimension(text.MinHeight.Pixels, 0f);
+        };
     }
 }

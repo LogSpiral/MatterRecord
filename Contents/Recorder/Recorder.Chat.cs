@@ -4,7 +4,6 @@ using Terraria.DataStructures;
 using Terraria.Localization;
 using Terraria.ModLoader.IO;
 using Terraria.Utilities;
-
 namespace MatterRecord.Contents.Recorder;
 
 public partial class Recorder
@@ -49,8 +48,6 @@ public partial class Recorder
             return " ";
         }
         askForSlimeThisTime = !DreamWorld.UsedZoologistDream && Main.rand.NextBool(10);
-
-
         // 解锁物品
         List<IRecordBookItem> recordBooks = [];
         foreach (var item in Main.LocalPlayer.inventory)
@@ -82,7 +79,6 @@ public partial class Recorder
 
         // 特殊物品闲聊
         foreach (var recordBook in recordBooks)
-
             chat.Add(Dialogue(recordBook.RecordType.ToString() + "Unlocked"));
 
         // NPC相关闲聊
@@ -167,9 +163,6 @@ public partial class Recorder
                 askForSlimeTriggered = true;
                 return;
             }
-
-
-
             var count = RecorderSystem.GetUnlockCountWithoutRewards();
             int rewardType;
             bool findSlime = !RecorderSystem.CheckUnlock(ItemRecords.LordOfTheFlies) && NPC.AnyNPCs(ModContent.NPCType<DreamSlime>());
@@ -189,12 +182,6 @@ public partial class Recorder
                     6 => ModContent.ItemType<EmeraldTablet.EmeraldTablet>(),
                     _ => -1
                 };
-
-
-
-
-
-
             if (rewardType != -1)
             {
                 var index = Item.NewItem(new EntitySource_Gift(NPC), Main.LocalPlayer.Hitbox, rewardType);
@@ -212,7 +199,6 @@ public partial class Recorder
 
                 return;
             }
-
             if (count < 6)
             {
                 var content = this.GetLocalization("HowManyRequiredForReward").Format(count % 2 == 0 ? 2 : 1);
@@ -231,9 +217,6 @@ public partial class Recorder
                     SetChatText(content);
                 }
             }
-
-
-
         }
     }
     private void SetChatText(string content)
