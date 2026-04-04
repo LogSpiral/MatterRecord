@@ -99,6 +99,45 @@ public partial class Recorder
         return " ";
     }
 
+    private string GetSecondaryButtonText()
+    {
+        if (askForSlimeThisTime)
+        {
+            return this.GetLocalizedValue("FindSlime");
+        }
+        if (string.IsNullOrEmpty(cachedItemName) || (int)(Main.GlobalTimeWrappedHourly * 60) % 10 == 0)
+        {
+            foreach (var item in Main.LocalPlayer.inventory)
+            {
+                if (item.ModItem is not IRecordBookItem recordBook || recordBook.IsRecordUnlocked) continue;
+                cachedItemName = item.Name;
+                break;
+            }
+        }
+
+        string defaultText = this.GetLocalization("Progress").Format($"({RecorderSystem.GetUnlockCount()}/{(int)ItemRecords.Count})");
+        if (cachedItemName != null)
+        {
+            defaultText = $"{this.GetLocalizedValue("Collect")} ({cachedItemName})";
+        }
+
+        int count = RecorderSystem.GetUnlockCountWithoutRewards();
+        bool findSlime = !RecorderSystem.CheckUnlock(ItemRecords.LordOfTheFlies) && NPC.AnyNPCs(ModContent.NPCType<DreamSlime>());
+
+        if (count is 2 or 4 or 6 || findSlime)
+        {
+            if (count == 2 && RecorderSystem.CheckUnlock(ItemRecords.TheAdventureofSherlockHolmes)) return defaultText;
+            if (count == 4 && RecorderSystem.CheckUnlock(ItemRecords.TheoryOfJustice)) return defaultText;
+            if (count == 6 && RecorderSystem.CheckUnlock(ItemRecords.EmeraldTablet)) return defaultText;
+            string key = count switch { 2 => "TheAdventureofSherlockHolmes", 4 => "TheoryofJustice", 6 or _ => "EmeraldTablet" };
+            if (findSlime)
+                key = "LordOfTheFlies";
+            return $"{this.GetLocalizedValue("Reward")} ({Language.GetTextValue($"Mods.MatterRecord.Items.{key}.DisplayName")})";
+        }
+
+        return defaultText;
+    }
+
     public override void SetChatButtons(ref string button, ref string button2)
     {
         if (chatTimer == 0)
@@ -113,41 +152,7 @@ public partial class Recorder
                 Main.npcChatText = currentChat[..chatTimer];
         }
         button = this.GetLocalizedValue("Copy");
-
-        if (askForSlimeThisTime)
-        {
-            button2 = this.GetLocalizedValue("FindSlime");
-            return;
-        }
-
-
-
-        if (string.IsNullOrEmpty(cachedItemName) || (int)(Main.GlobalTimeWrappedHourly * 60) % 10 == 0)
-            foreach (var item in Main.LocalPlayer.inventory)
-            {
-                if (item.ModItem is not IRecordBookItem recordBook
-                    || recordBook.IsRecordUnlocked) continue;
-                cachedItemName = item.Name;
-                break;
-            }
-        button2 = this.GetLocalization("Progress").Format($"({RecorderSystem.GetUnlockCount()}/{(int)ItemRecords.Count})");
-        if (cachedItemName != null)
-        {
-            button2 = $"{this.GetLocalizedValue("Collect")} ({cachedItemName})";
-        }
-        int count = RecorderSystem.GetUnlockCountWithoutRewards();
-        bool findSlime = !RecorderSystem.CheckUnlock(ItemRecords.LordOfTheFlies) && NPC.AnyNPCs(ModContent.NPCType<DreamSlime>());
-        if (count is 2 or 4 or 6 || findSlime)
-        {
-            if (count == 2 && RecorderSystem.CheckUnlock(ItemRecords.TheAdventureofSherlockHolmes)) return;
-            if (count == 4 && RecorderSystem.CheckUnlock(ItemRecords.TheoryOfJustice)) return;
-            if (count == 6 && RecorderSystem.CheckUnlock(ItemRecords.EmeraldTablet)) return;
-            string key = count switch { 2 => "TheAdventureofSherlockHolmes", 4 => "TheoryofJustice", 6 or _ => "EmeraldTablet" };
-            if (findSlime)
-                key = "LordOfTheFlies";
-            button2 = $"{this.GetLocalizedValue("Reward")} ({Language.GetTextValue($"Mods.MatterRecord.Items.{key}.DisplayName")})";
-        }
-
+        button2 = GetSecondaryButtonText();
     }
     private static string cachedItemName;
     public override void OnChatButtonClicked(bool firstButton, ref string shopName)
