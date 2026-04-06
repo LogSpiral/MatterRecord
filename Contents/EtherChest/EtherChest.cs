@@ -2,6 +2,7 @@ namespace MatterRecord.Contents.EtherChest;
 
 public class EtherChest : ModItem
 {
+    public override bool IsLoadingEnabled(Mod mod) => false;
     public override void SetDefaults()
     {
         Item.DefaultToPlaceableTile(ModContent.TileType<EtherChest_Tile>());

@@ -10,6 +10,7 @@ namespace MatterRecord.Contents.EtherChest;
 
 public class EtherChest_Tile : ModTile
 {
+    public override bool IsLoadingEnabled(Mod mod) => false;
     public override void SetStaticDefaults()
     {
         // Properties

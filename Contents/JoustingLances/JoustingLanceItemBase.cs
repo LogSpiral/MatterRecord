@@ -2,6 +2,7 @@
 
 public abstract class JoustingLanceItemBase<T>(int damage, int value, int rarity, int barType) : ModItem where T : ModProjectile
 {
+    public override bool IsLoadingEnabled(Mod mod) => false;
     public override void SetDefaults()
     {
         Item.CloneDefaults(ItemID.JoustingLance);

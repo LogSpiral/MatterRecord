@@ -7,6 +7,7 @@ namespace MatterRecord.Contents.JoustingLances;
 
 public abstract class JoustingLanceProjectileBase : ModProjectile
 {
+    public override bool IsLoadingEnabled(Mod mod) => false;
     public override void SetDefaults()
     {
         Projectile.CloneDefaults(ProjectileID.JoustingLance);
