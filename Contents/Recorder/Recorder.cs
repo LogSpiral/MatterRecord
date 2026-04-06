@@ -4,11 +4,14 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using Terraria.Audio;
+using Terraria.GameContent;
 using Terraria.GameContent.Bestiary;
 using Terraria.GameContent.Personalities;
 using Terraria.GameContent.UI.Elements;
 using Terraria.Localization;
 using Terraria.UI;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace MatterRecord.Contents.Recorder;
 
@@ -62,8 +65,7 @@ public partial class Recorder : ModNPC
     {
         bestiaryEntry.Info.AddRange([
             BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Surface,
-            new FlavorTextBestiaryInfoElement("Mods.MatterRecord.Bestiary.Recorder.Common"),
-            new RecorderWarnElement()
+            new RecorderFlavorTextElement()
         ]);
     }
 
@@ -166,17 +168,26 @@ public partial class Recorder : ModNPC
         base.DrawTownAttackGun(ref item, ref itemFrame, ref scale, ref horizontalHoldoutOffset);
     }
 }
-public class RecorderWarnElement : IBestiaryInfoElement
+public class RecorderFlavorTextElement : FlavorTextBestiaryInfoElement, IBestiaryInfoElement, ICategorizedBestiaryInfoElement
 {
     private bool _clicked;
     private int _textCounter = 0;
     private static string _warn;
-    public UIElement ProvideUIElement(BestiaryUICollectionInfo info)
+    public RecorderFlavorTextElement() : base("")
+    {
+
+    }
+    public UIBestiaryEntryInfoPage.BestiaryInfoCategory ElementCategory => UIBestiaryEntryInfoPage.BestiaryInfoCategory.FlavorText;
+
+    public new UIElement ProvideUIElement(BestiaryUICollectionInfo info)
     {
         if (info.UnlockState < BestiaryEntryUnlockState.CanShowStats_2)
         {
             return null;
         }
+        _clicked = false;
+        _textCounter = 0;
+        _warn = Language.GetTextValue("Mods.MatterRecord.Bestiary.Recorder.Warn");
 
         UIPanel obj = new UIPanel(Main.Assets.Request<Texture2D>("Images/UI/Bestiary/Stat_Panel"), null, 12, 7)
         {
@@ -188,7 +199,7 @@ public class RecorderWarnElement : IBestiaryInfoElement
             PaddingLeft = 4f,
             PaddingRight = 4f
         };
-        UIText uIText = new UIText("", 0.8f)
+        UIText UITextFlavor = new UIText(Language.GetTextValue("Mods.MatterRecord.Bestiary.Recorder.Common"), 0.8f)
         {
             HAlign = 0f,
             VAlign = 0f,
@@ -196,35 +207,51 @@ public class RecorderWarnElement : IBestiaryInfoElement
             Height = StyleDimension.FromPixelsAndPercent(0f, 1f),
             IsWrapped = true
         };
-        uIText.SetText(Language.GetText("Mods.MatterRecord.Bestiary.Recorder.Request").Format(Main.gameMenu ? "" : Main.LocalPlayer.name ?? ""));
-        _warn = Language.GetTextValue("Mods.MatterRecord.Bestiary.Recorder.Warn");
-        uIText.OnLeftClick += delegate
+
+        UIText UITextWarn = new UIText("", 0.8f)
+        {
+            HAlign = 0f,
+            VAlign = 0f,
+            Width = StyleDimension.FromPixelsAndPercent(0f, 1f),
+            Height = StyleDimension.FromPixelsAndPercent(0f, 1f),
+            IsWrapped = true
+        };
+        UITextWarn.SetText(Language.GetText("Mods.MatterRecord.Bestiary.Recorder.Request").Format(Main.gameMenu ? "" : Main.LocalPlayer.name ?? ""));
+        UITextWarn.OnLeftClick += delegate
         {
             _clicked = true;
-            uIText.TextColor = Color.Red;
+            UITextWarn.TextColor = Color.Red;
         };
-        uIText.OnUpdate += delegate
+        UITextWarn.OnUpdate += delegate
         {
-            if (!_clicked) 
+            if (!_clicked)
             {
-                uIText.TextColor = Color.Lerp(uIText.TextColor, uIText.IsMouseHovering ? Color.White : Color.Gray, 0.1f); 
+                UITextWarn.TextColor = Color.Lerp(UITextWarn.TextColor, UITextWarn.IsMouseHovering ? Color.White : Color.Gray, 0.1f);
                 return;
             }
             _textCounter++;
             int index = _textCounter / 10;
             if (_textCounter % 10 == 0 && index <= _warn.Length)
-                uIText.SetText(_warn[0..index]);
+                UITextWarn.SetText(_warn[0..index]);
         };
-        AddDynamicResize(obj, uIText);
-        obj.Append(uIText);
+        UITextWarn.Top = new StyleDimension(UITextFlavor.MinHeight.Pixels, 0);
+        AddDynamicResize(obj, UITextFlavor, UITextWarn);
+        obj.Append(UITextFlavor);
+        obj.Append(UITextWarn);
+
         return obj;
     }
 
-    public static void AddDynamicResize(UIElement container, UIText text)
+    public static void AddDynamicResize(UIElement container, UIText text, UIText text2)
     {
         text.OnInternalTextChange += delegate
         {
-            container.Height = new StyleDimension(text.MinHeight.Pixels, 0f);
+            text2.Top = new StyleDimension(text.MinHeight.Pixels, 0);
+            container.Height = new StyleDimension(text.MinHeight.Pixels + text2.MinHeight.Pixels, 0f);
+        };
+        text2.OnInternalTextChange += delegate
+        {
+            container.Height = new StyleDimension(text.MinHeight.Pixels + text2.MinHeight.Pixels, 0f);
         };
     }
 }
