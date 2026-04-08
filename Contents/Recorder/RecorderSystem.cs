@@ -19,7 +19,13 @@ namespace MatterRecord.Contents.Recorder;
 
 public class RecorderSystem : ModSystem
 {
+    public static Dictionary<int, ItemRecords> RewardDictionary { get; } = new(){
+        { 2, ItemRecords.TheAdventureofSherlockHolmes },
+        { 4, ItemRecords.TheoryOfJustice },
+        { 6, ItemRecords.EmeraldTablet }
+    };
     private Bits64 _itemLockRecords;
+    public Dictionary<ItemRecords, int> RecordToItemType { get; } = [];
     public static void ClearRecord()
     {
         if (Instance is not { } instance) return;
@@ -40,12 +46,7 @@ public class RecorderSystem : ModSystem
         int count = 0;
         for (int n = 0; n < (int)ItemRecords.Count; n++)
         {
-            if ((ItemRecords)n
-                is ItemRecords.Faust
-                or ItemRecords.TheAdventureofSherlockHolmes
-                or ItemRecords.TheoryOfJustice
-                or ItemRecords.EmeraldTablet)
-                continue;
+            if ((ItemRecords)n == ItemRecords.Faust || RewardDictionary.ContainsValue((ItemRecords)n)) continue;
 
             if (Instance._itemLockRecords[n]) count++;
         }
@@ -54,8 +55,14 @@ public class RecorderSystem : ModSystem
     public static int GetUnlockCount()
     {
         int count = 0;
-        for (int n = 0; n < (int)ItemRecords.Count; n++)
+        for (int n = 0; n < (int)ItemRecords.Count; n++) 
+        {
             if (Instance._itemLockRecords[n]) count++;
+            else 
+            {
+                ItemRecords record = (ItemRecords)n;
+            }
+        }
         return count;
     }
 

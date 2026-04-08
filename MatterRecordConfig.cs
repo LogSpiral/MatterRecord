@@ -51,7 +51,7 @@ public class MatterRecordItemHandler : ITagHandler, ILoadable
     {
         public override bool UniqueDraw(bool justCheckingString, out Vector2 size, SpriteBatch spriteBatch, Vector2 position = default, Color color = default, float scale = 1)
         {
-            RecordLockItem.UnlockStyleInventoryVisualMask = true;
+            RecordBookItem.UnlockStyleInventoryVisualMask = true;
             return base.UniqueDraw(justCheckingString, out size, spriteBatch, position, color, scale);
         }
     }
@@ -67,7 +67,7 @@ public class MatterRecordItemHandler : ITagHandler, ILoadable
         if (ItemID.Search.TryGetId(text, out result))
             item.netDefaults(result);
 
-        if (item.type <= 0)
+        if (item.type <= ItemID.None)
             return new TextSnippet(text);
 
         item.stack = 1;

@@ -3,9 +3,9 @@ using System;
 
 namespace MatterRecord.Contents.WarAndPeace;
 
-public class WarAndPeace : ModItem, IRecordBookItem
+public class WarAndPeace : RecordBookItem
 {
-    ItemRecords IRecordBookItem.RecordType => ItemRecords.WarAndPeace;
+    public override ItemRecords RecordType => ItemRecords.WarAndPeace;
     public override void SetDefaults()
     {
         Item.accessory = true;

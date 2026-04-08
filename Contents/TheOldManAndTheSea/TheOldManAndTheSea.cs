@@ -4,9 +4,9 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 namespace MatterRecord.Contents.TheOldManAndTheSea;
 
-public class TheOldManAndTheSea : ModItem, IRecordBookItem
+public class TheOldManAndTheSea : RecordBookItem
 {
-    ItemRecords IRecordBookItem.RecordType => ItemRecords.TheOldManAndTheSea;
+    public override ItemRecords RecordType => ItemRecords.TheOldManAndTheSea;
     public override Color? GetAlpha(Color lightColor)
     {
         return null;
@@ -45,6 +45,7 @@ public class TheOldManAndTheSea : ModItem, IRecordBookItem
 
     public override bool PreDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
     {
+        if (!base.PreDrawInInventory(spriteBatch, position, frame, drawColor, itemColor, origin, scale)) return false;
         if (RecorderSystem.CheckUnlock(ItemRecords.TheOldManAndTheSea))
         {
             itemTex ??= ModContent.Request<Texture2D>("MatterRecord/Contents/TheOldManAndTheSea/TheOldManAndTheSea_full");
@@ -54,6 +55,7 @@ public class TheOldManAndTheSea : ModItem, IRecordBookItem
     }
     public override bool PreDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, ref float rotation, ref float scale, int whoAmI)
     {
+        if (!base.PreDrawInWorld(spriteBatch, lightColor, alphaColor, ref rotation, ref scale, whoAmI)) return false;
         if (RecorderSystem.CheckUnlock(ItemRecords.TheOldManAndTheSea))
         {
             itemTex ??= ModContent.Request<Texture2D>("MatterRecord/Contents/TheOldManAndTheSea/TheOldManAndTheSea_full");

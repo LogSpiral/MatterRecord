@@ -8,9 +8,9 @@ using Terraria.DataStructures;
 namespace MatterRecord.Contents.TheoryOfFreedom;
 
 [AutoloadEquip(EquipType.Wings)]
-public class TheoryOfFreedom : ModItem, IRecordBookItem
+public class TheoryOfFreedom : RecordBookItem
 {
-    ItemRecords IRecordBookItem.RecordType => ItemRecords.TheoryOfFreedom;
+    public override ItemRecords RecordType => ItemRecords.TheoryOfFreedom;
     public override void UpdateAccessory(Player player, bool hideVisual)
     {
         var mplr = player.GetModPlayer<TheTheoryOfFreedomPlayer>();

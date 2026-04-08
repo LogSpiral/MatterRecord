@@ -2,9 +2,9 @@
 
 namespace MatterRecord.Contents.EmeraldTablet;
 
-public class EmeraldTablet : ModItem, IRecordBookItem
+public class EmeraldTablet : RecordBookItem
 {
-    ItemRecords IRecordBookItem.RecordType => ItemRecords.EmeraldTablet;
+    public override ItemRecords RecordType => ItemRecords.EmeraldTablet;
 
     public override void SetDefaults()
     {

@@ -4,9 +4,9 @@ namespace MatterRecord.Contents.LittlePrince;
 
 
 
-public class LittlePrince : ModItem, IRecordBookItem
+public class LittlePrince :RecordBookItem
 {
-    ItemRecords IRecordBookItem.RecordType => ItemRecords.LittlePrince;
+    public override ItemRecords RecordType => ItemRecords.LittlePrince;
     public override void AddRecipes()
     {
         this.RegisterBookRecipe(ItemID.AbigailsFlower);

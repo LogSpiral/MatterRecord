@@ -140,7 +140,7 @@ public partial class Recorder : ModNPC
             if (favoriteItemType > 0)
             {
                 Item favoriteItem = ContentSamples.ItemsByType[favoriteItemType];
-                if (favoriteItem != null && favoriteItem.ammo == AmmoID.Bullet && favoriteItem.shoot > 0)
+                if (favoriteItem != null && favoriteItem.ammo == AmmoID.Bullet && favoriteItem.shoot > ProjectileID.None)
                 {
                     projType = favoriteItem.shoot;
                 }

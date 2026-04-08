@@ -24,33 +24,59 @@ using Terraria.UI.Chat;
 
 namespace MatterRecord.Contents.DonQuijoteDeLaMancha;
 
-public class DonQuijoteDeLaMancha : MeleeSequenceItem<DonQuijoteDeLaManchaProj>, IRecordBookItem
+public class DonQuijoteDeLaMancha : RecordBookItem
 {
-    ItemRecords IRecordBookItem.RecordType => ItemRecords.DonQuijoteDeLaMancha;
-    public static bool SlashActive => MatterRecordConfig.Instance.DonQuijoteSlashActive;
+
+    // 该死的多继承问题，呃啊啊啊啊啊啊啊啊啊啊啊啊啊(
+    #region 基类部分的代码
+    public override void SetStaticDefaults()
+    {
+        ItemID.Sets.SkipsInitialUseSound[Type] = true;
+        base.SetStaticDefaults();
+    }
 
     public override void SetDefaults()
     {
-        base.SetDefaults();
+        Item.useStyle = ItemUseStyleID.Shoot;
+        Item.DamageType = DamageClass.Melee;
+        Item.shoot = ModContent.ProjectileType<DonQuijoteDeLaManchaProj>();
+        Item.shootSpeed = 1f;
+        Item.noMelee = false;
+        Item.noUseGraphic = false;
+        Item.channel = true;
         Item.width = 66;
         Item.height = 66;
-        Item.value = Item.buyPrice(copper: 5);
-        Item.rare = ItemRarityID.Quest;
         Item.UseSound = SoundID.Item71;
-        /*Item.damage = 155;
-        Item.useTime = 24;
-        time = 24;
-        Item.knockBack = 14f;*/
-
         Item.damage = 21;
         Item.useTime = 60;
         Item.useAnimation = 60;
+        Item.rare = ItemRarityID.Quest;
         Item.knockBack = 4f;
         Item.value = Item.sellPrice(0, 2);
         Item.useTurn = true;
+    }
+
+    public override bool CanShoot(Player player)
+    {
+        if (SlashActive)
+            return base.CanShoot(player);
+        bool flag = (player.altFunctionUse == 2 || player.GetModPlayer<DonQuijoteDeLaManchaPlayer>().StabTimeLeft > 0) && player.ownedProjectileCounts[ModContent.ProjectileType<DonQuijoteDeLaManchaProj>()] == 0;
+        if (flag)
+            return true;
+        Item.shoot = ProjectileID.None;
         Item.noUseGraphic = false;
         Item.noMelee = false;
+        Item.useStyle = ItemUseStyleID.Swing;
+        Item.channel = false;
+        return false;
     }
+    public virtual bool EnableRightClick => false;
+    #endregion
+
+
+    public override ItemRecords RecordType => ItemRecords.DonQuijoteDeLaMancha;
+    public static bool SlashActive => MatterRecordConfig.Instance.DonQuijoteSlashActive;
+
 
     public override bool? UseItem(Player player)
     {
@@ -293,20 +319,7 @@ public class DonQuijoteDeLaMancha : MeleeSequenceItem<DonQuijoteDeLaManchaProj>,
         base.ModifyTooltips(tooltips);
     }
 
-    public override bool CanShoot(Player player)
-    {
-        if (SlashActive)
-            return base.CanShoot(player);
-        bool flag = (player.altFunctionUse == 2 || player.GetModPlayer<DonQuijoteDeLaManchaPlayer>().StabTimeLeft > 0) && player.ownedProjectileCounts[ModContent.ProjectileType<DonQuijoteDeLaManchaProj>()] == 0;
-        if (flag)
-            return true;
-        Item.shoot = ProjectileID.None;
-        Item.noUseGraphic = false;
-        Item.noMelee = false;
-        Item.useStyle = ItemUseStyleID.Swing;
-        Item.channel = false;
-        return false;
-    }
+
 }
 
 public class DonQuijoteDeLaManchaProj : MeleeSequenceProj

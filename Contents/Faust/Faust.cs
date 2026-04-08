@@ -11,9 +11,9 @@ using Terraria.GameContent.Drawing;
 
 namespace MatterRecord.Contents.Faust;
 
-public class Faust : ModItem, IRecordBookItem
+public class Faust : RecordBookItem
 {
-    ItemRecords IRecordBookItem.RecordType => ItemRecords.Faust;
+    public override ItemRecords RecordType => ItemRecords.Faust;
     //旧版物品说明
     /*不行！不行！恶魔是利己主义者，
     对别人有益的事体，
