@@ -18,61 +18,36 @@ public class RecorderPlayer : ModPlayer
     private static Bits64 _hintedRecords;
 
     public static bool CheckNotHinted(ItemRecords records) => GetHintState(records) is RecordHintState.NotHinted;
-
-    public static List<string> GetNotHintedKeys()
+    private static HashSet<ItemRecords> RecordsToHintInternal { get; } =
+    [
+        ItemRecords.AliceInWonderland,
+        // ItemRecords.DonQuijoteDeLaMancha,
+        ItemRecords.TheAdventureofSherlockHolmes,
+        ItemRecords.LittlePrince,
+        ItemRecords.TheOldManAndTheSea,
+        ItemRecords.WarAndPeace,
+        ItemRecords.TheInterpretationOfDreams,
+        ItemRecords.TheoryOfFreedom
+    ];
+    public static IReadOnlySet<ItemRecords> RecordsToHint { get; } = RecordsToHintInternal;
+    public static List<(string, ItemRecords)> GetNotHintedRecords()
     {
-        List<string> hints = [];
-
-        if (CheckNotHinted(ItemRecords.AliceInWonderland))
-            hints.Add("AliceInWonderlandHint");
-        if (CheckNotHinted(ItemRecords.DonQuijoteDeLaMancha))
-            hints.Add("DonQuijoteDeLaManchaHint");
-        if (CheckNotHinted(ItemRecords.LittlePrince))
-            hints.Add("LittlePrinceHint");
-        if (CheckNotHinted(ItemRecords.TheOldManAndTheSea))
-            hints.Add("TheOldManAndTheSeaHint");
-        if (CheckNotHinted(ItemRecords.WarAndPeace))
-            hints.Add("WarAndPeaceHint");
-        if (CheckNotHinted(ItemRecords.TheInterpretationOfDreams))
-            hints.Add("TheInterpretationOfDreamsHint");
-        if (CheckNotHinted(ItemRecords.TheoryOfFreedom))
-            hints.Add("TheoryOfFreedomHint");
-
+        List<(string, ItemRecords)> hints = [];
+        foreach (var record in RecordsToHintInternal)
+        {
+            if (CheckNotHinted(record))
+                hints.Add(($"{record}Hint",record));
+        }
         return hints;
-    }
-
-    public static List<string> GetHintKeys()
-    {
-        return
-            [
-            "AliceInWonderlandHint",
-            "DonQuijoteDeLaManchaHint",
-            "LittlePrinceHint",
-            "TheOldManAndTheSeaHint",
-            "WarAndPeaceHint",
-            "TheInterpretationOfDreamsHint",
-            "TheoryOfFreedomHint"
-            ];
     }
     public static List<string> GetLockedKeys()
     {
         List<string> hints = [];
-
-        if (!RecorderSystem.CheckUnlock(ItemRecords.AliceInWonderland))
-            hints.Add("AliceInWonderlandHint");
-        if (!RecorderSystem.CheckUnlock(ItemRecords.DonQuijoteDeLaMancha))
-            hints.Add("DonQuijoteDeLaManchaHint");
-        if (!RecorderSystem.CheckUnlock(ItemRecords.LittlePrince))
-            hints.Add("LittlePrinceHint");
-        if (!RecorderSystem.CheckUnlock(ItemRecords.TheOldManAndTheSea))
-            hints.Add("TheOldManAndTheSeaHint");
-        if (!RecorderSystem.CheckUnlock(ItemRecords.WarAndPeace))
-            hints.Add("WarAndPeaceHint");
-        if (!RecorderSystem.CheckUnlock(ItemRecords.TheInterpretationOfDreams))
-            hints.Add("TheInterpretationOfDreamsHint");
-        if (!RecorderSystem.CheckUnlock(ItemRecords.TheoryOfFreedom))
-            hints.Add("TheoryOfFreedomHint");
-
+        foreach (var record in RecordsToHintInternal)
+        {
+            if (!RecorderSystem.CheckUnlock(record))
+                hints.Add($"{record}Hint");
+        }
         return hints;
     }
 
@@ -80,42 +55,17 @@ public class RecorderPlayer : ModPlayer
     {
         Dictionary<string, RecordHintState> hints = [];
 
-        if (!CheckNotHinted(ItemRecords.AliceInWonderland))
-            hints.Add("AliceInWonderlandHint", GetHintState(ItemRecords.AliceInWonderland));
-
-        if (!CheckNotHinted(ItemRecords.DonQuijoteDeLaMancha))
-            hints.Add("DonQuijoteDeLaManchaHint", GetHintState(ItemRecords.DonQuijoteDeLaMancha));
-
-        if (!CheckNotHinted(ItemRecords.LittlePrince))
-            hints.Add("LittlePrinceHint", GetHintState(ItemRecords.LittlePrince));
-
-        if (!CheckNotHinted(ItemRecords.TheOldManAndTheSea))
-            hints.Add("TheOldManAndTheSeaHint", GetHintState(ItemRecords.TheOldManAndTheSea));
-
-        if (!CheckNotHinted(ItemRecords.WarAndPeace))
-            hints.Add("WarAndPeaceHint", GetHintState(ItemRecords.WarAndPeace));
-
-        if (!CheckNotHinted(ItemRecords.TheInterpretationOfDreams))
-            hints.Add("TheInterpretationOfDreamsHint", GetHintState(ItemRecords.TheInterpretationOfDreams));
-
-        if (!CheckNotHinted(ItemRecords.TheoryOfFreedom))
-            hints.Add("TheoryOfFreedomHint", GetHintState(ItemRecords.TheoryOfFreedom));
+        foreach (var record in RecordsToHintInternal)
+        {
+            if (!CheckNotHinted(record))
+                hints.Add($"{record}Hint", GetHintState(record));
+        }
 
         return hints;
     }
 
-    public static void SetHintedViaKey(string Key)
+    public static void SetHinted(ItemRecords record)
     {
-        var record = Key switch
-        {
-            "AliceInWonderlandHint" => ItemRecords.AliceInWonderland,
-            "DonQuijoteDeLaManchaHint" => ItemRecords.DonQuijoteDeLaMancha,
-            "LittlePrinceHint" => ItemRecords.LittlePrince,
-            "TheOldManAndTheSeaHint" => ItemRecords.TheOldManAndTheSea,
-            "WarAndPeaceHint" => ItemRecords.WarAndPeace,
-            "TheInterpretationOfDreamsHint" => ItemRecords.TheInterpretationOfDreams,
-            "TheoryOfFreedomHint" or _ => ItemRecords.TheoryOfFreedom
-        };
         var state = GetHintState(record);
         if (state is RecordHintState.NotHinted)
             SetHintState(record, RecordHintState.Hinted);
@@ -150,15 +100,15 @@ public class RecorderPlayer : ModPlayer
     public override void LoadData(TagCompound tag)
     {
         tag.TryGet("Met", out MetWithRecorder);
-        //if (tag.TryGet("HR", out ulong value))
-        //    _hintedRecords = value;
+        if (tag.TryGet("HR", out ulong value))
+            _hintedRecords = value;
         _hintedRecords = default;
     }
     public override void SaveData(TagCompound tag)
     {
         if (MetWithRecorder)
             tag["Met"] = true;
-        //tag["HR"] = (ulong)_hintedRecords;
+        tag["HR"] = (ulong)_hintedRecords;
     }
     public override void OnEnterWorld()
     {

@@ -20,7 +20,7 @@ namespace MatterRecord.Contents.Recorder;
 public class RecorderSystem : ModSystem
 {
     public static Dictionary<int, ItemRecords> RewardDictionary { get; } = new(){
-        { 2, ItemRecords.TheAdventureofSherlockHolmes },
+        { 2, ItemRecords.DonQuijoteDeLaMancha },
         { 4, ItemRecords.TheoryOfJustice },
         { 6, ItemRecords.EmeraldTablet }
     };
@@ -55,10 +55,10 @@ public class RecorderSystem : ModSystem
     public static int GetUnlockCount()
     {
         int count = 0;
-        for (int n = 0; n < (int)ItemRecords.Count; n++) 
+        for (int n = 0; n < (int)ItemRecords.Count; n++)
         {
             if (Instance._itemLockRecords[n]) count++;
-            else 
+            else
             {
                 ItemRecords record = (ItemRecords)n;
             }

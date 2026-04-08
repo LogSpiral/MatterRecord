@@ -836,7 +836,7 @@ public class DonQuijoteDeLaManchaPlayer : ModPlayer
             SyncPlayer(toWho: -1, fromWho: Main.myPlayer, newPlayer: false);
     }
 
-
+#if false
     public override void OnHitNPCWithProj(Projectile projectile, NPC npc, NPC.HitInfo hit, int damageDone)
     {
         if (projectile.type is ProjectileID.JoustingLance or ProjectileID.HallowJoustingLance or ProjectileID.ShadowJoustingLance)
@@ -845,6 +845,7 @@ public class DonQuijoteDeLaManchaPlayer : ModPlayer
                 Player.QuickSpawnItem(npc.GetItemSource_Loot(), ModContent.ItemType<DonQuijoteDeLaMancha>());
         }
     }
+#endif
 }
 
 public class DonQuijoteGBItem : GlobalItem

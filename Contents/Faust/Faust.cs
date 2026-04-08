@@ -55,12 +55,12 @@ public class Faust : RecordBookItem
         dust.noGravity = true;
         if (player.itemAnimation == 1)
         {
-            List<string> hints = RecorderPlayer.GetNotHintedKeys();
+            var pairs = RecorderPlayer.GetNotHintedRecords();
 
-            if (hints.Count > 0)
+            if (pairs.Count > 0)
             {
-                string key = Main.rand.Next(hints);
-                RecorderPlayer.SetHintedViaKey(key);
+                (string key, ItemRecords record) = Main.rand.Next(pairs);
+                RecorderPlayer.SetHinted(record);
                 CombatText.NewText(
                     player.Hitbox,
                     Color.MediumPurple,
@@ -68,7 +68,7 @@ public class Faust : RecordBookItem
             }
             else
             {
-                hints = RecorderPlayer.GetLockedKeys();
+                List<string> hints = RecorderPlayer.GetLockedKeys();
                 if (hints.Count == 0)
                 {
                     CombatText.NewText(
@@ -152,16 +152,7 @@ public class Faust : RecordBookItem
         {
             _updateTimer = 30;
 
-            ItemRecords[] records =
-                [
-                    ItemRecords.AliceInWonderland,
-                    ItemRecords.DonQuijoteDeLaMancha,
-                    ItemRecords.LittlePrince,
-                    ItemRecords.TheOldManAndTheSea,
-                    ItemRecords.WarAndPeace,
-                    ItemRecords.TheInterpretationOfDreams,
-                    ItemRecords.TheoryOfFreedom
-                ];
+            var records = RecorderPlayer.RecordsToHint;
 
             var player = Main.LocalPlayer;
             Item[][] inventories =

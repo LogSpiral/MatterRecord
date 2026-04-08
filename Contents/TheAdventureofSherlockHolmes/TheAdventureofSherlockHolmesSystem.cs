@@ -1,6 +1,7 @@
 ﻿using MatterRecord.Contents.Recorder;
 using Microsoft.Xna.Framework;
 using System;
+using Terraria.DataStructures;
 
 namespace MatterRecord.Contents.TheAdventureofSherlockHolmes;
 
@@ -10,12 +11,21 @@ public class TheAdventureofSherlockHolmesSystem : ModSystem
     public override void Load()
     {
         Main.OnPostFullscreenMapDraw += Main_OnPostFullscreenMapDraw;
+        On_Main.TriggerPing += SpawnItemHook;
         base.Load();
+    }
+
+    private static void SpawnItemHook(On_Main.orig_TriggerPing orig, Vector2 position)
+    {
+        orig?.Invoke(position);
+        if (!Main.dedServ && RecorderSystem.ShouldSpawnRecordItem<TheAdventureofSherlockHolmes>())
+            Main.LocalPlayer.QuickSpawnItem(new EntitySource_Misc("MapPing"), ModContent.ItemType<TheAdventureofSherlockHolmes>());
     }
 
     public override void Unload()
     {
         Main.OnPostFullscreenMapDraw -= Main_OnPostFullscreenMapDraw;
+        On_Main.TriggerPing -= SpawnItemHook;
         base.Unload();
     }
 
