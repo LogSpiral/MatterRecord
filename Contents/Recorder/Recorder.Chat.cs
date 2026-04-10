@@ -8,11 +8,15 @@ namespace MatterRecord.Contents.Recorder;
 
 public partial class Recorder
 {
-    private static string UnlockRecord(int type, IRecordBookItem recordBook)
+    private static string UnlockRecord(int type, IRecordBookItem recordBook, bool fromReward = false)
     {
         static string Dialogue(string key) => Language.GetTextValue($"Mods.MatterRecord.Dialogue.Recorder.{key}");
         RecorderSystem.SetUnlock(recordBook);
-        string chatResult = Dialogue(recordBook.RecordType.ToString() + "Unlocking");
+        string chatResult;
+        if (fromReward && recordBook.RecordType == ItemRecords.LordOfTheFlies)
+            chatResult = Dialogue("PetFoundDialogue");
+        else
+            chatResult = Dialogue(recordBook.RecordType.ToString() + "Unlocking");
         currentChat = "...";
         chatTimer = 0;
         Main.npcChatText = "...";
@@ -182,7 +186,7 @@ public partial class Recorder
             if (Main.netMode == NetmodeID.MultiplayerClient)
                 NetMessage.SendData(MessageID.SyncItem, -1, -1, null, index, 1f);
             if (Main.item[index].ModItem is IRecordBookItem recordBook)
-                UnlockRecord(Main.item[index].type, recordBook);
+                UnlockRecord(Main.item[index].type, recordBook, true);
         }
         #endregion
 
