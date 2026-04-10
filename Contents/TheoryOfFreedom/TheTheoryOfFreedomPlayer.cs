@@ -39,6 +39,7 @@ public class TheTheoryOfFreedomPlayer : ModPlayer
 
     public float flyTimeCache;
     public List<Point> TargetTileCoords { get; } = [];
+#if false
     private static ModKeybind CanHookPlatformSwitch { get; set; }
 
     public override void Load()
@@ -58,7 +59,16 @@ public class TheTheoryOfFreedomPlayer : ModPlayer
         }
         base.ProcessTriggers(triggersSet);
     }
-
+#endif
+    public void SetCanHookPlatform(bool value) 
+    {
+        if (value == CanHookPlatform)
+            return;
+        CanHookPlatform = value;
+        // Main.NewText(Language.GetTextValue($"Mods.{nameof(MatterRecord)}.Items.{nameof(TheoryOfFreedom)}.{(CanHookPlatform ? "CanHookOnPlatform" : "CantHookOnPlatform")}"), CanHookPlatform ? Color.Lime : Color.Green);
+        if (Main.netMode == NetmodeID.MultiplayerClient)
+            SyncPlayer(-1, Player.whoAmI, false);
+    }
     public override void CopyClientState(ModPlayer targetCopy)
     {
         TheTheoryOfFreedomPlayer clone = (TheTheoryOfFreedomPlayer)targetCopy;

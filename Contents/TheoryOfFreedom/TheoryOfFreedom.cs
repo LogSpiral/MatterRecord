@@ -14,6 +14,7 @@ public class TheoryOfFreedom : RecordBookItem
     public override void UpdateAccessory(Player player, bool hideVisual)
     {
         var mplr = player.GetModPlayer<TheTheoryOfFreedomPlayer>();
+        mplr.SetCanHookPlatform(!hideVisual);
         mplr.EquippedTOF = true;
         if (player.grapCount > 0)
             player.endurance += 0.1f;

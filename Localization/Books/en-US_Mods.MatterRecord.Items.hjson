@@ -4,6 +4,7 @@ TheoryOfFreedom: {
 	DisplayName: Theory of Freedom
 	Tooltip:
 		'''
+		饰品可见性关闭时使你无视平台
 		"To understand shackles is better than adorning them with flowers."
 		All hooks can latch onto mid-air
 		Costs 1% HP per grapple use
