@@ -76,7 +76,6 @@ public class RecorderSystem : ModSystem
             _itemLockRecords = records;
         else
             _itemLockRecords = default;
-        _itemLockRecords[(int)ItemRecords.Faust] = true;
         base.LoadWorldData(tag);
     }
     public override void SaveWorldData(TagCompound tag)

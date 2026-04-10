@@ -1,12 +1,15 @@
 ﻿using MatterRecord.Contents.TheAdventureofSherlockHolmes;
 using MatterRecord.Contents.TheInterpretationOfDreams;
 using MatterRecord.Contents.TheoryOfFreedom;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using Terraria.DataStructures;
+using Terraria.GameContent;
 using Terraria.Localization;
 using Terraria.ModLoader.IO;
 using Terraria.Utilities;
@@ -47,49 +50,36 @@ public partial class Recorder
         // 首次见面奖励
         if (!recordPlayer.MetWithRecorder)
         {
-            recordPlayer.MetWithRecorder = true;
-            var index = Item.NewItem(new EntitySource_Gift(NPC), Main.LocalPlayer.Hitbox, ModContent.ItemType<Faust.Faust>());
-            if (Main.netMode == NetmodeID.MultiplayerClient)
-                NetMessage.SendData(MessageID.SyncItem, -1, -1, null, index, 1f);
-            chatResult = DialogueWithArgs("FirstMeet", NPC.GivenName);
+            chatResult = DialogueWithArgs("FirstMeet.1", NPC.GivenName);
             currentChat = chatResult;
             return " ";
         }
         askForSlimeThisTime = !DreamWorld.UsedZoologistDream && Main.rand.NextBool(10);
-        // 解锁物品
+
+        #region 解锁物品闲聊
         List<IRecordBookItem> recordBooks = [];
         foreach (var item in Main.LocalPlayer.inventory)
         {
-#if false
-            if (item.ModItem is IRecordBookItem recordBook)
-            {
-                if (!recordBook.IsRecordUnlocked)
-                {
-                    chatResult = UnlockRecord(recordBook);
-                    return " ";
-                }
-                else if(recordBook is not Faust.Faust)
-                    recordBooks.Add(recordBook);
-            }
-#else
             if (item.ModItem is IRecordBookItem { RecordType: not ItemRecords.Faust } recordBook
                 && recordBook.IsRecordUnlocked)
                 recordBooks.Add(recordBook);
-#endif
         }
+        #endregion
 
-        // 闲聊
+        #region 闲聊
         WeightedRandom<string> chat = new();
         chat.Add(DialogueWithArgs("StandardDialogue1", Main.LocalPlayer.name));
         chat.Add(Dialogue("StandardDialogue2"));
         chat.Add(Dialogue("StandardDialogue3"));
         chat.Add(Dialogue("StandardDialogue4"));
+        #endregion
 
-        // 特殊物品闲聊
+        #region 特殊物品闲聊
         foreach (var recordBook in recordBooks)
             chat.Add(Dialogue(recordBook.RecordType.ToString() + "Unlocked"));
+        #endregion
 
-        // NPC相关闲聊
+        #region NPC相关闲聊
         int guideIndex = NPC.FindFirstNPC(NPCID.Guide);
         if (guideIndex != -1)
             chat.Add(DialogueWithArgs("GuideDialogue", Main.npc[guideIndex].GivenName));
@@ -97,6 +87,8 @@ public partial class Recorder
         int anglerIndex = NPC.FindFirstNPC(NPCID.Angler);
         if (anglerIndex != -1)
             chat.Add(Dialogue("AnglerDialogue"));
+        #endregion
+
         chatResult = chat.Get();
         currentChat = chatResult;
         return " ";
@@ -104,6 +96,20 @@ public partial class Recorder
     private static Dictionary<int, ItemRecords> RewardDictionary => RecorderSystem.RewardDictionary;
     private string GetSecondaryButtonText()
     {
+        #region 首次见面
+        var recordPlayer = Main.LocalPlayer.GetModPlayer<RecorderPlayer>();
+        if (!recordPlayer.MetWithRecorder)
+        {
+            var text = Language.GetTextValue($"Mods.MatterRecord.Dialogue.Recorder.FirstMeet.2");
+            int length = currentChat.Length;
+            int timer = chatTimer - length - 15;
+            timer /= 2;
+            if (timer <= 0) return string.Empty;
+            if (timer >= text.Length) return text;
+            return text[..timer];
+        }
+        #endregion
+
         #region 请求寻找宠物史莱姆
         if (askForSlimeThisTime)
         {
@@ -160,7 +166,8 @@ public partial class Recorder
             if (chatTimer <= length)
                 Main.npcChatText = currentChat[..chatTimer];
         }
-        button = this.GetLocalizedValue("Copy");
+        if (RecorderSystem.GetUnlockCount() > 0)
+            button = this.GetLocalizedValue("Copy");
         button2 = GetSecondaryButtonText();
     }
     private void OnSecondaryButtonClicked()
@@ -176,6 +183,20 @@ public partial class Recorder
                 NetMessage.SendData(MessageID.SyncItem, -1, -1, null, index, 1f);
             if (Main.item[index].ModItem is IRecordBookItem recordBook)
                 UnlockRecord(Main.item[index].type, recordBook);
+        }
+        #endregion
+
+        #region 首次见面
+        var recordPlayer = Main.LocalPlayer.GetModPlayer<RecorderPlayer>();
+        if (!recordPlayer.MetWithRecorder)
+        {
+            recordPlayer.MetWithRecorder = true;
+            var index = Item.NewItem(new EntitySource_Gift(NPC), Main.LocalPlayer.Hitbox, ModContent.ItemType<Faust.Faust>());
+            if (Main.netMode == NetmodeID.MultiplayerClient)
+                NetMessage.SendData(MessageID.SyncItem, -1, -1, null, index, 1f);
+            RecorderSystem.SetUnlock(ItemRecords.Faust);
+            SetChatText(Language.GetTextValue("Mods.MatterRecord.Dialogue.Recorder.FirstMeet.3"));
+            return;
         }
         #endregion
 
