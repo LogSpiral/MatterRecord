@@ -7,14 +7,9 @@ namespace MatterRecord.Contents.TheOldManAndTheSea;
 public class TheOldManAndTheSea : RecordBookItem
 {
     public override ItemRecords RecordType => ItemRecords.TheOldManAndTheSea;
-    public override Color? GetAlpha(Color lightColor)
-    {
-        return null;
-    }
-
     public override void SetStaticDefaults()
     {
-        ItemID.Sets.CanFishInLava[Item.type] = true; // Allows the pole to fish in lava
+        ItemID.Sets.CanFishInLava[Item.type] = true;
     }
 
     private static Asset<Texture2D> itemTex;
@@ -27,14 +22,15 @@ public class TheOldManAndTheSea : RecordBookItem
         Item.CloneDefaults(ItemID.WoodFishingPole);
         Item.value = Item.buyPrice(copper: 5);
         Item.rare = ItemRarityID.Quest;
-        Item.fishingPole = 75; // Sets the poles fishing power
-        Item.shootSpeed = 12f; // Sets the speed in which the bobbers are launched. Wooden Fishing Pole is 9f and Golden Fishing Rod is 17f.
-        Item.shoot = ModContent.ProjectileType<TheOldManAndTheSeaBobber>(); // The bobber projectile. Note that this will be overridden by Fishing Bobber accessories if present, so don't assume the bobber spawned is the specified projectile. https://terraria.wiki.gg/wiki/Fishing_Bobbers
+        Item.fishingPole = 0;
+        Item.shootSpeed = 12f;
+        Item.shoot = ModContent.ProjectileType<TheOldManAndTheSeaBobber>();
     }
 
     public override void HoldItem(Player player)
     {
         player.accFishingLine = true;
+        Item.fishingPole = this.IsRecordUnlocked ? 75 : 0;
     }
 
     public override void ModifyFishingLine(Projectile bobber, ref Vector2 lineOriginOffset, ref Color lineColor)
