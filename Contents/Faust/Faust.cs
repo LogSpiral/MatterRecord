@@ -4,7 +4,6 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.GameContent.Drawing;

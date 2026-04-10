@@ -1,15 +1,6 @@
-﻿using MatterRecord.Contents.TheAdventureofSherlockHolmes;
-using MatterRecord.Contents.TheInterpretationOfDreams;
-using MatterRecord.Contents.TheoryOfFreedom;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
-using System;
+﻿using MatterRecord.Contents.TheInterpretationOfDreams;
 using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Linq;
-using System.Runtime.CompilerServices;
 using Terraria.DataStructures;
-using Terraria.GameContent;
 using Terraria.Localization;
 using Terraria.ModLoader.IO;
 using Terraria.Utilities;

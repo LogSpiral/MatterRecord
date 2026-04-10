@@ -4,7 +4,7 @@ namespace MatterRecord.Contents.LittlePrince;
 
 
 
-public class LittlePrince :RecordBookItem
+public class LittlePrince : RecordBookItem
 {
     public override ItemRecords RecordType => ItemRecords.LittlePrince;
     public override void AddRecipes()

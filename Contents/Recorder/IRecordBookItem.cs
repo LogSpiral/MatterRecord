@@ -6,7 +6,7 @@ public interface IRecordBookItem
 }
 public static class RecordBookItemExtension
 {
-    extension(IRecordBookItem recordBookItem) 
+    extension(IRecordBookItem recordBookItem)
     {
         public bool IsRecordUnlocked => RecorderSystem.CheckUnlock(recordBookItem);
     }

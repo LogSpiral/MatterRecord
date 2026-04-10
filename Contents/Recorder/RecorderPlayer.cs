@@ -36,7 +36,7 @@ public class RecorderPlayer : ModPlayer
         foreach (var record in RecordsToHintInternal)
         {
             if (CheckNotHinted(record))
-                hints.Add(($"{record}Hint",record));
+                hints.Add(($"{record}Hint", record));
         }
         return hints;
     }

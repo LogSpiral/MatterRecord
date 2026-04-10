@@ -7,6 +7,7 @@ using Terraria.Localization;
 using Terraria.Utilities;
 
 namespace MatterRecord.Contents.Recorder;
+
 public partial class RecordBookItem
 {
     public override bool CanUseItem(Player player) => this.IsRecordUnlocked;
