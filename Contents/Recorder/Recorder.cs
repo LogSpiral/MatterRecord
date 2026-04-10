@@ -2,8 +2,11 @@
 using MatterRecord.Contents.LordOfTheFlies;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoMod.Cil;
 using System;
 using System.Collections.Generic;
+using System.Reflection;
+using Terraria.Chat;
 using Terraria.GameContent.Bestiary;
 using Terraria.GameContent.Personalities;
 using Terraria.GameContent.UI.Elements;
@@ -15,6 +18,42 @@ namespace MatterRecord.Contents.Recorder;
 [AutoloadHead]
 public partial class Recorder : ModNPC
 {
+    public override void Load()
+    {
+        IL_WorldGen.SpawnTownNPC += RecorderArriveModify;
+    }
+
+    private static void RecorderArriveModify(ILContext il)
+    {
+        var cursor = new ILCursor(il);
+        if (!cursor.TryGotoNext(c => c.MatchLdsfld(typeof(Main).GetField(nameof(Main.netMode), BindingFlags.Static | BindingFlags.Public)))) return;
+        var index = cursor.Index;
+
+        if (!cursor.TryGotoNext(c => c.MatchBr(out _))) return;
+        if (!cursor.Next.MatchBr(out var label)) return;
+
+        cursor.Index = index;
+        cursor.EmitLdloc(11);
+        cursor.EmitDelegate<Func<int,bool>>(i => 
+        {
+            var npc = Main.npc[i];
+            if (npc.type == ModContent.NPCType<Recorder>()) 
+            {
+                if (Main.netMode == 0)
+                    Main.NewText(Language.GetTextValue("LegacyMultiplayer.19", npc.FullName), new Color(255, 240, 20));
+                else if (Main.netMode == 2)
+                    ChatHelper.BroadcastChatMessage(NetworkText.FromKey("LegacyMultiplayer.19", npc.GetFullNetName()), new Color(255, 240, 20));
+                return true;
+            }
+            return false;
+        });
+        cursor.EmitBrtrue(label);
+    }
+
+    public override void Unload()
+    {
+        IL_WorldGen.SpawnTownNPC -= RecorderArriveModify;
+    }
     public override void SetStaticDefaults()
     {
         Main.npcFrameCount[Type] = 23;
@@ -40,8 +79,16 @@ public partial class Recorder : ModNPC
             .SetNPCAffection(NPCID.PartyGirl, AffectionLevel.Like)
             .SetNPCAffection(NPCID.Angler, AffectionLevel.Hate);
         ContentSamples.NpcBestiaryRarityStars[Type] = 3;
-    }
 
+
+
+    }
+    public override bool ModifyDeathMessage(ref NetworkText customText, ref Color color)
+    {
+        customText = NetworkText.FromKey("LegacyMultiplayer.20", NPC.GivenName);
+        color = new Color(255, 240, 20);
+        return true;
+    }
     public override void SetDefaults()
     {
         NPC.townNPC = true;
