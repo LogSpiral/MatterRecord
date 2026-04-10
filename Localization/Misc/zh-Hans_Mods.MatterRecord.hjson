@@ -53,8 +53,8 @@ NPCs: {
 			LoveNPC: 我喜欢{NPCName}，她是我见过唯一能把绷带打得比废话还快的人
 			LikeNPC: "{NPCName}总是邀请我参加她的派对"
 			HateNPC: "{NPCName}在我身边的时候，我的佩枪就一直响，我应该给他来上一发吗？"
-			// LikeNPC_Princess: 我喜欢 {NPCName}。
-			// Princess_LovesNPC: 我喜欢 {NPCName}。
+			LikeNPC_Princess: 我喜欢 {NPCName}。
+			Princess_LovesNPC: 我喜欢和{NPCName}待在一起，她收集的哪些闪闪发光的故事就像是星星一样有趣！
 		}
 	}
 

@@ -54,7 +54,7 @@ public partial class Recorder
             currentChat = chatResult;
             return " ";
         }
-        askForSlimeThisTime = !DreamWorld.UsedZoologistDream && Main.rand.NextBool(10);
+        askForSlimeThisTime = !DreamWorld.UsedZoologistDream && !NPC.AnyNPCs(ModContent.NPCType<DreamSlime>()) && Main.rand.NextBool(10);
 
         #region 解锁物品闲聊
         List<IRecordBookItem> recordBooks = [];
@@ -86,7 +86,16 @@ public partial class Recorder
 
         int anglerIndex = NPC.FindFirstNPC(NPCID.Angler);
         if (anglerIndex != -1)
-            chat.Add(Dialogue("AnglerDialogue"));
+            chat.Add(DialogueWithArgs("AnglerDialogue", Main.npc[anglerIndex].GivenName));
+
+        int pirateIndex = NPC.FindFirstNPC(NPCID.Pirate);
+        if (pirateIndex != -1 && anglerIndex != -1)
+            chat.Add(DialogueWithArgs("PirateDialogue", Main.npc[pirateIndex].GivenName, Main.npc[anglerIndex].GivenName));
+
+        int princessIndex = NPC.FindFirstNPC(NPCID.Princess);
+        if (princessIndex != -1)
+            chat.Add(DialogueWithArgs("PrincessDialogue", Main.npc[princessIndex].GivenName));
+
         #endregion
 
         chatResult = chat.Get();
