@@ -58,7 +58,10 @@ NPCs: {
 		}
 	}
 
-	DreamSlime.DisplayName: Dream Slime
+	DreamSlime: {
+		DisplayName: Dream Slime
+		Name: TuanZi
+	}
 }
 
 Bestiary: {
@@ -67,4 +70,6 @@ Bestiary: {
 		Request: "{0}？我有些话要和你说，用鼠标点一下这行字吧"
 		Warn: 偷看别人的个人信息可不算是礼貌的行为哦
 	}
+
+	DreamSlime: 这只史莱姆能在梦境之间穿梭，为人们驱逐噩梦。有时它会吃掉梦中的甜点——它真的很喜欢甜食！不过看在赶走噩梦的份上，就让它偷吃一口吧
 }

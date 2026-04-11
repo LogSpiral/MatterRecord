@@ -68,3 +68,9 @@ Recorder: {
 		'''
 	PrincessDialogue: "{0}总是缠着我听故事，我乐意于此，但有些故事似乎不适合给小孩子讲......"
 }
+
+DreamSlime: {
+	Chatter_1: 叽里咕噜
+	Chatter_2: 咕啾？
+	Chatter_3: *似乎在发呆*
+}

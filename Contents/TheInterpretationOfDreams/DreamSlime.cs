@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
+using Terraria.GameContent.Bestiary;
 using Terraria.Localization;
 
 namespace MatterRecord.Contents.TheInterpretationOfDreams;
@@ -55,19 +56,24 @@ public class DreamSlime : ModNPC
         NPC.DeathSound = SoundID.NPCDeath6;
         NPC.knockBackResist = 0.5f;
         NPC.housingCategory = 1; // This means it can share a house with a normal Town NPC.
-        AnimationType = NPCID.TownSlimeRainbow; // This example matches the animations of the Town Bunny.
+        AnimationType = NPCID.TownSlimeBlue; // This example matches the animations of the Town Bunny.
+        AIType = NPCID.TownSlimeBlue;
     }
     public override bool CanTownNPCSpawn(int numTownNPCs) => DreamWorld.UsedZoologistDream;
 
     public override List<string> SetNPCNameList()
     {
-        return ["梦境史莱姆(W.I.P.)"];
+        return [this.GetLocalizedValue("Name")];
     }
-
-    public override string GetChat()
+    public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
     {
-        return "*未完工史莱姆声*";
+        bestiaryEntry.Info.AddRange(
+            [
+            BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Surface,
+            new FlavorTextBestiaryInfoElement("Mods.MatterRecord.Bestiary.DreamSlime")
+            ]);
     }
+    public override string GetChat() => Language.GetTextValue($"Mods.MatterRecord.Dialogue.DreamSlime.Chatter_{Main.rand.Next(1, 4)}");
 
     public override void SetChatButtons(ref string button, ref string button2)
     {
