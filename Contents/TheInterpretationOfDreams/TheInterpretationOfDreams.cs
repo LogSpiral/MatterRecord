@@ -247,6 +247,7 @@ public class TheInterpretationOfDreams : RecordBookItem
 
     public override bool CanUseItem(Player player)
     {
+        if (!base.CanUseItem(player)) return false;
         if (player.altFunctionUse == 2)
         {
             player.itemTime = player.itemAnimation = 0;
