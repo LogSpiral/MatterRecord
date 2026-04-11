@@ -202,12 +202,12 @@ public class RecorderSystem : ModSystem
                     spb.Draw(TextureAssets.MagicPixel.Value, new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), Color.Black * (timer * backLight));
                     AnimationEffect.Draw(spb);
                     spb.Draw(
-                        TextureAssets.Item[ItemID.SpellTome].Value,
+                        ModAsset.RecordBook.Value,
                         center,
                         null,
                         Color.White * timer,
                         0,
-                        TextureAssets.Item[ItemID.SpellTome].Size() * .5f,
+                        ModAsset.RecordBook.Size() * .5f,
                         4f,
                         0,
                         0);
@@ -217,12 +217,12 @@ public class RecorderSystem : ModSystem
                     spb.Draw(TextureAssets.MagicPixel.Value, new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), Color.Black * backLight);
                     AnimationEffect.Draw(spb);
                     spb.Draw(
-                        TextureAssets.Item[ItemID.SpellTome].Value,
+                        ModAsset.RecordBook.Value,
                         center + Main.rand.NextVector2Unit() * Main.rand.NextFloat(0, timer * 32),
                         null,
                         Color.White,
                         0,
-                        TextureAssets.Item[ItemID.SpellTome].Size() * .5f,
+                        ModAsset.RecordBook.Size() * .5f,
                         4f,
                         0,
                         0);

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using System;
 using System.Collections.Generic;
 using Terraria.GameContent;
@@ -31,8 +32,8 @@ public partial class RecordBookItem
     {
         if (!this.IsRecordUnlocked && !UnlockStyleInventoryVisualMask)
         {
-            spriteBatch.Draw(TextureAssets.Item[ItemID.SpellTome].Value, position, null, drawColor, 0, new Vector2(14, 16), 0.85f, 0, 0);
-            spriteBatch.Draw(TextureAssets.Item[ItemID.SpellTome].Value, position, null, Color.Lerp(Color.Transparent, Color.White with { A = 0 }, MathF.Cos(Main.GlobalTimeWrappedHourly * 6) * .25f + .25f), 0, new Vector2(14, 16), 0.85f, 0, 0);
+            spriteBatch.Draw(ModAsset.RecordBook.Value, position, null, drawColor, 0, new Vector2(14, 16), 0.85f, 0, 0);
+            spriteBatch.Draw(ModAsset.RecordBook.Value, position, null, Color.Lerp(Color.Transparent, Color.White with { A = 0 }, MathF.Cos(Main.GlobalTimeWrappedHourly * 6) * .25f + .25f), 0, new Vector2(14, 16), 0.85f, 0, 0);
             return false;
         }
         UnlockStyleInventoryVisualMask = false;
@@ -42,8 +43,8 @@ public partial class RecordBookItem
     {
         if (!this.IsRecordUnlocked)
         {
-            spriteBatch.Draw(TextureAssets.Item[ItemID.SpellTome].Value, Item.Center - Main.screenPosition, null, lightColor, rotation, new Vector2(14, 16), scale, 0, 0);
-            spriteBatch.Draw(TextureAssets.Item[ItemID.SpellTome].Value, Item.Center - Main.screenPosition, null, Color.Lerp(Color.Transparent, Color.White with { A = 0 }, MathF.Cos(Main.GlobalTimeWrappedHourly * 6) * .25f + .25f), rotation, new Vector2(14, 16), scale, 0, 0);
+            spriteBatch.Draw(ModAsset.RecordBook.Value, Item.Center - Main.screenPosition, null, lightColor, rotation, new Vector2(14, 16), scale, 0, 0);
+            spriteBatch.Draw(ModAsset.RecordBook.Value, Item.Center - Main.screenPosition, null, Color.Lerp(Color.Transparent, Color.White with { A = 0 }, MathF.Cos(Main.GlobalTimeWrappedHourly * 6) * .25f + .25f), rotation, new Vector2(14, 16), scale, 0, 0);
             return false;
         }
         return true;
