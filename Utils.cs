@@ -1581,7 +1581,7 @@ public static class MiscMethods
     /// </summary>=
     public static List<TooltipLine> GenerateDetailedTags(Mod Mod, ReadOnlyCollection<TooltipLine> tooltips, object arg = null)
     {
-        List<TooltipLine> list = new();
+        List<TooltipLine> list = [];
         foreach (TooltipLine line in tooltips)
         {
             if (line.Mod == Mod.Name)

@@ -39,9 +39,9 @@ public partial class Recorder : ModNPC
             var npc = Main.npc[i];
             if (npc.type == ModContent.NPCType<Recorder>()) 
             {
-                if (Main.netMode == 0)
+                if (Main.netMode == NetmodeID.SinglePlayer)
                     Main.NewText(Language.GetTextValue("LegacyMultiplayer.19", npc.FullName), new Color(255, 240, 20));
-                else if (Main.netMode == 2)
+                else if (Main.netMode == NetmodeID.Server)
                     ChatHelper.BroadcastChatMessage(NetworkText.FromKey("LegacyMultiplayer.19", npc.GetFullNetName()), new Color(255, 240, 20));
                 return true;
             }

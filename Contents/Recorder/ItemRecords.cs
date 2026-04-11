@@ -14,5 +14,7 @@ public enum ItemRecords
     TheoryOfFreedom,
     TheoryOfJustice,
     WarAndPeace,
+    CompendiumOfMateriaMedica,
+    TheTaleOfTheHeike,
     Count
 }

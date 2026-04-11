@@ -51,15 +51,6 @@ public partial class Recorder
         }
         askForSlimeThisTime = !DreamWorld.UsedZoologistDream && !NPC.AnyNPCs(ModContent.NPCType<DreamSlime>()) && Main.rand.NextBool(10);
 
-        #region 解锁物品闲聊
-        List<IRecordBookItem> recordBooks = [];
-        foreach (var item in Main.LocalPlayer.inventory)
-        {
-            if (item.ModItem is IRecordBookItem { RecordType: not ItemRecords.Faust } recordBook
-                && recordBook.IsRecordUnlocked)
-                recordBooks.Add(recordBook);
-        }
-        #endregion
 
         #region 闲聊
         WeightedRandom<string> chat = new();
@@ -70,8 +61,17 @@ public partial class Recorder
         #endregion
 
         #region 特殊物品闲聊
-        foreach (var recordBook in recordBooks)
-            chat.Add(Dialogue(recordBook.RecordType.ToString() + "Unlocked"));
+        foreach (var item in Main.LocalPlayer.inventory)
+        {
+            if (item.ModItem is IRecordBookItem { RecordType: not ItemRecords.Faust } recordBook
+                && recordBook.IsRecordUnlocked) 
+            {
+                if(recordBook.RecordType is ItemRecords.CompendiumOfMateriaMedica)
+                    chat.Add(DialogueWithArgs(recordBook.RecordType.ToString() + "Unlocked",Main.LocalPlayer.name));
+                else
+                    chat.Add(Dialogue(recordBook.RecordType.ToString() + "Unlocked"));
+            }
+        }
         #endregion
 
         #region NPC相关闲聊

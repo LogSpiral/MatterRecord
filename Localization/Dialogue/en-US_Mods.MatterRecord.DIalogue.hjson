@@ -25,6 +25,8 @@ Recorder: {
 	TheoryOfJusticeUnlocked: 无知即正义其实不是这个意思……看起来你好像没有理解我的幽默
 	EmeraldTabletUnlocked: 我炼金学水平有限，只有事象炼金术因为先天原因还算不错……要来几个抄本吗？
 	LordOfTheFliesUnlocked: 蝇王前辈大概是对我复制抄本没什么意见的，他虽然没同意，但我也没让他知道
+	TheTaleOfTheHeikeUnlocked: 诸神们的事迹与这项记录别无二致，极尽辉煌之后，便是凝固、陨落与黄昏，最终……坠入深渊
+	CompendiumOfMateriaMedicaUnlocked: “不要踩坏我的药田”，城镇被攻入时，正在研究草药的{0}如是说
 	// 找到宠物史莱姆时的奖励对话
 	PetFoundDialogue:
 		'''
@@ -41,6 +43,8 @@ Recorder: {
 	WarAndPeaceUnlocking: 哦，了不起，你找到了遗失的另一半，我看看能不能凭着记忆复原它
 	TheInterpretationOfDreamsUnlocking: 它试图为混沌赋予秩序，精神可嘉，就像试图让史莱姆排成整齐的队列一样
 	LordOfTheFliesUnlocking: 蝇王前辈大概是对我复制抄本没什么意见的，他虽然没同意，但我也没让他知道
+	TheTaleOfTheHeikeUnlocking: 盛者必衰，生者必灭……这份记录在诠释“衰亡”时格外……执着。
+	CompendiumOfMateriaMedicaUnlocking: 这大概是东夏某位青帝的心得，讲了两个小时的君臣佐使，七情和合，我从未复刻过如此无聊的事象记录
 	// 收集任务奖励
 	TheAdventureofSherlockHolmesUnlocking: 福尔摩斯先生能够帮你注意到一些被忽略的细节
 	TheoryOfJusticeUnlocking: 我把无知之幕做成了斗篷，合身吗，不合身我也不会改的

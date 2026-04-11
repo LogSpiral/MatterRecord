@@ -27,7 +27,9 @@ public class RecorderPlayer : ModPlayer
         ItemRecords.TheOldManAndTheSea,
         ItemRecords.WarAndPeace,
         ItemRecords.TheInterpretationOfDreams,
-        ItemRecords.TheoryOfFreedom
+        ItemRecords.TheoryOfFreedom,
+        ItemRecords.TheTaleOfTheHeike,
+        ItemRecords.CompendiumOfMateriaMedica
     ];
     public static IReadOnlySet<ItemRecords> RecordsToHint { get; } = RecordsToHintInternal;
     public static List<(string, ItemRecords)> GetNotHintedRecords()

@@ -58,6 +58,8 @@ Faust: {
 	WarAndPeaceHint: 与绒爪的夜行者立约，驯服一个永恒的谜题
 	TheInterpretationOfDreamsHint: 怀揣罗网沉入梦乡，在虚幻中打捞真实的碎片
 	TheoryOfFreedomHint: 毁去一朵娇艳的花，而后直面它的本质
+	TheTaleOfTheHeikeHint: 挥动妖异之刀，斩断枯槁之躯
+	CompendiumOfMateriaMedicaHint: 执生机之杖，于百草间采撷自然的馈赠
 	HintList: 记录提示如下:
 	HintNotFound: - {0}
 	HintFound: - {0} (已获取, 请在记录员处提交)

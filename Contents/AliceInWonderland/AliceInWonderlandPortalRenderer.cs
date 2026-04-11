@@ -11,7 +11,7 @@ namespace MatterRecord.Contents.AliceInWonderland;
 
 internal class AliceInWonderlandPortalRenderer : IPlayerRenderer
 {
-    private List<DrawData> _voidLensData = new List<DrawData>();
+    private List<DrawData> _voidLensData = [];
     private AliceInWonderlandInteractionChecker _interactionChecker = new AliceInWonderlandInteractionChecker();
 
     public void DrawPlayers(Camera camera, IEnumerable<Player> players)
