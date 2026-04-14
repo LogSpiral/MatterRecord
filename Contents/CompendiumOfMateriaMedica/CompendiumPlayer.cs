@@ -135,13 +135,19 @@ public class CompendiumPlayer : ModPlayer
     /// </summary>
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
     {
+        if (target.friendly)
+            return;
+
         bool finalDeathweed = potionDeathweed || proximityDeathweed;
         bool finalFireblossom = potionFireblossom || proximityFireblossom;
         bool finalShiverthorn = potionShiverthorn || proximityShiverthorn;
 
-        if (finalDeathweed) target.AddBuff(BuffID.Poisoned, 30);
-        if (finalFireblossom) target.AddBuff(BuffID.OnFire, 30);
-        if (finalShiverthorn) target.AddBuff(BuffID.Frostburn, 30);
+        if (finalDeathweed)
+            target.AddBuff(BuffID.Poisoned, 15);
+        if (finalFireblossom)
+            target.AddBuff(BuffID.OnFire, 15);
+        if (finalShiverthorn)
+            target.AddBuff(BuffID.Frostburn, 15);
     }
 
     /// <summary>
@@ -181,10 +187,10 @@ public class CompendiumPlayer : ModPlayer
     private void ScanNearbyHerbs()
     {
         Vector2 center = Player.Center;
-        int left = (int)(center.X - 500);
-        int right = (int)(center.X + 500);
-        int top = (int)(center.Y - 500);
-        int bottom = (int)(center.Y + 500);
+        int left = (int)(center.X - 800);
+        int right = (int)(center.X + 800);
+        int top = (int)(center.Y - 800);
+        int bottom = (int)(center.Y + 800);
 
         int minTileX = MathHelper.Clamp(left / 16, 0, Main.maxTilesX - 1);
         int maxTileX = MathHelper.Clamp(right / 16, 0, Main.maxTilesX - 1);
