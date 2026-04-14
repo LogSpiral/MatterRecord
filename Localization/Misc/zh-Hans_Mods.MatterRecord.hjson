@@ -73,3 +73,40 @@ Bestiary: {
 
 	DreamSlime: 这只史莱姆能在梦境之间穿梭，为人们驱逐噩梦。有时它会吃掉梦中的甜点——它真的很喜欢甜食！不过看在赶走噩梦的份上，就让它偷吃一口吧
 }
+
+EmeraldTablet: {
+	HintDefault:
+		'''
+		在物品槽中放置旗旗帜/宝匣/宝藏袋
+		可进行炼成
+		'''
+	HintBanner:
+		'''
+		当前物品：{0}
+		可转化为对应敌怪掉落物
+		'''
+	HintBossBag:
+		'''
+		当前物品：{0}
+		可转化为对应内容物 强敌遗馈只可得其一
+		'''
+	HintCrate:
+		'''
+		当前物品：{0}
+		可转化为对应内容物
+		'''
+	HintInvalidBag:
+		'''
+		当前物品无效
+		仅支持旗帜/宝匣/宝藏袋
+		'''
+	HintInvalid:
+		'''
+		当前物品无效
+		请在物品槽中放置旗帜/宝匣/宝藏袋
+		'''
+	BannerUnit: 旗帜
+	BagUnit: 彩袋
+	FormatBannersPerItem: "{0}{1}=1"
+	FormatItemsPerBanner: 1{1}={0}
+}
