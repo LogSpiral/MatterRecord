@@ -78,7 +78,6 @@ EmeraldTablet: {
 	HintDefault: Mods.MatterRecord.EmeraldTablet.HintDefault
 	HintBanner: Mods.MatterRecord.EmeraldTablet.HintBanner
 	HintBossBag: Mods.MatterRecord.EmeraldTablet.HintBossBag
-
 	HintCrate: Mods.MatterRecord.EmeraldTablet.HintCrate
 	HintInvalidBag: Mods.MatterRecord.EmeraldTablet.HintInvalidBag
 	HintInvalid: Mods.MatterRecord.EmeraldTablet.HintInvalid

@@ -1,36 +1,33 @@
 ﻿using System.Collections.Generic;
-using Terraria;
-using Terraria.ModLoader;
+using System.Linq;
 using Terraria.ModLoader.IO;
-using System.Linq;  
 
-namespace MatterRecord.Contents.EmeraldTablet
+namespace MatterRecord.Contents.EmeraldTablet;
+
+public class BossBagRecordPlayer : ModPlayer
 {
-    public class BossBagRecordPlayer : ModPlayer
+    public HashSet<int> ExchangedBossBags = new HashSet<int>();
+
+    public override void SaveData(TagCompound tag)
     {
-        public HashSet<int> ExchangedBossBags = new HashSet<int>();
+        tag["ExchangedBossBags"] = ExchangedBossBags.ToList();
+    }
 
-        public override void SaveData(TagCompound tag)
-        {
-            tag["ExchangedBossBags"] = ExchangedBossBags.ToList();
-        }
+    public override void LoadData(TagCompound tag)
+    {
+        ExchangedBossBags.Clear();
+        var list = tag.GetList<int>("ExchangedBossBags");
+        if (list != null)
+            ExchangedBossBags = new HashSet<int>(list);
+    }
 
-        public override void LoadData(TagCompound tag)
-        {
-            ExchangedBossBags.Clear();
-            var list = tag.GetList<int>("ExchangedBossBags");
-            if (list != null)
-                ExchangedBossBags = new HashSet<int>(list);
-        }
+    public void RecordExchange(int itemType)
+    {
+        ExchangedBossBags.Add(itemType);
+    }
 
-        public void RecordExchange(int itemType)
-        {
-            ExchangedBossBags.Add(itemType);
-        }
-
-        public bool HasExchanged(int itemType)
-        {
-            return ExchangedBossBags.Contains(itemType);
-        }
+    public bool HasExchanged(int itemType)
+    {
+        return ExchangedBossBags.Contains(itemType);
     }
 }
