@@ -6,6 +6,12 @@ MatterRecordConfig: {
 		Tooltip: 开启后使用手持弹幕模式，默认关闭
 	}
 
+	AllowingRecordRecipe: {
+		ConditionDescription: 允许合成事象记录
+		Label: "[rbi:-]允许合成事象记录"
+		Tooltip: 如果你实在找不到的话就开启这个然后拿书问问向导吧
+	}
+
 	LordOfTheFliesUIReset: {
 		Label: "[records:MatterRecord/LordOfTheFlies]重置蝇王的UI位置为默认值"
 		Tooltip: ""

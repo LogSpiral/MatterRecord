@@ -1572,6 +1572,7 @@ public static class MiscMethods
             .AddIngredient(ItemID.Book)
             .AddTile(TileID.Bookcases)
             .AddIngredient(extraIngredient)
+            .AddCondition(Language.GetText("Mods.MatterRecord.Configs.MatterRecordConfig.AllowingRecordRecipe.ConditionDescription"), () => MatterRecordConfig.Instance.AllowingRecordRecipe)
             .DisableDecraft()
             .Register();
     }

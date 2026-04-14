@@ -2,6 +2,8 @@
 using MatterRecord.Contents.Recorder;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.ComponentModel;
+using System.Security.Policy;
 using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.GameContent.UI.Chat;
@@ -18,6 +20,9 @@ public class MatterRecordConfig : ModConfig
     public static MatterRecordConfig Instance => ModContent.GetInstance<MatterRecordConfig>();
     public override ConfigScope Mode => ConfigScope.ServerSide;
     public bool DonQuijoteSlashActive = false;
+
+    [DefaultValue(false)]
+    public bool AllowingRecordRecipe = false;
 
     [CustomModConfigItem(typeof(LordOfTheFliesResetElement))]
     public object LordOfTheFliesUIReset;
@@ -121,6 +126,41 @@ public class MatterRecordItemHandler : ITagHandler, ILoadable
     void ILoadable.Load(Mod mod)
     {
         ChatManager.Register<MatterRecordItemHandler>("records");
+    }
+    void ILoadable.Unload()
+    {
+    }
+}
+
+
+
+public class MatterRecordBookIconHandler : ITagHandler, ILoadable
+{
+    public class MatterRecordItemSnippet() : TextSnippet
+    {
+        public override bool UniqueDraw(bool justCheckingString, out Vector2 size, SpriteBatch spriteBatch, Vector2 position = default, Color color = default, float scale = 1)
+        {
+            if (!justCheckingString && (color.R != 0 || color.G != 0 || color.B != 0))
+                spriteBatch.Draw(ModAsset.RecordBook.Value, position + new Vector2(10, 8), null, color, 0, new Vector2(14, 15), 0.67f, 0, 0);
+            size = new Vector2(20f);
+            return true;
+        }
+    }
+
+
+    TextSnippet ITagHandler.Parse(string text, Color baseColor, string options)
+    {
+        return new MatterRecordItemSnippet()
+        {
+            Text = "[rbi:-]",
+            CheckForHover = true,
+            DeleteWhole = true
+        };
+    }
+
+    void ILoadable.Load(Mod mod)
+    {
+        ChatManager.Register<MatterRecordBookIconHandler>("rbi");
     }
     void ILoadable.Unload()
     {

@@ -6,6 +6,12 @@ MatterRecordConfig: {
 		Tooltip: Enables melee projectile mode (disabled by default)
 	}
 
+	AllowingRecordRecipe: {
+		ConditionDescription: 允许合成事象记录
+		Label: "[rbi:-]允许合成事象记录"
+		Tooltip: 如果你实在找不到的话就开启这个然后拿书问问向导吧
+	}
+
 	LordOfTheFliesUIReset: {
 		Label: "[records:MatterRecord/LordOfTheFlies]Reset the position of LordOfTheFlies's UI To Default"
 		Tooltip: ""
