@@ -73,3 +73,17 @@ Bestiary: {
 
 	DreamSlime: 这只史莱姆能在梦境之间穿梭，为人们驱逐噩梦。有时它会吃掉梦中的甜点——它真的很喜欢甜食！不过看在赶走噩梦的份上，就让它偷吃一口吧
 }
+
+EmeraldTablet: {
+	HintDefault: Mods.MatterRecord.EmeraldTablet.HintDefault
+	HintBanner: Mods.MatterRecord.EmeraldTablet.HintBanner
+	HintBossBag: Mods.MatterRecord.EmeraldTablet.HintBossBag
+
+	HintCrate: Mods.MatterRecord.EmeraldTablet.HintCrate
+	HintInvalidBag: Mods.MatterRecord.EmeraldTablet.HintInvalidBag
+	HintInvalid: Mods.MatterRecord.EmeraldTablet.HintInvalid
+	BannerUnit: Mods.MatterRecord.EmeraldTablet.BannerUnit
+	BagUnit: Mods.MatterRecord.EmeraldTablet.BagUnit
+	FormatBannersPerItem: Mods.MatterRecord.EmeraldTablet.FormatBannersPerItem
+	FormatItemsPerBanner: Mods.MatterRecord.EmeraldTablet.FormatItemsPerBanner
+}
