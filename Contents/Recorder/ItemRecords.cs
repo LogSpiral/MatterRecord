@@ -12,7 +12,7 @@ public enum ItemRecords
     TheInterpretationOfDreams,
     TheOldManAndTheSea,
     TheoryOfFreedom,
-    TheoryOfJustice,
+    TheoryofJustice,
     WarAndPeace,
     CompendiumOfMateriaMedica,
     TheTaleOfTheHeike,

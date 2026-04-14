@@ -22,7 +22,7 @@ Recorder: {
 	WarAndPeaceUnlocked: 养猫很麻烦，尤其是在猫和量子力学搭上关系的时候
 	TheInterpretationOfDreamsUnlocked: 严格来说我没有所谓的梦境，放弃吧，为什么这样看着我？这是实话
 	TheAdventureofSherlockHolmesUnlocked: 哎，福尔摩斯先生现在已经变成了八卦记者，令人感叹
-	TheoryOfJusticeUnlocked: 无知即正义其实不是这个意思……看起来你好像没有理解我的幽默
+	TheoryofJusticeUnlocked: 无知即正义其实不是这个意思……看起来你好像没有理解我的幽默
 	EmeraldTabletUnlocked: 我炼金学水平有限，只有事象炼金术因为先天原因还算不错……要来几个抄本吗？
 	LordOfTheFliesUnlocked: 蝇王前辈大概是对我复制抄本没什么意见的，他虽然没同意，但我也没让他知道
 	TheTaleOfTheHeikeUnlocked: 诸神们的事迹与这项记录别无二致，极尽辉煌之后，便是凝固、陨落与黄昏，最终……坠入深渊
@@ -47,7 +47,7 @@ Recorder: {
 	CompendiumOfMateriaMedicaUnlocking: 这大概是东夏某位青帝的心得，讲了两个小时的君臣佐使，七情和合，我从未复刻过如此无聊的事象记录
 	// 收集任务奖励
 	TheAdventureofSherlockHolmesUnlocking: 福尔摩斯先生能够帮你注意到一些被忽略的细节
-	TheoryOfJusticeUnlocking: 我把无知之幕做成了斗篷，合身吗，不合身我也不会改的
+	TheoryofJusticeUnlocking: 我把无知之幕做成了斗篷，合身吗，不合身我也不会改的
 	EmeraldTabletUnlocking: 现世已经不需要太一了，不过作为炼金术入门还算不错
 	// 幸福度相关
 	Homeless: 有椅子和工作台就行，监狱也无所谓，我只是想有个地方能休息

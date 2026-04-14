@@ -21,7 +21,7 @@ public class RecorderSystem : ModSystem
 {
     public static Dictionary<int, ItemRecords> RewardDictionary { get; } = new(){
         { 2, ItemRecords.DonQuijoteDeLaMancha },
-        { 4, ItemRecords.TheoryOfJustice },
+        { 4, ItemRecords.TheoryofJustice },
         { 6, ItemRecords.EmeraldTablet }
     };
     private Bits64 _itemLockRecords;

@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using Terraria.GameContent.Bestiary;
 
-namespace MatterRecord.Contents.TheoryOfJustice;
+namespace MatterRecord.Contents.TheoryofJustice;
 
 [AutoloadEquip(EquipType.Back, EquipType.Front)]
-public class TheoryOfJustice : RecordBookItem
+public class TheoryofJustice : RecordBookItem
 {
-    public override ItemRecords RecordType => ItemRecords.TheoryOfJustice;
+    public override ItemRecords RecordType => ItemRecords.TheoryofJustice;
     public override void SetDefaults()
     {
         Item.accessory = true;
