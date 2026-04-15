@@ -110,3 +110,5 @@ EmeraldTablet: {
 	FormatBannersPerItem: "{0}{1}=1"
 	FormatItemsPerBanner: 1{1}={0}
 }
+
+RecordSystem.Unlocked: 已解锁 {0}

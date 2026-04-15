@@ -85,10 +85,11 @@ public class RecorderSystem : ModSystem
     }
 
     public static RecorderSystem Instance { get; private set; }
-
+    private LocalizedText UnlockedText { get; set; }
     public override void Load()
     {
         Instance = this;
+        UnlockedText = Language.GetText("Mods.MatterRecord.RecordSystem.Unlocked");
     }
 
     public override void Unload()
@@ -318,13 +319,13 @@ public class RecorderSystem : ModSystem
                         0,
                         0
                         );
-                    string text = $"已解锁 {ContentSamples.ItemsByType[AnimationItemType].Name}";
+                    string text = UnlockedText.Format(ContentSamples.ItemsByType[AnimationItemType].Name);
                     float timerText = MathHelper.SmoothStep(0, 1, (AnimationTimer - 210f) / 30f);
                     ChatManager.DrawColorCodedString(
                         spb,
                         FontAssets.DeathText.Value,
                         text,
-                        center + new Vector2(0, 240),
+                        center + new Vector2(0, 180),
                         Color.White * timerText,
                         0,
                         FontAssets.DeathText.Value.MeasureString(text) * .5f, Vector2.One);
@@ -349,20 +350,20 @@ public class RecorderSystem : ModSystem
                         0,
                         0);
 
-                    text = $"已解锁 {ContentSamples.ItemsByType[AnimationItemType].Name}";
+                    text = UnlockedText.Format(ContentSamples.ItemsByType[AnimationItemType].Name);
                     timerText = MathHelper.SmoothStep(0, 1, (AnimationTimer - 210f) / 30f);
                     ChatManager.DrawColorCodedString(
                         spb,
                         FontAssets.DeathText.Value,
                         text,
-                        center + new Vector2(0, 240),
+                        center + new Vector2(0, 180),
                         Color.White * timer,
                         0,
                         FontAssets.DeathText.Value.MeasureString(text) * .5f, Vector2.One);
                     break;
             }
             return true;
-        }, InterfaceScaleType.Game));
+        }, InterfaceScaleType.UI));
     }
 
 

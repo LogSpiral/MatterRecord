@@ -86,3 +86,5 @@ EmeraldTablet: {
 	FormatBannersPerItem: Mods.MatterRecord.EmeraldTablet.FormatBannersPerItem
 	FormatItemsPerBanner: Mods.MatterRecord.EmeraldTablet.FormatItemsPerBanner
 }
+
+RecordSystem.Unlocked: "{0} Unlocked"
