@@ -194,9 +194,7 @@ public class EmeraldUI : UIState
 
         InitializeUI();
         if (Visible) return;
-
-        _instance._mainPanel.BorderColor = new Color(62, 101, 78);
-        _instance._mainPanel.BackgroundColor = new Color(93, 163, 142) * .5f;
+        _instance._bannerSlot.Item = Main.LocalPlayer.GetModPlayer<BossBagRecordPlayer>().ItemToExchange ??= new();
         Visible = true;
         _active = true;
         _timer = 0;
@@ -238,13 +236,12 @@ public class EmeraldUI : UIState
         };
         Append(Mask);
 
-        var backColor = new Color(69, 124, 91);
         _mainPanel = new DraggablePanel
         {
             ControlTarget = Mask,
             MinWidth = new StyleDimension(400, 0f),
             MinHeight = new StyleDimension(TargetHeight, 0f),
-            BackgroundColor = backColor * .5f,
+            BackgroundColor = new Color(93, 163, 142) * .5f,
             BorderColor = new Color(62, 101, 78),
             PaddingTop = 12,
             PaddingBottom = 12,
@@ -306,6 +303,8 @@ public class EmeraldUI : UIState
 
     private void OnBannerSlotChanged(Item item)
     {
+        if (!Main.gameMenu)
+            Main.LocalPlayer.GetModPlayer<BossBagRecordPlayer>().ItemToExchange = item;
         EnsureDictionaryBuilt();
 
         if (item != null && !item.IsAir)

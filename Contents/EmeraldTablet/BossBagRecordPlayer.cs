@@ -6,11 +6,15 @@ namespace MatterRecord.Contents.EmeraldTablet;
 
 public class BossBagRecordPlayer : ModPlayer
 {
-    public HashSet<int> ExchangedBossBags = new HashSet<int>();
+    public HashSet<int> ExchangedBossBags = [];
+
+    public Item ItemToExchange { get; set; }
 
     public override void SaveData(TagCompound tag)
     {
         tag["ExchangedBossBags"] = ExchangedBossBags.ToList();
+        if (ItemToExchange != null && !ItemToExchange.IsAir)
+            tag["e"] = ItemIO.Save(ItemToExchange);
     }
 
     public override void LoadData(TagCompound tag)
@@ -18,7 +22,10 @@ public class BossBagRecordPlayer : ModPlayer
         ExchangedBossBags.Clear();
         var list = tag.GetList<int>("ExchangedBossBags");
         if (list != null)
-            ExchangedBossBags = new HashSet<int>(list);
+            ExchangedBossBags = [.. list];
+
+        if(tag.TryGet<Item>("e",out var value))
+            ItemToExchange = value;
     }
 
     public void RecordExchange(int itemType)

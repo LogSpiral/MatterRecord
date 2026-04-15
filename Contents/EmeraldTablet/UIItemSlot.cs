@@ -16,7 +16,7 @@ public class UIItemSlot : UIElement
 
     public UIItemSlot(int context, float scale = 1f)
     {
-        _item = new Item();
+        _item = new();
         _itemSlotContext = context;
         _scale = scale;
         Width.Set(52 * scale, 0);
@@ -24,7 +24,11 @@ public class UIItemSlot : UIElement
         _backgroundTexture = TextureAssets.InventoryBack9.Value;
     }
 
-    public Item Item => _item;
+    public Item Item 
+    {
+        get => _item;
+        set => _item = value;
+    }
 
     public override void DrawSelf(SpriteBatch spriteBatch)
     {
