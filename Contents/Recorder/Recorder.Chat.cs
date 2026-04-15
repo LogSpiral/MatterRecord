@@ -1,4 +1,5 @@
-﻿using MatterRecord.Contents.TheInterpretationOfDreams;
+﻿using MatterRecord.Contents.ImperfectPage;
+using MatterRecord.Contents.TheInterpretationOfDreams;
 using System.Collections.Generic;
 using Terraria.DataStructures;
 using Terraria.Localization;
@@ -196,6 +197,9 @@ public partial class Recorder
         {
             recordPlayer.MetWithRecorder = true;
             var index = Item.NewItem(new EntitySource_Gift(NPC), Main.LocalPlayer.Hitbox, ModContent.ItemType<Faust.Faust>());
+            if (Main.netMode == NetmodeID.MultiplayerClient)
+                NetMessage.SendData(MessageID.SyncItem, -1, -1, null, index, 1f);
+            index = Item.NewItem(new EntitySource_Gift(NPC), Main.LocalPlayer.Hitbox, ModContent.ItemType<ImperfectPage.ImperfectPage>());
             if (Main.netMode == NetmodeID.MultiplayerClient)
                 NetMessage.SendData(MessageID.SyncItem, -1, -1, null, index, 1f);
             RecorderSystem.SetUnlock(ItemRecords.Faust);

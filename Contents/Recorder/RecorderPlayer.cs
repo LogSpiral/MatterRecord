@@ -104,7 +104,6 @@ public class RecorderPlayer : ModPlayer
         tag.TryGet("Met", out MetWithRecorder);
         if (tag.TryGet("HR", out ulong value))
             _hintedRecords = value;
-        _hintedRecords = default;
     }
     public override void SaveData(TagCompound tag)
     {
