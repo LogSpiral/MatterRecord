@@ -210,6 +210,41 @@ public partial class Recorder : ModNPC
         horizontalHoldoutOffset = -8;
         base.DrawTownAttackGun(ref item, ref itemFrame, ref scale, ref horizontalHoldoutOffset);
     }
+
+    // ==================== 战斗状态判定 ====================
+    /// <summary>
+    /// 判断当前记录者是否处于战斗状态（索敌范围内存在敌人）
+    /// </summary>
+    public bool IsInCombat()
+    {
+        float range = 520; 
+        foreach (NPC npc in Main.npc)
+        {
+            if (npc.active && !npc.friendly && npc.damage > 0 && !npc.townNPC && npc.type != NPCID.TargetDummy)
+            {
+                if (Vector2.Distance(NPC.Center, npc.Center) < range)
+                    return true;
+            }
+        }
+        return false;
+    }
+
+    /// <summary>
+    /// 静态方法：检查世界中是否存在任意记录者处于战斗状态
+    /// </summary>
+    public static bool IsAnyRecorderInCombat()
+    {
+        foreach (NPC npc in Main.npc)
+        {
+            if (npc.active && npc.type == ModContent.NPCType<Recorder>())
+            {
+                if (npc.ModNPC is Recorder recorder && recorder.IsInCombat())
+                    return true;
+            }
+        }
+        return false;
+    }
+    // ======================================================
 }
 public class RecorderFlavorTextElement : FlavorTextBestiaryInfoElement, IBestiaryInfoElement, ICategorizedBestiaryInfoElement
 {
