@@ -6,6 +6,7 @@ using Terraria.Audio;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.GameContent.UI.Elements;
 using Terraria.Localization;
+using Terraria.ModLoader.UI;
 using Terraria.UI;
 
 namespace MatterRecord.Contents.EmeraldTablet;
@@ -67,8 +68,8 @@ public class EmeraldUI : UIState
     private DraggablePanel _mainPanel;
     private UIItemSlot _bannerSlot;
     private UIPanel _dropsPanel;
-    private UIList _dropList;
-    private UIScrollbar _scrollbar;
+    private SUIList _dropList;
+    //private UIScrollbar _scrollbar;
     private UIText _hintText;
 
     private int _currentNPC = -1;
@@ -190,9 +191,12 @@ public class EmeraldUI : UIState
 
     public static void Show()
     {
+
         InitializeUI();
         if (Visible) return;
 
+        _instance._mainPanel.BorderColor = new Color(62, 101, 78);
+        _instance._mainPanel.BackgroundColor = new Color(93, 163, 142) * .5f;
         Visible = true;
         _active = true;
         _timer = 0;
@@ -234,12 +238,14 @@ public class EmeraldUI : UIState
         };
         Append(Mask);
 
+        var backColor = new Color(69, 124, 91);
         _mainPanel = new DraggablePanel
         {
             ControlTarget = Mask,
             MinWidth = new StyleDimension(400, 0f),
             MinHeight = new StyleDimension(TargetHeight, 0f),
-            BackgroundColor = new Color(30, 40, 70),
+            BackgroundColor = backColor * .5f,
+            BorderColor = new Color(62, 101, 78),
             PaddingTop = 12,
             PaddingBottom = 12,
             PaddingLeft = 12,
@@ -266,24 +272,28 @@ public class EmeraldUI : UIState
 
         _dropsPanel = new UIPanel();
         _dropsPanel.SetPadding(6);
-        _dropsPanel.Width.Set(0, 0.95f);
+        _dropsPanel.Width.Set(0, 1f);
         _dropsPanel.Height.Set(160, 0);
         _dropsPanel.Top.Set(60, 0);
-        _dropsPanel.BackgroundColor = new Color(20, 30, 50);
+        _dropsPanel.BackgroundColor = Color.Black * .2f;
+        _dropsPanel.BorderColor = Color.Transparent;
         _mainPanel.Append(_dropsPanel);
 
-        _dropList = new UIList();
+        _dropList = new SUIList()
+        {
+            ListPadding = 4
+        };
         _dropList.Width.Set(0, 1);
         _dropList.Height.Set(0, 1);
         _dropList.ListPadding = 4;
         _dropsPanel.Append(_dropList);
 
-        _scrollbar = new UIScrollbar();
-        _scrollbar.SetView(100, 1000);
-        _scrollbar.Height.Set(0, 1);
-        _scrollbar.Left.Set(10, 1);
-        _dropsPanel.Append(_scrollbar);
-        _dropList.SetScrollbar(_scrollbar);
+        //_scrollbar = new UIScrollbar();
+        //_scrollbar.SetView(100, 1000);
+        //_scrollbar.Height.Set(0, 1);
+        //_scrollbar.Left.Set(10, 1);
+        //_dropsPanel.Append(_scrollbar);
+        //_dropList.SetScrollbar(_scrollbar);
 
         // 刷新一次当前槽位，确保提示文本正确显示本地化内容
         RefreshCurrentSlot();
@@ -350,6 +360,7 @@ public class EmeraldUI : UIState
         else
         {
             _currentNPC = -1;
+            _currentBagItem = null;
             _pendingUpdateList = true;
             _hintText.SetText(HintDefault.Value);
         }
@@ -364,10 +375,17 @@ public class EmeraldUI : UIState
         drops = [.. drops.OrderBy(d => !(d.DropRate > 0 && d.IsAvailable)).ThenByDescending(d => d.DropRate)];
 
         bool forceUnavailable = IsNPCForbidden();
+
+        var bar1 = new UIHorizontalSeparator() { Width = new(0, 1), Height = new(4, 0), Color = UICommon.DefaultUIBlue * .5f };
+        _dropList.Add(bar1);
+
         foreach (var drop in drops)
         {
             var entry = new DropEntry(drop, false, _currentKillsNeeded, forceUnavailable, 0, PerformExchange);
             _dropList.Add(entry);
+
+            var bar = new UIHorizontalSeparator() { Width = new(0, 1), Height = new(4, 0), Color = UICommon.DefaultUIBlue * .5f };
+            _dropList.Add(bar);
         }
     }
 
@@ -436,11 +454,17 @@ public class EmeraldUI : UIState
 
         drops = [.. drops.OrderBy(d => !(d.DropRate > 0 && d.IsAvailable)).ThenByDescending(d => d.DropRate)];
 
+        var bar1 = new UIHorizontalSeparator() { Width = new(0, 1), Height = new(4, 0), Color = UICommon.DefaultUIBlue * .5f };
+        _dropList.Add(bar1);
+
         foreach (var drop in drops)
         {
             bool forceUnavailable = _bossBagAlreadyExchanged || !(drop.DropRate > 0 && drop.IsAvailable);
             var entry = new DropEntry(drop, true, 1, forceUnavailable, _currentBagTotalRate, PerformExchange);
             _dropList.Add(entry);
+
+            var bar = new UIHorizontalSeparator() { Width = new(0, 1), Height = new(4, 0), Color = UICommon.DefaultUIBlue * .5f };
+            _dropList.Add(bar);
         }
     }
 

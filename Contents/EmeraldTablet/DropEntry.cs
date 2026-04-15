@@ -34,8 +34,8 @@ public class DropEntry : UIPanel
         _onExchange = onExchange;
         Width.Set(0, 1);
         Height.Set(36, 0);
-        BackgroundColor = new Color(40, 50, 70);
-        BorderColor = Color.DarkSlateGray;
+        BackgroundColor = new Color(40, 50, 70) * .5f;
+        BorderColor = Color.Transparent;
         SetPadding(4);
 
         _dummyItem = ContentSamples.ItemsByType[drop.ItemID];
@@ -84,7 +84,27 @@ public class DropEntry : UIPanel
             }
         }
     }
-
+    public override void LeftClick(UIMouseEvent evt)
+    {
+        base.LeftClick(evt);
+        if (_canExchange)
+        {
+            int requiredBanners, giveStack;
+            if (_bannersPerItem.HasValue)
+            {
+                requiredBanners = _bannersPerItem.Value;
+                giveStack = 1;
+            }
+            else if (_itemsPerBanner.HasValue)
+            {
+                requiredBanners = 1;
+                giveStack = _itemsPerBanner.Value;
+            }
+            else
+                return;
+            _onExchange?.Invoke(_drop, requiredBanners, giveStack);
+        }
+    }
     public override void Update(GameTime gameTime)
     {
         base.Update(gameTime);
@@ -106,9 +126,9 @@ public class DropEntry : UIPanel
     public override void DrawSelf(SpriteBatch spriteBatch)
     {
         if (_canExchange)
-            BackgroundColor = new Color(60, 80, 100);
+            BackgroundColor = new Color(60, 80, 100) * .75f;
         else
-            BackgroundColor = new Color(40, 50, 70);
+            BackgroundColor = new Color(40, 50, 70) * .75f;
 
         base.DrawSelf(spriteBatch);
 
@@ -178,7 +198,7 @@ public class DropEntry : UIPanel
                 _drop.IsAvailable && !_forceUnavailable ? Color.LightGreen : Color.OrangeRed, 0, Vector2.Zero, textScale, SpriteEffects.None, 0);
         }
 
-        if (hitbox.Contains(Main.MouseScreen.ToPoint()))
+        if (IsMouseHovering)
         {
             Main.LocalPlayer.mouseInterface = true;
             Item hoverItem = new Item();
@@ -187,24 +207,6 @@ public class DropEntry : UIPanel
             Main.HoverItem = hoverItem;
             Main.hoverItemName = "1";
             Main.mouseText = true;
-        }
-
-        if (_canExchange && hitbox.Contains(Main.MouseScreen.ToPoint()) && Main.mouseLeft && Main.mouseLeftRelease)
-        {
-            int requiredBanners, giveStack;
-            if (_bannersPerItem.HasValue)
-            {
-                requiredBanners = _bannersPerItem.Value;
-                giveStack = 1;
-            }
-            else if (_itemsPerBanner.HasValue)
-            {
-                requiredBanners = 1;
-                giveStack = _itemsPerBanner.Value;
-            }
-            else
-                return;
-            _onExchange?.Invoke(_drop, requiredBanners, giveStack);
         }
     }
 }

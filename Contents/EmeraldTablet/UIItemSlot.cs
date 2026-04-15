@@ -43,7 +43,7 @@ public class UIItemSlot : UIElement
         var s = Main.inventoryScale;
         Main.inventoryScale = 0.8f;
         Vector2 position = dimension.Center() + new Vector2(52f, 52f) * -0.5f * Main.inventoryScale;
-        spriteBatch.Draw(_backgroundTexture, dimension.Center(), null, Color.White, 0, new Vector2(26), _scale, 0, 0);
+        spriteBatch.Draw(_backgroundTexture, dimension.Center(), null, Color.White * .75f, 0, new Vector2(26), _scale, 0, 0);
         ItemSlot.Draw(spriteBatch, ref _item, 14, position);
         Main.inventoryScale = s;
     }
