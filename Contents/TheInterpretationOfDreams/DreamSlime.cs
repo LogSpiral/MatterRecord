@@ -16,22 +16,26 @@ namespace MatterRecord.Contents.TheInterpretationOfDreams;
 public class DreamSlime : ModNPC
 {
     // ========== 常量 ==========
-    private const float SEARCH_RANGE = 520f;           // 索敌范围
-    private const float RANDOM_HOP_CHANCE = 0.33f;     // 随机跳跃概率
-    private const float SPLIT_CHANCE = 0.5f;           // 分裂概率
-    private const int MAX_SLIME_COUNT = 3;             // 分裂上限
-    private const float GRAVITY = 0.5f;                // 重力加速度（像素/帧²）
-    private const int AID_DELAY_MIN = 60;              // 援助倒计时最小帧数
-    private const int AID_DELAY_MAX = 181;             // 援助倒计时最大帧数
-    private const float JUMP_BASE_POWER = -7f;          // 基础跳跃速度
-    private const float JUMP_MIN_POWER = -4f;           // 最小跳跃速度
-    private const float JUMP_EXTRA_FACTOR_UP = 0.025f;  // 目标在上方时额外加成系数
-    private const float JUMP_EXTRA_FACTOR_DOWN = 0.03f; // 目标在下方时减少系数
-    private const float JUMP_MAX_EXTRA = 10f;           // 最大额外速度
-    private const float JUMP_MAX_REDUCE = 3f;           // 最大减少量
-    private const int GROUND_CHECK_HEIGHT = 4;          // 接地检测额外高度（像素）
-    private const float SIDE_WALL_CHECK_OFFSET = 4f;    // 侧向墙检测偏移（像素）
+    private const float SEARCH_RANGE = 520f;
+    private const float RANDOM_HOP_CHANCE = 0.33f;
+    private const float SPLIT_CHANCE = 0.5f;
+    private const int MAX_SLIME_COUNT = 3;
+    private const float GRAVITY = 0.5f;
+    private const int AID_DELAY_MIN = 60;
+    private const int AID_DELAY_MAX = 181;
+    private const float JUMP_BASE_POWER = -7f;
+    private const float JUMP_MIN_POWER = -4f;
+    private const float JUMP_EXTRA_FACTOR_UP = 0.025f;
+    private const float JUMP_EXTRA_FACTOR_DOWN = 0.03f;
+    private const float JUMP_MAX_EXTRA = 10f;
+    private const float JUMP_MAX_REDUCE = 3f;
+    private const int GROUND_CHECK_HEIGHT = 4;
+    private const float SIDE_WALL_CHECK_OFFSET = 4f;
     private const float WALL_COLLIDE_SPEED_THRESHOLD = 0.1f;
+    private const float IDLE_JUMP_HSPEED_MIN = 1f;
+    private const float IDLE_JUMP_HSPEED_MAX = 2.5f;
+    private const float IDLE_JUMP_VSPEED_MIN = -4.5f;
+    private const float IDLE_JUMP_VSPEED_MAX = -3f;
 
     // ========== 字段 ==========
     private int aidTimer = 0;
@@ -146,13 +150,13 @@ public class DreamSlime : ModNPC
         {
             NPC.defense = 9999;
             NPC.knockBackResist = 0f;
-            HandleNoTileCollideDuringFall(); // 下落穿平台及防卡墙
+            HandleNoTileCollideDuringFall();
             JumpToEnemy();
         }
         else
         {
             base.AI();
-            HandleAidTeleport(); // 援助传送
+            HandleAidTeleport();
         }
     }
 
@@ -254,14 +258,27 @@ public class DreamSlime : ModNPC
     private void JumpToEnemy()
     {
         NPC target = FindNearestEnemy(NPC);
-        if (target == null) return;
 
-        bool isGrounded = NPC.collideY || IsBelowGround(NPC.BottomLeft, NPC.width, GROUND_CHECK_HEIGHT);
+        // 无目标时：向玩家方向小跳移动
+        if (target == null)
+        {
+            Player nearestPlayer = GetNearestPlayer();
+            if (nearestPlayer != null && (NPC.collideY || IsBelowGround(NPC.BottomLeft, NPC.width, GROUND_CHECK_HEIGHT)))
+            {
+                float direction = (nearestPlayer.Center.X > NPC.Center.X) ? 1f : -1f;
+                float hSpeed = direction * Main.rand.NextFloat(IDLE_JUMP_HSPEED_MIN, IDLE_JUMP_HSPEED_MAX);
+                float vSpeed = Main.rand.NextFloat(IDLE_JUMP_VSPEED_MIN, IDLE_JUMP_VSPEED_MAX);
+                NPC.velocity = new Vector2(hSpeed, vSpeed);
+                NPC.direction = (int)direction;
+            }
+            return;
+        }
 
-        if (isGrounded)
+        // 有目标时正常跳跃
+        bool grounded = NPC.collideY || IsBelowGround(NPC.BottomLeft, NPC.width, GROUND_CHECK_HEIGHT);
+        if (grounded)
         {
             bool doRandomHop = Main.rand.NextFloat() < RANDOM_HOP_CHANCE;
-
             if (doRandomHop)
             {
                 if (CanSplit()) TrySplit();
@@ -277,10 +294,6 @@ public class DreamSlime : ModNPC
                 float jumpPower = CalculateJumpPower(target);
                 NPC.velocity.Y = -LimitJumpSpeedByCeiling(-jumpPower);
             }
-        }
-        else
-        {
-            // 空中无额外动作
         }
 
         if (Collision.SolidCollision(NPC.position, NPC.width, NPC.height))
@@ -442,7 +455,9 @@ public class DreamSlime : ModNPC
         float minDist = float.MaxValue;
         foreach (NPC enemy in Main.npc)
         {
-            if (enemy.active && !enemy.friendly && enemy.lifeMax > 5 && !enemy.townNPC && enemy.type != NPCID.TargetDummy)
+            // 增加 !enemy.dontTakeDamage 条件，排除无敌/无血条单位
+            if (enemy.active && !enemy.friendly && enemy.damage >= 1 && enemy.lifeMax > 5
+                && !enemy.townNPC && !enemy.dontTakeDamage && enemy.type != NPCID.TargetDummy)
             {
                 float dist = Vector2.Distance(searcher.Center, enemy.Center);
                 if (dist < SEARCH_RANGE && dist < minDist)
@@ -455,11 +470,31 @@ public class DreamSlime : ModNPC
         return nearest;
     }
 
+    private Player GetNearestPlayer()
+    {
+        Player nearest = null;
+        float minDist = float.MaxValue;
+        foreach (Player player in Main.player)
+        {
+            if (player != null && player.active && !player.dead)
+            {
+                float dist = Vector2.Distance(NPC.Center, player.Center);
+                if (dist < minDist)
+                {
+                    minDist = dist;
+                    nearest = player;
+                }
+            }
+        }
+        return nearest;
+    }
+
     private bool CheckHasEnemy()
     {
         foreach (NPC npc in Main.npc)
         {
-            if (npc.active && !npc.friendly && npc.lifeMax > 5 && !npc.townNPC && npc.type != NPCID.TargetDummy)
+            if (npc.active && !npc.friendly && npc.damage >= 1 && npc.lifeMax > 5
+                && !npc.townNPC && !npc.dontTakeDamage && npc.type != NPCID.TargetDummy)
             {
                 if (Vector2.Distance(NPC.Center, npc.Center) < SEARCH_RANGE)
                     return true;
