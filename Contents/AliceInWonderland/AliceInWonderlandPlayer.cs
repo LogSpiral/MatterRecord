@@ -117,6 +117,7 @@ public class AliceInWonderlandPlayer : ModPlayer
         {
             target.SpawnedFromStatue = true;
             Player.QuickSpawnItem(Player.GetSource_CatchEntity(target), ModContent.ItemType<AliceInWonderlandWatch>());
+            RecorderSystem.SetCooldown<AliceInWonderlandWatch>();
         }
         return null;
     }

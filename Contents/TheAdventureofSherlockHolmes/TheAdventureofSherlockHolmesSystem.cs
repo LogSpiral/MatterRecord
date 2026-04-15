@@ -18,8 +18,11 @@ public class TheAdventureofSherlockHolmesSystem : ModSystem
     private static void SpawnItemHook(On_Main.orig_TriggerPing orig, Vector2 position)
     {
         orig?.Invoke(position);
-        if (!Main.dedServ && RecorderSystem.ShouldSpawnRecordItem<TheAdventureofSherlockHolmes>())
+        if (!Main.dedServ && RecorderSystem.ShouldSpawnRecordItem<TheAdventureofSherlockHolmes>()) 
+        {
             Main.LocalPlayer.QuickSpawnItem(new EntitySource_Misc("MapPing"), ModContent.ItemType<TheAdventureofSherlockHolmes>());
+            RecorderSystem.SetCooldown<TheAdventureofSherlockHolmes>();
+        }
     }
 
     public override void Unload()

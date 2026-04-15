@@ -77,8 +77,11 @@ public class TheoryOfFreedom : RecordBookItem
         cursor.EmitLdarg1();
         cursor.EmitDelegate<Action<int, int, int>>((index, i, j) =>
         {
-            if (RecorderSystem.ShouldSpawnRecordItem<TheoryOfFreedom>())
+            if (RecorderSystem.ShouldSpawnRecordItem<TheoryOfFreedom>()) 
+            {
                 Main.player[index].QuickSpawnItem(WorldGen.GetItemSource_FromTileBreak(i, j), ModContent.ItemType<TheoryOfFreedom>());
+                RecorderSystem.SetCooldown<TheoryOfFreedom>();
+            }
         });
     }
 #if false

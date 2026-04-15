@@ -80,8 +80,11 @@ public abstract class JoustingLanceProjectileBase : ModProjectile
     }
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
     {
-        if (!target.friendly && target.life < 0 && RecorderSystem.ShouldSpawnRecordItem<DonQuijoteDeLaMancha.DonQuijoteDeLaMancha>())
+        if (!target.friendly && target.life < 0 && RecorderSystem.ShouldSpawnRecordItem<DonQuijoteDeLaMancha.DonQuijoteDeLaMancha>()) 
+        {
             Main.LocalPlayer.QuickSpawnItem(target.GetItemSource_Loot(), ModContent.ItemType<DonQuijoteDeLaMancha.DonQuijoteDeLaMancha>());
+            RecorderSystem.SetCooldown<DonQuijoteDeLaMancha.DonQuijoteDeLaMancha>();
+        }
     }
     public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
     {

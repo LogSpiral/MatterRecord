@@ -96,10 +96,32 @@ public class RecorderSystem : ModSystem
         Instance = null;
     }
 
-
+    public static Dictionary<int, int> RecordSpawnCooldown { get; } = [];
+    public static void SetCooldown<T>(int cooldown = 18000)  where T:ModItem
+    {
+        RecordSpawnCooldown.Add(ModContent.ItemType<T>(), cooldown);
+    }
+    public override void PostUpdateEverything()
+    {
+        HashSet<int> cooldownCompleted = [];
+        foreach (var pair in RecordSpawnCooldown) 
+        {
+            if (pair.Value == 0) 
+            {
+                cooldownCompleted.Add(pair.Key);
+                continue;
+            }
+            RecordSpawnCooldown[pair.Key] = pair.Value - 1;
+        }
+        foreach (var c in cooldownCompleted)
+            RecordSpawnCooldown.Remove(c);
+    }
     public static bool ShouldSpawnRecordItem<T>() where T : ModItem
     {
         int recordType = ModContent.ItemType<T>();
+
+        if (RecordSpawnCooldown.ContainsKey(recordType)) return false;
+
         if (Main.dedServ)
         {
             foreach (var player in Main.player)

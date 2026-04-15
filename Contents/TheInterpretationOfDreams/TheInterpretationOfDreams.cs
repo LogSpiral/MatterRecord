@@ -40,8 +40,12 @@ public class TheInterpretationOfDreams : RecordBookItem
         if (RecorderSystem.ShouldSpawnRecordItem<TheInterpretationOfDreams>())
         {
             foreach (var item in player.inventory)
-                if (ItemID.Sets.CatchingTool[item.type])
+                if (ItemID.Sets.CatchingTool[item.type]) 
+                {
                     player.QuickSpawnItem(player.GetSource_Misc("Sleeping"), ModContent.ItemType<TheInterpretationOfDreams>());
+                    RecorderSystem.SetCooldown<TheInterpretationOfDreams>();
+                    break;
+                }
 
         }
     }

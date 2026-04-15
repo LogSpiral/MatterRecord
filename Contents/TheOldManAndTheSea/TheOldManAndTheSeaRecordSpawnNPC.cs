@@ -9,7 +9,10 @@ public class TheOldManAndTheSeaRecordSpawnNPC : GlobalNPC
         if (npc.type != NPCID.DukeFishron) return;
         if (npc.lastInteraction != 255
             && Main.player[npc.lastInteraction] is { active: true } player
-            && RecorderSystem.ShouldSpawnRecordItem<TheOldManAndTheSea>())
+            && RecorderSystem.ShouldSpawnRecordItem<TheOldManAndTheSea>()) 
+        {
             player.QuickSpawnItem(npc.GetItemSource_Loot(), ModContent.ItemType<TheOldManAndTheSea>());
+            RecorderSystem.SetCooldown<TheOldManAndTheSea>();
+        }
     }
 }
