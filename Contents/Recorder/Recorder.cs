@@ -37,7 +37,7 @@ public partial class Recorder : ModNPC
         cursor.EmitDelegate<Func<int,bool>>(i => 
         {
             var npc = Main.npc[i];
-            if (npc.type == ModContent.NPCType<Recorder>()) 
+            if (npc.type == ModContent.NPCType<Recorder>())
             {
                 if (Main.netMode == NetmodeID.SinglePlayer)
                     Main.NewText(Language.GetTextValue("LegacyMultiplayer.19", npc.FullName), new Color(255, 240, 20));
@@ -172,15 +172,16 @@ public partial class Recorder : ModNPC
 
     public override void TownNPCAttackProj(ref int projType, ref int attackDelay)
     {
-        // 5% 概率发射湮灭弹（保留原样）
+        // 5% 概率发射湮灭弹
         if (Main.rand.NextFloat() < 0.05f)
         {
             projType = ModContent.ProjectileType<AnnihilationBullet>();
         }
         else
         {
-            // 优先使用世界数据中存储的弹药（通过 ImperfectPageSystem）
             int favoriteItemType = ModContent.GetInstance<ImperfectPageSystem>().FavoriteAmmoType;
+            projType = ProjectileID.Bullet; // 默认火枪子弹
+
             if (favoriteItemType > 0)
             {
                 Item favoriteItem = ContentSamples.ItemsByType[favoriteItemType];
@@ -188,9 +189,7 @@ public partial class Recorder : ModNPC
                 {
                     projType = favoriteItem.shoot;
                 }
-
             }
-
         }
         attackDelay = 10;
     }
