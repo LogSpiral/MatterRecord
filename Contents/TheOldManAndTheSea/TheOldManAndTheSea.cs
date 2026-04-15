@@ -22,7 +22,7 @@ public class TheOldManAndTheSea : RecordBookItem
         Item.CloneDefaults(ItemID.WoodFishingPole);
         Item.value = Item.buyPrice(copper: 5);
         Item.rare = ItemRarityID.Quest;
-        Item.fishingPole = 0;
+        Item.fishingPole = 75;
         Item.shootSpeed = 12f;
         Item.shoot = ModContent.ProjectileType<TheOldManAndTheSeaBobber>();
     }
@@ -30,7 +30,6 @@ public class TheOldManAndTheSea : RecordBookItem
     public override void HoldItem(Player player)
     {
         player.accFishingLine = true;
-        Item.fishingPole = this.IsRecordUnlocked ? 75 : 0;
     }
 
     public override void ModifyFishingLine(Projectile bobber, ref Vector2 lineOriginOffset, ref Color lineColor)
@@ -41,6 +40,7 @@ public class TheOldManAndTheSea : RecordBookItem
 
     public override bool PreDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
     {
+        Item.fishingPole = this.IsRecordUnlocked ? 75 : 0;
         if (!base.PreDrawInInventory(spriteBatch, position, frame, drawColor, itemColor, origin, scale)) return false;
         if (RecorderSystem.CheckUnlock(ItemRecords.TheOldManAndTheSea))
         {
