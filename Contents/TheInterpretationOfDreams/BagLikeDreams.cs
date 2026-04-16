@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using Terraria.DataStructures;
 using Terraria.GameContent;
 
 namespace MatterRecord.Contents.TheInterpretationOfDreams;
@@ -21,24 +22,14 @@ public abstract class BagLikeDreams(int index, Func<bool> condition, int type, i
         var collection = itemGetter?.Invoke();
         if (collection != null)
             foreach (var pair in collection)
-                player.QuickSpawnItem(Item.GetSource_GiftOrReward(), pair.Item1, pair.Item2);
+                player.QuickSpawnItem(new EntitySource_Gift(Item), pair.Item1, pair.Item2);
         else
-            player.QuickSpawnItem(Item.GetSource_GiftOrReward(), type, stack);
+            player.QuickSpawnItem(new EntitySource_Gift(Item), type, stack);
 
         base.RightClick(player);
     }
 
     public override bool CanRightClick() => true;
-
-    public override bool PreDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, ref float rotation, ref float scale, int whoAmI)
-    {
-        return base.PreDrawInWorld(spriteBatch, lightColor, alphaColor, ref rotation, ref scale, whoAmI);
-    }
-
-    public override bool PreDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
-    {
-        return base.PreDrawInInventory(spriteBatch, position, frame, drawColor, itemColor, origin, scale);
-    }
 }
 
 public class GuideDream() : BagLikeDreams(1, () => true, 0, 0, () => [(ItemID.WarriorEmblem, 1), (ItemID.SummonerEmblem, 1), (ItemID.SorcererEmblem, 1), (ItemID.RangerEmblem, 1)])

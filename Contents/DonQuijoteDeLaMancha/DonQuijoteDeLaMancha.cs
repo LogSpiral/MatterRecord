@@ -135,26 +135,12 @@ public class DonQuijoteDeLaMancha : RecordBookItem
         return false;
     }
 
-    public override void Load()
-    {
-        On_Item.TryGetPrefixStatMultipliersForItem += On_Item_TryGetPrefixStatMultipliersForItem;
-        base.Load();
-    }
-
-    private bool On_Item_TryGetPrefixStatMultipliersForItem(On_Item.orig_TryGetPrefixStatMultipliersForItem orig, Item self, int rolledPrefix, out float dmg, out float kb, out float spd, out float size, out float shtspd, out float mcst, out int crt)
-    {
-        PreFixStat = orig;
-        return orig.Invoke(self, rolledPrefix, out dmg, out kb, out spd, out size, out shtspd, out mcst, out crt);
-    }
-
-    public static On_Item.orig_TryGetPrefixStatMultipliersForItem PreFixStat;
-
     public override void ModifyWeaponDamage(Player player, ref StatModifier damage)
     {
         var mplr = player.GetModPlayer<DonQuijoteDeLaManchaPlayer>();
         var definition = mplr.itemDefinition;
         var item = new Item(definition.Type);
-        if (PreFixStat?.Invoke(Item, Item.prefix, out float dmg, out _, out _, out _, out _, out _, out _) == true)
+        if (Item.TryGetPrefixStatMultipliersForItem(item.prefix, out var dmg, out _, out _, out _, out _, out _, out _, out _, out _, out _))
             damage.Base = (int)((Math.Clamp(item.damage, 1, int.MaxValue) - 21) * dmg);
         else
             damage.Base = Math.Clamp(item.damage, 1, int.MaxValue) - 21;
@@ -239,14 +225,13 @@ public class DonQuijoteDeLaMancha : RecordBookItem
         base.PostDrawInInventory(spriteBatch, position, frame, drawColor, itemColor, origin, scale);
     }
 
-    public override void PostDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI)
+    public override void PostDrawInWorld(WorldItem item, SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI)
     {
         if (Active)
         {
             float factor = Main.GlobalTimeWrappedHourly % 1;
-            spriteBatch.Draw(TextureAssets.Item[Type].Value, Item.Center - Main.screenPosition, null, Color.Red with { A = 0 } * (0.5f - MathF.Cos(factor * MathHelper.TwoPi) * 0.5f), rotation, new Vector2(33), scale * (1 + .5f * MathF.Pow(factor, 3)), 0, 0);
+            spriteBatch.Draw(TextureAssets.Item[Type].Value, item.Center - Main.screenPosition, null, Color.Red with { A = 0 } * (0.5f - MathF.Cos(factor * MathHelper.TwoPi) * 0.5f), rotation, new Vector2(33), scale * (1 + .5f * MathF.Pow(factor, 3)), 0, 0);
         }
-        base.PostDrawInWorld(spriteBatch, lightColor, alphaColor, rotation, scale, whoAmI);
     }
 
     public override bool CanRightClick()
@@ -754,7 +739,7 @@ public class DonQuijoteDeLaManchaPlayer : ModPlayer
 
     public override void ModifyDrawInfo(ref PlayerDrawSet drawInfo)
     {
-        if (DashCoolDown > 0 && Main.myPlayer == Player.whoAmI && !Player.DeadOrGhost)
+        if (DashCoolDown > 0 && Main.myPlayer == Player.whoAmI && !Player.dead)
         {
             Vector2 cen = Player.Center + Player.gfxOffY * Vector2.UnitY - Main.screenPosition - new Vector2(16, Player.gravDir < 0 ? -128 : 160);
             var direction = Player.gravDir < 0 ? SpriteEffects.FlipVertically : SpriteEffects.None;
@@ -925,16 +910,15 @@ public class WindMill : ModProjectile
         base.AI();
     }
 
-    public override bool PreDraw(ref Color lightColor)
+    public override bool PreDraw(Player player, ref Color lightColor)
     {
         lightColor *= MathHelper.SmoothStep(0, 1, (90 - MathF.Abs(90 - Projectile.timeLeft)) / 10f);
-        return base.PreDraw(ref lightColor);
+        return true;
     }
 
-    public override void PostDraw(Color lightColor)
+    public override void PostDraw(Player player, Color lightColor)
     {
         lightColor *= MathHelper.SmoothStep(0, 1, (90 - MathF.Abs(90 - Projectile.timeLeft)) / 10f);
         Main.spriteBatch.Draw(wheelTex.Value, Projectile.Center + new Vector2(0, -12) - Main.screenPosition, null, lightColor, Projectile.ai[1], new Vector2(53, 55), 1f, 0, 0);
-        base.PostDraw(lightColor);
     }
 }

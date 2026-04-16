@@ -77,7 +77,7 @@ public class AnnihilationBullet : ModProjectile
             || Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), Projectile.Center, Projectile.Center + Projectile.velocity * 2, 10, ref point);
     }
 
-    public override bool PreDraw(ref Color lightColor)
+    public override bool PreDraw(Player player,ref Color lightColor)
     {
         SpriteBatch spriteBatch = Main.spriteBatch;
         // ↓效果一般，且用到前置库代码，下次另外制作

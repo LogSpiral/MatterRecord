@@ -98,7 +98,7 @@ public class AliceInWonderlandWatch : RecordBookItem
             int teleportRangeX = Main.maxTilesX - 200;
             int teleportStartY = 100;
             int underworldLayer = Main.UnderworldLayer;
-            Vector2 vector = Main.LocalPlayer.CheckForGoodTeleportationSpot(ref canSpawn, teleportStartX, teleportRangeX, teleportStartY, underworldLayer, new Player.RandomTeleportationAttemptSettings
+            Vector2 vector = Utils.CheckForGoodTeleportationSpot(ref canSpawn, teleportStartX, teleportRangeX, teleportStartY, underworldLayer, new Utils.RandomTeleportationAttemptSettings
             {
                 avoidLava = true,
                 avoidHurtTiles = true,

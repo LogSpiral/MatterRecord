@@ -36,10 +36,11 @@ public class UIItemSlot : UIElement
         {
             Main.LocalPlayer.mouseInterface = true;
             var item = _item;
-            ItemSlot.OverrideHover(ref _item, _itemSlotContext);
-            ItemSlot.LeftClick(ref _item, _itemSlotContext);
-            ItemSlot.RightClick(ref _item, _itemSlotContext);
-            ItemSlot.MouseHover(ref _item, _itemSlotContext);
+            Item[] tempArray = [_item];
+            ItemSlot.OverrideHover(tempArray, _itemSlotContext);
+            ItemSlot.LeftClick(tempArray, _itemSlotContext);
+            ItemSlot.RightClick(tempArray, _itemSlotContext);
+            ItemSlot.MouseHover(tempArray, _itemSlotContext);
             if (item != _item)
                 OnItemChanged?.Invoke(_item);
         }

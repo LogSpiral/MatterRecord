@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Terraria.Audio;
+using Terraria.GameContent;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.GameContent.UI.Elements;
 using Terraria.Localization;
@@ -108,10 +109,10 @@ public class EmeraldUI : UIState
         {
             if (npcId == 0) continue;
 
-            int bannerId = Item.NPCtoBanner(npcId);
+            int bannerId = BannerSystem.NPCtoBanner(npcId);
             if (bannerId > 0)
             {
-                int bannerItemId = Item.BannerToItem(bannerId);
+                int bannerItemId = BannerSystem.BannerToItem(bannerId);
                 string npcName = Lang.GetNPCNameValue(npcId);
                 int killsNeeded = ItemID.Sets.KillsToBanner[bannerItemId];
                 if (!_bannerToNPC.ContainsKey(bannerItemId))

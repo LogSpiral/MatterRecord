@@ -85,9 +85,9 @@ public class CantSewordProj : ModProjectile
         player.itemRotation = MathHelper.WrapAngle((float)Math.Atan2(projectile.velocity.Y * (float)projectile.direction, projectile.velocity.X * (float)projectile.direction) + num3);
     }
 
-    public override bool PreDraw(ref Color lightColor)
+    public override bool PreDraw(Player player, ref Color lightColor)
     {
         lightColor *= .25f;
-        return base.PreDraw(ref lightColor);
+        return true;
     }
 }

@@ -1,6 +1,7 @@
 ﻿using MatterRecord.Contents.Recorder;
 using Microsoft.Xna.Framework;
 using System;
+using Terraria.DataStructures;
 using Terraria.GameContent;
 
 namespace MatterRecord.Contents.TheInterpretationOfDreams;
@@ -206,7 +207,7 @@ public class TheInterpretationOfDreams : RecordBookItem
                         case < 3:
                             {
                                 mplr.LuckyTimer.Add(43200);
-                                player.QuickSpawnItem(Item.GetSource_FromThis(), ItemID.GoldCoin);
+                                player.QuickSpawnItem(new EntitySource_Parent(Item), ItemID.GoldCoin);
                                 Main.NewText(this.GetLocalizedValue("SweetDreamHint"), new Color(253, 195, 229));
                                 break;
                             }

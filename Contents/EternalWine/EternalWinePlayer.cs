@@ -95,7 +95,7 @@ public class EternalWinePlayer : ModPlayer
 
     public override void ModifyDrawInfo(ref PlayerDrawSet drawInfo)
     {
-        if (_lifeDebtMax > 0 && Main.myPlayer == Player.whoAmI && !Player.DeadOrGhost)
+        if (_lifeDebtMax > 0 && Main.myPlayer == Player.whoAmI && !Player.dead)
         {
             Vector2 cen = Player.Center + Player.gfxOffY * Vector2.UnitY - Main.screenPosition - new Vector2(16, Player.gravDir > 0 ? 128 : -96);
             var direction = Player.gravDir < 0 ? SpriteEffects.FlipVertically : SpriteEffects.None;

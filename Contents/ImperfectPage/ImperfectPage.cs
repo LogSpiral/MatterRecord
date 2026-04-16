@@ -95,14 +95,13 @@ namespace MatterRecord.Contents.ImperfectPage
             base.PostDrawInInventory(spriteBatch, position, frame, drawColor, itemColor, origin, scale);
         }
 
-        public override void PostDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI)
+        public override void PostDrawInWorld(WorldItem item,SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI)
         {
             if (Active)
             {
                 float factor = Main.GlobalTimeWrappedHourly % 1;
-                spriteBatch.Draw(TextureAssets.Item[Type].Value, Item.Center - Main.screenPosition, null, Color.Red with { A = 0 } * (0.5f - MathF.Cos(factor * MathHelper.TwoPi) * 0.5f), rotation, TextureAssets.Item[Type].Value.Size() / 2, scale * (1 + .5f * MathF.Pow(factor, 3)), 0, 0);
+                spriteBatch.Draw(TextureAssets.Item[Type].Value, item.Center - Main.screenPosition, null, Color.Red with { A = 0 } * (0.5f - MathF.Cos(factor * MathHelper.TwoPi) * 0.5f), rotation, TextureAssets.Item[Type].Value.Size() / 2, scale * (1 + .5f * MathF.Pow(factor, 3)), 0, 0);
             }
-            base.PostDrawInWorld(spriteBatch, lightColor, alphaColor, rotation, scale, whoAmI);
         }
 
         public override void ModifyTooltips(List<TooltipLine> tooltips)

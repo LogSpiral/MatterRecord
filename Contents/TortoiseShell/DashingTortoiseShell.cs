@@ -125,7 +125,7 @@ public class DashingTortoiseShell : ModProjectile
         base.AI();
     }
 
-    public override bool PreDraw(ref Color lightColor)
+    public override bool PreDraw(Player player, ref Color lightColor)
     {
         var mplr = Player.GetModPlayer<TortoiseShellPlayer>();
         var direction = Player.gravDir < 0 ? SpriteEffects.FlipVertically : SpriteEffects.None;

@@ -64,7 +64,7 @@ public abstract class JoustingLanceProjectileBase : ModProjectile
         if (flag3)
             Projectile.Kill();
     }
-    public override bool PreDraw(ref Color lightColor)
+    public override bool PreDraw(Player player,ref Color lightColor)
     {
         var tex = TextureAssets.Projectile[Projectile.type].Value;
         Main.EntitySpriteDraw(tex,

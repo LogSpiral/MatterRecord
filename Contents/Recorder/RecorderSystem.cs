@@ -4,6 +4,8 @@ using NetSimplified;
 using NetSimplified.Syncing;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Reflection;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent;
@@ -174,7 +176,7 @@ public class RecorderSystem : ModSystem
         }
         return true;
     }
-    public override void ModifyWorldGenTasks(List<GenPass> tasks, ref double totalWeight)
+    public override void ModifyWorldGenTasks(List<GenPass> tasks)
     {
         int GuideIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Guide"));
 

@@ -102,4 +102,8 @@ internal class AliceInWonderlandPortalRenderer : IPlayerRenderer
 
         spriteBatch.End();
     }
+
+    public void PrepareDrawForFrame(Player drawPlayer)
+    {
+    }
 }

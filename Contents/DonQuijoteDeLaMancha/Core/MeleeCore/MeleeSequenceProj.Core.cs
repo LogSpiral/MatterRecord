@@ -87,7 +87,7 @@ public abstract partial class MeleeSequenceProj : ModProjectile
         if (Projectile.owner == Main.myPlayer)
             Projectile.velocity = (Main.MouseWorld - Player.MountedCenter).SafeNormalize(default);
         UpdateStandardInfo(StandardInfo, StandardInfo.VertexStandard);
-        if (Player.DeadOrGhost)
+        if (Player.dead)
         {
             CurrentElement?.OnDeactive();
             Projectile.Kill();

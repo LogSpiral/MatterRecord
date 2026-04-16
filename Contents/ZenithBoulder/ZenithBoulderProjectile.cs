@@ -122,7 +122,7 @@ public class ZenithBoulderProjectile : ModProjectile
         base.AI();
     }
 
-    public override bool PreDraw(ref Color lightColor)
+    public override bool PreDraw(Player player, ref Color lightColor)
     {
         var tex = ModContent.Request<Texture2D>("MatterRecord/Contents/ZenithBoulder/ZenithBoulder_ExtraLight").Value;
         int m = Projectile.oldPos.Length;
@@ -132,7 +132,7 @@ public class ZenithBoulderProjectile : ModProjectile
             float scaler = MathHelper.Lerp(1, 0.2f, fac);
             Main.EntitySpriteDraw(tex, Projectile.oldPos[n] - Main.screenPosition + Main.rand.NextVector2Unit() * MathHelper.Lerp(0, Main.rand.NextFloat(0, 8), fac), null, Main.hslToRgb((fac - Main.GlobalTimeWrappedHourly) % 1, 1, 0.95f) * scaler * MathHelper.Clamp(Projectile.localAI[0] / m, 0, 1), Projectile.oldRot[n], new Vector2(16), scaler * 1.2f, 0, 0);//
         }
-        return base.PreDraw(ref lightColor);
+        return true;
     }
 
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)

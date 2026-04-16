@@ -558,7 +558,7 @@ public abstract class CatProj : ModProjectile
         set => Projectile.frame = value;
     }
 
-    public override bool PreDraw(ref Color lightColor)
+    public override bool PreDraw(Player player, ref Color lightColor)
     {
         Main.EntitySpriteDraw(TextureAssets.Projectile[Type].Value, Projectile.Center - Main.screenPosition - Vector2.UnitY * 4,
             new Rectangle(0, 28 * Projectile.frame, 44, 28), lightColor, Projectile.rotation, new Vector2(18, 14), 1, Projectile.spriteDirection == -1 ? Microsoft.Xna.Framework.Graphics.SpriteEffects.FlipHorizontally : 0, 0);

@@ -21,7 +21,7 @@ public class TheoryOfFreedomGlobalProjectile : GlobalProjectile
         var mplr = player.GetModPlayer<TheTheoryOfFreedomPlayer>();
         if (!mplr.EquippedTOF) return null;
 
-        if ((type < ProjectileID.LunarHookSolar || type > ProjectileID.LunarHookStardust) && type != ProjectileID.Web)
+        if ((type < ProjectileID.LunarHookSolar || type > ProjectileID.LunarHookStardust) && type != ProjectileID.WebSlingerHook)
             for (int num7 = 0; num7 < 1000; num7++)
             {
                 if (Main.projectile[num7].active
@@ -30,7 +30,7 @@ public class TheoryOfFreedomGlobalProjectile : GlobalProjectile
                     && Main.projectile[num7].ai[0] != 2f)
                     return null;
             }
-        else if (type == ProjectileID.Web)
+        else if (type == ProjectileID.WebSlingerHook)
         {
             int c = 0;
             for (int num7 = 0; num7 < 1000; num7++)

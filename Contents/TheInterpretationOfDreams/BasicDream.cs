@@ -35,13 +35,12 @@ public abstract class BasicDream : ModItem
 
         return false;
     }
-
-    public override bool PreDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, ref float rotation, ref float scale, int whoAmI)
+    public override bool PreDrawInWorld(WorldItem item, SpriteBatch spriteBatch, Color lightColor, Color alphaColor, ref float rotation, ref float scale, int whoAmI)
     {
-        spriteBatch.Draw(TextureAssets.Item[Type].Value, Item.Center - Main.screenPosition, null, lightColor, rotation, new Vector2(8), scale, 0, 0);
+        spriteBatch.Draw(TextureAssets.Item[Type].Value, item.Center - Main.screenPosition, null, lightColor, rotation, new Vector2(8), scale, 0, 0);
 
         if (HeadTexture != null)
-            spriteBatch.Draw(HeadTexture.Value, Item.Center - Main.screenPosition + new Vector2(2), null, lightColor * .5f, rotation, new Vector2(-2), scale, 0, 0);
+            spriteBatch.Draw(HeadTexture.Value, item.Center - Main.screenPosition + new Vector2(2), null, lightColor * .5f, rotation, new Vector2(-2), scale, 0, 0);
 
         return false;
     }

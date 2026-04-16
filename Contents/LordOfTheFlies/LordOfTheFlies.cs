@@ -172,7 +172,7 @@ public class LordOfTheFlies : RecordBookItem
                         if (_chargeTimer % 4 == 0)
                         {
                             NetMessage.SendData(MessageID.PlayerControls, -1, -1, null, Main.myPlayer);
-                            NetMessage.SendData(MessageID.ShotAnimationAndSound, -1, -1, null, Main.myPlayer);
+                            NetMessage.SendData(MessageID.ItemRotationAndAnimation, -1, -1, null, Main.myPlayer);
                         }
                     }
                     player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, player.itemRotation * player.gravDir - (player.direction < 0 ? MathHelper.Pi : 0) - MathHelper.PiOver2);
@@ -220,7 +220,7 @@ public class LordOfTheFlies : RecordBookItem
                     if (player.itemTime % 4 == 0)
                     {
                         NetMessage.SendData(MessageID.PlayerControls, -1, -1, null, Main.myPlayer);
-                        NetMessage.SendData(MessageID.ShotAnimationAndSound, -1, -1, null, Main.myPlayer);
+                        NetMessage.SendData(MessageID.ItemRotationAndAnimation, -1, -1, null, Main.myPlayer);
                     }
                 }
                 player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, player.itemRotation * player.gravDir - (player.direction < 0 ? MathHelper.Pi : 0) - MathHelper.PiOver2);

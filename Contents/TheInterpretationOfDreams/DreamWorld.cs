@@ -31,7 +31,7 @@ public class DreamWorld : ModSystem
             var cursor = new ILCursor(ilContext);
             if (!cursor.TryGotoNext(i => i.MatchCallvirt(typeof(AbstractNPCShop).GetMethod("Register", BindingFlags.Instance | BindingFlags.Public))))
                 return;
-            var conditionFld = typeof(NPCShop.Entry).GetField("conditions", BindingFlags.Instance | BindingFlags.NonPublic);
+            var conditionFld = typeof(AbstractNPCShop.Entry).GetField("_conditions", BindingFlags.Instance | BindingFlags.NonPublic);
             cursor.EmitDelegate<Func<NPCShop, NPCShop>>(shop =>
             {
                 foreach (var entry in shop.Entries)
@@ -138,11 +138,11 @@ public class DreamWorld : ModSystem
                     Main.rand.Next((int)Main.worldSurface - 1, Main.maxTilesY - 20));
     }
 
-    private void PartyGirlModify(On_Main.orig_UpdateTime_SpawnTownNPCs orig)
+    private void PartyGirlModify(On_Main.orig_UpdateTime_SpawnTownNPCs orig, bool forceUpdate)
     {
         if (GlobalHasCheck(DreamState.PartyGirl) && Main.netMode != NetmodeID.MultiplayerClient && WorldGen.GetWorldUpdateRate() > 0)
             Main.checkForSpawns += 3;
-        orig.Invoke();
+        orig.Invoke(forceUpdate);
     }
 
     private void PainterModify(On_Player.orig_ApplyCoating orig, Player self, int x, int y, bool paintingAWall, bool applyItemAnimation, Item targetItem)
@@ -156,7 +156,7 @@ public class DreamWorld : ModSystem
                 {
                     targetItem.stack--;
                     if (targetItem.stack <= 0)
-                        targetItem.SetDefaults();
+                        targetItem.TurnToAir();
                 }
 
                 if (applyItemAnimation)
@@ -169,7 +169,7 @@ public class DreamWorld : ModSystem
             {
                 targetItem.stack--;
                 if (targetItem.stack <= 0)
-                    targetItem.SetDefaults();
+                    targetItem.TurnToAir();
             }
 
             if (applyItemAnimation)
@@ -239,7 +239,7 @@ public class DreamWorld : ModSystem
         cursor.Index -= 3;
 
         cursor.EmitLdarg0();
-        cursor.EmitDelegate<Action<Player>>(plr => plr.currentShoppingSettings.PriceAdjustment *= plr.CheckDreamActive(DreamState.Princess) ? 0.9 : 1.0);
+        cursor.EmitDelegate<Action<Player>>(plr => plr.currentShoppingSettings.PriceAdjustment *= plr.CheckDreamActive(DreamState.Princess) ? 0.9f : 1.0f);
     }
 
     private void NurseModify(ILContext il)

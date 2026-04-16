@@ -1,4 +1,5 @@
 ﻿using MatterRecord.Contents.Recorder;
+using Terraria.DataStructures;
 
 namespace MatterRecord.Contents.WarAndPeace;
 
@@ -8,7 +9,7 @@ public class WarAndPeaceGlobalItem : GlobalItem
     {
         if (item.type == ItemID.LicenseCat && RecorderSystem.ShouldSpawnRecordItem<WarAndPeace>()) 
         {
-            player.QuickSpawnItem(item.GetSource_Misc("CatLicense"), ModContent.ItemType<WarAndPeace>());
+            player.QuickSpawnItem(new EntitySource_Misc("CatLicense"), ModContent.ItemType<WarAndPeace>());
             RecorderSystem.SetCooldown<WarAndPeace>();
         }
 

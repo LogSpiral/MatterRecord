@@ -39,12 +39,12 @@ public partial class RecordBookItem
         UnlockStyleInventoryVisualMask = false;
         return true;
     }
-    public override bool PreDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, ref float rotation, ref float scale, int whoAmI)
+    public override bool PreDrawInWorld(WorldItem item, SpriteBatch spriteBatch, Color lightColor, Color alphaColor, ref float rotation, ref float scale, int whoAmI)
     {
         if (!this.IsRecordUnlocked)
         {
-            spriteBatch.Draw(ModAsset.RecordBook.Value, Item.Center - Main.screenPosition, null, lightColor, rotation, new Vector2(14, 16), scale, 0, 0);
-            spriteBatch.Draw(ModAsset.RecordBook.Value, Item.Center - Main.screenPosition, null, Color.Lerp(Color.Transparent, Color.White with { A = 0 }, MathF.Cos(Main.GlobalTimeWrappedHourly * 6) * .25f + .25f), rotation, new Vector2(14, 16), scale, 0, 0);
+            spriteBatch.Draw(ModAsset.RecordBook.Value, item.Center - Main.screenPosition, null, lightColor, rotation, new Vector2(14, 16), scale, 0, 0);
+            spriteBatch.Draw(ModAsset.RecordBook.Value, item.Center - Main.screenPosition, null, Color.Lerp(Color.Transparent, Color.White with { A = 0 }, MathF.Cos(Main.GlobalTimeWrappedHourly * 6) * .25f + .25f), rotation, new Vector2(14, 16), scale, 0, 0);
             return false;
         }
         return true;

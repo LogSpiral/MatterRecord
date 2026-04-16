@@ -1,6 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using NetSimplified;
-using NetSimplified.Syncing;
 using System.IO;
 
 namespace MatterRecord.Contents.TheoryOfFreedom;

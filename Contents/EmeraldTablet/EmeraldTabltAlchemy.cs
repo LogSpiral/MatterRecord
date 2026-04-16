@@ -32,7 +32,7 @@ public class EmeraldTabltAlchemy : ModSystem
     {
         foreach (var recipe in Main.recipe)
         {
-            if (recipe.requiredTile.Contains(TileID.Bottles))
+            if (recipe.requiredTile is TileID.Bottles)
                 recipe.AddConsumeIngredientCallback(EmeraldTabltAlchemyMethod);
         }
         base.PostAddRecipes();

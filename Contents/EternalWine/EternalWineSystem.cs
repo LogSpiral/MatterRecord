@@ -5,7 +5,7 @@ namespace MatterRecord.Contents.EternalWine;
 
 public class EternalWineSystem : ModSystem
 {
-    public override void ModifyWorldGenTasks(List<GenPass> tasks, ref double totalWeight)
+    public override void ModifyWorldGenTasks(List<GenPass> tasks)
     {
         int ChestIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Buried Chests"));
 
@@ -13,6 +13,5 @@ public class EternalWineSystem : ModSystem
         {
             tasks.Insert(ChestIndex + 1, new EternalWinePass("EternalWineSpawn", 100f));
         }
-        base.ModifyWorldGenTasks(tasks, ref totalWeight);
     }
 }

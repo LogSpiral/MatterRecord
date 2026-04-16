@@ -8,32 +8,56 @@ public class EternalWine : ModItem
 {
     public override void Load()
     {
-        IL_Player.QuickBuff += EternalWineQuickBuff;
+        On_Player.QuickBuff_UseItemForBuff += EternalWineQuickBuffEffect;
+        IL_Player.QuickBuff_ShouldUseItem += EternalWineQuickBuffCheck;
         IL_Player.QuickHeal += EternalWineHealModify;
         On_Player.QuickHeal_GetItemToUse += GetEternalWineToHeal;
         On_Player.ApplyPotionDelay += WineBanDelay;
         base.Load();
     }
 
-    private void EternalWineQuickBuff(ILContext il)
+    private void EternalWineQuickBuffEffect(On_Player.orig_QuickBuff_UseItemForBuff orig, Player self, Item item, int btype)
+    {
+        if (item.type != ModContent.ItemType<EternalWine>())
+            goto origInvoke;
+        int buffTime;
+        int healValue;
+        if (NPC.downedMoonlord)
+        {
+            healValue = 175;
+            buffTime = 90;
+        }
+        else if (Main.hardMode)
+        {
+            healValue = 125;
+            buffTime = 60;
+        }
+        else
+        {
+            healValue = 75;
+            buffTime = 30;
+        }
+        self.AddBuff(ModContent.BuffType<Eternal>(), buffTime);
+        self.GetModPlayer<EternalWinePlayer>().SetLifeDebt(healValue, healValue);
+        self.statLife += healValue;
+        if (self.whoAmI == Main.myPlayer)
+            self.HealEffect(healValue);
+        if (Main.netMode == NetmodeID.MultiplayerClient && Main.myPlayer == self.whoAmI)
+            EternalWineSync.Get(self.whoAmI, healValue, healValue).Send(-1, self.whoAmI);
+    origInvoke:
+        orig?.Invoke(self, item, btype);
+    }
+
+    private void EternalWineQuickBuffCheck(ILContext il)
     {
         ILCursor cursor = new ILCursor(il);
-
         for (int i = 0; i < 3; i++)
-            if (!cursor.TryGotoNext(i => i.MatchLdloc(5)))
+            if (!cursor.TryGotoNext(i => i.MatchLdarg1()))
                 return;
-
-        int currentIndex = cursor.Index;
-
-        if (!cursor.TryGotoNext(i => i.MatchLdloc(4)))
-            return;
-
-        ILLabel curLabel = cursor.MarkLabel();
-
-        cursor.Index = currentIndex;
         cursor.Index++;
-        for (int n = 0; n < 3; n++)
-            cursor.Remove();
+        cursor.RemoveRange(2);
+        if (!cursor.Next.MatchBle(out var label)) return;
+        cursor.Remove();
         cursor.EmitDelegate<Func<Item, bool>>(
             item =>
             {
@@ -42,45 +66,8 @@ public class EternalWine : ModItem
                 return flag1 && flag2;
             }
             );
-        cursor.EmitBrtrue(curLabel);
-
-        for (int i = 0; i < 3; i++)//8
-            if (!cursor.TryGotoNext(i => i.MatchLdloc(5)))
-                return;
-        cursor.EmitLdloc(5);
-        cursor.EmitLdarg0();
-        cursor.EmitDelegate<Action<Item, Player>>((item, player) =>
-        {
-            if (item.type != ModContent.ItemType<EternalWine>())
-                return;
-            int buffTime;
-            int healValue;
-            if (NPC.downedMoonlord)
-            {
-                healValue = 175;
-                buffTime = 90;
-            }
-            else if (Main.hardMode)
-            {
-                healValue = 125;
-                buffTime = 60;
-            }
-            else
-            {
-                healValue = 75;
-                buffTime = 30;
-            }
-            player.AddBuff(ModContent.BuffType<Eternal>(), buffTime);
-            player.GetModPlayer<EternalWinePlayer>().SetLifeDebt(healValue, healValue);
-            player.statLife += healValue;
-            if (player.whoAmI == Main.myPlayer)
-                player.HealEffect(healValue);
-            if (Main.netMode == NetmodeID.MultiplayerClient && Main.myPlayer == player.whoAmI)
-                EternalWineSync.Get(player.whoAmI, healValue, healValue).Send(-1, player.whoAmI);
-
-        });
+        cursor.EmitBrtrue(label);
     }
-
     private static void WineBanDelay(On_Player.orig_ApplyPotionDelay orig, Player self, Item sItem)
     {
         if (sItem.type != ModContent.ItemType<EternalWine>())
