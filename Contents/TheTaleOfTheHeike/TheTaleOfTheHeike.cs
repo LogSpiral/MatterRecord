@@ -50,4 +50,14 @@ public class TheTaleOfTheHeikePlayer : ModPlayer
         float damageMultiplier = 1f + (1f - playerHpPercent) * 0.3f;
         modifiers.FinalDamage *= damageMultiplier;
     }
+
+    public override void OnHitNPCWithItem(Item item, NPC target, NPC.HitInfo hit, int damageDone)
+    {
+        if (item.type != ItemID.Muramasa) return;
+        if (target.life > 0) return;
+        if (!RecorderSystem.ShouldSpawnRecordItem<TheTaleOfTheHeike>()) return;
+
+        Player.QuickSpawnItem(target.GetSource_Loot(), ModContent.ItemType<TheTaleOfTheHeike>());
+        RecorderSystem.SetCooldown<TheTaleOfTheHeike>();
+    }
 }
