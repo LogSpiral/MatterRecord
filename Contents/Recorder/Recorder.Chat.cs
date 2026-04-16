@@ -1,10 +1,14 @@
 ﻿using MatterRecord.Contents.ImperfectPage;
 using MatterRecord.Contents.TheInterpretationOfDreams;
+using MatterRecord.Contents.Recorder.Dialogue;  // 新增引用
 using System.Collections.Generic;
+using Terraria.Audio;  // 新增引用
 using Terraria.DataStructures;
 using Terraria.Localization;
 using Terraria.ModLoader.IO;
 using Terraria.Utilities;
+using Microsoft.Xna.Framework;
+
 namespace MatterRecord.Contents.Recorder;
 
 public partial class Recorder
@@ -35,6 +39,7 @@ public partial class Recorder
     private static bool askForSlimeThisTime;
     private static bool askForSlimeTriggered;
     private static string cachedItemName;
+    private bool _lifeCrystalOptionActive;  // 新增：是否显示生命水晶选项
 
     public override string GetChat()
     {
@@ -52,7 +57,6 @@ public partial class Recorder
         }
         askForSlimeThisTime = !DreamWorld.UsedZoologistDream && !NPC.AnyNPCs(ModContent.NPCType<DreamSlime>()) && Main.rand.NextBool(10);
 
-
         #region 闲聊
         WeightedRandom<string> chat = new();
         chat.Add(DialogueWithArgs("StandardDialogue1", Main.LocalPlayer.name));
@@ -65,10 +69,10 @@ public partial class Recorder
         foreach (var item in Main.LocalPlayer.inventory)
         {
             if (item.ModItem is IRecordBookItem { RecordType: not ItemRecords.Faust } recordBook
-                && recordBook.IsRecordUnlocked) 
+                && recordBook.IsRecordUnlocked)
             {
-                if(recordBook.RecordType is ItemRecords.CompendiumOfMateriaMedica)
-                    chat.Add(DialogueWithArgs(recordBook.RecordType.ToString() + "Unlocked",Main.LocalPlayer.name));
+                if (recordBook.RecordType is ItemRecords.CompendiumOfMateriaMedica)
+                    chat.Add(DialogueWithArgs(recordBook.RecordType.ToString() + "Unlocked", Main.LocalPlayer.name));
                 else
                     chat.Add(Dialogue(recordBook.RecordType.ToString() + "Unlocked"));
             }
@@ -91,14 +95,15 @@ public partial class Recorder
         int princessIndex = NPC.FindFirstNPC(NPCID.Princess);
         if (princessIndex != -1)
             chat.Add(DialogueWithArgs("PrincessDialogue", Main.npc[princessIndex].GivenName));
-
         #endregion
 
         chatResult = chat.Get();
         currentChat = chatResult;
         return " ";
     }
+
     private static Dictionary<int, ItemRecords> RewardDictionary => RecorderSystem.RewardDictionary;
+
     private string GetSecondaryButtonText()
     {
         #region 首次见面
@@ -118,6 +123,7 @@ public partial class Recorder
         #region 请求寻找宠物史莱姆
         if (askForSlimeThisTime)
         {
+            _lifeCrystalOptionActive = false;
             return this.GetLocalizedValue("FindSlime");
         }
         #endregion
@@ -126,6 +132,7 @@ public partial class Recorder
         bool findSlime = !RecorderSystem.CheckUnlock(ItemRecords.LordOfTheFlies) && NPC.AnyNPCs(ModContent.NPCType<DreamSlime>());
         if (findSlime)
         {
+            _lifeCrystalOptionActive = false;
             return $"{this.GetLocalizedValue("Reward")} ({Language.GetTextValue($"Mods.MatterRecord.Items.LordOfTheFlies.DisplayName")})";
         }
         #endregion
@@ -135,7 +142,10 @@ public partial class Recorder
         if (RewardDictionary.TryGetValue(count, out var reward))
         {
             if (!RecorderSystem.CheckUnlock(reward))
+            {
+                _lifeCrystalOptionActive = false;
                 return $"{this.GetLocalizedValue("Reward")} ({Language.GetTextValue($"Mods.MatterRecord.Items.{reward}.DisplayName")})";
+            }
         }
         #endregion
 
@@ -150,10 +160,24 @@ public partial class Recorder
             }
         }
         if (cachedItemName != null)
+        {
+            _lifeCrystalOptionActive = false;
             return $"{this.GetLocalizedValue("Collect")} ({cachedItemName})";
+        }
+        #endregion
+
+        #region 生命水晶选项
+        var localPlayer = Main.LocalPlayer.GetModPlayer<RecorderLocalPlayer>();
+        bool hasLifeCrystal = Main.LocalPlayer.HasItem(ItemID.LifeCrystal);
+        if (localPlayer.LocalData.LifeCrystalCounter == 2 && hasLifeCrystal)
+        {
+            _lifeCrystalOptionActive = true;
+            return "给予生命水晶";
+        }
         #endregion
 
         #region 收集进度文本
+        _lifeCrystalOptionActive = false;
         return this.GetLocalization("Progress").Format($"({RecorderSystem.GetUnlockCount()}/{(int)ItemRecords.Count})");
         #endregion
     }
@@ -167,7 +191,6 @@ public partial class Recorder
         if (currentChat != null)
         {
             int length = currentChat.Length;
-
             if (chatTimer <= length)
                 Main.npcChatText = currentChat[..chatTimer];
         }
@@ -175,8 +198,48 @@ public partial class Recorder
             button = this.GetLocalizedValue("Copy");
         button2 = GetSecondaryButtonText();
     }
+
     private void OnSecondaryButtonClicked()
     {
+        
+        if (_lifeCrystalOptionActive)
+        {
+            var localPlayer = Main.LocalPlayer.GetModPlayer<RecorderLocalPlayer>();
+            bool hasLifeCrystal = Main.LocalPlayer.HasItem(ItemID.LifeCrystal);
+            if (localPlayer.LocalData.LifeCrystalCounter == 2 && hasLifeCrystal)
+            {
+                int itemIndex = Main.LocalPlayer.FindItem(ItemID.LifeCrystal);
+                if (itemIndex != -1)
+                {
+                    // 消耗一个生命水晶
+                    Main.LocalPlayer.inventory[itemIndex].stack--;
+                    if (Main.LocalPlayer.inventory[itemIndex].stack <= 0)
+                        Main.LocalPlayer.inventory[itemIndex] = new Item();
+
+                    // 播放音效
+                    SoundEngine.PlaySound(SoundID.Item29, NPC.Center);
+
+                    // 增加记录者生命值与上限
+                    NPC.lifeMax += 20;
+                    NPC.life += 20;
+                    if (NPC.life > NPC.lifeMax) NPC.life = NPC.lifeMax;
+
+                    // 显示绿色数字
+                    CombatText.NewText(NPC.Hitbox, Color.LimeGreen, 20);
+
+                    // 多人同步
+                    if (Main.netMode == NetmodeID.Server)
+                        NetMessage.SendData(MessageID.SyncNPC, -1, -1, null, NPC.whoAmI);
+
+                    // 输出指定对话
+                    SetChatText("好像变得更健康了一点点，你平时都吃这个的吗？");
+                }
+            }
+            _lifeCrystalOptionActive = false;
+            return;
+        }
+
+        // 原有的其他逻辑
         var type = ModContent.ItemType<TheAdventureofSherlockHolmes.TheAdventureofSherlockHolmes>();
         var typ2 = ModContent.ItemType<TheoryOfFreedom.TheoryOfFreedom>();
 
@@ -233,7 +296,6 @@ public partial class Recorder
             SpawnItemAndUnlock(NPC, id);
             return;
         }
-
         #endregion
 
         #region 解锁道具
@@ -247,9 +309,7 @@ public partial class Recorder
         #endregion
 
         #region 收集进度文本
-
         KeyValuePair<int, ItemRecords>? target = null;
-
         foreach (var pair in RewardDictionary)
             if (pair.Key > count && (target == null || target.Value.Key > pair.Key))
                 target = pair;
@@ -273,8 +333,8 @@ public partial class Recorder
             }
         }
         #endregion
-
     }
+
     public override void OnChatButtonClicked(bool firstButton, ref string shopName)
     {
         if (firstButton)
@@ -282,16 +342,19 @@ public partial class Recorder
         else
             OnSecondaryButtonClicked();
     }
+
     private void SetChatText(string content)
     {
         currentChat = content;
         chatTimer = 0;
         Main.npcChatText = " ";
     }
+
     public override void SaveData(TagCompound tag)
     {
         tag["s"] = askForSlimeTriggered;
     }
+
     public override void LoadData(TagCompound tag)
     {
         if (tag.TryGet<bool>("s", out var flag))
