@@ -1,4 +1,4 @@
-﻿using MatterRecord.Contents.ImperfectPage;  // 添加对 ImperfectPageSystem 的引用
+﻿using MatterRecord.Contents.ImperfectPage;
 using MatterRecord.Contents.LordOfTheFlies;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -18,6 +18,10 @@ namespace MatterRecord.Contents.Recorder;
 [AutoloadHead]
 public partial class Recorder : ModNPC
 {
+    // 气泡文本字段（供对话模块使用）
+    public string ChatText;
+    public int ChatTimer;
+
     public override void Load()
     {
         IL_WorldGen.SpawnTownNPC += RecorderArriveModify;
@@ -34,7 +38,7 @@ public partial class Recorder : ModNPC
 
         cursor.Index = index;
         cursor.EmitLdloc(11);
-        cursor.EmitDelegate<Func<int,bool>>(i => 
+        cursor.EmitDelegate<Func<int, bool>>(i =>
         {
             var npc = Main.npc[i];
             if (npc.type == ModContent.NPCType<Recorder>())
@@ -54,6 +58,7 @@ public partial class Recorder : ModNPC
     {
         IL_WorldGen.SpawnTownNPC -= RecorderArriveModify;
     }
+
     public override void SetStaticDefaults()
     {
         Main.npcFrameCount[Type] = 23;
@@ -79,16 +84,15 @@ public partial class Recorder : ModNPC
             .SetNPCAffection(NPCID.PartyGirl, AffectionLevel.Like)
             .SetNPCAffection(NPCID.Angler, AffectionLevel.Hate);
         ContentSamples.NpcBestiaryRarityStars[Type] = 3;
-
-
-
     }
+
     public override bool ModifyDeathMessage(ref NetworkText customText, ref Color color)
     {
         customText = NetworkText.FromKey("LegacyMultiplayer.20", NPC.GivenName);
         color = new Color(255, 240, 20);
         return true;
     }
+
     public override void SetDefaults()
     {
         NPC.townNPC = true;
@@ -118,6 +122,20 @@ public partial class Recorder : ModNPC
         return true;
     }
 
+    public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
+    {
+        if (!string.IsNullOrEmpty(ChatText) && ChatTimer > 0)
+        {
+            Vector2 textCenter = NPC.Center - screenPos - new Vector2(0, NPC.height / 2 + 20);
+            Utils.DrawBorderString(spriteBatch, ChatText, textCenter, Color.White, 1f, 0.5f, 0.5f);
+            ChatTimer--;
+        }
+        else
+        {
+            ChatText = null;
+        }
+    }
+
     public override bool CanTownNPCSpawn(int numTownNPCs) => true;
 
     public override List<string> SetNPCNameList()
@@ -130,7 +148,6 @@ public partial class Recorder : ModNPC
     // ==================== 攻击行为 ====================
     public override void TownNPCAttackStrength(ref int damage, ref float knockback)
     {
-        // 原复杂逻辑保持不变
         if (Main.netMode == NetmodeID.SinglePlayer)
         {
             var player = Main.LocalPlayer;
@@ -172,7 +189,6 @@ public partial class Recorder : ModNPC
 
     public override void TownNPCAttackProj(ref int projType, ref int attackDelay)
     {
-        // 5% 概率发射湮灭弹
         if (Main.rand.NextFloat() < 0.05f)
         {
             projType = ModContent.ProjectileType<AnnihilationBullet>();
@@ -180,8 +196,7 @@ public partial class Recorder : ModNPC
         else
         {
             int favoriteItemType = ModContent.GetInstance<ImperfectPageSystem>().FavoriteAmmoType;
-            projType = ProjectileID.Bullet; // 默认火枪子弹
-
+            projType = ProjectileID.Bullet;
             if (favoriteItemType > 0)
             {
                 Item favoriteItem = ContentSamples.ItemsByType[favoriteItemType];
@@ -194,14 +209,11 @@ public partial class Recorder : ModNPC
         attackDelay = 10;
     }
 
-
-
     public override void TownNPCAttackProjSpeed(ref float multiplier, ref float gravityCorrection, ref float randomOffset)
     {
         multiplier = 80f;
         randomOffset = 0f;
     }
-    // ======================================================
 
     public override void DrawTownAttackGun(ref Texture2D item, ref Rectangle itemFrame, ref float scale, ref int horizontalHoldoutOffset)
     {
@@ -212,12 +224,9 @@ public partial class Recorder : ModNPC
     }
 
     // ==================== 战斗状态判定 ====================
-    /// <summary>
-    /// 判断当前记录者是否处于战斗状态（索敌范围内存在敌人）
-    /// </summary>
     public bool IsInCombat()
     {
-        float range = 520; 
+        float range = 520;
         foreach (NPC npc in Main.npc)
         {
             if (npc.active && !npc.friendly && npc.damage > 0 && !npc.townNPC && npc.type != NPCID.TargetDummy)
@@ -229,9 +238,6 @@ public partial class Recorder : ModNPC
         return false;
     }
 
-    /// <summary>
-    /// 静态方法：检查世界中是否存在任意记录者处于战斗状态
-    /// </summary>
     public static bool IsAnyRecorderInCombat()
     {
         foreach (NPC npc in Main.npc)
@@ -244,25 +250,22 @@ public partial class Recorder : ModNPC
         }
         return false;
     }
-    // ======================================================
 }
+
 public class RecorderFlavorTextElement : FlavorTextBestiaryInfoElement, IBestiaryInfoElement, ICategorizedBestiaryInfoElement
 {
     private bool _clicked;
     private int _textCounter = 0;
     private static string _warn;
-    public RecorderFlavorTextElement() : base("")
-    {
+    public RecorderFlavorTextElement() : base("") { }
 
-    }
     public UIBestiaryEntryInfoPage.BestiaryInfoCategory ElementCategory => UIBestiaryEntryInfoPage.BestiaryInfoCategory.FlavorText;
 
     public new UIElement ProvideUIElement(BestiaryUICollectionInfo info)
     {
         if (info.UnlockState < BestiaryEntryUnlockState.CanShowStats_2)
-        {
             return null;
-        }
+
         _clicked = false;
         _textCounter = 0;
         _warn = Language.GetTextValue("Mods.MatterRecord.Bestiary.Recorder.Warn");
@@ -316,7 +319,6 @@ public class RecorderFlavorTextElement : FlavorTextBestiaryInfoElement, IBestiar
         AddDynamicResize(obj, UITextFlavor, UITextWarn);
         obj.Append(UITextFlavor);
         obj.Append(UITextWarn);
-
         return obj;
     }
 
