@@ -19,6 +19,12 @@ namespace MatterRecord.Contents.Recorder;
 
 public class RecorderSystem : ModSystem
 {
+    public override void PostSetupContent()
+    {
+        foreach (var pair in ContentSamples.ItemsByType)
+            if (pair.Value.ModItem is IRecordBookItem book)
+                Instance.RecordToItemType[book.RecordType] = pair.Key;
+    }
     public static Dictionary<int, ItemRecords> RewardDictionary { get; } = new(){
         { 2, ItemRecords.DonQuijoteDeLaMancha },
         { 4, ItemRecords.TheoryofJustice },

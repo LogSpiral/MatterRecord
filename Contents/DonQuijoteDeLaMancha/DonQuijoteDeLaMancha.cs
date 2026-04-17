@@ -24,38 +24,27 @@ using Terraria.UI.Chat;
 
 namespace MatterRecord.Contents.DonQuijoteDeLaMancha;
 
-public class DonQuijoteDeLaMancha : RecordBookItem
+public class DonQuijoteDeLaMancha : MeleeSequenceItem<DonQuijoteDeLaManchaProj>, IRecordBookItem
 {
-
-    // 该死的多继承问题，呃啊啊啊啊啊啊啊啊啊啊啊啊啊(
-    #region 基类部分的代码
-    public override void SetStaticDefaults()
-    {
-        ItemID.Sets.SkipsInitialUseSound[Type] = true;
-        base.SetStaticDefaults();
-    }
+    ItemRecords IRecordBookItem.RecordType => ItemRecords.DonQuijoteDeLaMancha;
+    public static bool SlashActive => MatterRecordConfig.Instance.DonQuijoteSlashActive;
 
     public override void SetDefaults()
     {
-        Item.useStyle = ItemUseStyleID.Shoot;
-        Item.DamageType = DamageClass.Melee;
-        Item.shoot = ModContent.ProjectileType<DonQuijoteDeLaManchaProj>();
-        Item.shootSpeed = 1f;
-        Item.noMelee = false;
-        Item.noUseGraphic = false;
-        Item.channel = true;
+        base.SetDefaults();
         Item.width = 66;
         Item.height = 66;
+        Item.rare = ItemRarityID.Quest;
         Item.UseSound = SoundID.Item71;
         Item.damage = 21;
         Item.useTime = 60;
         Item.useAnimation = 60;
-        Item.rare = ItemRarityID.Quest;
         Item.knockBack = 4f;
         Item.value = Item.sellPrice(0, 2);
         Item.useTurn = true;
+        Item.noUseGraphic = false;
+        Item.noMelee = false;
     }
-
     public override bool CanShoot(Player player)
     {
         if (SlashActive)
@@ -70,14 +59,7 @@ public class DonQuijoteDeLaMancha : RecordBookItem
         Item.channel = false;
         return false;
     }
-    public virtual bool EnableRightClick => false;
-    #endregion
-
-
-    public override ItemRecords RecordType => ItemRecords.DonQuijoteDeLaMancha;
-    public static bool SlashActive => MatterRecordConfig.Instance.DonQuijoteSlashActive;
-
-
+    public override bool EnableRightClick => true;
     public override bool? UseItem(Player player)
     {
         if (SlashActive)
@@ -135,26 +117,12 @@ public class DonQuijoteDeLaMancha : RecordBookItem
         return false;
     }
 
-    public override void Load()
-    {
-        On_Item.TryGetPrefixStatMultipliersForItem += On_Item_TryGetPrefixStatMultipliersForItem;
-        base.Load();
-    }
-
-    private bool On_Item_TryGetPrefixStatMultipliersForItem(On_Item.orig_TryGetPrefixStatMultipliersForItem orig, Item self, int rolledPrefix, out float dmg, out float kb, out float spd, out float size, out float shtspd, out float mcst, out int crt)
-    {
-        PreFixStat = orig;
-        return orig.Invoke(self, rolledPrefix, out dmg, out kb, out spd, out size, out shtspd, out mcst, out crt);
-    }
-
-    public static On_Item.orig_TryGetPrefixStatMultipliersForItem PreFixStat;
-
     public override void ModifyWeaponDamage(Player player, ref StatModifier damage)
     {
         var mplr = player.GetModPlayer<DonQuijoteDeLaManchaPlayer>();
         var definition = mplr.itemDefinition;
         var item = new Item(definition.Type);
-        if (PreFixStat?.Invoke(Item, Item.prefix, out float dmg, out _, out _, out _, out _, out _, out _) == true)
+        if (Item.TryGetPrefixStatMultipliersForItem(item.prefix, out var dmg, out _, out _, out _, out _, out _, out _))
             damage.Base = (int)((Math.Clamp(item.damage, 1, int.MaxValue) - 21) * dmg);
         else
             damage.Base = Math.Clamp(item.damage, 1, int.MaxValue) - 21;
@@ -246,7 +214,6 @@ public class DonQuijoteDeLaMancha : RecordBookItem
             float factor = Main.GlobalTimeWrappedHourly % 1;
             spriteBatch.Draw(TextureAssets.Item[Type].Value, Item.Center - Main.screenPosition, null, Color.Red with { A = 0 } * (0.5f - MathF.Cos(factor * MathHelper.TwoPi) * 0.5f), rotation, new Vector2(33), scale * (1 + .5f * MathF.Pow(factor, 3)), 0, 0);
         }
-        base.PostDrawInWorld(spriteBatch, lightColor, alphaColor, rotation, scale, whoAmI);
     }
 
     public override bool CanRightClick()
@@ -754,7 +721,7 @@ public class DonQuijoteDeLaManchaPlayer : ModPlayer
 
     public override void ModifyDrawInfo(ref PlayerDrawSet drawInfo)
     {
-        if (DashCoolDown > 0 && Main.myPlayer == Player.whoAmI && !Player.DeadOrGhost)
+        if (DashCoolDown > 0 && Main.myPlayer == Player.whoAmI && !Player.dead)
         {
             Vector2 cen = Player.Center + Player.gfxOffY * Vector2.UnitY - Main.screenPosition - new Vector2(16, Player.gravDir < 0 ? -128 : 160);
             var direction = Player.gravDir < 0 ? SpriteEffects.FlipVertically : SpriteEffects.None;
@@ -928,13 +895,12 @@ public class WindMill : ModProjectile
     public override bool PreDraw(ref Color lightColor)
     {
         lightColor *= MathHelper.SmoothStep(0, 1, (90 - MathF.Abs(90 - Projectile.timeLeft)) / 10f);
-        return base.PreDraw(ref lightColor);
+        return true;
     }
 
     public override void PostDraw(Color lightColor)
     {
         lightColor *= MathHelper.SmoothStep(0, 1, (90 - MathF.Abs(90 - Projectile.timeLeft)) / 10f);
         Main.spriteBatch.Draw(wheelTex.Value, Projectile.Center + new Vector2(0, -12) - Main.screenPosition, null, lightColor, Projectile.ai[1], new Vector2(53, 55), 1f, 0, 0);
-        base.PostDraw(lightColor);
     }
 }

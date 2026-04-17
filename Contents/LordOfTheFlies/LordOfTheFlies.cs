@@ -8,9 +8,9 @@ using Terraria.GameContent;
 
 namespace MatterRecord.Contents.LordOfTheFlies;
 
-public class LordOfTheFlies : RecordBookItem
+public class LordOfTheFlies : ModItem, IRecordBookItem
 {
-    public override ItemRecords RecordType => ItemRecords.LordOfTheFlies;
+    ItemRecords IRecordBookItem.RecordType => ItemRecords.LordOfTheFlies;
     public override void SetDefaults()
     {
         Item.damage = 1;

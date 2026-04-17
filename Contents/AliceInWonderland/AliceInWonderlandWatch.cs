@@ -3,9 +3,9 @@ using Microsoft.Xna.Framework;
 
 namespace MatterRecord.Contents.AliceInWonderland;
 
-public class AliceInWonderlandWatch : RecordBookItem
+public class AliceInWonderlandWatch : ModItem,IRecordBookItem
 {
-    public override ItemRecords RecordType => ItemRecords.AliceInWonderland;
+    ItemRecords IRecordBookItem.RecordType => ItemRecords.AliceInWonderland;
 
     // public override string Texture => $"Terraria/Images/Item_{ItemID.PlatinumWatch}";
     public override void SetDefaults()

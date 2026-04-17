@@ -5,9 +5,9 @@ using Terraria.GameContent;
 
 namespace MatterRecord.Contents.TheInterpretationOfDreams;
 
-public class TheInterpretationOfDreams : RecordBookItem
+public class TheInterpretationOfDreams : ModItem,IRecordBookItem
 {
-    public override ItemRecords RecordType => ItemRecords.TheInterpretationOfDreams;
+    ItemRecords IRecordBookItem.RecordType => ItemRecords.TheInterpretationOfDreams;
     public override void SetStaticDefaults()
     {
         base.SetStaticDefaults();

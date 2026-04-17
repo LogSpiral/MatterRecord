@@ -8,9 +8,9 @@ using Terraria.DataStructures;
 namespace MatterRecord.Contents.TheoryOfFreedom;
 
 [AutoloadEquip(EquipType.Wings)]
-public class TheoryOfFreedom : RecordBookItem
+public class TheoryOfFreedom : ModItem, IRecordBookItem
 {
-    public override ItemRecords RecordType => ItemRecords.TheoryOfFreedom;
+    ItemRecords IRecordBookItem.RecordType => ItemRecords.TheoryOfFreedom;
     public override void UpdateAccessory(Player player, bool hideVisual)
     {
         var mplr = player.GetModPlayer<TheTheoryOfFreedomPlayer>();
@@ -77,7 +77,7 @@ public class TheoryOfFreedom : RecordBookItem
         cursor.EmitLdarg1();
         cursor.EmitDelegate<Action<int, int, int>>((index, i, j) =>
         {
-            if (RecorderSystem.ShouldSpawnRecordItem<TheoryOfFreedom>()) 
+            if (RecorderSystem.ShouldSpawnRecordItem<TheoryOfFreedom>())
             {
                 Main.player[index].QuickSpawnItem(WorldGen.GetItemSource_FromTileBreak(i, j), ModContent.ItemType<TheoryOfFreedom>());
                 RecorderSystem.SetCooldown<TheoryOfFreedom>();

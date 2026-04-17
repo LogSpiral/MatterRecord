@@ -4,9 +4,9 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 namespace MatterRecord.Contents.TheOldManAndTheSea;
 
-public class TheOldManAndTheSea : RecordBookItem
+public class TheOldManAndTheSea : ModItem,IRecordBookItem
 {
-    public override ItemRecords RecordType => ItemRecords.TheOldManAndTheSea;
+    ItemRecords IRecordBookItem.RecordType => ItemRecords.TheOldManAndTheSea;
     public override void SetStaticDefaults()
     {
         ItemID.Sets.CanFishInLava[Item.type] = true;

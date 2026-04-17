@@ -7,11 +7,11 @@ using Terraria.Localization;
 
 namespace MatterRecord.Contents.CompendiumOfMateriaMedica;
 
-public class CompendiumOfMateriaMedica : RecordBookItem
+public class CompendiumOfMateriaMedica : ModItem,IRecordBookItem
 {
     public static LocalizedText ShiftTooltipText { get; private set; }
 
-    public override ItemRecords RecordType => ItemRecords.CompendiumOfMateriaMedica;
+    ItemRecords IRecordBookItem.RecordType => ItemRecords.CompendiumOfMateriaMedica;
 
     public override void SetStaticDefaults()
     {
