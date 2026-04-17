@@ -40,7 +40,7 @@ public class DonQuijoteDeLaMancha : MeleeSequenceItem<DonQuijoteDeLaManchaProj>,
         Item.useTime = 60;
         Item.useAnimation = 60;
         Item.knockBack = 4f;
-        Item.value = Item.sellPrice(0, 2);
+        Item.value = 5;
         Item.useTurn = true;
         Item.noUseGraphic = false;
         Item.noMelee = false;

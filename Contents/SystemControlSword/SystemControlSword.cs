@@ -6,21 +6,27 @@ namespace MatterRecord.Contents.SystemControlSword
     {
         public override void SetDefaults()
         {
-            // 伤害调整为木剑水平（木剑基础伤害为7）
-            Item.damage = 7;
+            
+            Item.damage = 6;
             Item.DamageType = DamageClass.Melee;
             Item.width = 40;
             Item.height = 40;
             Item.useTime = 20;
             Item.useAnimation = 20;
             Item.useStyle = ItemUseStyleID.Swing;
-            Item.knockBack = 6;
-            Item.value = Item.buyPrice(gold: 10);
-            Item.rare = ItemRarityID.LightPurple;
+            Item.knockBack = 5;
+            Item.value = 100;
+            Item.rare = ItemRarityID.White;
             Item.UseSound = SoundID.Item1;
-            Item.autoReuse = false;
+            Item.autoReuse = true;
         }
-
+        public override void AddRecipes()
+        {
+            Recipe recipe = CreateRecipe();
+            recipe.AddIngredient(ItemID.Wood, 10);
+            recipe.AddTile(TileID.WorkBenches);
+            recipe.Register();
+        }
         public override bool? UseItem(Player player)
         {
             // 仅在客户端且当前玩家为本地玩家时打开界面
@@ -55,4 +61,7 @@ namespace MatterRecord.Contents.SystemControlSword
                 timer++;
         }
     }
+
+
 }
+
