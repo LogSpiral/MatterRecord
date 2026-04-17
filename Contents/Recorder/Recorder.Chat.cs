@@ -31,6 +31,7 @@ public partial class Recorder
                     Interactions.SlimeReward.Instance,
                     Interactions.CollectingReward.Instance,
                     Interactions.UnlockingRecord.Instance,
+                    Interactions.GivingLifeCrystal.Instance,
                     Interactions.RecordCollectingProgress.Instance
                 ]);
         NPCInteractions.All.Add(Interactions.Copy.Instance);
@@ -63,7 +64,6 @@ public partial class Recorder
     private static bool askForSlimeThisTime;
     private static bool askForSlimeTriggered;
     private static string cachedItemName;
-    private bool _lifeCrystalOptionActive;  // 新增：是否显示生命水晶选项
     private static int cachedItemType;
 
     public override string GetChat()
