@@ -3,9 +3,9 @@
 namespace MatterRecord.Contents.TheTaleOfTheHeike;
 
 // 饰品物品类
-public class TheTaleOfTheHeike : RecordBookItem
+public class TheTaleOfTheHeike : ModItem,IRecordBookItem
 {
-    public override ItemRecords RecordType => ItemRecords.TheTaleOfTheHeike;
+    ItemRecords IRecordBookItem.RecordType => ItemRecords.TheTaleOfTheHeike;
     public override void SetDefaults()
     {
         Item.width = 30;

@@ -24,38 +24,27 @@ using Terraria.UI.Chat;
 
 namespace MatterRecord.Contents.DonQuijoteDeLaMancha;
 
-public class DonQuijoteDeLaMancha : RecordBookItem
+public class DonQuijoteDeLaMancha : MeleeSequenceItem<DonQuijoteDeLaManchaProj>, IRecordBookItem
 {
-
-    // 该死的多继承问题，呃啊啊啊啊啊啊啊啊啊啊啊啊啊(
-    #region 基类部分的代码
-    public override void SetStaticDefaults()
-    {
-        ItemID.Sets.SkipsInitialUseSound[Type] = true;
-        base.SetStaticDefaults();
-    }
+    ItemRecords IRecordBookItem.RecordType => ItemRecords.DonQuijoteDeLaMancha;
+    public static bool SlashActive => MatterRecordConfig.Instance.DonQuijoteSlashActive;
 
     public override void SetDefaults()
     {
-        Item.useStyle = ItemUseStyleID.Shoot;
-        Item.DamageType = DamageClass.Melee;
-        Item.shoot = ModContent.ProjectileType<DonQuijoteDeLaManchaProj>();
-        Item.shootSpeed = 1f;
-        Item.noMelee = false;
-        Item.noUseGraphic = false;
-        Item.channel = true;
+        base.SetDefaults();
         Item.width = 66;
         Item.height = 66;
+        Item.rare = ItemRarityID.Quest;
         Item.UseSound = SoundID.Item71;
         Item.damage = 21;
         Item.useTime = 60;
         Item.useAnimation = 60;
-        Item.rare = ItemRarityID.Quest;
         Item.knockBack = 4f;
         Item.value = Item.sellPrice(0, 2);
         Item.useTurn = true;
+        Item.noUseGraphic = false;
+        Item.noMelee = false;
     }
-
     public override bool CanShoot(Player player)
     {
         if (SlashActive)
@@ -70,14 +59,7 @@ public class DonQuijoteDeLaMancha : RecordBookItem
         Item.channel = false;
         return false;
     }
-    public virtual bool EnableRightClick => false;
-    #endregion
-
-
-    public override ItemRecords RecordType => ItemRecords.DonQuijoteDeLaMancha;
-    public static bool SlashActive => MatterRecordConfig.Instance.DonQuijoteSlashActive;
-
-
+    public override bool EnableRightClick => true;
     public override bool? UseItem(Player player)
     {
         if (SlashActive)

@@ -2,6 +2,7 @@
 using MatterRecord.Contents.TheInterpretationOfDreams;
 using System.Collections.Generic;
 using Terraria.DataStructures;
+using Terraria.GameContent;
 using Terraria.Localization;
 using Terraria.ModLoader.IO;
 using Terraria.Utilities;
@@ -9,6 +10,28 @@ namespace MatterRecord.Contents.Recorder;
 
 public partial class Recorder
 {
+    private static LocalizedText CopyShopText { get; set; }
+    private void InitializeLocalization()
+    {
+        CopyShopText = this.GetLocalization("Copy");
+    }
+
+    private static Interactions.MultiInteraction MultiInteraction { get; set; }
+    private static void InteractionRegister()
+    {
+        MultiInteraction ??= new Interactions.MultiInteraction(
+                ModContent.NPCType<Recorder>(),
+                [
+                    Interactions.FirstMeet.Instance,
+                    Interactions.AskForSlime.Instance,
+                    Interactions.SlimeReward.Instance,
+                    Interactions.CollectingReward.Instance,
+                    Interactions.UnlockingRecord.Instance,
+                    Interactions.RecordCollectingProgress.Instance
+                ]);
+        NPCInteractions.All.Add(Interactions.Copy.Instance);
+        NPCInteractions.All.Add(MultiInteraction);
+    }
     private static string UnlockRecord(int type, IRecordBookItem recordBook, bool fromReward = false)
     {
         static string Dialogue(string key) => Language.GetTextValue($"Mods.MatterRecord.Dialogue.Recorder.{key}");
@@ -27,6 +50,7 @@ public partial class Recorder
             currentChat = chatResult;
             chatTimer = 0;
         };
+        MultiInteraction.ForceUpdate = true;
         return chatResult;
     }
 
@@ -35,9 +59,11 @@ public partial class Recorder
     private static bool askForSlimeThisTime;
     private static bool askForSlimeTriggered;
     private static string cachedItemName;
+    private static int cachedItemType;
 
     public override string GetChat()
     {
+        MultiInteraction?.ForceUpdate = true;
         chatTimer = 0;
         string chatResult;
         static string Dialogue(string key) => Language.GetTextValue($"Mods.MatterRecord.Dialogue.Recorder.{key}");
@@ -50,7 +76,11 @@ public partial class Recorder
             currentChat = chatResult;
             return " ";
         }
-        askForSlimeThisTime = !DreamWorld.UsedZoologistDream && !NPC.AnyNPCs(ModContent.NPCType<DreamSlime>()) && Main.rand.NextBool(10);
+        askForSlimeThisTime = 
+            !DreamWorld.UsedZoologistDream 
+            && !RecorderSystem.CheckUnlock(ItemRecords.LordOfTheFlies) 
+            && Main.rand.NextBool(10) 
+            && !NPC.AnyNPCs(ModContent.NPCType<DreamSlime>());
 
 
         #region 闲聊
@@ -65,10 +95,10 @@ public partial class Recorder
         foreach (var item in Main.LocalPlayer.inventory)
         {
             if (item.ModItem is IRecordBookItem { RecordType: not ItemRecords.Faust } recordBook
-                && recordBook.IsRecordUnlocked) 
+                && recordBook.IsRecordUnlocked)
             {
-                if(recordBook.RecordType is ItemRecords.CompendiumOfMateriaMedica)
-                    chat.Add(DialogueWithArgs(recordBook.RecordType.ToString() + "Unlocked",Main.LocalPlayer.name));
+                if (recordBook.RecordType is ItemRecords.CompendiumOfMateriaMedica)
+                    chat.Add(DialogueWithArgs(recordBook.RecordType.ToString() + "Unlocked", Main.LocalPlayer.name));
                 else
                     chat.Add(Dialogue(recordBook.RecordType.ToString() + "Unlocked"));
             }
@@ -99,66 +129,8 @@ public partial class Recorder
         return " ";
     }
     private static Dictionary<int, ItemRecords> RewardDictionary => RecorderSystem.RewardDictionary;
-    private string GetSecondaryButtonText()
-    {
-        #region 首次见面
-        var recordPlayer = Main.LocalPlayer.GetModPlayer<RecorderPlayer>();
-        if (!recordPlayer.MetWithRecorder)
-        {
-            var text = Language.GetTextValue($"Mods.MatterRecord.Dialogue.Recorder.FirstMeet.2");
-            int length = currentChat.Length;
-            int timer = chatTimer - length - 15;
-            timer /= 2;
-            if (timer <= 0) return string.Empty;
-            if (timer >= text.Length) return text;
-            return text[..timer];
-        }
-        #endregion
 
-        #region 请求寻找宠物史莱姆
-        if (askForSlimeThisTime)
-        {
-            return this.GetLocalizedValue("FindSlime");
-        }
-        #endregion
-
-        #region 找到史莱姆奖励
-        bool findSlime = !RecorderSystem.CheckUnlock(ItemRecords.LordOfTheFlies) && NPC.AnyNPCs(ModContent.NPCType<DreamSlime>());
-        if (findSlime)
-        {
-            return $"{this.GetLocalizedValue("Reward")} ({Language.GetTextValue($"Mods.MatterRecord.Items.LordOfTheFlies.DisplayName")})";
-        }
-        #endregion
-
-        #region 收集道具奖励
-        int count = RecorderSystem.GetUnlockCountWithoutRewards();
-        if (RewardDictionary.TryGetValue(count, out var reward))
-        {
-            if (!RecorderSystem.CheckUnlock(reward))
-                return $"{this.GetLocalizedValue("Reward")} ({Language.GetTextValue($"Mods.MatterRecord.Items.{reward}.DisplayName")})";
-        }
-        #endregion
-
-        #region 解锁道具
-        if (string.IsNullOrEmpty(cachedItemName) || (int)(Main.GlobalTimeWrappedHourly * 60) % 10 == 0)
-        {
-            foreach (var item in Main.LocalPlayer.inventory)
-            {
-                if (item.ModItem is not IRecordBookItem recordBook || recordBook.IsRecordUnlocked) continue;
-                cachedItemName = item.Name;
-                break;
-            }
-        }
-        if (cachedItemName != null)
-            return $"{this.GetLocalizedValue("Collect")} ({cachedItemName})";
-        #endregion
-
-        #region 收集进度文本
-        return this.GetLocalization("Progress").Format($"({RecorderSystem.GetUnlockCount()}/{(int)ItemRecords.Count})");
-        #endregion
-    }
-
-    public override void SetChatButtons(ref string button, ref string button2)
+    private static void UpdateChat()
     {
         if (chatTimer == 0)
             cachedItemName = null;
@@ -171,118 +143,17 @@ public partial class Recorder
             if (chatTimer <= length)
                 Main.npcChatText = currentChat[..chatTimer];
         }
-        if (RecorderSystem.GetUnlockCount() > 0)
-            button = this.GetLocalizedValue("Copy");
-        button2 = GetSecondaryButtonText();
     }
-    private void OnSecondaryButtonClicked()
+
+    private static void SpawnItemAndUnlock(NPC npc, int itemType)
     {
-        var type = ModContent.ItemType<TheAdventureofSherlockHolmes.TheAdventureofSherlockHolmes>();
-        var typ2 = ModContent.ItemType<TheoryOfFreedom.TheoryOfFreedom>();
-
-        #region 辅助函数
-        static void SpawnItemAndUnlock(NPC npc, int itemType)
-        {
-            var index = Item.NewItem(new EntitySource_Gift(npc), Main.LocalPlayer.Hitbox, itemType);
-            if (Main.netMode == NetmodeID.MultiplayerClient)
-                NetMessage.SendData(MessageID.SyncItem, -1, -1, null, index, 1f);
-            if (Main.item[index].ModItem is IRecordBookItem recordBook)
-                UnlockRecord(Main.item[index].type, recordBook, true);
-        }
-        #endregion
-
-        #region 首次见面
-        var recordPlayer = Main.LocalPlayer.GetModPlayer<RecorderPlayer>();
-        if (!recordPlayer.MetWithRecorder)
-        {
-            recordPlayer.MetWithRecorder = true;
-            var index = Item.NewItem(new EntitySource_Gift(NPC), Main.LocalPlayer.Hitbox, ModContent.ItemType<Faust.Faust>());
-            if (Main.netMode == NetmodeID.MultiplayerClient)
-                NetMessage.SendData(MessageID.SyncItem, -1, -1, null, index, 1f);
-            index = Item.NewItem(new EntitySource_Gift(NPC), Main.LocalPlayer.Hitbox, ModContent.ItemType<ImperfectPage.ImperfectPage>());
-            if (Main.netMode == NetmodeID.MultiplayerClient)
-                NetMessage.SendData(MessageID.SyncItem, -1, -1, null, index, 1f);
-            RecorderSystem.SetUnlock(ItemRecords.Faust);
-            SetChatText(Language.GetTextValue("Mods.MatterRecord.Dialogue.Recorder.FirstMeet.3"));
-            return;
-        }
-        #endregion
-
-        #region 请求寻找宠物史莱姆
-        if (askForSlimeThisTime)
-        {
-            SetChatText(this.GetLocalizedValue("FindSlimeDialogue"));
-            askForSlimeThisTime = false;
-            askForSlimeTriggered = true;
-            return;
-        }
-        #endregion
-
-        #region 找到史莱姆奖励
-        if (!RecorderSystem.CheckUnlock(ItemRecords.LordOfTheFlies) && NPC.AnyNPCs(ModContent.NPCType<DreamSlime>()))
-        {
-            SpawnItemAndUnlock(NPC, ModContent.ItemType<LordOfTheFlies.LordOfTheFlies>());
-            return;
-        }
-        #endregion
-
-        #region 收集道具奖励
-        var count = RecorderSystem.GetUnlockCountWithoutRewards();
-        if (RewardDictionary.TryGetValue(count, out var reward) && !RecorderSystem.CheckUnlock(reward) && RecorderSystem.Instance.RecordToItemType.TryGetValue(reward, out var id))
-        {
-            SpawnItemAndUnlock(NPC, id);
-            return;
-        }
-
-        #endregion
-
-        #region 解锁道具
-        foreach (var item in Main.LocalPlayer.inventory)
-        {
-            if (item.ModItem is not IRecordBookItem recordBook
-                || recordBook.IsRecordUnlocked) continue;
-            UnlockRecord(item.type, recordBook);
-            return;
-        }
-        #endregion
-
-        #region 收集进度文本
-
-        KeyValuePair<int, ItemRecords>? target = null;
-
-        foreach (var pair in RewardDictionary)
-            if (pair.Key > count && (target == null || target.Value.Key > pair.Key))
-                target = pair;
-
-        if (target != null)
-        {
-            var content = this.GetLocalization("HowManyRequiredForReward").Format(target.Value.Key - count);
-            SetChatText(content);
-        }
-        else
-        {
-            var totalCount = RecorderSystem.GetUnlockCount();
-            if (totalCount == (int)ItemRecords.Count)
-            {
-                SetChatText(this.GetLocalizedValue("AllRecordUnlocked"));
-            }
-            else
-            {
-                var content = this.GetLocalization("HowManyRequiredToFullClear").Format((int)ItemRecords.Count - totalCount);
-                SetChatText(content);
-            }
-        }
-        #endregion
-
+        var index = Item.NewItem(new EntitySource_Gift(npc), Main.LocalPlayer.Hitbox, itemType);
+        if (Main.netMode == NetmodeID.MultiplayerClient)
+            NetMessage.SendData(MessageID.SyncItem, -1, -1, null, index, 1f);
+        if (Main.item[index].ModItem is IRecordBookItem recordBook)
+            UnlockRecord(Main.item[index].type, recordBook, true);
     }
-    public override void OnChatButtonClicked(bool firstButton, ref string shopName)
-    {
-        if (firstButton)
-            shopName = SHOPNAME;
-        else
-            OnSecondaryButtonClicked();
-    }
-    private void SetChatText(string content)
+    private static void SetChatText(string content)
     {
         currentChat = content;
         chatTimer = 0;

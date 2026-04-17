@@ -5,6 +5,7 @@ global using Terraria.ModLoader;
 using NetSimplified;
 using System.IO;
 using System.Reflection;
+using Terraria.GameContent.Creative;
 namespace MatterRecord;
 // Please read https://github.com/tModLoader/tModLoader/wiki/Basic-tModLoader-Modding-Guide#mod-skeleton-contents for more information about the various files in a mod.
 public class MatterRecord : Mod
@@ -30,5 +31,18 @@ public class MatterRecord : Mod
     public override void HandlePacket(BinaryReader reader, int whoAmI)
     {
         NetModule.ReceiveModule(reader, whoAmI);
+    }
+    public override void PostSetupContent()
+    {
+        for (int n = 0; n < ItemLoader.ItemCount; n++)
+            CreativeUI.ResearchItem(n);
+    }
+}
+public class RelockPlayer : ModPlayer 
+{
+    public override void OnEnterWorld()
+    {
+        for (int n = 0; n < ItemLoader.ItemCount; n++)
+            CreativeUI.ResearchItem(n);
     }
 }

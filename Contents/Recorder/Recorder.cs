@@ -80,7 +80,8 @@ public partial class Recorder : ModNPC
             .SetNPCAffection(NPCID.Angler, AffectionLevel.Hate);
         ContentSamples.NpcBestiaryRarityStars[Type] = 3;
 
-
+        InitializeLocalization();
+        InteractionRegister();
 
     }
     public override bool ModifyDeathMessage(ref NetworkText customText, ref Color color)
@@ -115,6 +116,7 @@ public partial class Recorder : ModNPC
 
     public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
     {
+        UpdateChat();
         return true;
     }
 

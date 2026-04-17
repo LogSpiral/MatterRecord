@@ -21,6 +21,12 @@ namespace MatterRecord.Contents.Recorder;
 
 public class RecorderSystem : ModSystem
 {
+    public override void PostSetupContent()
+    {
+        foreach (var pair in ContentSamples.ItemsByType)
+            if (pair.Value.ModItem is IRecordBookItem book)
+                Instance.RecordToItemType[book.RecordType] = pair.Key;
+    }
     public static Dictionary<int, ItemRecords> RewardDictionary { get; } = new(){
         { 2, ItemRecords.DonQuijoteDeLaMancha },
         { 4, ItemRecords.TheoryofJustice },
@@ -100,16 +106,16 @@ public class RecorderSystem : ModSystem
     }
 
     public static Dictionary<int, int> RecordSpawnCooldown { get; } = [];
-    public static void SetCooldown<T>(int cooldown = 18000)  where T:ModItem
+    public static void SetCooldown<T>(int cooldown = 18000) where T : ModItem
     {
         RecordSpawnCooldown.Add(ModContent.ItemType<T>(), cooldown);
     }
     public override void PostUpdateEverything()
     {
         HashSet<int> cooldownCompleted = [];
-        foreach (var pair in RecordSpawnCooldown) 
+        foreach (var pair in RecordSpawnCooldown)
         {
-            if (pair.Value == 0) 
+            if (pair.Value == 0)
             {
                 cooldownCompleted.Add(pair.Key);
                 continue;

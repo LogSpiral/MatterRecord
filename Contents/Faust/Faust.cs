@@ -10,9 +10,9 @@ using Terraria.GameContent.Drawing;
 
 namespace MatterRecord.Contents.Faust;
 
-public class Faust : RecordBookItem
+public class Faust : ModItem, IRecordBookItem
 {
-    public override ItemRecords RecordType => ItemRecords.Faust;
+    ItemRecords IRecordBookItem.RecordType => ItemRecords.Faust;
     //旧版物品说明
     /*不行！不行！恶魔是利己主义者，
     对别人有益的事体，
@@ -117,7 +117,7 @@ public class Faust : RecordBookItem
         base.PostDrawInInventory(spriteBatch, position, frame, drawColor, itemColor, origin, scale);
     }
 
-    public override void PostDrawInWorld(WorldItem item,SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI)
+    public override void PostDrawInWorld(WorldItem item, SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI)
     {
         if (Active)
         {
