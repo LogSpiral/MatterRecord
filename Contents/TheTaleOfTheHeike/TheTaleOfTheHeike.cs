@@ -20,6 +20,11 @@ public class TheTaleOfTheHeike : RecordBookItem
         if (!this.IsRecordUnlocked) return;
         player.GetModPlayer<TheTaleOfTheHeikePlayer>().Equipped = true;
     }
+
+    public override void AddRecipes()
+    {
+        this.RegisterBookRecipe(ItemID.Muramasa);
+    }
 }
 
 // 玩家效果类

@@ -98,9 +98,9 @@ public class RecorderSystem : ModSystem
     }
 
     public static Dictionary<int, int> RecordSpawnCooldown { get; } = [];
-    public static void SetCooldown<T>(int cooldown = 18000)  where T:ModItem
+    public static void SetCooldown<T>(int cooldown = 1800)  where T:ModItem
     {
-        RecordSpawnCooldown.Add(ModContent.ItemType<T>(), cooldown);
+        RecordSpawnCooldown[ModContent.ItemType<T>()] = cooldown;
     }
     public override void PostUpdateEverything()
     {

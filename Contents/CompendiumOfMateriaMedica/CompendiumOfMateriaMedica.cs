@@ -1,6 +1,8 @@
 ﻿using MatterRecord.Contents.Recorder;
 using Microsoft.Xna.Framework.Input;
+using MonoMod.Cil;
 using System.Collections.Generic;
+using Terraria.DataStructures;
 using Terraria.Localization;
 
 namespace MatterRecord.Contents.CompendiumOfMateriaMedica;
@@ -55,5 +57,44 @@ public class CompendiumOfMateriaMedica : RecordBookItem
             var line = new TooltipLine(Mod, "ShiftTooltip", ShiftTooltipText.Value);
             tooltips.Add(line);
         }
+    }
+    public override void AddRecipes()
+    {
+        this.RegisterBookRecipe(ItemID.StaffofRegrowth);
+    }
+    public override void Load()
+    {
+        IL_Player.PlaceThing_Tiles_BlockPlacementForAssortedThings += CompendiumOfMateriaMedicaSpawn;
+    }
+
+    private static void CompendiumOfMateriaMedicaSpawn(ILContext il)
+    {
+        var cursor = new ILCursor(il);
+        if (!cursor.TryGotoNext(MoveType.After,
+        i => i.MatchLdcI4(TileID.BloomingHerbs),
+        i => i.MatchBneUn(out _)))
+            return;
+
+        cursor.EmitDelegate(() =>
+        {
+            if (!RecorderSystem.ShouldSpawnRecordItem<CompendiumOfMateriaMedica>())
+                return;
+            Main.LocalPlayer.QuickSpawnItem(new EntitySource_Misc("Harvesting Herb"), ModContent.ItemType<CompendiumOfMateriaMedica>());
+            RecorderSystem.SetCooldown<CompendiumOfMateriaMedica>();
+        });
+
+        if (!cursor.TryGotoNext(i => i.MatchLdloc(22)))
+            return;
+        if (!cursor.TryGotoNext(MoveType.After, i => i.MatchBrfalse(out _)))
+            return;
+
+
+        cursor.EmitDelegate(() =>
+        {
+            if (!RecorderSystem.ShouldSpawnRecordItem<CompendiumOfMateriaMedica>())
+                return;
+            Main.LocalPlayer.QuickSpawnItem(new EntitySource_Misc("Harvesting Herb"), ModContent.ItemType<CompendiumOfMateriaMedica>());
+            RecorderSystem.SetCooldown<CompendiumOfMateriaMedica>();
+        });
     }
 }
