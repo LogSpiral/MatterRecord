@@ -7,13 +7,14 @@ public class TortoiseShellPlayer : ModPlayer
 {
     public override void UpdateEquips()
     {
-        if (TortoiseShellActive)//TortoiseShellActive
+        if (TortoiseShellActive)
         {
             if (TortoiseDashing)
                 Player.endurance += timer * 0.18f;
             else
                 Player.endurance += .9f;
             Player.noKnockback = true;
+            Player.mount?.Dismount(Player);
         }
         TortoiseShellActive = false;
         TortoiseDashing = false;
@@ -35,11 +36,13 @@ public class TortoiseShellPlayer : ModPlayer
 
     public override void ModifyDrawInfo(ref PlayerDrawSet drawInfo)
     {
-        if (TortoiseShellActive)
+        if (TortoiseShellActive) 
         {
+            drawInfo.hideEntirePlayer = true;
             drawInfo.drawPlayer.invis = true;
             drawInfo.colorArmorBody = drawInfo.colorArmorHead = drawInfo.colorArmorLegs = default;
         }
+
         base.ModifyDrawInfo(ref drawInfo);
     }
 

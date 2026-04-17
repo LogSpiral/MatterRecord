@@ -1,4 +1,5 @@
 ﻿using MatterRecord.Contents.Recorder;
+using System.Collections.Generic;
 
 namespace MatterRecord.Contents.TheTaleOfTheHeike;
 
@@ -18,6 +19,11 @@ public class TheTaleOfTheHeike : ModItem,IRecordBookItem
     {
         if (!this.IsRecordUnlocked) return;
         player.GetModPlayer<TheTaleOfTheHeikePlayer>().Equipped = true;
+    }
+
+    public override void AddRecipes()
+    {
+        this.RegisterBookRecipe(ItemID.Muramasa);
     }
 }
 
@@ -55,9 +61,63 @@ public class TheTaleOfTheHeikePlayer : ModPlayer
     {
         if (item.type != ItemID.Muramasa) return;
         if (target.life > 0) return;
+        if (!DungeonEnermies.Contains(target.type)) return;
         if (!RecorderSystem.ShouldSpawnRecordItem<TheTaleOfTheHeike>()) return;
 
         Player.QuickSpawnItem(target.GetSource_Loot(), ModContent.ItemType<TheTaleOfTheHeike>());
         RecorderSystem.SetCooldown<TheTaleOfTheHeike>();
     }
+
+
+    private static HashSet<int> DungeonEnermies { get; } =
+        [
+            NPCID.SkeletronHand,
+            NPCID.SkeletronHead,
+
+            NPCID.AngryBones,
+            NPCID.AngryBonesBig,
+            NPCID.AngryBonesBigHelmet,
+            NPCID.AngryBonesBigMuscle,
+
+            NPCID.DarkCaster,
+
+            NPCID.CursedSkull,
+
+            NPCID.DungeonSlime,
+
+            NPCID.DungeonGuardian,
+
+            NPCID.BlueArmoredBones,
+            NPCID.BlueArmoredBonesMace,
+            NPCID.BlueArmoredBonesNoPants,
+            NPCID.BlueArmoredBonesSword,
+
+            NPCID.RustyArmoredBonesAxe,
+            NPCID.RustyArmoredBonesFlail,
+            NPCID.RustyArmoredBonesSword,
+            NPCID.RustyArmoredBonesSwordNoArmor,
+
+            NPCID.HellArmoredBones,
+            NPCID.HellArmoredBonesMace,
+            NPCID.HellArmoredBonesSpikeShield,
+            NPCID.HellArmoredBonesSword,
+
+            NPCID.Paladin,
+
+            NPCID.Necromancer,
+            NPCID.NecromancerArmored,
+
+            NPCID.RaggedCaster,
+            NPCID.RaggedCasterOpenCoat,
+
+            NPCID.DiabolistRed,
+            NPCID.DiabolistWhite,
+
+            NPCID.SkeletonCommando,
+            NPCID.SkeletonSniper,
+            NPCID.TacticalSkeleton,
+            NPCID.GiantCursedSkull,
+            NPCID.BoneLee,
+            NPCID.DungeonSpirit
+        ];
 }

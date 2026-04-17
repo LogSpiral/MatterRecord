@@ -1,11 +1,15 @@
 ﻿using MatterRecord.Contents.ImperfectPage;
 using MatterRecord.Contents.TheInterpretationOfDreams;
+using MatterRecord.Contents.Recorder.Dialogue;  // 新增引用
 using System.Collections.Generic;
+using Terraria.Audio;  // 新增引用
 using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.Localization;
 using Terraria.ModLoader.IO;
 using Terraria.Utilities;
+using Microsoft.Xna.Framework;
+
 namespace MatterRecord.Contents.Recorder;
 
 public partial class Recorder
@@ -59,6 +63,7 @@ public partial class Recorder
     private static bool askForSlimeThisTime;
     private static bool askForSlimeTriggered;
     private static string cachedItemName;
+    private bool _lifeCrystalOptionActive;  // 新增：是否显示生命水晶选项
     private static int cachedItemType;
 
     public override string GetChat()
@@ -81,7 +86,6 @@ public partial class Recorder
             && !RecorderSystem.CheckUnlock(ItemRecords.LordOfTheFlies) 
             && Main.rand.NextBool(10) 
             && !NPC.AnyNPCs(ModContent.NPCType<DreamSlime>());
-
 
         #region 闲聊
         WeightedRandom<string> chat = new();
@@ -121,13 +125,13 @@ public partial class Recorder
         int princessIndex = NPC.FindFirstNPC(NPCID.Princess);
         if (princessIndex != -1)
             chat.Add(DialogueWithArgs("PrincessDialogue", Main.npc[princessIndex].GivenName));
-
         #endregion
 
         chatResult = chat.Get();
         currentChat = chatResult;
         return " ";
     }
+
     private static Dictionary<int, ItemRecords> RewardDictionary => RecorderSystem.RewardDictionary;
 
     private static void UpdateChat()
@@ -139,7 +143,6 @@ public partial class Recorder
         if (currentChat != null)
         {
             int length = currentChat.Length;
-
             if (chatTimer <= length)
                 Main.npcChatText = currentChat[..chatTimer];
         }
@@ -159,10 +162,12 @@ public partial class Recorder
         chatTimer = 0;
         Main.npcChatText = " ";
     }
+
     public override void SaveData(TagCompound tag)
     {
         tag["s"] = askForSlimeTriggered;
     }
+
     public override void LoadData(TagCompound tag)
     {
         if (tag.TryGet<bool>("s", out var flag))
