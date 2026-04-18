@@ -213,24 +213,12 @@ public partial class Recorder
                     // 消耗一个生命水晶
                     Main.LocalPlayer.inventory[itemIndex].stack--;
                     if (Main.LocalPlayer.inventory[itemIndex].stack <= 0)
-                        Main.LocalPlayer.inventory[itemIndex] = new Item();
-
-                    SoundEngine.PlaySound(SoundID.Item29, NPC.Center);
-
-                    // 增加记录者生命值与上限
-                    NPC.lifeMax += 20;
-                    NPC.life += 20;
-                    if (NPC.life > NPC.lifeMax) NPC.life = NPC.lifeMax;
-                    CombatText.NewText(NPC.Hitbox, Color.LimeGreen, 20);
+                        Main.LocalPlayer.inventory[itemIndex].TurnToAir();
 
                     // 增加本地额外生命
                     localPlayer.LocalData.ExtraLife += 20;
                     localPlayer.SaveData();
-
-                    // 同步 NPC 状态
-                    if (Main.netMode == NetmodeID.Server)
-                        NetMessage.SendData(MessageID.SyncNPC, -1, -1, null, NPC.whoAmI);
-
+                    ExtraLifeWorldDataIncreaseSync.Get().Send(runLocally: true);
                     SetChatText("好像变得更健康了一点点，你平时都吃这个的吗？");
                 }
             }

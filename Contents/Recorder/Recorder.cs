@@ -7,6 +7,7 @@ using MonoMod.Cil;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using Terraria.Audio;
 using Terraria.Chat;
 using Terraria.GameContent.Bestiary;
 using Terraria.GameContent.Personalities;
@@ -110,7 +111,7 @@ public partial class Recorder : ModNPC
         NPC.DeathSound = SoundID.NPCDeath1;
         NPC.knockBackResist = 0.5f;
         AnimationType = NPCID.Steampunker;
-        _firstTick = true;
+        _firstTick = Main.netMode != NetmodeID.MultiplayerClient;
     }
 
     public override void AI()
@@ -118,50 +119,25 @@ public partial class Recorder : ModNPC
         base.AI();
         if (_firstTick)
         {
-            UpdateLifeFromExtraLife();
+            UpdateLifeFromExtraLife(Main.dedServ ? RecorderSystem.RecorderExtraLifeData : Main.LocalPlayer.GetModPlayer<RecorderLocalPlayer>().LocalData.ExtraLife);
             _firstTick = false;
         }
     }
 
-    private void UpdateLifeFromExtraLife()
+    public void UpdateLifeFromExtraLife(int maxExtraLife, bool increaseMode = false)
     {
-        // 仅在服务器端计算，客户端等待同步
-        if (Main.netMode == NetmodeID.MultiplayerClient)
-            return;
-
-        int maxExtraLife = 0;
-
-        if (Main.netMode == NetmodeID.SinglePlayer)
-        {
-            var localPlayer = Main.LocalPlayer.GetModPlayer<RecorderLocalPlayer>();
-            maxExtraLife = localPlayer.LocalData.ExtraLife;
-        }
-        else
-        {
-            // 遍历所有在线玩家，取 ExtraLife 最大值
-            for (int i = 0; i < Main.maxPlayers; i++)
-            {
-                Player player = Main.player[i];
-                if (player != null && player.active)
-                {
-                    var rp = player.GetModPlayer<RecorderLocalPlayer>();
-                    if (rp?.LocalData != null)
-                    {
-                        int extra = rp.LocalData.ExtraLife;
-                        if (extra > maxExtraLife)
-                            maxExtraLife = extra;
-                    }
-                }
-            }
-        }
-
         int newLifeMax = 250 + maxExtraLife;
         if (NPC.lifeMax != newLifeMax)
         {
             NPC.lifeMax = newLifeMax;
-            NPC.life = newLifeMax;
-            if (Main.netMode == NetmodeID.Server)
-                NetMessage.SendData(MessageID.SyncNPC, -1, -1, null, NPC.whoAmI);
+            if (increaseMode && !Main.dedServ) 
+            {
+                SoundEngine.PlaySound(SoundID.Item29, NPC.Center);
+                CombatText.NewText(NPC.Hitbox, CombatText.HealLife, 20);
+                NPC.life += 20;
+            }
+            else
+                NPC.life = newLifeMax;
         }
     }
 
