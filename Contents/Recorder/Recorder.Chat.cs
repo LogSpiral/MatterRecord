@@ -1,13 +1,13 @@
-﻿using MatterRecord.Contents.ImperfectPage;
+﻿using Microsoft.Xna.Framework;
+using MatterRecord.Contents.ImperfectPage;
 using MatterRecord.Contents.TheInterpretationOfDreams;
-using MatterRecord.Contents.Recorder.Dialogue;  // 新增引用
+using MatterRecord.Contents.Recorder.Dialogue;
 using System.Collections.Generic;
-using Terraria.Audio;  // 新增引用
+using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.Localization;
 using Terraria.ModLoader.IO;
 using Terraria.Utilities;
-using Microsoft.Xna.Framework;
 
 namespace MatterRecord.Contents.Recorder;
 
@@ -39,7 +39,7 @@ public partial class Recorder
     private static bool askForSlimeThisTime;
     private static bool askForSlimeTriggered;
     private static string cachedItemName;
-    private bool _lifeCrystalOptionActive;  // 新增：是否显示生命水晶选项
+    private bool _lifeCrystalOptionActive;
 
     public override string GetChat()
     {
@@ -48,7 +48,6 @@ public partial class Recorder
         static string Dialogue(string key) => Language.GetTextValue($"Mods.MatterRecord.Dialogue.Recorder.{key}");
         static string DialogueWithArgs(string key, params object[] args) => Language.GetTextValue($"Mods.MatterRecord.Dialogue.Recorder.{key}", args);
         var recordPlayer = Main.LocalPlayer.GetModPlayer<RecorderPlayer>();
-        // 首次见面奖励
         if (!recordPlayer.MetWithRecorder)
         {
             chatResult = DialogueWithArgs("FirstMeet.1", NPC.GivenName);
@@ -120,6 +119,16 @@ public partial class Recorder
         }
         #endregion
 
+        #region 生命水晶选项
+        var localPlayer = Main.LocalPlayer.GetModPlayer<RecorderLocalPlayer>();
+        bool hasLifeCrystal = Main.LocalPlayer.HasItem(ItemID.LifeCrystal);
+        if (localPlayer.LocalData.LifeCrystalCounter == 2 && hasLifeCrystal)
+        {
+            _lifeCrystalOptionActive = true;
+            return "给予生命水晶";
+        }
+        #endregion
+
         #region 请求寻找宠物史莱姆
         if (askForSlimeThisTime)
         {
@@ -166,16 +175,6 @@ public partial class Recorder
         }
         #endregion
 
-        #region 生命水晶选项
-        var localPlayer = Main.LocalPlayer.GetModPlayer<RecorderLocalPlayer>();
-        bool hasLifeCrystal = Main.LocalPlayer.HasItem(ItemID.LifeCrystal);
-        if (localPlayer.LocalData.LifeCrystalCounter == 2 && hasLifeCrystal)
-        {
-            _lifeCrystalOptionActive = true;
-            return "给予生命水晶";
-        }
-        #endregion
-
         #region 收集进度文本
         _lifeCrystalOptionActive = false;
         return this.GetLocalization("Progress").Format($"({RecorderSystem.GetUnlockCount()}/{(int)ItemRecords.Count})");
@@ -201,7 +200,7 @@ public partial class Recorder
 
     private void OnSecondaryButtonClicked()
     {
-        
+        // 优先处理生命水晶
         if (_lifeCrystalOptionActive)
         {
             var localPlayer = Main.LocalPlayer.GetModPlayer<RecorderLocalPlayer>();
@@ -216,22 +215,22 @@ public partial class Recorder
                     if (Main.LocalPlayer.inventory[itemIndex].stack <= 0)
                         Main.LocalPlayer.inventory[itemIndex] = new Item();
 
-                    // 播放音效
                     SoundEngine.PlaySound(SoundID.Item29, NPC.Center);
 
                     // 增加记录者生命值与上限
                     NPC.lifeMax += 20;
                     NPC.life += 20;
                     if (NPC.life > NPC.lifeMax) NPC.life = NPC.lifeMax;
-
-                    // 显示绿色数字
                     CombatText.NewText(NPC.Hitbox, Color.LimeGreen, 20);
 
-                    // 多人同步
+                    // 增加本地额外生命
+                    localPlayer.LocalData.ExtraLife += 20;
+                    localPlayer.SaveData();
+
+                    // 同步 NPC 状态
                     if (Main.netMode == NetmodeID.Server)
                         NetMessage.SendData(MessageID.SyncNPC, -1, -1, null, NPC.whoAmI);
 
-                    // 输出指定对话
                     SetChatText("好像变得更健康了一点点，你平时都吃这个的吗？");
                 }
             }

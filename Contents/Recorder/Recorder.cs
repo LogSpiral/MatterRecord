@@ -1,5 +1,6 @@
 ﻿using MatterRecord.Contents.ImperfectPage;
 using MatterRecord.Contents.LordOfTheFlies;
+using MatterRecord.Contents.Recorder.Dialogue;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoMod.Cil;
@@ -18,9 +19,10 @@ namespace MatterRecord.Contents.Recorder;
 [AutoloadHead]
 public partial class Recorder : ModNPC
 {
-    // 气泡文本字段（供对话模块使用）
+    // 气泡文本字段
     public string ChatText;
     public int ChatTimer;
+    private bool _firstTick = true;
 
     public override void Load()
     {
@@ -103,10 +105,64 @@ public partial class Recorder : ModNPC
         NPC.damage = 10;
         NPC.defense = 15;
         NPC.lifeMax = 250;
+        NPC.life = 250;
         NPC.HitSound = SoundID.NPCHit1;
         NPC.DeathSound = SoundID.NPCDeath1;
         NPC.knockBackResist = 0.5f;
         AnimationType = NPCID.Steampunker;
+        _firstTick = true;
+    }
+
+    public override void AI()
+    {
+        base.AI();
+        if (_firstTick)
+        {
+            UpdateLifeFromExtraLife();
+            _firstTick = false;
+        }
+    }
+
+    private void UpdateLifeFromExtraLife()
+    {
+        // 仅在服务器端计算，客户端等待同步
+        if (Main.netMode == NetmodeID.MultiplayerClient)
+            return;
+
+        int maxExtraLife = 0;
+
+        if (Main.netMode == NetmodeID.SinglePlayer)
+        {
+            var localPlayer = Main.LocalPlayer.GetModPlayer<RecorderLocalPlayer>();
+            maxExtraLife = localPlayer.LocalData.ExtraLife;
+        }
+        else
+        {
+            // 遍历所有在线玩家，取 ExtraLife 最大值
+            for (int i = 0; i < Main.maxPlayers; i++)
+            {
+                Player player = Main.player[i];
+                if (player != null && player.active)
+                {
+                    var rp = player.GetModPlayer<RecorderLocalPlayer>();
+                    if (rp?.LocalData != null)
+                    {
+                        int extra = rp.LocalData.ExtraLife;
+                        if (extra > maxExtraLife)
+                            maxExtraLife = extra;
+                    }
+                }
+            }
+        }
+
+        int newLifeMax = 250 + maxExtraLife;
+        if (NPC.lifeMax != newLifeMax)
+        {
+            NPC.lifeMax = newLifeMax;
+            NPC.life = newLifeMax;
+            if (Main.netMode == NetmodeID.Server)
+                NetMessage.SendData(MessageID.SyncNPC, -1, -1, null, NPC.whoAmI);
+        }
     }
 
     public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
