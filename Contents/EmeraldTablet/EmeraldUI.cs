@@ -127,7 +127,7 @@ public class EmeraldUI : UIState
         if (_bannerToNPC == null)
             BuildBannerDictionary();
     }
-
+    public static bool IsItemANPCBanner(int itemID) => _bannerToNPC.ContainsKey(itemID);
     public static bool TryGetNPCInfo(int bannerItemId, out int npcId, out string npcName, out int kills)
     {
         EnsureDictionaryBuilt();
