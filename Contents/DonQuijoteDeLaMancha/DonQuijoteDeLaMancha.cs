@@ -277,7 +277,7 @@ public class DonQuijoteDeLaMancha : MeleeSequenceItem<DonQuijoteDeLaManchaProj>,
         }
         float k = Main.mouseTextColor / 255f;
         k = .85f + .15f * k;
-        var dmgTip = new TooltipLine(Mod, "Sheep", this.GetLocalizedValue("SheepDamage")) { OverrideColor = new Color(120, 190, 120, 255) * k };
+        var dmgTip = new TooltipLine(Mod, "Sheep", this.GetLocalizedValue("SheepDamage")) { Color = new Color(120, 190, 120, 255) * k };
         if (index == -1)
             tooltips.Add(dmgTip);
         else

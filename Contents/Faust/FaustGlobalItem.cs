@@ -26,7 +26,7 @@ public class FaustGlobalItem : GlobalItem
         tooltips.Clear();
         tooltips.Add(dummy);
         if (item.value == 0 || item.type == ModContent.ItemType<Faust>() || Main.ItemDropsDB.GetRulesForItemID(item.type).Count != 0 || EmeraldUI.IsItemANPCBanner(item.type) || (item.type >= ItemID.CopperCoin && item.type <= ItemID.PlatinumCoin))
-            tooltips.Add(new TooltipLine(Mod, "CantBuyIt", Language.GetTextValue("Mods.MatterRecord.Items.Faust.CantButIt")) { OverrideColor = Color.Lerp(Color.Gray, Color.DarkGray, MathF.Cos(Main.GlobalTimeWrappedHourly) * .5f + .5f) });
+            tooltips.Add(new TooltipLine(Mod, "CantBuyIt", Language.GetTextValue("Mods.MatterRecord.Items.Faust.CantButIt")) { Color = Color.Lerp(Color.Gray, Color.DarkGray, MathF.Cos(Main.GlobalTimeWrappedHourly) * .5f + .5f) });
         else
         {
             var text5 = "";
@@ -78,7 +78,7 @@ public class FaustGlobalItem : GlobalItem
             else if (num15 > 0)
                 color2 = new Color((byte)(246f * num17), (byte)(138f * num17), (byte)(96f * num17), Main.mouseTextColor);
 
-            tooltips.Add(new TooltipLine(Mod, "ThePrice", $"{Language.GetTextValue("Mods.MatterRecord.Items.Faust.BuyPrice")}{text5}") { OverrideColor = color2 });
+            tooltips.Add(new TooltipLine(Mod, "ThePrice", $"{Language.GetTextValue("Mods.MatterRecord.Items.Faust.BuyPrice")}{text5}") { Color = color2 });
         }
         base.ModifyTooltips(item, tooltips);
     }

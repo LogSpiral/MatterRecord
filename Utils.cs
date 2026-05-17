@@ -1607,7 +1607,7 @@ public static class MiscMethods
                     // Tag名称
                     list.Add(new(Mod, line.Name, line.Text)
                     {
-                        OverrideColor = line.OverrideColor
+                        Color = line.Color
                     });
                 }
 
@@ -1679,7 +1679,7 @@ public static class MiscMethods
             {
                 drawX += 8;
             }
-            Color color = line.OverrideColor ?? new(0.7f, 0.7f, 0.7f);
+            Color color = line.Color;
             ChatManager.DrawColorCodedStringWithShadow(Main.spriteBatch, font, line.Text, new(drawX, y), color, 0f, Vector2.Zero, Vector2.One, spread: 1.6f);
             y += (int)ChatManager.GetStringSize(font, line.Text, Vector2.One).Y;
         }

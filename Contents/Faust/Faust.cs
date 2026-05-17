@@ -193,7 +193,7 @@ public class Faust : ModItem, IRecordBookItem
 
         tooltips.Add(new(Mod, "ConsumedMoney", content)
         {
-            OverrideColor = Color.Lerp(Color.Gray, Color.Red, 0.5f + 0.5f * MathF.Cos(Main.GlobalTimeWrappedHourly))
+            Color = Color.Lerp(Color.Gray, Color.Red, 0.5f + 0.5f * MathF.Cos(Main.GlobalTimeWrappedHourly))
         });
 
         base.ModifyTooltips(tooltips);
@@ -220,7 +220,7 @@ public class Faust : ModItem, IRecordBookItem
             hintText = localized.Format([hintText]);
             var line = new TooltipLine(Mod, "RecordHint" + counter, hintText)
             {
-                OverrideColor = state switch
+                Color = state switch
                 {
                     RecordHintState.Hinted => Color.Gray,
                     RecordHintState.Found => Color.MediumPurple,

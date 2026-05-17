@@ -39,7 +39,7 @@ public class GuideDream() : BagLikeDreams(1, () => true, 0, 0, () => [(ItemID.Wa
     public override void ModifyTooltips(List<TooltipLine> tooltips)
     {
         if (!Main.hardMode)
-            tooltips.Add(new TooltipLine(Mod, "Unlock", this.GetLocalizedValue("Unlock")) { OverrideColor = Color.Lerp(Color.Gray, Color.DarkGray, Main.mouseTextColor / 255f) });
+            tooltips.Add(new TooltipLine(Mod, "Unlock", this.GetLocalizedValue("Unlock")) { Color = Color.Lerp(Color.Gray, Color.DarkGray, Main.mouseTextColor / 255f) });
         base.ModifyTooltips(tooltips);
     }
 
@@ -63,7 +63,7 @@ public class StylistDream() : BagLikeDreams(20, () => NPC.savedStylist, ModConte
     public override void ModifyTooltips(List<TooltipLine> tooltips)
     {
         if (!NPC.downedPlantBoss)
-            tooltips.Add(new TooltipLine(Mod, "Unlock", this.GetLocalizedValue("Unlock")) { OverrideColor = Color.Lerp(Color.Gray, Color.DarkGray, Main.mouseTextColor / 255f) });
+            tooltips.Add(new TooltipLine(Mod, "Unlock", this.GetLocalizedValue("Unlock")) { Color = Color.Lerp(Color.Gray, Color.DarkGray, Main.mouseTextColor / 255f) });
         base.ModifyTooltips(tooltips);
     }
 
