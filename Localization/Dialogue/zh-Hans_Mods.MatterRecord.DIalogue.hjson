@@ -71,6 +71,8 @@ Recorder: {
 		这能让他更好地和鱼在一起
 		'''
 	PrincessDialogue: "{0}总是缠着我听故事，我乐意于此，但有些故事似乎不适合给小孩子讲......"
+	# 给予生命水晶
+	GivenLifeCrystal: 好像变得更健康了一点点，你平时都吃这个的吗？
 }
 
 DreamSlime: {

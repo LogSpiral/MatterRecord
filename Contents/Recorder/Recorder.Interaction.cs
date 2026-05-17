@@ -222,41 +222,24 @@ public partial class Recorder
                 return false;
             }
 
-            public override string GetText() => "给予生命水晶";
+            public override string GetText() => TalkNPC.ModNPC is Recorder recorder ? recorder.GetLocalizedValue("GivingLifeCrystal") : string.Empty;
 
             public override void Interact()
             {
-                var NPC = TalkNPC;
                 var localPlayer = Main.LocalPlayer.GetModPlayer<RecorderLocalPlayer>();
-                bool hasLifeCrystal = Main.LocalPlayer.HasItem(ItemID.LifeCrystal);
-                if (localPlayer.LocalData.LifeCrystalCounter == 2 && hasLifeCrystal)
+                if (localPlayer.LocalData.LifeCrystalCounter == 2 && Main.LocalPlayer.FindItem(ItemID.LifeCrystal) is { } itemIndex && itemIndex != -1)
                 {
-                    int itemIndex = Main.LocalPlayer.FindItem(ItemID.LifeCrystal);
-                    if (itemIndex != -1)
-                    {
-                        // 消耗一个生命水晶
-                        Main.LocalPlayer.inventory[itemIndex].stack--;
-                        if (Main.LocalPlayer.inventory[itemIndex].stack <= 0)
-                            Main.LocalPlayer.inventory[itemIndex] = new Item();
+                    // 消耗一个生命水晶
+                    Main.LocalPlayer.inventory[itemIndex].stack--;
+                    if (Main.LocalPlayer.inventory[itemIndex].stack <= 0)
+                        Main.LocalPlayer.inventory[itemIndex].TurnToAir();
 
-                        // 播放音效
-                        SoundEngine.PlaySound(SoundID.Item29, NPC.Center);
+                    // 增加本地额外生命
+                    localPlayer.LocalData.ExtraLife += 20;
+                    localPlayer.SaveData();
+                    ExtraLifeWorldDataIncreaseSync.Get().Send(runLocally: true);
 
-                        // 增加记录者生命值与上限
-                        NPC.lifeMax += 20;
-                        NPC.life += 20;
-                        if (NPC.life > NPC.lifeMax) NPC.life = NPC.lifeMax;
-
-                        // 显示绿色数字
-                        CombatText.NewText(NPC.Hitbox, CombatText.HealLife, 20);
-
-                        // 多人同步
-                        if (Main.netMode == NetmodeID.Server)
-                            NetMessage.SendData(MessageID.SyncNPC, -1, -1, null, NPC.whoAmI);
-
-                        // 输出指定对话
-                        SetChatText("好像变得更健康了一点点，你平时都吃这个的吗？");
-                    }
+                    SetChatText(Language.GetTextValue("Mods.MatterRecord.Dialogue.Recorder.GivenLifeCrystal"));
                 }
             }
         }

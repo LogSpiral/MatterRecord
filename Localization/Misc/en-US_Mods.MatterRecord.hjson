@@ -40,7 +40,7 @@ NPCs: {
 		HowManyRequiredForReward: Collect {0} more records, and you can get a new item from me, Keep it up
 		HowManyRequiredToFullClear: There's only {0} records left, you are almost done it!
 		AllRecordUnlocked: All the records known has been collected yet, thanks for your effort! Have fun
-
+		GivingLifeCrystal: 给予生命水晶
 		TownNPCMood: {
 			Content: 这个地方还不错……如果忽略掉那些小麻烦的话
 			NoHome: 有椅子和工作台就行，监狱也无所谓，我只是想有个地方能休息
