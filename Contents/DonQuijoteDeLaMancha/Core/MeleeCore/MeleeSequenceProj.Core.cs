@@ -71,7 +71,6 @@ public abstract partial class MeleeSequenceProj : ModProjectile
         Projectile.tileCollide = false;
         Projectile.penetrate = -1;
         Projectile.aiStyle = -1;
-        Projectile.hide = true;
         Projectile.usesLocalNPCImmunity = true;
         Projectile.localNPCHitCooldown = 8;
         Projectile.ownerHitCheck = true;
