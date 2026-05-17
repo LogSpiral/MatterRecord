@@ -1,11 +1,13 @@
 ﻿using MatterRecord.Contents.ImperfectPage;
 using MatterRecord.Contents.LordOfTheFlies;
+using MatterRecord.Contents.Recorder.Dialogue;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoMod.Cil;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using Terraria.Audio;
 using Terraria.Chat;
 using Terraria.GameContent.Bestiary;
 using Terraria.GameContent.Personalities;
@@ -18,9 +20,10 @@ namespace MatterRecord.Contents.Recorder;
 [AutoloadHead]
 public partial class Recorder : ModNPC
 {
-    // 气泡文本字段（供对话模块使用）
+    // 气泡文本字段
     public string ChatText;
     public int ChatTimer;
+    private bool _firstTick = true;
 
     public override void Load()
     {
@@ -107,10 +110,39 @@ public partial class Recorder : ModNPC
         NPC.damage = 10;
         NPC.defense = 15;
         NPC.lifeMax = 250;
+        NPC.life = 250;
         NPC.HitSound = SoundID.NPCHit1;
         NPC.DeathSound = SoundID.NPCDeath1;
         NPC.knockBackResist = 0.5f;
         AnimationType = NPCID.Steampunker;
+        _firstTick = Main.netMode != NetmodeID.MultiplayerClient;
+    }
+
+    public override void AI()
+    {
+        base.AI();
+        if (_firstTick)
+        {
+            UpdateLifeFromExtraLife(Main.dedServ ? RecorderSystem.RecorderExtraLifeData : Main.LocalPlayer.GetModPlayer<RecorderLocalPlayer>().LocalData.ExtraLife);
+            _firstTick = false;
+        }
+    }
+
+    public void UpdateLifeFromExtraLife(int maxExtraLife, bool increaseMode = false)
+    {
+        int newLifeMax = 250 + maxExtraLife;
+        if (NPC.lifeMax != newLifeMax)
+        {
+            NPC.lifeMax = newLifeMax;
+            if (increaseMode && !Main.dedServ) 
+            {
+                SoundEngine.PlaySound(SoundID.Item29, NPC.Center);
+                CombatText.NewText(NPC.Hitbox, CombatText.HealLife, 20);
+                NPC.life += 20;
+            }
+            else
+                NPC.life = newLifeMax;
+        }
     }
 
     public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)

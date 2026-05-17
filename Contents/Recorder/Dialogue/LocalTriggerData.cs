@@ -7,5 +7,6 @@
         public int TuningCounter { get; set; } = 0;
         public int LifeCrystalCounter { get; set; } = 0;
         public int CharlieCounter { get; set; } = 0;
+        public int ExtraLife { get; set; } = 0;  // 本地累计贡献的生命值
     }
 }

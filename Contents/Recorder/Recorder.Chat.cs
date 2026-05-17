@@ -1,14 +1,14 @@
-﻿using MatterRecord.Contents.ImperfectPage;
+﻿using Microsoft.Xna.Framework;
+using MatterRecord.Contents.ImperfectPage;
 using MatterRecord.Contents.TheInterpretationOfDreams;
-using MatterRecord.Contents.Recorder.Dialogue;  // 新增引用
+using MatterRecord.Contents.Recorder.Dialogue;
 using System.Collections.Generic;
-using Terraria.Audio;  // 新增引用
+using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.Localization;
 using Terraria.ModLoader.IO;
 using Terraria.Utilities;
-using Microsoft.Xna.Framework;
 
 namespace MatterRecord.Contents.Recorder;
 
@@ -27,11 +27,11 @@ public partial class Recorder
                 ModContent.NPCType<Recorder>(),
                 [
                     Interactions.FirstMeet.Instance,
+                    Interactions.GivingLifeCrystal.Instance,
                     Interactions.AskForSlime.Instance,
                     Interactions.SlimeReward.Instance,
                     Interactions.CollectingReward.Instance,
                     Interactions.UnlockingRecord.Instance,
-                    Interactions.GivingLifeCrystal.Instance,
                     Interactions.RecordCollectingProgress.Instance
                 ]);
         NPCInteractions.All.Add(Interactions.Copy.Instance);
@@ -74,7 +74,6 @@ public partial class Recorder
         static string Dialogue(string key) => Language.GetTextValue($"Mods.MatterRecord.Dialogue.Recorder.{key}");
         static string DialogueWithArgs(string key, params object[] args) => Language.GetTextValue($"Mods.MatterRecord.Dialogue.Recorder.{key}", args);
         var recordPlayer = Main.LocalPlayer.GetModPlayer<RecorderPlayer>();
-        // 首次见面奖励
         if (!recordPlayer.MetWithRecorder)
         {
             chatResult = DialogueWithArgs("FirstMeet.1", NPC.GivenName);

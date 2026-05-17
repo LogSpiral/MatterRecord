@@ -1,6 +1,7 @@
 namespace MatterRecord.Contents.InternalDocument;
 
 using Microsoft.Xna.Framework;
+
 public class InternalDocument : ModItem
 {
     public override void SetDefaults()
@@ -13,28 +14,29 @@ public class InternalDocument : ModItem
         Item.autoReuse = true;
 
         Item.DamageType = DamageClass.Melee;
-        Item.damage = 1;
-        Item.knockBack = 4f;
+        Item.damage = 6;                     // 基础伤害改为 6
+        Item.knockBack = 5f;
         Item.crit = 0;
 
-        Item.value = Item.sellPrice(copper: 1);
+        Item.value =100;
         Item.rare = ItemRarityID.White;
         Item.UseSound = SoundID.Item1;
     }
 
     public override void UseStyle(Player player, Rectangle heldItemFrame)
     {
-
         player.itemLocation.X -= 1f;
         player.itemLocation.Y += 6f;
     }
+
     public override void ModifyWeaponDamage(Player player, ref StatModifier damage)
     {
-        // 修正：使用正确的方法获取启用的模组数量
+        // 获取当前已启用的模组总数
         int enabledModCount = ModLoader.Mods.Length;
 
-        // 每个模组提供+1伤害
-        damage.Base = enabledModCount - 2;
+        // 每个模组提供 +5% 伤害（乘法）
+        float multiplier = 1f + 0.05f * enabledModCount;
+        damage *= multiplier;
     }
 
     public override void AddRecipes()

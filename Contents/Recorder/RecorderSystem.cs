@@ -21,6 +21,7 @@ namespace MatterRecord.Contents.Recorder;
 
 public class RecorderSystem : ModSystem
 {
+    public static int RecorderExtraLifeData { get; set; }
     public override void PostSetupContent()
     {
         foreach (var pair in ContentSamples.ItemsByType)
@@ -84,11 +85,14 @@ public class RecorderSystem : ModSystem
             _itemLockRecords = records;
         else
             _itemLockRecords = default;
+        if (tag.TryGet<int>("EL", out var extraLife))
+            RecorderExtraLifeData = extraLife;
         base.LoadWorldData(tag);
     }
     public override void SaveWorldData(TagCompound tag)
     {
         tag.Add("LR", (ulong)_itemLockRecords);
+        tag.Add("EL", RecorderExtraLifeData);
         base.SaveWorldData(tag);
     }
 
@@ -106,7 +110,7 @@ public class RecorderSystem : ModSystem
     }
 
     public static Dictionary<int, int> RecordSpawnCooldown { get; } = [];
-    public static void SetCooldown<T>(int cooldown = 1800)  where T:ModItem
+    public static void SetCooldown<T>(int cooldown = 1800) where T : ModItem
     {
         RecordSpawnCooldown[ModContent.ItemType<T>()] = cooldown;
     }

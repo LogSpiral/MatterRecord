@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using MatterRecord.Contents.EmeraldTablet;
+using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,7 +25,7 @@ public class FaustGlobalItem : GlobalItem
         }
         tooltips.Clear();
         tooltips.Add(dummy);
-        if (item.value == 0 || item.type == ModContent.ItemType<Faust>() || Main.ItemDropsDB.GetRulesForItemID(item.type).Any() || (item.type >= ItemID.CopperCoin && item.type <= ItemID.PlatinumCoin))
+        if (item.value == 0 || item.type == ModContent.ItemType<Faust>() || Main.ItemDropsDB.GetRulesForItemID(item.type).Count != 0 || EmeraldUI.IsItemANPCBanner(item.type) || (item.type >= ItemID.CopperCoin && item.type <= ItemID.PlatinumCoin))
             tooltips.Add(new TooltipLine(Mod, "CantBuyIt", Language.GetTextValue("Mods.MatterRecord.Items.Faust.CantButIt")) { OverrideColor = Color.Lerp(Color.Gray, Color.DarkGray, MathF.Cos(Main.GlobalTimeWrappedHourly) * .5f + .5f) });
         else
         {
@@ -94,7 +95,8 @@ public class FaustGlobalItem : GlobalItem
         if (!Faust.Active) goto Label;
         if (item.value == 0) goto Label;
         if (item.type == ModContent.ItemType<Faust>()) goto Label;
-        if (Main.ItemDropsDB.GetRulesForItemID(item.type).Any()) goto Label;
+        if (Main.ItemDropsDB.GetRulesForItemID(item.type).Count != 0) goto Label;
+        if (EmeraldUI.IsItemANPCBanner(item.type)) goto Label;
         if (player.CanAfford((long)item.GetStoreValue() * 4))
         {
             if (Main.stackSplit > 1) return;
@@ -139,7 +141,7 @@ public class FaustGlobalItem : GlobalItem
         if (item.value == 0) return false;
         if (item.type == ModContent.ItemType<UnloadedItem>()) return false;
         if (item.type == ModContent.ItemType<Faust>()) return false;
-
+        if (EmeraldUI.IsItemANPCBanner(item.type)) return false;
         if (!Main.LocalPlayer.CanAfford((long)item.GetStoreValue() * 4)) return false;
         if (item.type >= ItemID.CopperCoin && item.type <= ItemID.PlatinumCoin) return false;
         if (Faust.Active)

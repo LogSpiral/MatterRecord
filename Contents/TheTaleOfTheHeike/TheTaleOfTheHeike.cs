@@ -43,7 +43,7 @@ public class TheTaleOfTheHeikePlayer : ModPlayer
         if (!Equipped) return;
 
         float targetHpPercent = target.life / (float)target.lifeMax;
-        float damageMultiplier = 1f + (1f - targetHpPercent) * 0.3f;
+        float damageMultiplier = 1f + (1f - targetHpPercent) * 0.25f;
         modifiers.FinalDamage *= damageMultiplier;
     }
 
@@ -53,7 +53,7 @@ public class TheTaleOfTheHeikePlayer : ModPlayer
         if (!Equipped) return;
 
         float playerHpPercent = Player.statLife / (float)Player.statLifeMax2;
-        float damageMultiplier = 1f + (1f - playerHpPercent) * 0.3f;
+        float damageMultiplier = 1f + (1f - playerHpPercent) * 0.25f;
         modifiers.FinalDamage *= damageMultiplier;
     }
 

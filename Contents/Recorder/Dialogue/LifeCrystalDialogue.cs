@@ -27,7 +27,7 @@ namespace MatterRecord.Contents.Recorder.Dialogue
         {
             if (data.TuningCounter == 2 && data.LifeCrystalCounter == 0 && _stage == 0 && !_player.AnyModuleActive)
             {
-                if (player.controlUseItem && player.HeldItem.type == ItemID.LifeCrystal && player.statLifeMax2 >= 400)
+                if (player.controlUseItem && player.HeldItem.type == ItemID.LifeCrystal && player.ConsumedLifeCrystals >= Player.LifeCrystalMax - 1)
                 {
                     if (!_prevControlUseItem) TryStart(data);
                 }

@@ -4,10 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Text.Json;
 using Microsoft.Xna.Framework;
-using Terraria;
-using Terraria.ModLoader;
-using Terraria.ID;
-using MatterRecord.Contents.Recorder;
 
 namespace MatterRecord.Contents.Recorder.Dialogue
 {
@@ -50,11 +46,14 @@ namespace MatterRecord.Contents.Recorder.Dialogue
 
         public override void OnEnterWorld()
         {
-            if (Main.netMode == NetmodeID.Server) return;
             LocalData = LoadData();
 
             foreach (var module in _modules)
                 module.OnEnterWorld(Player, LocalData);
+
+            // 仅在多人的时候将本地数据发给服务器
+            if (Main.netMode is NetmodeID.MultiplayerClient)
+                ExtraLifeSync.Get(LocalData.ExtraLife).Send();
         }
 
         public override void PostUpdate()
