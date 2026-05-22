@@ -299,3 +299,8 @@ TaijiNoYume: {
 		   而感到害怕吗......”
 		'''
 }
+
+Eraser: {
+	DisplayName: 橡皮擦
+	Tooltip: 擦去所有你不喜欢的东西
+}

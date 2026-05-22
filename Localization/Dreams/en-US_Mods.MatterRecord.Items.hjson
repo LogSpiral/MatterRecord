@@ -299,3 +299,8 @@ TaijiNoYume: {
 		Is it the mother's heart you fear?"
 		'''
 }
+
+Eraser: {
+	DisplayName: Eraser
+	Tooltip: ""
+}
