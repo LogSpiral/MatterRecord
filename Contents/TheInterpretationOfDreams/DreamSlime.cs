@@ -90,7 +90,7 @@ public class DreamSlime : ModNPC
     public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         => bestiaryEntry.Info.AddRange([BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Surface, new FlavorTextBestiaryInfoElement("Mods.MatterRecord.Bestiary.DreamSlime")]);
     public override string GetChat() => Language.GetTextValue($"Mods.MatterRecord.Dialogue.DreamSlime.Chatter_{Main.rand.Next(1, 4)}");
-    public override void SetChatButtons(ref string button, ref string button2) => button = Language.GetTextValue("UI.PetTheAnimal");
+    //public override void SetChatButtons(ref string button, ref string button2) => button = Language.GetTextValue("UI.PetTheAnimal");
 
     public override bool PreAI()
     {

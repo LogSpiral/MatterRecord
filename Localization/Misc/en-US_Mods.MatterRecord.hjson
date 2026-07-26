@@ -62,6 +62,7 @@ NPCs: {
 	DreamSlime: {
 		DisplayName: Dream Slime
 		Name: TuanZi
+		TownNPCMood.NoHome: *Hrumble grumble* ?
 	}
 }
 

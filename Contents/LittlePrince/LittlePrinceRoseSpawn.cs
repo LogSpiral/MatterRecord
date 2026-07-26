@@ -41,7 +41,7 @@ public class LittlePrinceRoseSpawn : GlobalTile
         return true;
     }
 
-    public override void RandomUpdate(int i, int j, int type)
+    public override void RandomUpdate(int i, int j, int type,bool underground)
     {
         if (type != TileID.Tombstones) return;
         Vector2 spt = new Vector2(Main.spawnTileX, Main.spawnTileY);

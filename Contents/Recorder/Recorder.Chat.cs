@@ -21,22 +21,6 @@ public partial class Recorder
     }
 
     private static Interactions.MultiInteraction MultiInteraction { get; set; }
-    private static void InteractionRegister()
-    {
-        MultiInteraction ??= new Interactions.MultiInteraction(
-                ModContent.NPCType<Recorder>(),
-                [
-                    Interactions.FirstMeet.Instance,
-                    Interactions.GivingLifeCrystal.Instance,
-                    Interactions.AskForSlime.Instance,
-                    Interactions.SlimeReward.Instance,
-                    Interactions.CollectingReward.Instance,
-                    Interactions.UnlockingRecord.Instance,
-                    Interactions.RecordCollectingProgress.Instance
-                ]);
-        NPCInteractions.All.Add(Interactions.Copy.Instance);
-        NPCInteractions.All.Add(MultiInteraction);
-    }
     private static string UnlockRecord(int type, IRecordBookItem recordBook, bool fromReward = false)
     {
         static string Dialogue(string key) => Language.GetTextValue($"Mods.MatterRecord.Dialogue.Recorder.{key}");

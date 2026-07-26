@@ -62,6 +62,7 @@ NPCs: {
 	DreamSlime: {
 		DisplayName: 梦境史莱姆
 		Name: 团子
+		TownNPCMood.NoHome: *叽里咕噜* ?
 	}
 }
 

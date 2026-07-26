@@ -89,8 +89,23 @@ public partial class Recorder : ModNPC
         ContentSamples.NpcBestiaryRarityStars[Type] = 3;
 
         InitializeLocalization();
-        InteractionRegister();
+    }
 
+    public override void RegisterChatButtons(NPCInteractionList interactions)
+    {
+        MultiInteraction ??= new Interactions.MultiInteraction(
+                ModContent.NPCType<Recorder>(),
+                [
+                    Interactions.FirstMeet.Instance,
+                    Interactions.GivingLifeCrystal.Instance,
+                    Interactions.AskForSlime.Instance,
+                    Interactions.SlimeReward.Instance,
+                    Interactions.CollectingReward.Instance,
+                    Interactions.UnlockingRecord.Instance,
+                    Interactions.RecordCollectingProgress.Instance
+                ]);
+        interactions.InsertBefore(Interactions.Copy.Instance, NPCInteractionDatabase.CloseButton);
+        interactions.InsertBefore(MultiInteraction, NPCInteractionDatabase.CloseButton);
     }
 
     public override bool ModifyDeathMessage(ref NetworkText customText, ref Color color)
