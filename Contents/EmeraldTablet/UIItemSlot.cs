@@ -29,18 +29,19 @@ public class UIItemSlot : UIElement
         get => _item;
         set => _item = value;
     }
-
+    public static readonly Item[] SingleSlotItemArray = new Item[1];
     public override void DrawSelf(SpriteBatch spriteBatch)
     {
         if (IsMouseHovering)
         {
             Main.LocalPlayer.mouseInterface = true;
             var item = _item;
-            Item[] tempArray = [_item];
-            ItemSlot.OverrideHover(tempArray, _itemSlotContext);
-            ItemSlot.LeftClick(tempArray, _itemSlotContext);
-            ItemSlot.RightClick(tempArray, _itemSlotContext);
-            ItemSlot.MouseHover(tempArray, _itemSlotContext);
+            SingleSlotItemArray[0] = _item;
+            ItemSlot.OverrideHover(SingleSlotItemArray, _itemSlotContext);
+            ItemSlot.LeftClick(SingleSlotItemArray, _itemSlotContext);
+            ItemSlot.RightClick(SingleSlotItemArray, _itemSlotContext);
+            ItemSlot.MouseHover(SingleSlotItemArray, _itemSlotContext);
+            _item = SingleSlotItemArray[0];
             if (item != _item)
                 OnItemChanged?.Invoke(_item);
         }

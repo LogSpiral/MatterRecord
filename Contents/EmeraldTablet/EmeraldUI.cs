@@ -254,7 +254,7 @@ public class EmeraldUI : UIState
         _mainPanel.OnUpdate += elem => { if (_mainPanel.IsMouseHovering) Main.LocalPlayer.mouseInterface = true; };
         Mask.Append(_mainPanel);
 
-        _bannerSlot = new UIItemSlot(ItemSlot.Context.ChestItem, 0.8f);
+        _bannerSlot = new UIItemSlot(ItemSlot.Context.InventoryItem, 0.8f);
         _bannerSlot.Width.Set(52, 0);
         _bannerSlot.Height.Set(52, 0);
         _bannerSlot.Left.Set(2, 0f);
