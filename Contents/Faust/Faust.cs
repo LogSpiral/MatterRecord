@@ -199,18 +199,44 @@ public class Faust : ModItem, IRecordBookItem
 
         base.ModifyTooltips(tooltips);
     }
+
+    // ==================== 获取提示对应的物品ID（用于 [i:ID] 标签） ====================
+    private int? GetItemIdForHintKey(string hintKey)
+    {
+        if (string.IsNullOrEmpty(hintKey) || !hintKey.EndsWith("Hint"))
+            return null;
+
+        string enumName = hintKey.Substring(0, hintKey.Length - 4);
+        if (!Enum.TryParse<ItemRecords>(enumName, out var record))
+            return null;
+
+        var system = RecorderSystem.Instance;
+        if (system == null || !system.RecordToItemType.TryGetValue(record, out int itemId))
+            return null;
+
+        if (itemId <= 0 || itemId >= ItemLoader.ItemCount)
+            return null;
+
+        return itemId;
+    }
+    // ================================================================
+
     public override bool PreDrawTooltip(ReadOnlyCollection<TooltipLine> lines, ref int x, ref int y)
     {
         if (!this.IsRecordUnlocked) return true;
+
         List<TooltipLine> extraLines = [];
         Dictionary<string, RecordHintState> hints = RecorderPlayer.GetHintedKeysWithState();
         if (hints.Count == 0)
             return true;
+
         extraLines.Add(new TooltipLine(Mod, "RecordHintList", this.GetLocalizedValue("HintList")));
+
         int counter = 0;
-        foreach (var (hint, state) in hints)
+        foreach (var (hintKey, state) in hints)
         {
-            var hintText = this.GetLocalizedValue(hint);
+            // 获取提示文本
+            var hintText = this.GetLocalizedValue(hintKey);
             var localized = this.GetLocalization(state switch
             {
                 RecordHintState.Hinted => "HintNotFound",
@@ -219,6 +245,14 @@ public class Faust : ModItem, IRecordBookItem
                 _ => "HintNotFound"
             });
             hintText = localized.Format([hintText]);
+
+            // ★ 添加物品图标标签 [i:itemId] ★
+            int? itemId = GetItemIdForHintKey(hintKey);
+            if (itemId.HasValue)
+            {
+                hintText = $"[i:{itemId.Value}] {hintText}";
+            }
+
             var line = new TooltipLine(Mod, "RecordHint" + counter, hintText)
             {
                 OverrideColor = state switch
@@ -229,6 +263,7 @@ public class Faust : ModItem, IRecordBookItem
                     _ => Color.Transparent
                 }
             };
+
             extraLines.Add(line);
             counter++;
         }
@@ -237,5 +272,3 @@ public class Faust : ModItem, IRecordBookItem
         return true;
     }
 }
-
-
