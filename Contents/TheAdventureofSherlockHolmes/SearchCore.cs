@@ -13,7 +13,7 @@ namespace MatterRecord.Contents.TheAdventureofSherlockHolmes
 {
     public static class SearchCore
     {
-        // 配置参数（硬编码）
+        // 配置参数
         private const int MAX_RESULTS = 1500;
         private const float MARKER_SCALE_BASE = 0.9f;
         private const bool ENABLE_VEIN_SCALING = true;
@@ -21,6 +21,7 @@ namespace MatterRecord.Contents.TheAdventureofSherlockHolmes
         private const float VEIN_SCALE_MAX = 1.25f;
         private const int VEIN_SCALE_MIN_TILES = 4;
         private const int VEIN_SCALE_MAX_TILES = 40;
+        private const int REFRESH_INTERVAL = 120; // 2秒
 
         private static Asset<Texture2D> _markerTexture;
         private static string _currentQuery = "";
@@ -28,17 +29,22 @@ namespace MatterRecord.Contents.TheAdventureofSherlockHolmes
         private static string _pendingQuery = "";
         private static int _pendingSearchDelay = 0;
 
-        // 公开属性供外部保存状态
+        // 用户输入、精确匹配标志、刷新计时器
+        public static string UserInputText = "";
+        private static bool _exactMatch = false;
+        private static int _refreshTimer = 0;
+
+        // 公开属性
         public static string CurrentQuery => _currentQuery;
         public static IReadOnlyList<Point> Results => _resultEntries.Select(r => r.Position).ToList().AsReadOnly();
+        public static bool HasActiveSearch => _resultEntries.Count > 0 && !string.IsNullOrWhiteSpace(_currentQuery);
 
+        // 八方向邻居偏移
         private static readonly Point[] _neighborOffsets = {
             new Point(-1,-1), new Point(0,-1), new Point(1,-1),
             new Point(-1,0),  new Point(1,0),
             new Point(-1,1),  new Point(0,1), new Point(1,1)
         };
-
-        public static bool HasActiveSearch => _resultEntries.Count > 0 && !string.IsNullOrWhiteSpace(_currentQuery);
 
         public static void Load()
         {
@@ -63,13 +69,23 @@ namespace MatterRecord.Contents.TheAdventureofSherlockHolmes
 
         public static void QueueSearch(string query)
         {
-            _currentQuery = query?.Trim() ?? "";
+            UserInputText = query?.Trim() ?? "";
+            _currentQuery = UserInputText;
             _pendingQuery = _currentQuery;
             _pendingSearchDelay = 12;
+            _exactMatch = false; // 包含匹配
             if (string.IsNullOrWhiteSpace(_currentQuery))
                 ClearSearch();
 
-            // 新搜索执行时，清除旧保存状态（通知 LocatorPlayer）
+            var player = Main.LocalPlayer?.GetModPlayer<LocatorPlayer>();
+            if (player != null)
+                player.ClearSavedState();
+        }
+
+        public static void ForceSearchByExactName(string exactTileName)
+        {
+            _exactMatch = true;
+            RunSearchNow(exactTileName, exactMatch: true);
             var player = Main.LocalPlayer?.GetModPlayer<LocatorPlayer>();
             if (player != null)
                 player.ClearSavedState();
@@ -77,15 +93,45 @@ namespace MatterRecord.Contents.TheAdventureofSherlockHolmes
 
         public static void Update()
         {
+            // 清除已破坏的图格标记
+            CleanInvalidMarkers();
+
+            // 执行延迟搜索（如果有）
             if (_pendingSearchDelay > 0)
             {
                 _pendingSearchDelay--;
                 if (_pendingSearchDelay == 0)
-                    RunSearchNow(_pendingQuery, exactMatch: false);
+                    RunSearchNow(_pendingQuery, _exactMatch);
+            }
+
+            // 只要查询非空就持续刷新（即使无标记）
+            if (!string.IsNullOrWhiteSpace(_currentQuery) && _pendingSearchDelay == 0)
+            {
+                _refreshTimer++;
+                if (_refreshTimer >= REFRESH_INTERVAL)
+                {
+                    _refreshTimer = 0;
+                    RunSearchNow(_currentQuery, _exactMatch);
+                }
+            }
+            else
+            {
+                _refreshTimer = 0;
             }
         }
 
-        // 核心搜索：支持精确匹配或包含匹配
+        private static void CleanInvalidMarkers()
+        {
+            if (_resultEntries.Count == 0) return;
+            _resultEntries.RemoveAll(entry =>
+            {
+                Point p = entry.Position;
+                if (!WorldGen.InWorld(p.X, p.Y, 0)) return true;
+                Tile tile = Main.tile[p.X, p.Y];
+                return tile == null || !tile.HasTile;
+            });
+        }
+
         private static void RunSearchNow(string query, bool exactMatch)
         {
             _resultEntries.Clear();
@@ -95,15 +141,14 @@ namespace MatterRecord.Contents.TheAdventureofSherlockHolmes
             string normalizedQuery = NormalizeSearchText(_currentQuery);
             if (string.IsNullOrWhiteSpace(normalizedQuery)) return;
 
-            // 1. 搜索普通图格（排除箱子图格）
+            // 搜索普通图格（排除箱子）
             FindTileClusters(normalizedQuery, excludeChests: true, exactMatch);
             if (_resultEntries.Count >= MAX_RESULTS) return;
 
-            // 2. 搜索箱子实例
+            // 搜索箱子实例
             SearchChests(normalizedQuery, exactMatch);
         }
 
-        // 图格集群搜索（基于地图显示名称）
         private static void FindTileClusters(string query, bool excludeChests, bool exactMatch)
         {
             var visited = new HashSet<int>();
@@ -121,7 +166,6 @@ namespace MatterRecord.Contents.TheAdventureofSherlockHolmes
 
                     var tile = Main.tile[i, j];
                     if (tile == null || !tile.HasTile) continue;
-
                     if (excludeChests && IsChestTile(tile)) continue;
 
                     int packed = PackPoint(i, j);
@@ -168,7 +212,6 @@ namespace MatterRecord.Contents.TheAdventureofSherlockHolmes
             }
         }
 
-        // 箱子实例搜索
         private static void SearchChests(string query, bool exactMatch)
         {
             for (int i = 0; i < Main.maxChests; i++)
@@ -214,7 +257,6 @@ namespace MatterRecord.Contents.TheAdventureofSherlockHolmes
             }
         }
 
-        // 获取所有箱子的候选名称（用于建议列表）
         public static HashSet<string> GetAllChestNames()
         {
             HashSet<string> names = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
@@ -248,7 +290,6 @@ namespace MatterRecord.Contents.TheAdventureofSherlockHolmes
             return names;
         }
 
-        // 获取匹配的图格/箱子名称（用于建议列表，使用包含匹配）
         public static List<string> GetMatchingTileNames(string query, int maxResults = 20)
         {
             if (string.IsNullOrWhiteSpace(query)) return new List<string>();
@@ -257,7 +298,7 @@ namespace MatterRecord.Contents.TheAdventureofSherlockHolmes
 
             HashSet<string> uniqueNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
-            // 1. 从图格中收集
+            // 从普通图格收集
             for (int i = 0; i < Main.maxTilesX; i++)
             {
                 for (int j = 0; j < Main.maxTilesY; j++)
@@ -273,7 +314,7 @@ namespace MatterRecord.Contents.TheAdventureofSherlockHolmes
                 }
             }
 
-            // 2. 从箱子中收集
+            // 从箱子收集
             for (int i = 0; i < Main.maxChests; i++)
             {
                 Chest chest = Main.chest[i];
@@ -304,16 +345,6 @@ namespace MatterRecord.Contents.TheAdventureofSherlockHolmes
             var list = uniqueNames.ToList();
             list.Sort((a, b) => a.Length.CompareTo(b.Length));
             return list;
-        }
-
-        // 强制精确搜索（用于建议项点击）
-        public static void ForceSearchByExactName(string exactTileName)
-        {
-            RunSearchNow(exactTileName, exactMatch: true);
-            // 新搜索后清除旧保存状态
-            var player = Main.LocalPlayer?.GetModPlayer<LocatorPlayer>();
-            if (player != null)
-                player.ClearSavedState();
         }
 
         private static bool IsChestTile(Tile tile)
@@ -399,6 +430,9 @@ namespace MatterRecord.Contents.TheAdventureofSherlockHolmes
             _currentQuery = "";
             _pendingQuery = "";
             _pendingSearchDelay = 0;
+            UserInputText = "";
+            _exactMatch = false;
+            _refreshTimer = 0;
         }
 
         public static void DrawResults(SpriteBatch sb)

@@ -1,7 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
+using System.Linq;
 using Terraria;
 using Terraria.ModLoader;
 using Terraria.UI;
+using MatterRecord.Contents.Recorder;
 
 namespace MatterRecord.Contents.TheAdventureofSherlockHolmes
 {
@@ -39,7 +41,7 @@ namespace MatterRecord.Contents.TheAdventureofSherlockHolmes
 
             if (_searchInterface.CurrentState != _searchPanel)
             {
-                _searchPanel.ResetText();
+                _searchPanel.RestoreFromCore();
                 _searchInterface.SetState(_searchPanel);
             }
 
@@ -59,8 +61,18 @@ namespace MatterRecord.Contents.TheAdventureofSherlockHolmes
 
         private bool ShouldShowSearchUI()
         {
-            return Main.mapFullscreen && !Main.gameMenu &&
-                   Main.LocalPlayer.HeldItem.type == ModContent.ItemType<TheAdventureofSherlockHolmes>();
+            if (!Main.mapFullscreen || Main.gameMenu)
+                return false;
+
+            if (!RecorderSystem.CheckUnlock(ItemRecords.TheAdventureofSherlockHolmes))
+                return false;
+
+            int itemType = ModContent.ItemType<TheAdventureofSherlockHolmes>();
+            return Main.LocalPlayer.inventory.Union(Main.LocalPlayer.bank.item)
+                .Union(Main.LocalPlayer.bank2.item)
+                .Union(Main.LocalPlayer.bank3.item)
+                .Union(Main.LocalPlayer.bank4.item)
+                .Any(item => item.type == itemType);
         }
     }
 }

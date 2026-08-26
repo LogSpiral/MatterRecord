@@ -1,12 +1,12 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Terraria;
-using Terraria.ModLoader;
 using Terraria.ID;
-using ReLogic.Content;
+using Terraria.ModLoader;
 
 namespace MatterRecord.Contents.TheAdventureofSherlockHolmes
 {
@@ -29,16 +29,14 @@ namespace MatterRecord.Contents.TheAdventureofSherlockHolmes
             SavedMarkers.Clear();
         }
 
-        // 进入世界时重置所有保存的搜索状态（避免残留指引）
         public override void OnEnterWorld()
         {
             ClearSavedState();
-            // 同时清除当前搜索标记（但不影响地图UI）
             SearchCore.ClearSearch();
         }
     }
 
-    // 指引投射物（指向固定坐标）
+    // 指引投射物
     public class LocatorProjectile : ModProjectile
     {
         private Vector2 targetPos;
@@ -46,16 +44,11 @@ namespace MatterRecord.Contents.TheAdventureofSherlockHolmes
 
         public override string Texture => "MatterRecord/Contents/TheAdventureofSherlockHolmes/LocatorProjectile";
 
-        public override void SetStaticDefaults()
-        {
-            // Display name will be automatically set from localization or class name
-        }
-
         public override void SetDefaults()
         {
             Projectile.width = 22;
             Projectile.height = 28;
-            Projectile.light = 0f;        // 移除发光
+            Projectile.light = 0.8f;  // 发光效果
             Projectile.friendly = false;
             Projectile.hostile = false;
             Projectile.timeLeft = 2;
@@ -106,10 +99,13 @@ namespace MatterRecord.Contents.TheAdventureofSherlockHolmes
             Projectile.rotation = direction.ToRotation() + MathHelper.ToRadians(90f);
 
             Projectile.timeLeft = 2;
+
+            // 发光呼吸效果
+            Projectile.light = 0.6f + 0.3f * (float)Math.Sin(Main.GlobalTimeWrappedHourly * 5f);
         }
     }
 
-    // Mod系统：监听地图开关，管理投射物生成和状态保存
+    // Mod系统：管理投射物生成和状态同步
     public class LocatorSystem : ModSystem
     {
         private bool wasMapFullscreen = false;
@@ -126,25 +122,22 @@ namespace MatterRecord.Contents.TheAdventureofSherlockHolmes
         public override void UpdateUI(GameTime gameTime)
         {
             bool isMapFullscreen = Main.mapFullscreen;
-            if (isMapFullscreen != wasMapFullscreen)
-            {
-                if (!isMapFullscreen) // 地图关闭时保存搜索状态
-                {
-                    LocatorPlayer player = Main.LocalPlayer.GetModPlayer<LocatorPlayer>();
-                    player.SaveSearchState();
-                    RemoveProjectile(); // 地图关闭时移除指引投射物
-                }
-                wasMapFullscreen = isMapFullscreen;
-            }
+
+            // 实时同步标记到玩家数据（供弹幕使用）
+            LocatorPlayer player = Main.LocalPlayer.GetModPlayer<LocatorPlayer>();
+            player.SavedMarkers.Clear();
+            player.SavedMarkers.AddRange(SearchCore.Results); // 已过滤无效标记
 
             if (isMapFullscreen)
             {
-                RemoveProjectile();
+                RemoveProjectile(); // 地图全屏时移除弹幕
+                wasMapFullscreen = true;
                 return;
             }
 
-            // 非地图模式：更新指引投射物
+            // 非地图模式：更新弹幕
             UpdateLocatorProjectile();
+            wasMapFullscreen = false;
         }
 
         private void UpdateLocatorProjectile()
@@ -163,7 +156,6 @@ namespace MatterRecord.Contents.TheAdventureofSherlockHolmes
 
             if (currentProjectile != null && currentProjectile.Projectile.active)
             {
-                // 更新目标位置
                 currentProjectile.UpdateTarget(targetPos);
             }
             else

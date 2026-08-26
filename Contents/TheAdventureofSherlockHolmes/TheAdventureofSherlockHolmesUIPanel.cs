@@ -85,11 +85,16 @@ namespace MatterRecord.Contents.TheAdventureofSherlockHolmes
             if (text == _lastQuery) return;
             _lastQuery = text;
 
-            // 如果搜索栏被清空，清除所有标记
+            SearchCore.UserInputText = text;
+
             if (string.IsNullOrWhiteSpace(text))
             {
                 SearchCore.ClearSearch();
                 Main.LocalPlayer?.GetModPlayer<LocatorPlayer>().ClearSavedState();
+            }
+            else
+            {
+                SearchCore.QueueSearch(text);
             }
 
             UpdateSuggestionList(text);
@@ -121,13 +126,12 @@ namespace MatterRecord.Contents.TheAdventureofSherlockHolmes
                 return;
             }
 
-            // 有建议内容时，恢复背景和边框
             _suggestionPanel.BackgroundColor = new Color(26, 32, 56) * 0.96f;
             _suggestionPanel.BorderColor = new Color(95, 115, 190);
 
             foreach (string name in matches)
             {
-                var entry = new SuggestionEntry(name, OnSuggestionClicked);
+                var entry = new SuggestionEntry(name, OnSuggestionClicked, CancelCurrentSearch);
                 _suggestionList.Add(entry);
             }
 
@@ -140,30 +144,29 @@ namespace MatterRecord.Contents.TheAdventureofSherlockHolmes
             _mainPanel.Recalculate();
         }
 
+        // ===== 修改点：点击候选时先失焦 =====
         private void OnSuggestionClicked(string tileName)
         {
-            // 如果点击的候选项与当前正在搜索的相同 → 取消选取（清空标记和搜索栏）
+            // 失焦（如果输入框处于输入状态）
+            if (_searchBar != null && _searchBar.IsWritingText)
+                _searchBar.ToggleTakingText();
+
+            // 如果点击的是当前搜索项，不执行任何搜索
             if (string.Equals(tileName, SearchCore.CurrentQuery, System.StringComparison.OrdinalIgnoreCase))
-            {
-                SearchCore.ClearSearch();
-                Main.LocalPlayer?.GetModPlayer<LocatorPlayer>().ClearSavedState();
-                // 清空搜索栏文本并取消输入焦点
-                _searchBar.SetContents(string.Empty, false);
-                if (_searchBar.IsWritingText)
-                    _searchBar.ToggleTakingText();
-                // 刷新建议列表（变为空）
-                UpdateSuggestionList(string.Empty);
-            }
-            else
-            {
-                // 否则执行新搜索
-                SearchCore.ForceSearchByExactName(tileName);
-                // 取消搜索栏的输入状态（失去焦点）
-                if (_searchBar != null && _searchBar.IsWritingText)
-                {
-                    _searchBar.ToggleTakingText();
-                }
-            }
+                return;
+
+            SearchCore.ForceSearchByExactName(tileName);
+            UpdateSuggestionList(SearchCore.UserInputText);
+        }
+
+        private void CancelCurrentSearch()
+        {
+            SearchCore.ClearSearch();
+            Main.LocalPlayer?.GetModPlayer<LocatorPlayer>().ClearSavedState();
+            _searchBar.SetContents(string.Empty, false);
+            if (_searchBar.IsWritingText)
+                _searchBar.ToggleTakingText();
+            UpdateSuggestionList(string.Empty);
         }
 
         public override void Update(GameTime gameTime)
@@ -201,18 +204,30 @@ namespace MatterRecord.Contents.TheAdventureofSherlockHolmes
             _suggestionPanel.Recalculate();
             _mainPanel.Recalculate();
         }
+
+        public void RestoreFromCore()
+        {
+            string userInput = SearchCore.UserInputText;
+            _searchBar.SetContents(userInput, false);
+            UpdateSuggestionList(userInput);
+        }
     }
 
+    // ========== SuggestionEntry 类（包含您指定的叉号样式） ==========
     public class SuggestionEntry : UIPanel
     {
         private UIText _text;
+        private UIText _cancelText;
         private string _tileName;
         private System.Action<string> _onClick;
+        private System.Action _onCancel;
 
-        public SuggestionEntry(string tileName, System.Action<string> onClick)
+        public SuggestionEntry(string tileName, System.Action<string> onClick, System.Action onCancel)
         {
             _tileName = tileName;
             _onClick = onClick;
+            _onCancel = onCancel;
+
             Width.Set(0f, 1f);
             Height.Set(30f, 0f);
             BackgroundColor = new Color(40, 50, 70) * 0.9f;
@@ -223,10 +238,28 @@ namespace MatterRecord.Contents.TheAdventureofSherlockHolmes
             _text.Left.Set(8f, 0f);
             _text.Top.Set(5f, 0f);
             Append(_text);
+
+            // 叉号文本（您指定的位置和大小）
+            _cancelText = new UIText("×", 2.5f);
+            _cancelText.Left.Set(-37f, 1f);
+            _cancelText.Top.Set(-6f, 0f);
+            _cancelText.TextColor = Color.Transparent;
+            _cancelText.SetPadding(0f);
+            _cancelText.IgnoresMouseInteraction = true;
+            _cancelText.OnLeftMouseDown += (evt, element) =>
+            {
+                _onCancel?.Invoke();
+                SoundEngine.PlaySound(SoundID.MenuTick);
+            };
+            Append(_cancelText);
         }
 
         public override void LeftMouseDown(UIMouseEvent evt)
         {
+            // 如果点击在叉号区域，交由叉号处理，不触发条目点击
+            if (_cancelText != null && _cancelText.ContainsPoint(evt.MousePosition))
+                return;
+
             base.LeftMouseDown(evt);
             _onClick?.Invoke(_tileName);
             SoundEngine.PlaySound(SoundID.MenuTick);
@@ -235,7 +268,21 @@ namespace MatterRecord.Contents.TheAdventureofSherlockHolmes
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
-            if (IsMouseHovering)
+
+            bool isActive = string.Equals(_tileName, SearchCore.CurrentQuery, System.StringComparison.OrdinalIgnoreCase);
+            if (isActive)
+            {
+                _cancelText.TextColor = _cancelText.IsMouseHovering ? Color.OrangeRed : Color.Red;
+                _cancelText.IgnoresMouseInteraction = false;
+            }
+            else
+            {
+                _cancelText.TextColor = Color.Transparent;
+                _cancelText.IgnoresMouseInteraction = true;
+            }
+
+            // 背景悬停（避开叉号）
+            if (IsMouseHovering && !_cancelText.IsMouseHovering)
                 BackgroundColor = new Color(70, 80, 100) * 0.9f;
             else
                 BackgroundColor = new Color(40, 50, 70) * 0.9f;
