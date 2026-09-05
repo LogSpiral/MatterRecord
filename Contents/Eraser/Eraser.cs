@@ -1,5 +1,6 @@
 ﻿using MatterRecord;
 using Microsoft.Xna.Framework;
+using System.Collections.Generic;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
@@ -9,6 +10,11 @@ namespace MatterRecord.Contents.Eraser
 {
     public class Eraser : ModItem
     {
+        // 客户端节流：同一实体在 N tick 内只发送一次擦除请求，避免挥动动画期间每帧重复发包
+        private const int EraseCooldownTicks = 5;
+        private static readonly Dictionary<int, int> _npcEraseCooldown = new();
+        private static readonly Dictionary<int, int> _projEraseCooldown = new();
+
         public override void SetDefaults()
         {
             Item.damage = 0;
@@ -36,7 +42,17 @@ namespace MatterRecord.Contents.Eraser
                     Projectile p = Main.projectile[i];
                     if (p.active && p.Hitbox.Intersects(swordHitbox))
                     {
-                        p.Kill();
+                        if (Main.netMode == NetmodeID.MultiplayerClient)
+                        {
+                            // 客户端：本地视觉移除 + 请求服务器权威移除（弹幕状态由服务器管理）
+                            if (CanSendErase(_projEraseCooldown, i))
+                                EraserEraseSync.Get(1, i).Send();
+                            p.Kill();
+                        }
+                        else
+                        {
+                            KillProjectile(p);
+                        }
                     }
                 }
 
@@ -66,11 +82,18 @@ namespace MatterRecord.Contents.Eraser
                     NPC npc = Main.npc[i];
                     if (npc.active && npc.life > 0 && npc.Hitbox.Intersects(swordHitbox))
                     {
-                        npc.NPCLoot();
-                        npc.position.X = 999999f;
-                        npc.position.Y = 999999f;
-                        npc.life = 0;
-                        npc.active = false;
+                        if (Main.netMode == NetmodeID.MultiplayerClient)
+                        {
+                            // 客户端：仅本地视觉隐藏，并请求服务器权威秒杀，防止 NPC 被 SyncNPC 同步复活
+                            if (CanSendErase(_npcEraseCooldown, i))
+                                EraserEraseSync.Get(0, i).Send();
+                            npc.active = false;
+                            npc.life = 0;
+                        }
+                        else
+                        {
+                            KillNpc(npc);
+                        }
                     }
                 }
             }
@@ -94,6 +117,48 @@ namespace MatterRecord.Contents.Eraser
             Vector2 offset = new Vector2(halfLength * direction, 0).RotatedBy(rotation);
             Vector2 swordCenter = origin + offset;
             return new Rectangle((int)(swordCenter.X - width / 2), (int)(swordCenter.Y - height / 2), width, height);
+        }
+
+        /// <summary>
+        /// 判断某个实体是否已过冷却期、可以发送擦除请求（客户端节流用，避免挥动期间重复发包）。
+        /// </summary>
+        /// <param name="cooldown">该实体类型的冷却字典。</param>
+        /// <param name="index">实体索引。</param>
+        /// <returns>距离上次发送已超过冷却阈值时返回 true，并记录本次发送时刻。</returns>
+        private static bool CanSendErase(Dictionary<int, int> cooldown, int index)
+        {
+            int now = (int)Main.GameUpdateCount;
+            if (cooldown.TryGetValue(index, out int last) && now - last < EraseCooldownTicks)
+                return false;
+            cooldown[index] = now;
+            return true;
+        }
+
+        /// <summary>
+        /// 在服务器/单人模式下权威地秒杀 NPC：结算战利品、播放死亡效果、置为死亡并同步给所有客户端。
+        /// </summary>
+        /// <param name="npc">要秒杀的 NPC。</param>
+        public static void KillNpc(NPC npc)
+        {
+            npc.NPCLoot();
+            npc.HitEffect();
+            npc.life = 0;
+            npc.active = false;
+            npc.netUpdate = true;
+            if (Main.netMode == NetmodeID.Server)
+                NetMessage.SendData(MessageID.SyncNPC, -1, -1, null, npc.whoAmI);
+        }
+
+        /// <summary>
+        /// 在服务器/单人模式下权威地移除弹幕并同步给所有客户端。
+        /// </summary>
+        /// <param name="proj">要移除的弹幕。</param>
+        public static void KillProjectile(Projectile proj)
+        {
+            proj.Kill();
+            proj.netUpdate = true;
+            if (Main.netMode == NetmodeID.Server)
+                NetMessage.SendData(MessageID.SyncProjectile, -1, -1, null, proj.whoAmI);
         }
     }
 }
