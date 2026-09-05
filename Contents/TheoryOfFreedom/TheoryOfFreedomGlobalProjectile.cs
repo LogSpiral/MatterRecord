@@ -88,10 +88,25 @@ public class TheoryOfFreedomGlobalProjectile : GlobalProjectile
             var d = Dust.NewDustPerfect(Main.MouseWorld, DustID.Firework_Green, Main.rand.NextVector2Unit() * 4);
             d.noGravity = true;
         }
-        player.statLife -= player.statLifeMax2 / 100;
-        CombatText.NewText(player.Hitbox, CombatText.DamagedFriendly, player.statLifeMax2 / 100);
-        if (player.statLife <= 0)
-            player.KillMe(PlayerDeathReason.ByCustomReason(NetworkText.FromKey($"Mods.{nameof(MatterRecord)}.Items.{nameof(TheoryOfFreedom)}.GotFreedom", player.name)), 0, 0);
+        // 获取玩家中心（钩爪发射点）
+        Vector2 playerCenter = player.Center;
+        // 目标点即鼠标世界坐标
+        Vector2 targetPos = Main.MouseWorld;
+
+        // 使用 2x2 的小矩形代表“点”，检测两点之间是否有实心块阻挡
+        bool canHit = Collision.CanHit(
+            playerCenter - new Vector2(1, 1), 2, 2,          // 起点小矩形
+            targetPos - new Vector2(1, 1), 2, 2              // 终点小矩形
+        );
+
+        if (canHit) // 视线通畅 → 扣血
+        {
+            player.statLife -= player.statLifeMax2 / 100;
+            CombatText.NewText(player.Hitbox, CombatText.DamagedFriendly, player.statLifeMax2 / 100);
+            if (player.statLife <= 0)
+                player.KillMe(PlayerDeathReason.ByCustomReason(NetworkText.FromKey($"Mods.{nameof(MatterRecord)}.Items.{nameof(TheoryOfFreedom)}.GotFreedom", player.name)), 0, 0);
+        }
+        // else 视线被阻挡 → 不扣血（什么也不做）
 
         if (Main.netMode == NetmodeID.MultiplayerClient)
             HookPointSync.Get(player.whoAmI, [.. mplr.TargetTileCoords]).Send(-1, player.whoAmI);
