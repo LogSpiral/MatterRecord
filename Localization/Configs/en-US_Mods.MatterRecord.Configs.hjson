@@ -7,9 +7,9 @@ MatterRecordConfig: {
 	}
 
 	AllowingRecordRecipe: {
-		ConditionDescription: 允许合成事象记录
-		Label: "[rbi:-]允许合成事象记录"
-		Tooltip: 如果你实在找不到的话就开启这个然后拿书问问向导吧
+		ConditionDescription: Allow crafting Records of Events
+		Label: "[rbi:-]Allow crafting Records of Events"
+		Tooltip: If you really can't find them, enable this and ask the Guide while holding the book
 	}
 
 	LordOfTheFliesUIReset: {

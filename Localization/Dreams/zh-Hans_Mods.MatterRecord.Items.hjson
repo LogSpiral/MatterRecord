@@ -3,7 +3,7 @@ ClothierDream: {
 	DisplayName: 裁缝之梦
 	Tooltip:
 		'''
-		使用后获得一把金钥匙，消耗品
+		左键使用后获得一把金钥匙（消耗品）
 		“也许我当时应该打开几个宝箱？我刚刚梦到它们了”
 		'''
 }
@@ -13,7 +13,7 @@ StylistDream: {
 	DisplayName: 理发师之梦
 	Tooltip:
 		'''
-		使用后获得鸿蒙剪刀
+		左键使用后获得鸿蒙剪刀
 		“在梦里，我意识到剪刀除了剪头发还能剪些其他的！”
 		'''
 	Unlock: 被一个强大的丛林生物所诅咒
@@ -24,7 +24,7 @@ DyeTraderDream: {
 	DisplayName: 染料商之梦
 	Tooltip:
 		'''
-		使用后获得随机三种染料
+		左键使用后获得随机染料
 		“亲爱的，试试这个染料吧，我刚获得的新灵感”
 		'''
 }
@@ -44,7 +44,7 @@ GuideDream: {
 	DisplayName: 向导之梦
 	Tooltip:
 		'''
-		使用后获得四职业徽章各一枚
+		左键使用后获得四职业徽章各一枚
 		“久违的安眠，你最近应该没有探索地狱吧？没有……吧？”
 		'''
 	Unlock: 目前被一个强大的地狱生物所诅咒
@@ -65,7 +65,7 @@ TavernkeepDream: {
 	DisplayName: 酒馆老板之梦
 	Tooltip:
 		'''
-		右键使用随军团难度提升获得4/8/12护卫勋章
+		左键使用，随军团难度提升获得4/8/12护卫勋章
 		“那些哥布林没进来吧？”
 		'''
 }
@@ -73,6 +73,7 @@ TavernkeepDream: {
 WizardDream: {
 	RecipeCondition: 巫师可入住
 	ReachedLimit: 已达到上限
+	UsedCount: "已使用 {0}/10 次"
 	DisplayName: 巫师之梦
 	Tooltip:
 		'''
@@ -86,7 +87,7 @@ ZoologiseDream: {
 	DisplayName: 动物学家之梦
 	Tooltip:
 		'''
-		使用后召唤一只奇怪的城镇史莱姆(未实装十来亩)
+		使用后召唤一只奇怪的城镇史莱姆
 		“我梦到了一只新品种的史莱姆，等等，你说那不是梦？”
 		'''
 	TheSameSlime: 史莱姆已经到了！

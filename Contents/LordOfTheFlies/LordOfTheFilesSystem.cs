@@ -140,10 +140,17 @@ public class LordOfTheFilesSystem : ModSystem
     {
         if (Progress <= 0) return true;
 
-        DrawChargeBar_Internal(new(Main.screenWidth - 360 + OffsetValue.X, 80 + OffsetValue.Y, 40, 280), Progress, BarValue);
-        DrawAmmoBar_Internal(new(Main.screenWidth - 400 + OffsetValue.X, 80 + OffsetValue.Y, 40, 280), Progress, AmmoValue);
+        // 备弹条只在强化2（湮灭弹）解锁后显示
+        bool showAmmoBar = LordOfTheFliesProgression.Tier2_AnnihilationBullet;
 
-        var dimension = new Rectangle(Main.screenWidth - 400 + (int)OffsetValue.X, 80 + (int)OffsetValue.Y, 80, 280);
+        DrawChargeBar_Internal(new(Main.screenWidth - 360 + OffsetValue.X, 80 + OffsetValue.Y, 40, 280), Progress, BarValue);
+        if (showAmmoBar)
+            DrawAmmoBar_Internal(new(Main.screenWidth - 400 + OffsetValue.X, 80 + OffsetValue.Y, 40, 280), Progress, AmmoValue);
+
+        // 拖动区域随备弹条是否显示而调整：显示时覆盖双条，隐藏时只覆盖能量条
+        int dragLeft = showAmmoBar ? Main.screenWidth - 400 : Main.screenWidth - 360;
+        int dragWidth = showAmmoBar ? 80 : 40;
+        var dimension = new Rectangle(dragLeft + (int)OffsetValue.X, 80 + (int)OffsetValue.Y, dragWidth, 280);
 
         bool flag = dimension.Contains(Main.MouseScreen.ToPoint());
         if (flag)
@@ -195,11 +202,21 @@ public class LordOfTheFilesSystem : ModSystem
             if (result < 0.0001f) result = 0;
             if (result > 0.9999f) result = 1;
             BarValue = result;
-            target = mplr.StoredAmmoCount / 6f;
-            result = MathHelper.Lerp(AmmoValue, target, 0.1f);
-            if (result < 0.0001f) result = 0;
-            if (result > 0.9999f) result = 1;
-            AmmoValue = result;
+
+            // 备弹条只在强化2（湮灭弹）解锁后更新
+            if (LordOfTheFliesProgression.Tier2_AnnihilationBullet)
+            {
+                target = mplr.StoredAmmoCount / 6f;
+                result = MathHelper.Lerp(AmmoValue, target, 0.1f);
+                if (result < 0.0001f) result = 0;
+                if (result > 0.9999f) result = 1;
+                AmmoValue = result;
+            }
+            else
+            {
+                // 未解锁时清零，防止残留旧值在解锁前被绘制（例如存档中已存在备弹）
+                AmmoValue = 0f;
+            }
 
             progressTarget = 1;
         }

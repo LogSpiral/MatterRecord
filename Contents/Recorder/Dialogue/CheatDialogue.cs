@@ -1,5 +1,6 @@
 ﻿using Terraria;
 using Terraria.ID;
+using Terraria.Localization;
 
 namespace MatterRecord.Contents.Recorder.Dialogue
 {
@@ -41,13 +42,13 @@ namespace MatterRecord.Contents.Recorder.Dialogue
             _timer++;
             if (_stage == 1 && _timer >= _firstDelay)
             {
-                _player.SendMessageWithBubble("‹乐九›：", "嗯哼？");
+                _player.SendMessageWithBubble(Language.GetTextValue("Mods.MatterRecord.Dialogue.Recorder.NinaBubble"), Language.GetTextValue("Mods.MatterRecord.Dialogue.Recorder.CheatAh"));
                 _stage = 2;
                 _timer = 0;
             }
             else if (_stage == 2 && _timer >= 120)
             {
-                _player.SendMessageWithBubble("‹乐九›：", "在偷偷拿什么呢？");
+                _player.SendMessageWithBubble(Language.GetTextValue("Mods.MatterRecord.Dialogue.Recorder.NinaBubble"), Language.GetTextValue("Mods.MatterRecord.Dialogue.Recorder.CheatWhat"));
                 _stage = 0;
                 data.CheatCounter = 2;
                 _player.SaveData();

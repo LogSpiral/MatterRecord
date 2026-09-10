@@ -45,8 +45,8 @@ public class AliceInWonderlandWatch : ModItem,IRecordBookItem
 
     public override void AddRecipes()
     {
-        this.RegisterBookRecipe(ItemID.SilverWatch);
-        this.RegisterBookRecipe(ItemID.TungstenWatch);
+        // 银表 / 钨表 已合并为同一合成组，因此只生成一条配方
+        this.RegisterBookRecipe(RecipeGroupSystem.SilverWatchGroup);
         base.AddRecipes();
     }
 

@@ -25,7 +25,9 @@ public class AnnihilationBullet : ModProjectile
     public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
     {
         // 因为湮灭弹固定源自于审判模式所以固定有暴击双倍，这里平衡回来就得 / 40
-        modifiers.FlatBonusDamage += target.lifeMax / 40;
+        // 额外生命值伤害受项9进度锁控制
+        if (LordOfTheFliesProgression.Tier9_AnnihilationLifePercent)
+            modifiers.FlatBonusDamage += target.lifeMax / 40;
         base.ModifyHitNPC(target, ref modifiers);
     }
 
@@ -46,6 +48,10 @@ public class AnnihilationBullet : ModProjectile
 
     public override bool OnTileCollide(Vector2 oldVelocity)
     {
+        // 项9 解锁前湮灭弹不可穿墙，撞墙即消失
+        if (!LordOfTheFliesProgression.Tier9_AnnihilationLifePercent)
+            return true;
+
         Projectile.velocity = oldVelocity;
         Collision.HitTiles(Projectile.position, Projectile.velocity * .25f, Projectile.width, Projectile.height);
         for (int n = 0; n < 3; n++)

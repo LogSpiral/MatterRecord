@@ -9,6 +9,7 @@ Tiles: {
 }
 
 Keybinds: {
+	TimeStop.DisplayName: 时停
 	CanHookPlatform.DisplayName: 可以钩至平台
 	// ResetRecorderTrigger.DisplayName: Reset Recorder Trigger
 }
@@ -29,6 +30,8 @@ NPCs: {
 		Copy: 抄写
 		Collect: 解锁
 		Reward: 奖励
+		GiveLifeCrystal: 给予生命水晶
+		LifeCrystalHealed: 好像变得更健康了一点点，你平时都吃这个的吗？
 		Spawn: 正在生成记录者
 		Progress: 收集进展{0}
 		FindSlime: 走失的宠物？
@@ -112,3 +115,20 @@ EmeraldTablet: {
 }
 
 RecordSystem.Unlocked: 已解锁 {0}
+
+EasterEgg: {
+	LunaDefeated: 天兔已被击败！
+	TorchGodLine0: 嘿火把神，你动不动就转换火把的日子结束了
+	TorchGodLine1: 把徽章给我
+	TorchGodLine2: 想要的话，你得自己来拿
+	TorchGodLine3: 这规矩你早就懂的
+}
+
+UI: {
+	SearchHint: 输入显示的图格名进行查找
+}
+
+RecipeGroups: {
+	SilverWatch: 银表/钨表
+	Musket: 火枪/送葬者
+}

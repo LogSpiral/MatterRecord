@@ -18,7 +18,7 @@ Peace: {
 	Description:
 		'''
 		Peace is the tranquility of the soul
-		Reduces damage taken by 10%, then by 5
+		Reduces damage taken by 10%, and additionally blocks damage equal to 10% of your defense
 		'''
 }
 
@@ -27,7 +27,7 @@ War: {
 	Description:
 		'''
 		War is a storm of the heart
-		Damage is increased by 10%, then by 5
+		Increases damage dealt by 10%, and additionally adds 10% of the weapon's listed damage
 		'''
 }
 
@@ -43,5 +43,14 @@ Holiday_War: {
 
 FragrantHerbs: {
 	DisplayName: Fragrant Herbs
-	Description: Mods.MatterRecord.Buffs.FragrantHerbs.Description
+	Description: Thanks for nature's gifts
+	TipActive: "Active herb effects:"
+	TipNone: No herb effects active
+	Blinkroot: "Blinkroot: +3% damage reduction, +5% movement speed"
+	Daybloom: "Daybloom: +2 defense, +0.5 life regeneration"
+	Deathweed: "Deathweed: +4% damage, hits inflict Poisoned"
+	Fireblossom: "Fireblossom: +2% critical strike chance, hits inflict On Fire"
+	Moonglow: "Moonglow: +0.5 mana regeneration, +5% magic damage"
+	Shiverthorn: "Shiverthorn: +20 max life, hits inflict Frostburn"
+	Waterleaf: "Waterleaf: +5 fishing power, +0.01 luck"
 }

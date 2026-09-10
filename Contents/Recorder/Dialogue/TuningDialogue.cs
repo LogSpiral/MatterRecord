@@ -1,4 +1,5 @@
 ﻿using Terraria;
+using Terraria.Localization;
 
 namespace MatterRecord.Contents.Recorder.Dialogue
 {
@@ -46,20 +47,20 @@ namespace MatterRecord.Contents.Recorder.Dialogue
                 switch (_stage)
                 {
                     case 1:
-                        _player.SendMessageWithBubble("‹？？？›：", "喂喂？听的见吗？");
+                        _player.SendMessageWithBubble(Language.GetTextValue("Mods.MatterRecord.Dialogue.Recorder.MysteryBubble"), Language.GetTextValue("Mods.MatterRecord.Dialogue.Recorder.TuningHello"));
                         _stage = 2;
                         _timer = 0;
                         _targetDelay = Main.rand.Next(180, 301);
                         break;
                     case 2:
-                        _player.SendMessageWithBubble("‹？？？›：", "好像连上了？看起来框架不算太复杂");
+                        _player.SendMessageWithBubble(Language.GetTextValue("Mods.MatterRecord.Dialogue.Recorder.MysteryBubble"), Language.GetTextValue("Mods.MatterRecord.Dialogue.Recorder.TuningLink"));
                         _stage = 3;
                         _timer = 0;
                         _targetDelay = 120;
                         break;
                     case 3:
                         string playerName = Main.LocalPlayer.name;
-                        _player.SendMessageWithBubble("‹乐九›：", $"晚上好，{playerName}，额……你怎么一副见了鬼的表情？这不是什么难事");
+                        _player.SendMessageWithBubble(Language.GetTextValue("Mods.MatterRecord.Dialogue.Recorder.NinaBubble"), Language.GetTextValue("Mods.MatterRecord.Dialogue.Recorder.TuningEvening", playerName));
                         _stage = 4;
                         _timer = 0;
                         _targetDelay = 0;

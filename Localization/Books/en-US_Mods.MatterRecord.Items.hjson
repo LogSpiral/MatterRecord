@@ -1,14 +1,20 @@
-LockedRecords: You can't use it right now, maybe someone is looking for it.
+LockedRecords:
+	'''
+	You can't use it right now, maybe someone is looking for it
+	[c/FFAF00:Record of Events]
+	'''
 
 TheoryOfFreedom: {
 	DisplayName: Theory of Freedom
 	Tooltip:
 		'''
-		饰品可见性关闭时使你无视平台
-		"To understand shackles is better than adorning them with flowers."
-		All hooks can latch onto mid-air
-		Costs 1% HP per grapple use
-		Grappling mid-air no longer restores flight time
+		While the accessory's visibility is off, you ignore platforms
+		Modifies all hooks
+		Spend 1% of your max life to grapple in mid-air temporarily
+		Increases hook speed; grants 10% damage reduction while grappling and resets your extra jumps
+		Counts as wings but cannot fly
+		[c/66CCFF:"To understand shackles is better than adorning them with flowers."]
+		[c/FFAF00:Record of Events]
 		'''
 	CanHookOnPlatform: Hook on to the platforms enabled.
 	CantHookOnPlatform: Hook on to the platforms disabled.
@@ -19,8 +25,11 @@ TheAdventureofSherlockHolmes: {
 	DisplayName: The Adventures of Sherlock Holmes
 	Tooltip:
 		'''
-		Right-click the world map while holding to consult a 27x27 area for 1 Silver
-		"Elementary deductions, Dr. Watson."
+		While holding it and opening the world map from the hotkey
+		Right-click the map to deduce a 27x27 area for 50 Silver
+		Provides tile consultation for your explored map; simply carry it with you
+		[c/66CCFF:"Elementary deductions, Dr. Watson."]
+		[c/FFAF00:Record of Events]
 		'''
 }
 
@@ -32,28 +41,28 @@ Faust: {
 
 		"I signed the pact for transcendent power, but who will save my soul?"
 		Right-click in inventory to activate/deactivate
-		Activate to duplicate an item at 20x its sell value
+		After activating, right-click an item in your inventory to buy it
 		Lose 0.01 luck per Platinum spent
 		'''
 	WannaDeal: Well, Do ya wanna a deal?
 	MoneySpent: You have spent these Money with demons:
 	CantButIt: This item can't be bought
-	BuyPrice: You neet paid
+	BuyPrice: You need to pay
 	NoMoreHints: ......
-	AliceInWonderlandHint: 追寻雪白的跳跃者，用轻柔的网邀它共赴奇境
-	DonQuijoteDeLaManchaHint: 持盾冲向幻想的大敌，在无畏的突进中将其击碎
-	TheAdventureofSherlockHolmesHint: 标记不同寻常的细节，然后，一切昭然若揭
-	LittlePrinceHint: 于永恒的安眠之地，寻找一朵特别的花
-	TheOldManAndTheSeaHint: 与海中的巨兽搏斗，直至浪潮归于平静
-	WarAndPeaceHint: 与绒爪的夜行者立约，驯服一个永恒的谜题
-	TheInterpretationOfDreamsHint: 怀揣罗网沉入梦乡，在虚幻中打捞真实的碎片
-	TheoryOfFreedomHint: 毁去一朵娇艳的花，而后直面它的本质
-	TheTaleOfTheHeikeHint: 挥动妖异之刀，斩断枯槁之躯
-	CompendiumOfMateriaMedicaHint: 执生机之杖，于百草间采撷自然的馈赠
-	HintList: 记录提示如下:
+	AliceInWonderlandHint: Chase the snow-white jumper, and invite it to a wonderland with a gentle net
+	DonQuijoteDeLaManchaHint: Charge at the imagined giants with your lance, ending the tale in one precise thrust
+	TheAdventureofSherlockHolmesHint: Mark the unusual details, and everything will reveal itself
+	LittlePrinceHint: In the eternal resting place, find a special flower
+	TheOldManAndTheSeaHint: Wrestle with the leviathan of the sea until the waves settle
+	WarAndPeaceHint: Make a pact with the velvet-pawed night stalker, taming an eternal riddle
+	TheInterpretationOfDreamsHint: Fall asleep with a net in hand, fishing true fragments out of the illusory
+	TheoryOfFreedomHint: Destroy a delicate flower, and then face its essence
+	TheTaleOfTheHeikeHint: Wield the eerie blade and sever the withered bodies
+	CompendiumOfMateriaMedicaHint: Grasp the staff of life and gather nature's gifts among the herbs
+	HintList: Hints of records:
 	HintNotFound: - {0}
-	HintFound: - {0} (已获取, 请在记录员处提交)
-	HintUnlocked: - {0} (已解锁)
+	HintFound: - {0} (Found, submit it to the Recorder)
+	HintUnlocked: - {0} (Unlocked)
 }
 
 LittlePrince: {
@@ -63,6 +72,7 @@ LittlePrince: {
 		"It is like shedding old bark; there is nothing sad about old bark."
 		No tombstones on death
 		No coin loss on death
+		While your mana is below 50%, spending mana restores 1 mana
 		'''
 }
 
@@ -73,6 +83,8 @@ TheOldManAndTheSea: {
 		"At dawn, the old man leaned against the wood for warmth. He vowed to endure as long as the fish."
 		Greatly increases enemy spawn rate while held
 		Allows lava fishing
+		Gains energy while fishing; right-click to activate, then your bobber deals damage equal to your inventory weapon's damage plus 1% of the target's max life
+		Energy drains while not fishing and while inactive
 		'''
 }
 
@@ -80,19 +92,43 @@ DonQuijoteDeLaMancha: {
 	DisplayName: Don Quijote
 	Tooltip:
 		'''
-		"Don Quijote said to Sancho: 'Behold, giants approach! I shall vanquish them in righteous combat!'"
-		Right-click to summon a windmill and charge toward it, granting immunity to the next hit
-		Charge damage scales with distance (guaranteed crit)
-		Post-charge, attacks become stabs (reduces charge cooldown)
-		Right-click to cancel
-		Taking damage during charge extends cooldown
-		Enemies prioritize targeting you while held
+		[c/66CCFF:"Don Quijote said to his squire Sancho:]
+		[c/66CCFF:'My friend, dozens of giants have appeared ahead,]
+		[c/66CCFF:I shall go and duel them, I shall defeat them,]
+		[c/66CCFF:this is a righteous duel,]
+		[c/66CCFF:I shall destroy these villains who invade the earth.'"]
+		Right-click to summon a windmill and charge toward it while immune to damage; hold DOWN to skip the charge
+		Charge damage scales with the charge distance and always crits
+		Enemies are more likely to target you while held
 		'''
 	DashCooldown: Dash Cooldown
 	CancelStabState: Cancel Stabing State
 	InheritedFrom: The current property inherites from
 	SheepDamage: +500% damage to the sheep army
 	FindItemHint: Please [c/FF0000:Right click in Inventory] to activate it and then [c/FF0000:Right click another melee weapon]to get it's property.
+	ReviveText: Revived! +{0} HP
+	ShiftHint: Hold Shift to view growth effects
+	ProgressionTitle: Don Quijote enhancement progress [{0}/14]
+	ComboTitle: Combo Bonus
+	ComboHint: Hold Shift to view combo bonuses
+	Combo5: 5: Reduce debuff duration you receive
+	Combo10: 10: Increase crit chance
+	Combo15: 15: Boost life regeneration when it drops below 0
+	Combo20: 20: Deal more damage with move speed and improve your acceleration
+	Tier1_Block: 10% chance to block damage while held, based on Don Quijote's attack power
+	Tier2_StabAfterDash: Enter stab state after dashing, right-click to cancel
+	Tier3_TauntOnHit: Taunt nearby enemies toward your windmill for 3 seconds when hurt
+	Tier4_StabDRAndMove: Gain 20% damage reduction while stabbing; hold UP to move
+	Tier5_ComboSystem: Dealing damage builds combos; each combo grants +1% attack speed and +10% Don Quijote size, up to 10
+	Tier6_StabReduceCooldown: Stab hits reduce dash cooldown
+	Tier7_HitRestoreWing: Slash/stab hits restore flight time
+	Tier8_SpearThrow: Hold UP to throw a spear instead of slashing; slashing and charging are disabled while the spear is thrown (unimplemented)
+	Tier9_ComboDecayAndCap20: Combo decay becomes -5, cap raised to 20
+	Tier10_WindmillErase: Windmill destroys touching hostile projectiles
+	Tier11_DashEraseHealCombo: Dash destroys projectiles and heals you while building combos
+	Tier12_SpearUpgrade: Spear throw upgrade (unimplemented)
+	Tier13_Revive: Revive on fatal damage when combo is above 15
+	Tier14_BlockBoostWithWindmill: Higher block chance while a windmill is present
 }
 
 EmeraldTablet: {
@@ -102,6 +138,7 @@ EmeraldTablet: {
 		"As above, so below. Thus is the miracle of the One."
 		50% chance to not consume materials when crafting potions
 		Carry it in your inventory
+		Right-click to transmute banners / crates / treasure bags
 		'''
 }
 
@@ -111,7 +148,7 @@ TheoryofJustice: {
 		'''
 		"Ignorance is justice."
 		Grants damage reduction based on undiscovered Bestiary entries
-		Up to 30% reduction
+		Up to 25% reduction
 		'''
 	Endurance: Now reduce damage by
 }
@@ -121,9 +158,12 @@ TheInterpretationOfDreams: {
 	Tooltip:
 		'''
 		"Dreams are the royal road to the unconscious."
-		Use on NPCs to collect dreams (once daily). Right-click to open Dream Vault
-		(50% Broken Dream, 20% Sweet Dream, 20% Nightmare, 10% Unique Dream)
-		Unique Dreams are non-repeating per player
+		Left-click on a vanilla NPC to collect a dream; right-click to open the Dream Vault
+		50% Broken Dream: a chaotic dream, a crafting material
+		10% Unique Dream: the whimsical dreams of residents
+		20% Sweet Dream: gain 1 gold coin and increased luck for a while
+		20% Nightmare: reduced luck for a while
+		Unlock-type dreams are never obtained twice
 		'''
 	Unlocked: Has been unlocked
 	BrokenDreamHint: You capture a broken dream
@@ -131,6 +171,7 @@ TheInterpretationOfDreams: {
 	NightmareHint: You capture a nightmare
 	NoDreamHint: It seems that there's no more dream now
 	SpecialDreamHint: A special dream is captured.
+	SoulUndertone: ~ Soul undertone
 	Locked: (Locked)
 	Hint: (Left-click to activate/deactivate)
 	UnlockHint: Use to unlock, manipulate the state in the Menu of The Interpretation of Dreams
@@ -151,25 +192,83 @@ WarAndPeace: {
 
 AliceInWonderlandWatch: {
 	DisplayName: Alice In Wonderland Watch
-	Tooltip: ""
+	Tooltip:
+		'''
+		While equipped, portals spawn randomly; right-click a portal to teleport
+		Up to three portals per day, each releasing particles to guide you
+		Portals prefer unexplored areas
+		[c/66CCFF:"Oh dear! Oh dear! I shall be too late!"]
+		[c/FFAF00:Record of Events]
+		'''
 	Start: Wierd Portal Entrance
 	End: Wierd Portal Exit
 }
 
 LordOfTheFlies: {
 	DisplayName: Lord Of The Flies
-	Tooltip: ""
+	Tooltip:
+		'''
+		Scales your stats with armor; crits deal extra damage
+		Right-click to enter Trial Mode; Essence can't regenerate naturally in Trial Mode
+		In Trial Mode each shot costs 5 Essence and always crits
+		Right-click to end Trial Mode, or it ends when Essence runs out
+		[c/66CCFF:"What does not last long often ends in tragedy"]
+		[c/FFAF00:Record of Events]
+		'''
 	Clatter: Clatter
 	NoEnoughEnergy: No Enough Energy
+	ShiftHint: Hold Shift to view growth effects
+	ProgressionTitle: Lord of the Flies enhancement progress [{0}/14]
+	Tier1_DefenseOnHit: Hitting boosts Defense, which counts as armor stat
+	Tier2_AnnihilationBullet: Right-click in inventory to spend all Essence loading an Annihilation Round; hold right-click in Trial Mode to spend Essence and fire it
+	Tier3_Penetration: In Trial Mode bullets pierce enemies and ignore 20 armor
+	Tier4_Beelzebub: Beelzebub fights alongside you while the item stays idle in inventory
+	Tier5_CritLifePercent: Crit bonus damage also scales with enemy max HP percentage
+	Tier6_AttackSpeed: Attack speed also scales with your armor stat
+	Tier7_Teleport: Double-tap UP to spend 50 Essence and teleport to the cursor (unimplemented)
+	Tier8_JudgmentBlade: In Trial Mode hold UP + Left-click to transform into the Judgment Blade; hold to fire Judgment Light consuming Essence (unimplemented)
+	Tier9_AnnihilationLifePercent: Annihilation Rounds deal extra 5% of the enemy's max HP and pierce walls
+	Tier10_Explosion: 10% chance for shots in Trial Mode to explode
+	Tier11_Homing: While Beelzebub assists, your ammo homes onto enemies
+	Tier12_SourceFull: When Essence is full, shots auto-spend Essence to empower ammo
+	Tier13_Fusion: Chance to fuse and fire other musket-ball ammo from your ammo slots
+	Tier14_NoConsume: Annihilation Rounds sometimes don't consume stock, and instantly kill normal enemies
 }
 
 TheTaleOfTheHeike: {
 	DisplayName: The Tale Of The Heike
-	Tooltip: ""
+	Tooltip:
+		'''
+		Deal more damage to enemies the lower their health is
+		Take more damage the lower your own health is
+		Up to 25% extra damage
+		[c/66CCFF:"The bell of Gion echoes, telling that all things are impermanent;
+		[c/66CCFF:the color of the twin trees' blossoms shows that the prosperous must decline."]
+		[c/FFAF00:Record of Events]
+		'''
 }
 
 CompendiumOfMateriaMedica: {
 	DisplayName: Compendium Of Materia Medica
-	Tooltip: ""
-	ShiftTooltip: Mods.MatterRecord.Items.CompendiumOfMateriaMedica.ShiftTooltip
+	Tooltip:
+		'''
+		Gain buffs based on nearby herb tiles and the ingredients of potions you've drunk
+		Teammates also receive the buffs
+		Walking has a chance to consume herb seeds and plant herbs
+		Planting is guaranteed while holding the Staff of Regrowth
+		Prevents accidental destruction of the environment while the accessory is visible
+		[c/66CCFF:"The way of medicine: the gentleman uses it to preserve life, and extends it to aid the world"]
+		[c/FFAF00:Record of Events]
+		'''
+	ShiftHint: Hold Shift to view herb effects
+	ShiftTooltip:
+		'''
+		Blinkroot: +3% damage reduction, +5% movement speed
+		Daybloom: +2 defense, +0.5 life regen
+		Deathweed: attacks poison enemies, +4% damage
+		Fireblossom: attacks inflict fire, +2% crit chance
+		Moonglow: +0.5 mana regen, +5% magic damage
+		Shiverthorn: attacks inflict Frostburn, +20 max life
+		Waterleaf: +5 fishing power, +0.01 luck
+		'''
 }

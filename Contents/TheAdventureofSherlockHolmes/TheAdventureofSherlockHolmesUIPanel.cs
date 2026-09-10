@@ -45,8 +45,7 @@ namespace MatterRecord.Contents.TheAdventureofSherlockHolmes
             innerPanel.IgnoresMouseInteraction = true;
             _mainPanel.Append(innerPanel);
 
-            LocalizedText hint = new LocalizedText("Mods.MatterRecord.UI.SearchHint", "输入显示的图格名进行查找");
-            _searchBar = new UISearchBar(hint, 1f);
+            _searchBar = new UISearchBar(Language.GetText("Mods.MatterRecord.UI.SearchHint"), 1f);
             _searchBar.Left.Set(6f, 0f);
             _searchBar.Top.Set(2f, 0f);
             _searchBar.Width.Set(-12f, 1f);

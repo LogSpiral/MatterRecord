@@ -1,4 +1,4 @@
-﻿using MatterRecord.Contents.DonQuijoteDeLaMancha.Core.Visuals;
+using MatterRecord.Contents.DonQuijoteDeLaMancha.Core.Visuals;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -1572,6 +1572,24 @@ public static class MiscMethods
             .AddIngredient(ItemID.Book)
             .AddTile(TileID.Bookcases)
             .AddIngredient(extraIngredient)
+            .AddCondition(Language.GetText("Mods.MatterRecord.Configs.MatterRecordConfig.AllowingRecordRecipe.ConditionDescription"), () => MatterRecordConfig.Instance.AllowingRecordRecipe)
+            .DisableDecraft()
+            .Register();
+    }
+
+    /// <summary>
+    /// 与 <see cref="RegisterBookRecipe{T}(T, int)"/> 效果相同，但把额外材料换成一个合成组（RecipeGroup），
+    /// 使「二选一」材料只生成一条配方，而不是两条。
+    /// </summary>
+    /// <typeparam name="T">目标「事象记录」物品类型。</typeparam>
+    /// <param name="modItem">目标物品。</param>
+    /// <param name="recipeGroupName">合成组名称（需先经 <see cref="RecipeGroup.RegisterGroup(string, RecipeGroup)"/> 注册）。</param>
+    public static void RegisterBookRecipe<T>(this T modItem, string recipeGroupName) where T : ModItem
+    {
+        modItem.CreateRecipe()
+            .AddIngredient(ItemID.Book)
+            .AddTile(TileID.Bookcases)
+            .AddRecipeGroup(recipeGroupName)
             .AddCondition(Language.GetText("Mods.MatterRecord.Configs.MatterRecordConfig.AllowingRecordRecipe.ConditionDescription"), () => MatterRecordConfig.Instance.AllowingRecordRecipe)
             .DisableDecraft()
             .Register();

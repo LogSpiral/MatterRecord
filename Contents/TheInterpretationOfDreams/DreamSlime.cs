@@ -547,6 +547,7 @@ public class DreamSlime : ModNPC
     {
         if (contactProjIndex != -1 && Main.projectile[contactProjIndex].active)
             Main.projectile[contactProjIndex].Kill();
+
         contactProjIndex = -1;
     }
 

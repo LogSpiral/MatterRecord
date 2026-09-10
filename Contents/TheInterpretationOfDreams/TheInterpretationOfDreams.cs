@@ -1,4 +1,4 @@
-﻿using MatterRecord.Contents.Recorder;
+using MatterRecord.Contents.Recorder;
 using Microsoft.Xna.Framework;
 using System;
 using Terraria.GameContent;
@@ -76,7 +76,7 @@ public class TheInterpretationOfDreams : ModItem,IRecordBookItem
                     if (Main.rand.NextBool(10000) && mplr.dreamItemSlots[11].stack == 0)
                     {
                         mplr.dreamItemSlots[11].SetDefaults(ModContent.ItemType<TaijiNoYume.TaijiNoYume>());
-                        Main.NewText(" ~ Soul undertone", Color.Gray);
+                        Main.NewText(this.GetLocalizedValue("SoulUndertone"), Color.Gray);
                         //Main.NewText("哇偶这里本来应该扫出个胎儿之梦的但是笨蛋螺线还没实装，你运气真好");
                         continue;
                     }

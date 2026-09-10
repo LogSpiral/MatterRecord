@@ -2,40 +2,42 @@ EternalWine: {
 	DisplayName: Eternal Wine
 	Tooltip:
 		'''
-		"A sublime yet corrupting nectar, akin to divine ambrosia."
-		Borrows life: 75 (pre-Hardmode), 125 (Hardmode), 175 (post-Moon Lord)
-		Grants brief invincibility (0.5s / 1.0s / 1.5s)
+		Borrows {0} life and grants {1}s of invincibility
 		After consumption, natural life regeneration repays the borrowed life
-
-		Can be used via Quick Heal (prioritizes healing potions)
-		Can be activated via Quick Buff even at full health, triggering the borrowing effect
+		Can be triggered with Quick Heal or Quick Buff, prioritizing healing potions
+		Usable even while afflicted with Potion Sickness
+		"A sublime yet corrupting nectar, akin to divine ambrosia."
 		'''
+	UnlockHardMode: Gains a boost in Hardmode
+	UnlockMoonLord: Gains a boost after defeating the Moon Lord
 	RestoreLifeText: Restore Life
 	LifeDebt: Life to compensate
+}
+
+TurtleAmulet: {
+	DisplayName: Tortoise Amulet
+	Tooltip:
+		'''
+		While equipped, tortoises will not pester you
+		Best not to take it off...
+		'''
 }
 
 TortoiseShell: {
 	DisplayName: Giant Tortoise Shell
 	Tooltip:
 		'''
-		"My friend, never mock a retreating tortoise."
-		Retract into the shell and charge for up to 3s before launching
-
-		Damage scales with speed and launch angle
-		Higher angles yield greater speed and damage
-
-		Elastic collisions with targets
-		Knockback depends on relative size (volume = mass)
-		Large targets rebound you
-		Medium targets partially rebound both
-		Small targets are sent flying without affecting your speed
-		Equal mass results in velocity exchange
+		Hold left-click to retract into the shell and charge for up to 3s before launching
+		Gain heavy damage reduction while charging
+		Launch speed depends on the charge time
+		Damage depends on launch speed and launch angle
+		"The perfect choice for ramming into your friends"
 		'''
 }
 
 ZenithBoulder: {
 	DisplayName: Zenith Boulder
-	Tooltip: Celestial Orb, kid!
+	Tooltip: "I bet the Creator would love this"
 	Sisyphus: Sisyphus
 }
 
@@ -56,17 +58,21 @@ CantSeword: {
 
 ProtagonistAura: {
 	DisplayName: Protagonist Aura
-	Tooltip: ""
+	Tooltip:
+		'''
+		Dyeing it with special dyes produces different effects
+		"If I helped you... ahem... would you be grateful?"
+		'''
 }
 
 HallowBucket.SetHint: Can activate Hallow Armor Set bonus.
 
 InternalDocument: {
-	DisplayName: Internal DocumentsWord
+	DisplayName: Internal Document
 	Tooltip:
 		'''
 		Increases damage depending on the count of enabled mods
-		More and more documents...
+		"More and more documents..."
 		'''
 }
 
@@ -76,6 +82,7 @@ ForgetPill: {
 		'''
 		Forget every records
 		[DEBUG ITEM]
+		"Hey, this really is a pill, not a lizard solar battery!"
 		'''
 }
 
@@ -121,20 +128,77 @@ PlatinumJoustingLanceItem: {
 
 RecordUnlockPill: {
 	DisplayName: Record Unlock Pill
-	Tooltip: ""
+	Tooltip:
+		'''
+		Plays the unlock animation
+		[DEBUG ITEM]
+		"We once considered spawning a boulder over your head when the animation ended"
+		'''
 }
 
 ImperfectPage: {
 	DisplayName: Imperfect Page
-	Tooltip: ""
-	CurrentAmmo: Mods.MatterRecord.Items.ImperfectPage.CurrentAmmo
-	NoAmmo: Mods.MatterRecord.Items.ImperfectPage.NoAmmo
-	StatusInactive: Mods.MatterRecord.Items.ImperfectPage.StatusInactive
-	StatusActive: Mods.MatterRecord.Items.ImperfectPage.StatusActive
-	FavoriteAmmo: Mods.MatterRecord.Items.ImperfectPage.FavoriteAmmo
+	Tooltip:
+		'''
+		Teleports the Recorder to you at any time
+		Activate via [c/FF0000:right-click in inventory], then [c/FF0000:right-click a bullet-type ammo] to switch the Recorder's ammo
+		'''
+	CurrentAmmo: Current recorded ammo: {0}
+	NoAmmo: No ammo
+	// StatusInactive: Mods.MatterRecord.Items.ImperfectPage.StatusInactive
+	// StatusActive: Mods.MatterRecord.Items.ImperfectPage.StatusActive
+	// FavoriteAmmo: Mods.MatterRecord.Items.ImperfectPage.FavoriteAmmo
 }
 
 SystemControlSword: {
 	DisplayName: System Control Sword
-	Tooltip: ""
+	Tooltip:
+		'''
+		Open the keybind page when swung
+		Deals extra damage on hit
+		"Who changed my keybinds?"
+		'''
 }
+
+TodaySword: {
+	DisplayName: Today's Sword
+	Tooltip:
+		'''
+		Each day it randomly inherits all the effects of one sword
+		Spend a free charge to try it; right-click to watch an ad and gain free charges
+		"Today's free charges have been used up"
+		'''
+	AdUITitle:
+	'''
+	Today's Sword
+	Ad space for rent
+	'''
+	CurrentSwordText: Currently mimicking: {0}
+	SwordNotSelectedText: Today's sword has not been chosen yet, waiting until 4:00 AM...
+	FreeChargesText: Free charges: {0}/{1}
+	AdCooldownText: (ad cooldown: {0}s)
+	RightClickHint: Right-click to open the ad panel (30s cooldown, gain 1 free charge)
+}
+
+TimeSword: {
+	DisplayName: Time Sword
+	Tooltip:
+		'''
+		Increases damage based on your character's saved play time
+		Using it reduces your saved play time
+		"I don't have time to play Terraria..."
+		'''
+	CantLoadPlayerFile: Couldn't retrieve player save data.
+	CurrentPlayTime: Current play time: {0} seconds ({1})
+	NotEnoughTime: Too little time ({0}s, need over 120s), no time spent
+}
+
+HundredHerbsBrew: {
+	DisplayName: Hundred Herbs Brew
+	Tooltip:
+		'''
+		Grants Fragrant Herbs
+		Must be drunk the right way to take effect
+		'''
+}
+

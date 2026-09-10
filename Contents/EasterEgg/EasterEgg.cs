@@ -1,6 +1,7 @@
 ﻿using System;
 using Terraria;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 
@@ -33,7 +34,7 @@ namespace MatterRecord.Contents.EasterEgg
             data.EasterEggTriggeredToday = true;
             EasterEggSystem.Save();
 
-            Main.NewText("天兔已被击败！", new Color(175, 75, 255));
+            Main.NewText(Language.GetTextValue("Mods.MatterRecord.EasterEgg.LunaDefeated"), new Color(175, 75, 255));
         }
 
         private static bool IsEasterToday()

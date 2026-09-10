@@ -125,7 +125,7 @@ public partial class Recorder
         if (localPlayer.LocalData.LifeCrystalCounter == 2 && hasLifeCrystal)
         {
             _lifeCrystalOptionActive = true;
-            return "给予生命水晶";
+            return this.GetLocalizedValue("GiveLifeCrystal");
         }
         #endregion
 
@@ -219,7 +219,7 @@ public partial class Recorder
                     localPlayer.LocalData.ExtraLife += 20;
                     localPlayer.SaveData();
                     ExtraLifeWorldDataIncreaseSync.Get().Send(runLocally: true);
-                    SetChatText("好像变得更健康了一点点，你平时都吃这个的吗？");
+                    SetChatText(this.GetLocalizedValue("LifeCrystalHealed"));
                 }
             }
             _lifeCrystalOptionActive = false;

@@ -1,5 +1,6 @@
 ﻿using Terraria;
 using Terraria.ID;
+using Terraria.Localization;
 
 namespace MatterRecord.Contents.Recorder.Dialogue
 {
@@ -41,13 +42,13 @@ namespace MatterRecord.Contents.Recorder.Dialogue
                 switch (_stage)
                 {
                     case 1:
-                        _player.SendMessageWithBubble("‹乐九›：", "看起来你似乎已经达到了某种上限，如果不介意的话，可以分给我吗？");
+                        _player.SendMessageWithBubble(Language.GetTextValue("Mods.MatterRecord.Dialogue.Recorder.NinaBubble"), Language.GetTextValue("Mods.MatterRecord.Dialogue.Recorder.CrystalFull"));
                         _stage = 2;
                         _timer = 0;
                         _targetDelay = 120;
                         break;
                     case 2:
-                        _player.SendMessageWithBubble("‹乐九›：", "对话的时候递给我就行");
+                        _player.SendMessageWithBubble(Language.GetTextValue("Mods.MatterRecord.Dialogue.Recorder.NinaBubble"), Language.GetTextValue("Mods.MatterRecord.Dialogue.Recorder.CrystalGive"));
                         _stage = 3;
                         _timer = 0;
                         _targetDelay = 0;

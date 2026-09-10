@@ -2,6 +2,7 @@
 using System.Reflection;
 using Terraria;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 
@@ -95,10 +96,10 @@ namespace MatterRecord.Contents.EasterEgg
 
         private string GetDialogueText(int index) => index switch
         {
-            0 => "嘿火把神，你动不动就转换火把的日子结束了",
-            1 => "把徽章给我",
-            2 => "想要的话，你得自己来拿",
-            3 => "这规矩你早就懂的",
+            0 => Language.GetTextValue("Mods.MatterRecord.EasterEgg.TorchGodLine0"),
+            1 => Language.GetTextValue("Mods.MatterRecord.EasterEgg.TorchGodLine1"),
+            2 => Language.GetTextValue("Mods.MatterRecord.EasterEgg.TorchGodLine2"),
+            3 => Language.GetTextValue("Mods.MatterRecord.EasterEgg.TorchGodLine3"),
             _ => null
         };
 
