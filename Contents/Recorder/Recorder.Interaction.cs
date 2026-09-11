@@ -222,7 +222,7 @@ public partial class Recorder
                 return false;
             }
 
-            public override string GetText() => TalkNPC.ModNPC is Recorder recorder ? recorder.GetLocalizedValue("GivingLifeCrystal") : string.Empty;
+            public override string GetText() => Language.GetTextValue("Mods.MatterRecord.NPCs.Recorder.GiveLifeCrystal");
 
             public override void Interact()
             {
@@ -239,7 +239,7 @@ public partial class Recorder
                     localPlayer.SaveData();
                     ExtraLifeWorldDataIncreaseSync.Get().Send(runLocally: true);
 
-                    SetChatText(Language.GetTextValue("Mods.MatterRecord.Dialogue.Recorder.GivenLifeCrystal"));
+                    SetChatText(Language.GetTextValue("Mods.MatterRecord.NPCs.Recorder.LifeCrystalHealed"));
                 }
             }
         }

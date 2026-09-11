@@ -20,23 +20,7 @@ public class EternalWine : ModItem
     {
         if (item.type != ModContent.ItemType<EternalWine>())
             goto origInvoke;
-        int buffTime;
-        int healValue;
-        if (NPC.downedMoonlord)
-        {
-            healValue = 175;
-            buffTime = 90;
-        }
-        else if (Main.hardMode)
-        {
-            healValue = 125;
-            buffTime = 60;
-        }
-        else
-        {
-            healValue = 75;
-            buffTime = 30;
-        }
+        GetStageValues(out int healValue, out int buffTime);
         self.AddBuff(ModContent.BuffType<Eternal>(), buffTime);
         self.GetModPlayer<EternalWinePlayer>().SetLifeDebt(healValue, healValue);
         self.statLife += healValue;

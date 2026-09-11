@@ -42,7 +42,6 @@ NPCs: {
 		HowManyRequiredForReward: Collect {0} more records, and you can get a new item from me, Keep it up
 		HowManyRequiredToFullClear: There's only {0} records left, you are almost done it!
 		AllRecordUnlocked: All the records known has been collected yet, thanks for your effort! Have fun
-		GivingLifeCrystal: 给予生命水晶
 
 		TownNPCMood: {
 			Content: This place is decent... if you ignore those little annoyances
