@@ -32,17 +32,4 @@ public class MatterRecord : Mod
     {
         NetModule.ReceiveModule(reader, whoAmI);
     }
-    public override void PostSetupContent()
-    {
-        for (int n = 0; n < ItemLoader.ItemCount; n++)
-            CreativeUI.ResearchItem(n);
-    }
-}
-public class RelockPlayer : ModPlayer 
-{
-    public override void OnEnterWorld()
-    {
-        for (int n = 0; n < ItemLoader.ItemCount; n++)
-            CreativeUI.ResearchItem(n);
-    }
 }

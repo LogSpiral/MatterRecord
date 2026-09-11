@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using System.Collections.Generic;
 using Terraria.DataStructures;
 using Terraria.Localization;
 
@@ -9,9 +10,26 @@ public class TheoryOfFreedomGlobalProjectile : GlobalProjectile
     public override bool? GrappleCanLatchOnTo(Projectile projectile, Player player, int x, int y)
     {
         var mplr = player.GetModPlayer<TheTheoryOfFreedomPlayer>();
-        if (mplr.EquippedTOF && !mplr.CanHookPlatform && Main.tileSolidTop[Framing.GetTileSafely(x, y).TileType])
+        if (!mplr.EquippedTOF)
+            return null;
+        if (!mplr.CanHookPlatform && Main.tileSolidTop[Framing.GetTileSafely(x, y).TileType])
             return false;
-        if (mplr.EquippedTOF && mplr.TargetTileCoords.Contains(new Point(x, y)) && Vector2.Distance(player.Center, new Vector2(x, y) * 16) > new Vector2(projectile.width, projectile.height).Length() * 1.5f)
+        var targets = mplr.TargetTileCoords;
+        bool flag = false;
+        HashSet<Point> points =
+            [new(x, y),
+             new(x+1, y),
+             new(x-1, y),
+             new(x, y+1),
+             new(x, y-1)];
+        foreach (var coord in targets)
+        {
+            if (!points.Contains(coord))
+                continue;
+            flag = true;
+            break;
+        }
+        if (flag && Vector2.Distance(player.Center, new Vector2(x, y) * 16) > new Vector2(projectile.width, projectile.height).Length() * 1.5f)
             return true;
         return null;
     }

@@ -32,9 +32,12 @@ float4 PSFunction(PSInput input) : COLOR0
 	c *= input.Color;
 	cItem *= uItemColor;
 	cItemGlow *= uItemGlowColor;
-	float4 result = cItem + cItemGlow + c;
+	float4 combined = cItem + cItemGlow;
+	if (!any(combined))
+		return combined;
+	float4 result = combined + c;
 	result.a = input.Texcoord.z;
-	return result * sign((cItem + cItemGlow).x);//OpenGL下用if提前返回空白像素有时候会炸，不知道为什么-2025.3.28
+	return result;//OpenGL下用if提前返回空白像素有时候会炸，不知道为什么-2025.3.28
 }
 
 PSInput VertexShaderFunction(VSInput input)

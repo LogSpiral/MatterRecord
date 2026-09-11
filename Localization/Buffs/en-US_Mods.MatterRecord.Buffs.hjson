@@ -45,3 +45,8 @@ FragrantHerbs: {
 	DisplayName: Fragrant Herbs
 	Description: Mods.MatterRecord.Buffs.FragrantHerbs.Description
 }
+
+TheManInTheHighCastleBuff: {
+	DisplayName: The Man In The High Castle Buff
+	Description: Mods.MatterRecord.Buffs.TheManInTheHighCastleBuff.Description
+}

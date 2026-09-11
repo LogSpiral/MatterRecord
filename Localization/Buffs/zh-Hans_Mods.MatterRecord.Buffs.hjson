@@ -45,3 +45,8 @@ FragrantHerbs: {
 	DisplayName: 百草生香
 	Description: 感谢大自然的馈赠
 }
+
+TheManInTheHighCastleBuff: {
+	// DisplayName: The Man In The High Castle Buff
+	// Description: Mods.MatterRecord.Buffs.TheManInTheHighCastleBuff.Description
+}

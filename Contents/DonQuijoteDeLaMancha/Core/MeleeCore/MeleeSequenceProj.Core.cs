@@ -74,6 +74,7 @@ public abstract partial class MeleeSequenceProj : ModProjectile
         Projectile.usesLocalNPCImmunity = true;
         Projectile.localNPCHitCooldown = 8;
         Projectile.ownerHitCheck = true;
+        Projectile.drawLayer = ProjectileDrawLayerID.HeldProj; // Draws over the player's body and under the player's hands
         base.SetDefaults();
     }
 
@@ -97,11 +98,11 @@ public abstract partial class MeleeSequenceProj : ModProjectile
         if (triggered)
             SequenceModel?.IsCompleted = false;
 
-        //if (Player.GetModPlayer<SequencePlayer>().PendingForcedNext)
-        //{
-        //    triggered = true;
-        //    Player.GetModPlayer<SequencePlayer>().PendingForcedNext = false;
-        //}
+        if (Player.GetModPlayer<SequencePlayer>().PendingForcedNext)
+        {
+            triggered = true;
+            Player.GetModPlayer<SequencePlayer>().PendingForcedNext = false;
+        }
 
         if (triggered || !CurrentElement.IsCompleted)
             SequenceModel?.Update();

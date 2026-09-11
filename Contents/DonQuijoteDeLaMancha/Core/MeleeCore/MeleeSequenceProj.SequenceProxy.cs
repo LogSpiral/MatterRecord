@@ -18,7 +18,7 @@ public partial class MeleeSequenceProj
     }
 
     //下面这里实现手持弹幕的一些比较细枝末节的东西，像是绘制 攻击到目标的伤害修正之类
-    public override bool PreDraw(Player player,ref Color lightColor)
+    public override bool PreDraw(Player player, ref Color lightColor)
     {
         DrawBlade(TextureAssets.Projectile[Type].Value);
         return false;
@@ -43,7 +43,7 @@ public partial class MeleeSequenceProj
             var dirRot = Utils.AngleLerp(element.Rotation, (towradsRight ? MathHelper.Pi / 16f : MathHelper.Pi * 15 / 16f) * Player.gravDir, factor);
             towradsRight ^= Player.gravDir < 0;
             Main.spriteBatch.Draw(texture,
-                Player.MountedCenter + center - Main.screenPosition,
+                Player.MountedCenter + center + new Vector2(0, Player.gfxOffY) - Main.screenPosition,
                 StandardInfo.frame,
                 Color.White,
                 -StandardInfo.standardRotation,

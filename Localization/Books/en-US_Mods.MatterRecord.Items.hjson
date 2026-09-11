@@ -173,3 +173,16 @@ CompendiumOfMateriaMedica: {
 	Tooltip: ""
 	ShiftTooltip: Mods.MatterRecord.Items.CompendiumOfMateriaMedica.ShiftTooltip
 }
+
+TheManInTheHighCastle: {
+	DisplayName: 《高堡奇人》
+	Tooltip:
+		'''
+		受到钩爪牵引时自动使用
+		根据牵引时长获得可叠加增益
+		增益提高伤害并减免接触伤害
+		饮用生命药水时减半，boss生成或角色落地时清零
+		[c/66CCFF:“人人有钩爪，人人有镐子，太棒啦”]
+		[c/FFAF00:事象记录]
+		'''
+}
