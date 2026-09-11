@@ -11,10 +11,14 @@ namespace MatterRecord;
 public class RecipeGroupSystem : ModSystem
 {
     /// <summary>「银表 / 钨表」合成组名称（《爱丽丝漫游仙境》的额外合成材料）。</summary>
-    public const string SilverWatchGroup = "MatterRecord:SilverWatch";
+    public const string SilverWatchGroupName = "MatterRecord:SilverWatch";
+    public RecipeGroup SilverWatchGroup { get; private set; }
 
     /// <summary>「火枪 / 送葬者」合成组名称（《蝇王》的额外合成材料）。</summary>
-    public const string MusketGroup = "MatterRecord:Musket";
+    public const string MusketGroupName = "MatterRecord:Musket";
+    public RecipeGroup MusketGroup { get; private set; }
+
+    public static RecipeGroupSystem Instance { get; private set; }
 
     /// <summary>
     /// 注册本模组所需的合成组。tModLoader 保证本方法先于各物品的 <c>AddRecipes</c> 执行，
@@ -23,15 +27,26 @@ public class RecipeGroupSystem : ModSystem
     public override void AddRecipeGroups()
     {
         // 怀表组：银表或钨表均可
-        RecipeGroup silverWatch = new RecipeGroup(
-            () => Language.GetTextValue("Mods.MatterRecord.RecipeGroups.SilverWatch"),
-            ItemID.SilverWatch, ItemID.TungstenWatch);
-        RecipeGroup.RegisterGroup(SilverWatchGroup, silverWatch);
+        SilverWatchGroup = 
+            RecipeGroup.Register(
+                SilverWatchGroupName, 
+                "Mods.MatterRecord.RecipeGroups.SilverWatch", 
+                ItemID.SilverWatch, ItemID.TungstenWatch);
 
         // 火枪组：火枪（腐化）或送葬者（猩红）均可
-        RecipeGroup musket = new RecipeGroup(
-            () => Language.GetTextValue("Mods.MatterRecord.RecipeGroups.Musket"),
-            ItemID.Musket, ItemID.TheUndertaker);
-        RecipeGroup.RegisterGroup(MusketGroup, musket);
+        MusketGroup =
+            RecipeGroup.Register(
+                MusketGroupName,
+                "Mods.MatterRecord.RecipeGroups.Musket",
+                ItemID.Musket, ItemID.TheUndertaker);
+    }
+
+    public override void Load()
+    {
+        Instance = this;
+    }
+    public override void Unload()
+    {
+        Instance = null;
     }
 }

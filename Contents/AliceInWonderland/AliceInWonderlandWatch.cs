@@ -46,7 +46,7 @@ public class AliceInWonderlandWatch : ModItem, IRecordBookItem
     public override void AddRecipes()
     {
         // 银表 / 钨表 已合并为同一合成组，因此只生成一条配方
-        this.RegisterBookRecipe(RecipeGroupSystem.SilverWatchGroup);
+        this.RegisterBookRecipe(RecipeGroupSystem.Instance.SilverWatchGroup);
         base.AddRecipes();
     }
 
@@ -109,11 +109,11 @@ public class AliceInWonderlandWatch : ModItem, IRecordBookItem
         for (int attempt = 0; attempt < 8; attempt++)
         {
             bool canSpawn = false;
-            Vector2 candidate = Main.LocalPlayer.CheckForGoodTeleportationSpot(
+            Vector2 candidate = Utils.CheckForGoodTeleportationSpot(
                 ref canSpawn,
                 100, Main.maxTilesX - 200,
                 100, Main.UnderworldLayer,
-                new Player.RandomTeleportationAttemptSettings
+                new Utils.RandomTeleportationAttemptSettings
                 {
                     avoidLava = true,
                     avoidHurtTiles = true,
@@ -132,11 +132,11 @@ public class AliceInWonderlandWatch : ModItem, IRecordBookItem
         for (int attempt = 0; attempt < 5; attempt++)
         {
             bool canSpawn = false;
-            Vector2 candidate = Main.LocalPlayer.CheckForGoodTeleportationSpot(
+            Vector2 candidate = Utils.CheckForGoodTeleportationSpot(
                 ref canSpawn,
                 100, Main.maxTilesX - 200,
                 100, Main.UnderworldLayer,
-                new Player.RandomTeleportationAttemptSettings
+                new Utils.RandomTeleportationAttemptSettings
                 {
                     avoidLava = true,
                     avoidHurtTiles = true,

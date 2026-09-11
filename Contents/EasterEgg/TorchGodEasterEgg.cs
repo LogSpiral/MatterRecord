@@ -217,7 +217,7 @@ namespace MatterRecord.Contents.EasterEgg
                 for (int y = minY; y <= maxY; y++)
                 {
                     Tile tile = Main.tile[x, y];
-                    if (tile != null && tile.HasTile && TileID.Sets.Torch[tile.TileType])
+                    if (tile != null && tile.HasTile && TileID.Sets.Torches[tile.TileType])
                         count++;
                 }
             return count;

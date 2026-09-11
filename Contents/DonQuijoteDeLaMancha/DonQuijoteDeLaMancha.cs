@@ -306,25 +306,25 @@ public class DonQuijoteDeLaMancha : MeleeSequenceItem<DonQuijoteDeLaManchaProj>,
                 // 标题
                 tooltips.Add(new TooltipLine(Mod, "ComboTitle", this.GetLocalizedValue("ComboTitle"))
                 {
-                    OverrideColor = Color.Cyan
+                    Color = Color.Cyan
                 });
 
                 // 各阈值效果（固定描述，不依赖当前连击数）
                 tooltips.Add(new TooltipLine(Mod, "Combo5", this.GetLocalizedValue("Combo5"))
                 {
-                    OverrideColor = Color.LightGray
+                    Color = Color.LightGray
                 });
                 tooltips.Add(new TooltipLine(Mod, "Combo10", this.GetLocalizedValue("Combo10"))
                 {
-                    OverrideColor = Color.LightGray
+                    Color = Color.LightGray
                 });
                 tooltips.Add(new TooltipLine(Mod, "Combo15", this.GetLocalizedValue("Combo15"))
                 {
-                    OverrideColor = Color.LightGray
+                    Color = Color.LightGray
                 });
                 tooltips.Add(new TooltipLine(Mod, "Combo20", this.GetLocalizedValue("Combo20"))
                 {
-                    OverrideColor = Color.LightGray
+                    Color = Color.LightGray
                 });
             }
             else
@@ -332,7 +332,7 @@ public class DonQuijoteDeLaMancha : MeleeSequenceItem<DonQuijoteDeLaManchaProj>,
                 // 未按住 Shift：连击查看提示放在主 tip（与连击加成列表同区）
                 tooltips.Add(new TooltipLine(Mod, "ComboHint", this.GetLocalizedValue("ComboHint"))
                 {
-                    OverrideColor = Color.Gray
+                    Color = Color.Gray
                 });
             }
         }
@@ -355,7 +355,7 @@ public class DonQuijoteDeLaMancha : MeleeSequenceItem<DonQuijoteDeLaManchaProj>,
             // 未按住 Shift：只添加强化进度查看提示（连击提示已移至 ModifyTooltips 主 tip）
             extraLines.Add(new TooltipLine(Mod, "ShiftHint", this.GetLocalizedValue("ShiftHint"))
             {
-                OverrideColor = Color.Gray
+                Color = Color.Gray
             });
 
             MiscMethods.DrawTagTooltips(lines, extraLines, x, y);
@@ -404,7 +404,7 @@ public class DonQuijoteDeLaMancha : MeleeSequenceItem<DonQuijoteDeLaManchaProj>,
         // 标题
         extraLines.Add(new TooltipLine(Mod, "ProgressionTitle", this.GetLocalization("ProgressionTitle").Format(unlockedCount))
         {
-            OverrideColor = Color.White
+            Color = Color.White
         });
 
         // 每一项
@@ -429,7 +429,7 @@ public class DonQuijoteDeLaMancha : MeleeSequenceItem<DonQuijoteDeLaManchaProj>,
             string displayText = iconStr + this.GetLocalizedValue(nameKey);
             extraLines.Add(new TooltipLine(Mod, "Progression" + (i + 1), displayText)
             {
-                OverrideColor = unlocked ? Color.Yellow : Color.Gray
+                Color = unlocked ? Color.Yellow : Color.Gray
             });
         }
 
@@ -968,7 +968,7 @@ public class DonQuijoteGBItem : GlobalItem
             mplr.SyncPlayer(-1, player.whoAmI, false);
         item.stack++;
         DonQuijoteDeLaMancha.Active = false;
-        Label:
+    Label:
         orig.Invoke(item, player);
     }
 
@@ -1110,7 +1110,7 @@ public class WindMill : ModProjectile
         return true;
     }
 
-    public override bool PreDraw(ref Color lightColor)
+    public override bool PreDraw(Player player, ref Color lightColor)
     {
         float progress = 1f - (float)Projectile.timeLeft / 600f;
         float alpha = 1f;

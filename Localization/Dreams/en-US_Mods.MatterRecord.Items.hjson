@@ -73,7 +73,7 @@ TavernkeepDream: {
 WizardDream: {
 	RecipeCondition: Unlock Wizard
 	ReachedLimit: Has reached the maximum
-	UsedCount: "Used {0}/10 times"
+	UsedCount: Used {0}/10 times
 	DisplayName: Wizard's Dream
 	Tooltip:
 		'''

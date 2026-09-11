@@ -39,7 +39,7 @@ namespace MatterRecord.Contents.LordOfTheFlies
         public override void AddRecipes()
         {
             // 火枪 / 送葬者 已合并为同一合成组，因此只生成一条配方
-            this.RegisterBookRecipe(RecipeGroupSystem.MusketGroup);
+            this.RegisterBookRecipe(RecipeGroupSystem.Instance.MusketGroup);
         }
 
         public override bool CanUseItem(Player player)
@@ -127,7 +127,7 @@ namespace MatterRecord.Contents.LordOfTheFlies
                                 if (_chargeTimer % 4 == 0)
                                 {
                                     NetMessage.SendData(MessageID.PlayerControls, -1, -1, null, Main.myPlayer);
-                                    NetMessage.SendData(MessageID.ShotAnimationAndSound, -1, -1, null, Main.myPlayer);
+                                    NetMessage.SendData(MessageID.ItemRotationAndAnimation, -1, -1, null, Main.myPlayer);
                                 }
                             }
                             player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, player.itemRotation * player.gravDir - (player.direction < 0 ? MathHelper.Pi : 0) - MathHelper.PiOver2);
@@ -260,7 +260,7 @@ namespace MatterRecord.Contents.LordOfTheFlies
                         if (player.itemTime % 4 == 0)
                         {
                             NetMessage.SendData(MessageID.PlayerControls, -1, -1, null, Main.myPlayer);
-                            NetMessage.SendData(MessageID.ShotAnimationAndSound, -1, -1, null, Main.myPlayer);
+                            NetMessage.SendData(MessageID.ItemRotationAndAnimation, -1, -1, null, Main.myPlayer);
                         }
                     }
                     player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, player.itemRotation * player.gravDir - (player.direction < 0 ? MathHelper.Pi : 0) - MathHelper.PiOver2);
@@ -553,7 +553,7 @@ namespace MatterRecord.Contents.LordOfTheFlies
                 // 未按住 Shift：只添加提示行，不显示强化列表
                 extraLines.Add(new TooltipLine(Mod, "ShiftHint", this.GetLocalizedValue("ShiftHint"))
                 {
-                    OverrideColor = Color.Gray
+                    Color = Color.Gray
                 });
                 MiscMethods.DrawTagTooltips(lines, extraLines, x, y);
                 return true;
@@ -603,7 +603,7 @@ namespace MatterRecord.Contents.LordOfTheFlies
             // 标题
             extraLines.Add(new TooltipLine(Mod, "ProgressionTitle", this.GetLocalization("ProgressionTitle").Format(unlockedCount))
             {
-                OverrideColor = Color.White
+                Color = Color.White
             });
 
             // 每一项
@@ -628,7 +628,7 @@ namespace MatterRecord.Contents.LordOfTheFlies
                 string displayText = iconStr + this.GetLocalizedValue(nameKey);
                 extraLines.Add(new TooltipLine(Mod, "Progression" + (i + 1), displayText)
                 {
-                    OverrideColor = unlocked ? Color.Yellow : Color.Gray
+                    Color = unlocked ? Color.Yellow : Color.Gray
                 });
             }
 

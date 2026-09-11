@@ -114,7 +114,7 @@ public class TimeSword : ModItem
         TooltipLine line = new TooltipLine(Mod, "CurrentPlayTime",
             this.GetLocalization("CurrentPlayTime").Format(totalSeconds, formatted))
         {
-            OverrideColor = Color.LightGreen
+            Color = Color.LightGreen
         };
         tooltips.Add(line);
     }

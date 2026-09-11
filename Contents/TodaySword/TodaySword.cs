@@ -350,13 +350,13 @@ public class TodaySword : ModItem
             Item template = new Item();
             template.SetDefaults(swordType);
             TooltipLine line = new TooltipLine(Mod, "CurrentSword", this.GetLocalization("CurrentSwordText").Format(template.Name));
-            line.OverrideColor = Color.LightGreen;
+            line.Color = Color.LightGreen;
             tooltips.Add(line);
         }
         else
         {
             TooltipLine line = new TooltipLine(Mod, "CurrentSword", this.GetLocalizedValue("SwordNotSelectedText"));
-            line.OverrideColor = Color.Gray;
+            line.Color = Color.Gray;
             tooltips.Add(line);
         }
 

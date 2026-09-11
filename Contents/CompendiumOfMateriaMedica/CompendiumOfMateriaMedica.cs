@@ -58,7 +58,7 @@ public class CompendiumOfMateriaMedica : ModItem, IRecordBookItem
             // 未按住 Shift：只添加提示行
             tooltips.Add(new TooltipLine(Mod, "ShiftHint", this.GetLocalizedValue("ShiftHint"))
             {
-                OverrideColor = Color.Gray
+                Color = Color.Gray
             });
         }
         else
@@ -73,7 +73,7 @@ public class CompendiumOfMateriaMedica : ModItem, IRecordBookItem
                     continue;
                 tooltips.Add(new TooltipLine(Mod, "HerbEffect" + index, text)
                 {
-                    OverrideColor = Color.LightGray
+                    Color = Color.LightGray
                 });
                 index++;
             }

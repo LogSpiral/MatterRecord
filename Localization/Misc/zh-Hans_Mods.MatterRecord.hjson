@@ -11,7 +11,6 @@ Tiles: {
 Keybinds: {
 	TimeStop.DisplayName: 时停
 	CanHookPlatform.DisplayName: 可以钩至平台
-	// ResetRecorderTrigger.DisplayName: Reset Recorder Trigger
 }
 
 DamageClasses.RangedMagicDamage.DisplayName: 魔法-远程伤害
@@ -126,9 +125,7 @@ EasterEgg: {
 	TorchGodLine3: 这规矩你早就懂的
 }
 
-UI: {
-	SearchHint: 输入显示的图格名进行查找
-}
+UI.SearchHint: 输入显示的图格名进行查找
 
 RecipeGroups: {
 	SilverWatch: 银表/钨表

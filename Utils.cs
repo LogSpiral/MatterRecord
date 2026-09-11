@@ -1583,13 +1583,13 @@ public static class MiscMethods
     /// </summary>
     /// <typeparam name="T">目标「事象记录」物品类型。</typeparam>
     /// <param name="modItem">目标物品。</param>
-    /// <param name="recipeGroupName">合成组名称（需先经 <see cref="RecipeGroup.RegisterGroup(string, RecipeGroup)"/> 注册）。</param>
-    public static void RegisterBookRecipe<T>(this T modItem, string recipeGroupName) where T : ModItem
+    /// <param name="recipeGroup">合成组（需先经 <see cref="RecipeGroup.Register(string, string, int[])(string,string, int[])"/> 注册）。</param>
+    public static void RegisterBookRecipe<T>(this T modItem, RecipeGroup recipeGroup) where T : ModItem
     {
         modItem.CreateRecipe()
             .AddIngredient(ItemID.Book)
             .AddTile(TileID.Bookcases)
-            .AddRecipeGroup(recipeGroupName)
+            .AddRecipeGroup(recipeGroup)
             .AddCondition(Language.GetText("Mods.MatterRecord.Configs.MatterRecordConfig.AllowingRecordRecipe.ConditionDescription"), () => MatterRecordConfig.Instance.AllowingRecordRecipe)
             .DisableDecraft()
             .Register();

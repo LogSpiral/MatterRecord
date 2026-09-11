@@ -30,7 +30,7 @@ namespace MatterRecord.Contents.LordOfTheFlies
             Main.projFrames[Type] = 1;
             Main.projPet[Type] = true;
             ProjectileID.Sets.MinionSacrificable[Type] = true;
-            ProjectileID.Sets.MinionTargettingFeature[Type] = true;
+            ProjectileID.Sets.MinionTargetingFeature[Type] = true;
         }
 
         public override void SetDefaults()
@@ -395,7 +395,7 @@ namespace MatterRecord.Contents.LordOfTheFlies
             return target;
         }
 
-        public override bool PreDraw(ref Color lightColor)
+        public override bool PreDraw(Player player, ref Color lightColor)
         {
             Texture2D texture = TextureAssets.Projectile[Type].Value;
             Vector2 drawPos = Projectile.Center - Main.screenPosition + new Vector2(0f, _floatOffsetY);

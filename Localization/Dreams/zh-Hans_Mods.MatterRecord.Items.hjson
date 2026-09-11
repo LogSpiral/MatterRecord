@@ -73,7 +73,7 @@ TavernkeepDream: {
 WizardDream: {
 	RecipeCondition: 巫师可入住
 	ReachedLimit: 已达到上限
-	UsedCount: "已使用 {0}/10 次"
+	UsedCount: 已使用 {0}/10 次
 	DisplayName: 巫师之梦
 	Tooltip:
 		'''
