@@ -30,7 +30,7 @@ public class FaustGlobalItem : GlobalItem
         else
         {
             var text5 = "";
-            var num16 = (long)item.GetStoreValue() * 4;
+            var num16 = (long)item.GetStoreValue() ;
             var num12 = 0L;
             var num13 = 0L;
             var num14 = 0L;

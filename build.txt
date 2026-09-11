@@ -1,4 +1,4 @@
 displayName = 事象网罗
-author = 罗乐筱、杜格、信鸽、错数螺线
+author = 罗乐筱、杜格、信鸽、错数螺线、一团云酱
 version = 0.1.6.1
 dllReferences = NetSimplified

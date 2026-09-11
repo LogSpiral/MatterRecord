@@ -36,4 +36,8 @@
 原谅我在此提了一嘴，但我希望能够有同好能够找到这个mod
 对于模组中涉及的名著/诗歌/戏剧等，大部分未经完整阅读，如有与原文脱节部分，还望谅解
 如果对模组内容有兴趣，可以加入模组聊天群(QQ)780322910
+ *  部分功能代码基于 Reptiloid 的模组 (Simple Map Searcher)
+ *  使用已获作者许可
+ *  创意工坊页面: https://steamcommunity.com/sharedfiles/filedetails/?id=3703851399
+
 Developed By 罗乐筱、杜格、信鸽、错数螺线、一团云酱[/quote]

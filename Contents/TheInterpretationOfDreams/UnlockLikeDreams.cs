@@ -1,4 +1,4 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using System;
 using System.Collections.Generic;
@@ -75,7 +75,7 @@ public class SkeletonMerchantDream() : UnlockLikeDreams(DreamState.SkeletonMerch
 
 public class PrincessDream() : UnlockLikeDreams(DreamState.Princess, () => NPC.unlockedPrincessSpawn)
 {
-    public override void ExtraIngredient(Recipe recipe) => recipe.AddIngredient(ItemID.RoyalTiara);
+    public override void ExtraIngredient(Recipe recipe) => recipe.AddIngredient(ItemID.BerniePetItem);
 }
 
 public class SantaClausDream() : UnlockLikeDreams(DreamState.SantaClaus, () => NPC.downedFrost && Main.xMas)
@@ -130,7 +130,7 @@ public class PainterDream() : UnlockLikeDreams(DreamState.Painter, null)
 
 public class TruffleDream() : UnlockLikeDreams(DreamState.Truffle, () => NPC.unlockedTruffleSpawn)
 {
-    public override void ExtraIngredient(Recipe recipe) => recipe.AddIngredient(ItemID.StrangeGlowingMushroom);
+    public override void ExtraIngredient(Recipe recipe) => recipe.AddIngredient(ItemID.MushroomCap);
 }
 
 public class PartyGirlDream() : UnlockLikeDreams(DreamState.PartyGirl, () => NPC.unlockedPartyGirlSpawn)
@@ -140,7 +140,7 @@ public class PartyGirlDream() : UnlockLikeDreams(DreamState.PartyGirl, () => NPC
 
 public class ArmsDealerDream() : UnlockLikeDreams(DreamState.ArmsDealer, NPC.SpawnAllowed_ArmsDealer)
 {
-    public override void ExtraIngredient(Recipe recipe) => recipe.AddIngredient(ItemID.IllegalGunParts);
+    public override void ExtraIngredient(Recipe recipe) => recipe.AddIngredient(ItemID.FlintlockPistol);
 }
 
 public class AnglerDream() : UnlockLikeDreams(DreamState.Angler, () => NPC.savedAngler)

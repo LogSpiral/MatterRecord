@@ -7,7 +7,7 @@ namespace MatterRecord.Contents.TheAdventureofSherlockHolmes;
 
 public class TheAdventureofSherlockHolmesSystem : ModSystem
 {
-    private static int TASHPrice => Main.LocalPlayer.discountEquipped ? 8000 : 10000;
+    private static int TASHPrice => Main.LocalPlayer.discountEquipped ? 4000 : 5000;
     public override void Load()
     {
         Main.OnPostFullscreenMapDraw += Main_OnPostFullscreenMapDraw;

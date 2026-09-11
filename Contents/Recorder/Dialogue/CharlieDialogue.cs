@@ -3,6 +3,7 @@ using Terraria;
 using Terraria.ModLoader;
 using Terraria.GameContent;
 using MatterRecord.Contents.LordOfTheFlies;
+using Terraria.Localization;
 
 namespace MatterRecord.Contents.Recorder.Dialogue
 {
@@ -56,16 +57,16 @@ namespace MatterRecord.Contents.Recorder.Dialogue
 
             string content = data.CharlieCounter switch
             {
-                1 => "看来有人出门忘了带火把？",
-                2 => "真是没有记性的家伙",
-                3 => "我说，你不会是故意的吧",
-                4 => "这不好玩",
-                5 => "……",
-                6 => "湮灭弹储备归零，祝你好运",
+                1 => Language.GetTextValue("Mods.MatterRecord.Dialogue.Recorder.Charlie1"),
+                2 => Language.GetTextValue("Mods.MatterRecord.Dialogue.Recorder.Charlie2"),
+                3 => Language.GetTextValue("Mods.MatterRecord.Dialogue.Recorder.Charlie3"),
+                4 => Language.GetTextValue("Mods.MatterRecord.Dialogue.Recorder.Charlie4"),
+                5 => Language.GetTextValue("Mods.MatterRecord.Dialogue.Recorder.Charlie5"),
+                6 => Language.GetTextValue("Mods.MatterRecord.Dialogue.Recorder.Charlie6"),
                 _ => ""
             };
             if (!string.IsNullOrEmpty(content))
-                _player.SendMessageWithBubble("‹乐九›：", content);
+                _player.SendMessageWithBubble(Language.GetTextValue("Mods.MatterRecord.Dialogue.Recorder.NinaBubble"), content);
 
             SpawnCharlieProjectile(player);
         }

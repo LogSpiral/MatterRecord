@@ -1,4 +1,4 @@
-﻿using MonoMod.Cil;
+using MonoMod.Cil;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,35 +18,50 @@ public class EternalWine : ModItem
 
     private void EternalWineQuickBuffEffect(On_Player.orig_QuickBuff_UseItemForBuff orig, Player self, Item item, int btype)
     {
-        if (item.type != ModContent.ItemType<EternalWine>())
-            goto origInvoke;
-        int buffTime;
-        int healValue;
-        if (NPC.downedMoonlord)
+        ILCursor cursor = new ILCursor(il);
+
+        for (int i = 0; i < 3; i++)
+            if (!cursor.TryGotoNext(i => i.MatchLdloc(5)))
+                return;
+
+        int currentIndex = cursor.Index;
+
+        if (!cursor.TryGotoNext(i => i.MatchLdloc(4)))
+            return;
+
+        ILLabel curLabel = cursor.MarkLabel();
+
+        cursor.Index = currentIndex;
+        cursor.Index++;
+        for (int n = 0; n < 3; n++)
+            cursor.Remove();
+        cursor.EmitDelegate<Func<Item, bool>>(
+            item =>
+            {
+                bool flag1 = item.buffTime <= 0;
+                bool flag2 = item.type != ModContent.ItemType<EternalWine>();
+                return flag1 && flag2;
+            }
+            );
+        cursor.EmitBrtrue(curLabel);
+
+        for (int i = 0; i < 3; i++)//8
+            if (!cursor.TryGotoNext(i => i.MatchLdloc(5)))
+                return;
+        cursor.EmitLdloc(5);
+        cursor.EmitLdarg0();
+        cursor.EmitDelegate<Action<Item, Player>>((item, player) =>
         {
-            healValue = 175;
-            buffTime = 90;
-        }
-        else if (Main.hardMode)
-        {
-            healValue = 125;
-            buffTime = 60;
-        }
-        else
-        {
-            healValue = 75;
-            buffTime = 30;
-        }
-        self.AddBuff(ModContent.BuffType<Eternal>(), buffTime);
-        self.GetModPlayer<EternalWinePlayer>().SetLifeDebt(healValue, healValue);
-        self.statLife += healValue;
-        if (self.whoAmI == Main.myPlayer)
-            self.HealEffect(healValue);
-        if (Main.netMode == NetmodeID.MultiplayerClient && Main.myPlayer == self.whoAmI)
-            EternalWineSync.Get(self.whoAmI, healValue, healValue).Send(-1, self.whoAmI);
-    origInvoke:
-        orig?.Invoke(self, item, btype);
-    }
+            if (item.type != ModContent.ItemType<EternalWine>())
+                return;
+            GetStageValues(out int healValue, out int buffTime);
+            player.AddBuff(ModContent.BuffType<Eternal>(), buffTime);
+            player.GetModPlayer<EternalWinePlayer>().SetLifeDebt(healValue, healValue);
+            player.statLife += healValue;
+            if (player.whoAmI == Main.myPlayer)
+                player.HealEffect(healValue);
+            if (Main.netMode == NetmodeID.MultiplayerClient && Main.myPlayer == player.whoAmI)
+                EternalWineSync.Get(player.whoAmI, healValue, healValue).Send(-1, player.whoAmI);
 
     private void EternalWineQuickBuffCheck(ILContext il)
     {
@@ -179,19 +194,13 @@ public class EternalWine : ModItem
         Item.healLife = 100;
     }
 
-    public override void ModifyTooltips(List<TooltipLine> tooltips)
+    /// <summary>
+    /// 按当前世界进度取永生之酒的效果档位（未进困难 / 困难 / 击败月总，共三档）。
+    /// </summary>
+    /// <param name="healValue">借出的生命值，同时也是饮用时的回复量。</param>
+    /// <param name="buffTime">「永生」增益的持续帧数（60 帧 = 1 秒），即无敌帧时长。</param>
+    private static void GetStageValues(out int healValue, out int buffTime)
     {
-        TooltipLine line = tooltips.FirstOrDefault(x => x.Mod == "Terraria" && x.Name == "HealLife");
-        tooltips.Remove(line);
-    }
-    public override bool CanUseItem(Player player)
-    {
-        return !player.HasBuff<LifeRegenStagnant>();
-    }
-
-    public override void GetHealLife(Player player, bool quickHeal, ref int healValue)
-    {
-        int buffTime;
         if (NPC.downedMoonlord)
         {
             healValue = 175;
@@ -207,6 +216,46 @@ public class EternalWine : ModItem
             healValue = 75;
             buffTime = 30;
         }
+    }
+
+    /// <summary>
+    /// 动态生成物品提示：把当前档位的「借贷生命」与「无敌秒数」填入首行占位符，
+    /// 并按世界进度在末尾追加一条解锁提示（击败月总后不再追加）。
+    /// </summary>
+    /// <param name="tooltips">待显示的工具提示行集合。</param>
+    public override void ModifyTooltips(List<TooltipLine> tooltips)
+    {
+        // 原版会依据 Item.healLife 自动生成「恢复生命 xx」行，本物品改用自定义文案表达，故移除
+        TooltipLine healLine = tooltips.FirstOrDefault(x => x.Mod == "Terraria" && x.Name == "HealLife");
+        if (healLine != null)
+            tooltips.Remove(healLine);
+
+        GetStageValues(out int healValue, out int buffTime);
+
+        // hjson 的 Tooltip 被原版逐行拆成 Tooltip0/Tooltip1…，占位符只出现在首行，
+        // 因此只格式化首行自身文本，避免破坏多行结构
+        TooltipLine firstLine = tooltips.FirstOrDefault(x => x.Mod == "Terraria" && x.Name == "Tooltip0");
+        if (firstLine != null)
+            firstLine.Text = string.Format(firstLine.Text, healValue, buffTime / 60f);
+
+        // 末尾追加解锁提示：未进困难模式提示困难模式，进困难但未击败月总提示月总，击败月总后不再提示
+        string unlockKey = NPC.downedMoonlord ? null : Main.hardMode ? "UnlockMoonLord" : "UnlockHardMode";
+        if (unlockKey != null)
+        {
+            int lastTooltip = tooltips.FindLastIndex(x => x.Mod == "Terraria" && x.Name.StartsWith("Tooltip"));
+            if (lastTooltip != -1)
+                tooltips.Insert(lastTooltip + 1, new TooltipLine(Mod, "EternalWineUnlock", this.GetLocalizedValue(unlockKey)));
+        }
+    }
+
+    public override bool CanUseItem(Player player)
+    {
+        return !player.HasBuff<LifeRegenStagnant>();
+    }
+
+    public override void GetHealLife(Player player, bool quickHeal, ref int healValue)
+    {
+        GetStageValues(out healValue, out int buffTime);
         if (quickHeal)
         {
             player.AddBuff(ModContent.BuffType<Eternal>(), buffTime);

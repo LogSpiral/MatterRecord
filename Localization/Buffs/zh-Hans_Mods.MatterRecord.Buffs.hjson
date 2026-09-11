@@ -44,6 +44,15 @@ Holiday_War: {
 FragrantHerbs: {
 	DisplayName: 百草生香
 	Description: 感谢大自然的馈赠
+	TipActive: 当前激活的草药效果：
+	TipNone: 尚未激活任何草药效果
+	Blinkroot: 闪耀根：+3% 免伤，+5% 移速
+	Daybloom: 太阳花：+2 防御，+0.5 生命再生
+	Deathweed: 死亡草：+4% 伤害，命中附加中毒
+	Fireblossom: 火焰花：+2% 暴击率，命中附加着火了
+	Moonglow: 月光草：+0.5 魔力再生，+5% 魔法伤害
+	Shiverthorn: 寒颤棘：+20 最大生命，命中附加霜冻
+	Waterleaf: 水叶草：+5 渔力，+0.01 幸运
 }
 
 TheManInTheHighCastleBuff: {

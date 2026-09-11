@@ -61,6 +61,18 @@ public class WizardDream() : ActionLikeDreams(10, () => NPC.savedWizard)
 
     public override bool ConsumeItem(Player player) => player.GetModPlayer<DreamPlayer>().WizardDreamCount < 10;
 
+    /// <summary>
+    /// 在物品提示中追加当前已使用次数，便于玩家判断距离上限（10 次）还有多少空间。
+    /// </summary>
+    /// <param name="tooltips">待显示的工具提示行集合。</param>
+    public override void ModifyTooltips(List<TooltipLine> tooltips)
+    {
+        // 物品提示只在本机绘制，直接取本地玩家的记录即可
+        int used = Main.LocalPlayer.GetModPlayer<DreamPlayer>().WizardDreamCount;
+        tooltips.Add(new TooltipLine(Mod, "WizardDreamUsedCount", string.Format(this.GetLocalizedValue("UsedCount"), used)));
+        base.ModifyTooltips(tooltips);
+    }
+
     public override void ExtraIngredient(Recipe recipe) => recipe.AddIngredient(ItemID.SpellTome);
 }
 
@@ -88,7 +100,7 @@ public class ZoologiseDream() : ActionLikeDreams(26, () => Main.GetBestiaryProgr
 
     public override bool ConsumeItem(Player player) => !DreamWorld.UsedZoologistDream;
 
-    public override void ExtraIngredient(Recipe recipe) => recipe.AddIngredient(ItemID.LicenseCat);
+    public override void ExtraIngredient(Recipe recipe) => recipe.AddIngredient(ItemID.DontHurtCrittersBook);
 }
 
 public class GolferDream() : ActionLikeDreams(25, () => NPC.savedGolfer)

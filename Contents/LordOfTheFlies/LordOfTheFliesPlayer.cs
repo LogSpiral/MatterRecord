@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using Terraria.ModLoader.IO;
 
 namespace MatterRecord.Contents.LordOfTheFlies;
@@ -13,6 +14,8 @@ public class LordOfTheFliesPlayer : ModPlayer
 
     public int ChargingEnergy;
 
+    public int SourceRecoveryPauseTimer;
+
     // 移除击杀数加成机制
     /*public int PlayerKillCount { get; set; }
     public int NPCKillCount { get; set; }*/
@@ -22,6 +25,12 @@ public class LordOfTheFliesPlayer : ModPlayer
     //public bool ControlUseAnnihilation { get; private set; }
 
     public int RightCooldown { get; set; }
+
+    /// <summary>蝇王强化1：命中叠层的当前层数（0~5，每层视为护甲防御）。</summary>
+    public int DefenseBonusStacks;
+
+    /// <summary>蝇王强化1：防御加成剩余生效时间（单位：帧，300 帧 = 5 秒）。</summary>
+    public int DefenseBonusTimer;
 
     public override void SaveData(TagCompound tag)
     {
@@ -61,14 +70,66 @@ public class LordOfTheFliesPlayer : ModPlayer
         ChargingEnergy = 120;
 #endif
         RightCooldown--;
+        // 源质强化后暂停源质恢复的计时器递减
+        if (SourceRecoveryPauseTimer > 0)
+            SourceRecoveryPauseTimer--;
         if (Player.HeldItem?.ModItem is not LordOfTheFlies || ChargingEnergy < 3)
             IsInTrialMode = false;
         //ChargingEnergy = 0;
-        if (!IsInTrialMode && ChargingEnergy < 120 && (int)(Main.GlobalTimeWrappedHourly * 60) % 5 == 0)
+        // 源质恢复（使用源质强化后会暂停 30 帧）
+        if (!IsInTrialMode && ChargingEnergy < 120 && SourceRecoveryPauseTimer <= 0 && (int)(Main.GlobalTimeWrappedHourly * 60) % 5 == 0)
         {
             ChargingEnergy++;
         }
         base.PreUpdate();
+    }
+
+    /// <summary>
+    /// 蝇王强化1：命中敌人时叠加防御层数（每次 +1 层，最高 5 层，持续 5 秒）。
+    /// 参考本草纲目写法，不新增 buff，层数防御直接以 statDefense 形式生效。
+    /// </summary>
+    public void AddDefenseStack()
+    {
+        if (DefenseBonusStacks < 5)
+            DefenseBonusStacks++;
+        DefenseBonusTimer = 300; // 5 秒 = 300 帧
+    }
+
+    /// <summary>
+    /// 计算蝇王强化1当前提供的额外护甲防御值。
+    /// 每层 = 装备护甲防御 × 0.03（最低 1），总加成 = 层数 × 每层值。
+    /// </summary>
+    /// <returns>当前强化1提供的额外护甲防御值。</returns>
+    public int GetDefenseBonus()
+    {
+        if (DefenseBonusStacks <= 0)
+            return 0;
+        int armorDefense = Player.armor[0].defense + Player.armor[1].defense + Player.armor[2].defense;
+        int perStack = Math.Max(1, (int)(armorDefense * 0.03f));
+        return DefenseBonusStacks * perStack;
+    }
+
+    /// <summary>
+    /// 每帧更新强化1的层数计时，并把叠层防御视为护甲防御直接加成到玩家防御。
+    /// 参考本草纲目写法：不新增 buff、不绘制图标，仅通过属性生效。
+    /// </summary>
+    public override void PostUpdateEquips()
+    {
+        // 层数计时递减，超时清零
+        if (DefenseBonusTimer > 0)
+        {
+            DefenseBonusTimer--;
+            if (DefenseBonusTimer <= 0)
+                DefenseBonusStacks = 0;
+        }
+
+        // 叠层防御视为护甲防御，直接加成（仅提供容错，输出平衡在伤害公式中抵消）
+        // 进度锁：未解锁 Tier1 时强制清零，防止绕过锁累积防御
+        if (!LordOfTheFliesProgression.Tier1_DefenseOnHit)
+            DefenseBonusStacks = 0;
+        else if (DefenseBonusStacks > 0)
+            Player.statDefense += GetDefenseBonus();
+        base.PostUpdateEquips();
     }
 
     public override void ModifyHurt(ref Player.HurtModifiers modifiers)
@@ -79,7 +140,9 @@ public class LordOfTheFliesPlayer : ModPlayer
             var proj = Main.projectile[modifiers.DamageSource.SourceProjectileLocalIndex];
             if (proj.GetGlobalProjectile<LordOfTheFliesGlobalProj>().IsFromTrialMode)
             {
-                modifiers.ArmorPenetration += 20;
+                // 无视 20 护甲（项3 进度锁）
+                if (LordOfTheFliesProgression.Tier3_Penetration)
+                    modifiers.ArmorPenetration += 20;
                 modifiers.FinalDamage += 1;
             }
         }

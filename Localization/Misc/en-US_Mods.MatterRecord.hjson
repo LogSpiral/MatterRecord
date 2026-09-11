@@ -9,8 +9,9 @@ Tiles: {
 }
 
 Keybinds: {
+	TimeStop.DisplayName: Time Stop
 	CanHookPlatform.DisplayName: Can Hook Platform
-	ResetRecorderTrigger.DisplayName: Reset Recorder Trigger
+	// ResetRecorderTrigger.DisplayName: Reset Recorder Trigger
 }
 
 DamageClasses.RangedMagicDamage.DisplayName: Ranged Magic Damage
@@ -29,6 +30,8 @@ NPCs: {
 		Copy: Copy
 		Collect: Unlock
 		Reward: Reward
+		GiveLifeCrystal: Give the Life Crystal
+		LifeCrystalHealed: You seem a bit healthier... do you eat these often?
 		Spawn: Spawning Recorder
 		Progress: Collecting Progress{0}
 		FindSlime: Missing pet?
@@ -43,19 +46,19 @@ NPCs: {
 		GivingLifeCrystal: 给予生命水晶
 
 		TownNPCMood: {
-			Content: 这个地方还不错……如果忽略掉那些小麻烦的话
-			NoHome: 有椅子和工作台就行，监狱也无所谓，我只是想有个地方能休息
-			FarFromHome: 好像走太远了……完全找不到回去的路
-			LoveSpace: 这里安静得让人有点不自在，我该建议搬几个邻居过来
-			DislikeCrowded: 声音在这里无处可去，总能飘进我的耳朵里，也许这里太挤了
-			HateCrowded: 声音在这里无处可去，总能飘进我的耳朵里，也许这里太挤了
-			LikeBiome: "{BiomeName}，沙土，阳光，还有轻柔的海风，一切都完美的不像话"
-			DislikeBiome: 这里热的让人头昏眼花，{BiomeName}带给人的可怕意象与其相比简直不算什么
-			LoveNPC: 我喜欢{NPCName}，她是我见过唯一能把绷带打得比废话还快的人
-			LikeNPC: "{NPCName}总是邀请我参加她的派对"
-			HateNPC: "{NPCName}在我身边的时候，我的佩枪就一直响，我应该给他来上一发吗？"
-			LikeNPC_Princess: 我喜欢 {NPCName}。
-			Princess_LovesNPC: 我喜欢和{NPCName}待在一起，她收集的哪些闪闪发光的故事就像是星星一样有趣！
+			Content: This place is decent... if you ignore those little annoyances
+			NoHome: A chair and a workbench are enough; a jail cell is fine too. I just want somewhere to rest
+			FarFromHome: I've walked too far... I can't find my way back at all
+			LoveSpace: It's a little too quiet here for comfort. Maybe I should suggest moving a few neighbors in
+			DislikeCrowded: Sound has nowhere to go here—it always finds its way into my ears. Maybe it's too crowded
+			HateCrowded: Sound has nowhere to go here—it always finds its way into my ears. Maybe it's too crowded
+			LikeBiome: "{BiomeName}—sand, sunshine, and gentle sea breeze. Everything is perfect beyond words"
+			DislikeBiome: It's so hot here my head spins; the dreadful imagery {BiomeName} brings pales in comparison
+			LoveNPC: I like {NPCName}. She's the only one I know who can wrap a bandage faster than she talks nonsense
+			LikeNPC: "{NPCName} always invites me to her parties"
+			HateNPC: "Whenever {NPCName} is around, my pistol keeps going off. Should I fire a round at him?"
+			LikeNPC_Princess: I like {NPCName}.
+			Princess_LovesNPC: I love being around {NPCName}—the sparkling stories she collects are as delightful as stars!
 		}
 	}
 
@@ -68,25 +71,66 @@ NPCs: {
 
 Bestiary: {
 	Recorder: {
-		Common: 她似乎对一切事物都不感兴趣，即便是对于自己的工作也是一样……(后面的字迹被涂抹掉了)
-		Request: "{0}？我有些话要和你说，用鼠标点一下这行字吧"
-		Warn: 偷看别人的个人信息可不算是礼貌的行为哦
+		Common: She seems indifferent to everything, even her own work... (the rest of the writing has been smudged out)
+		Request: "{0}? I have something to tell you. Click this line with your mouse"
+		Warn: Peeking at someone's personal information isn't very polite
 	}
 
-	DreamSlime: 这只史莱姆能在梦境之间穿梭，为人们驱逐噩梦。有时它会吃掉梦中的甜点——它真的很喜欢甜食！不过看在赶走噩梦的份上，就让它偷吃一口吧
+	DreamSlime: This slime can travel between dreams and banish nightmares for people. Sometimes it snacks on dreamy desserts—it really loves sweets! Still, since it drives away nightmares, let it have a little bite
 }
 
 EmeraldTablet: {
-	HintDefault: Mods.MatterRecord.EmeraldTablet.HintDefault
-	HintBanner: Mods.MatterRecord.EmeraldTablet.HintBanner
-	HintBossBag: Mods.MatterRecord.EmeraldTablet.HintBossBag
-	HintCrate: Mods.MatterRecord.EmeraldTablet.HintCrate
-	HintInvalidBag: Mods.MatterRecord.EmeraldTablet.HintInvalidBag
-	HintInvalid: Mods.MatterRecord.EmeraldTablet.HintInvalid
-	BannerUnit: Mods.MatterRecord.EmeraldTablet.BannerUnit
-	BagUnit: Mods.MatterRecord.EmeraldTablet.BagUnit
-	FormatBannersPerItem: Mods.MatterRecord.EmeraldTablet.FormatBannersPerItem
-	FormatItemsPerBanner: Mods.MatterRecord.EmeraldTablet.FormatItemsPerBanner
+	HintDefault:
+		'''
+		Place a banner / crate / treasure bag in the slot
+		to perform transmutation
+		'''
+	HintBanner:
+		'''
+		Current item: {0}
+		Can be turned into the corresponding enemy drops
+		'''
+	HintBossBag:
+		'''
+		Current item: {0}
+		Can be turned into its contents; only one keepsake of a powerful foe may be gained
+		'''
+	HintCrate:
+		'''
+		Current item: {0}
+		Can be turned into its contents
+		'''
+	HintInvalidBag:
+		'''
+		Invalid current item
+		Only banners / crates / treasure bags are supported
+		'''
+	HintInvalid:
+		'''
+		Invalid current item
+		Place a banner / crate / treasure bag in the slot
+		'''
+	BannerUnit: Banner
+	BagUnit: Bag
+	FormatBannersPerItem: "{0}{1}=1"
+	FormatItemsPerBanner: 1{1}={0}
 }
 
 RecordSystem.Unlocked: "{0} Unlocked"
+
+EasterEgg: {
+	LunaDefeated: The Lunar Rabbit has been defeated!
+	TorchGodLine0: Hey Torch God, your days of casually toggling my torches are over
+	TorchGodLine1: Give me the badge
+	TorchGodLine2: If you want it, you'll have to take it
+	TorchGodLine3: You know the rules by now
+}
+
+UI: {
+	SearchHint: Type the name of a tile to find
+}
+
+RecipeGroups: {
+	SilverWatch: Silver Watch/Tungsten Watch
+	Musket: Musket/The Undertaker
+}

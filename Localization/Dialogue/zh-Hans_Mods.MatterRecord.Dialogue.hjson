@@ -71,8 +71,21 @@ Recorder: {
 		这能让他更好地和鱼在一起
 		'''
 	PrincessDialogue: "{0}总是缠着我听故事，我乐意于此，但有些故事似乎不适合给小孩子讲......"
-	# 给予生命水晶
-	GivenLifeCrystal: 好像变得更健康了一点点，你平时都吃这个的吗？
+	NinaBubble: ‹乐九›：
+	MysteryBubble: ‹？？？›：
+	Charlie1: 看来有人出门忘了带火把？
+	Charlie2: 真是没有记性的家伙
+	Charlie3: 我说，你不会是故意的吧
+	Charlie4: 这不好玩
+	Charlie5: ……
+	Charlie6: 湮灭弹储备归零，祝你好运
+	CheatAh: 嗯哼？
+	CheatWhat: 在偷偷拿什么呢？
+	CrystalFull: 看起来你似乎已经达到了某种上限，如果不介意的话，可以分给我吗？
+	CrystalGive: 对话的时候递给我就行
+	TuningHello: 喂喂？听的见吗？
+	TuningLink: 好像连上了？看起来框架不算太复杂
+	TuningEvening: 晚上好，{0}，额……你怎么一副见了鬼的表情？这不是什么难事
 }
 
 DreamSlime: {

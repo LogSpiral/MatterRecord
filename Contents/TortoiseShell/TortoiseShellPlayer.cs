@@ -12,7 +12,11 @@ public class TortoiseShellPlayer : ModPlayer
             if (TortoiseDashing)
                 Player.endurance += timer * 0.18f;
             else
-                Player.endurance += .9f;
+            {
+                // 缩壳时只在蓄力未满前提供90%减免
+                if (timer < 1f)
+                    Player.endurance += .9f;
+            }
             Player.noKnockback = true;
             Player.mount?.Dismount(Player);
         }

@@ -298,7 +298,7 @@ public class CompendiumPlayer : ModPlayer
 
         if (finalBlinkroot)
         {
-            Player.pickSpeed -= 0.05f;
+            Player.endurance += 0.03f;
             Player.moveSpeed += 0.05f;
             Player.maxRunSpeed += 0.05f;
         }
@@ -322,8 +322,8 @@ public class CompendiumPlayer : ModPlayer
         }
         if (finalShiverthorn)
         {
-            Player.tileSpeed -= 0.1f;   // 物块放置速度 +10%
-            Player.wallSpeed -= 0.1f;   // 墙壁放置速度 +10%
+            Player.statLifeMax2 += 20;
+            Player.statLife += 20;// 增加 0.2 倍跳跃速度（原版默认约 6.5）
         }
         if (finalWaterleaf)
         {

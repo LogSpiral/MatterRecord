@@ -3,7 +3,7 @@ ClothierDream: {
 	DisplayName: Clothier's Dream
 	Tooltip:
 		'''
-		Grants a Golden Key (consumable)
+		Left-click to use. Grants a Golden Key (consumable)
 		"Perhaps I should've opened a few chests? I just dreamed of them..."
 		'''
 }
@@ -13,7 +13,7 @@ StylistDream: {
 	DisplayName: Stylist's Dream
 	Tooltip:
 		'''
-		Grants Cosmos Scissors
+		Left-click to use. Grants Cosmos Scissors
 		"In my dream, scissors could cut more than hair!"
 		'''
 	Unlock: Has been cursed by a powerful Jungle creature
@@ -24,7 +24,7 @@ DyeTraderDream: {
 	DisplayName: Dye Trader's Dream
 	Tooltip:
 		'''
-		Grants 3 random dyes
+		Left-click to use. Grants random dyes
 		"Try these new hues, darling! Fresh from my inspiration."
 		'''
 }
@@ -44,10 +44,10 @@ GuideDream: {
 	DisplayName: Guide's Dream
 	Tooltip:
 		'''
-		Grants one of each class emblem
+		Left-click to use. Grants one of each class emblem
 		"Restful sleep... You haven't been to the Underworld, right?... Right?"
 		'''
-	Unlock: Has been cursed by the Guide himself
+	Unlock: Currently cursed by a powerful Underworld creature
 }
 
 PirateDream: {
@@ -65,14 +65,15 @@ TavernkeepDream: {
 	DisplayName: Tavernkeep's Dream
 	Tooltip:
 		'''
-		Grants 4/8/12 Defender Medals based on current wave difficulty
+		Left-click to use. Grants 4/8/12 Defender Medals based on current wave difficulty
 		"Those goblins aren't here, are they?"
 		'''
 }
 
 WizardDream: {
 	RecipeCondition: Unlock Wizard
-	ReachedLimit: Has reached the maxium
+	ReachedLimit: Has reached the maximum
+	UsedCount: "Used {0}/10 times"
 	DisplayName: Wizard's Dream
 	Tooltip:
 		'''
@@ -86,10 +87,10 @@ ZoologiseDream: {
 	DisplayName: Zoologist's Dream
 	Tooltip:
 		'''
-		Summons a peculiar Town Slime (unimplemented)
+		Summons a peculiar Town Slime
 		"I dreamed of a new slime species... Wait, that wasn't a dream?"
 		'''
-	TheSameSlime: You dreamed of the same slime as before
+	TheSameSlime: The slime has already arrived!
 }
 
 BrokenDream: {
@@ -103,7 +104,7 @@ CybrogDream: {
 	DisplayName: Cyborg's Dream
 	Tooltip:
 		'''
-		Summons an Electric Sheep
+		Summons an Electric Sheep (unimplemented)
 		"I lack sleep simulations. Thus, I do not dream of electric sheep."
 		'''
 }
@@ -113,7 +114,6 @@ AnglerDream: {
 	DisplayName: Angler's Dream
 	Tooltip:
 		'''
-		Angler's Dream
 		Activates: Double rewards for fishing quests
 		"Even in dreams, you're my top servant. Keep fishing!"
 		'''
@@ -140,8 +140,8 @@ DemolitionistDream: {
 }
 
 DryadDream: {
-	RecipeCondition: Unlock Deyad
-	DisplayName: Deyad's Dream
+	RecipeCondition: Unlock Dryad
+	DisplayName: Dryad's Dream
 	Tooltip:
 		'''
 		Activates: Permanent Dryad's Blessing buff
@@ -244,7 +244,7 @@ SteampunkerDream: {
 	DisplayName: Steampunker's Dream
 	Tooltip:
 		'''
-		Activates: Flight time +2s, Rocket Boots +5s
+		Activates: Increases flight time, more while wearing a jetpack
 		"In my dream, you were a sky pirate extraordinaire!"
 		'''
 }
@@ -261,7 +261,7 @@ TaxCollectorDream: {
 
 TravellingMerchatDream: {
 	RecipeCondition: None
-	DisplayName: Travelling Merchat's Dream
+	DisplayName: Travelling Merchant's Dream
 	Tooltip:
 		'''
 		Activates: Travelling Merchant arrives daily
@@ -280,7 +280,7 @@ TruffleDream: {
 }
 
 WitchDoctorDream: {
-	RecipeCondition: Unlock Which Doctor
+	RecipeCondition: Unlock Witch Doctor
 	DisplayName: Witch Doctor's Dream
 	Tooltip:
 		'''
@@ -291,11 +291,17 @@ WitchDoctorDream: {
 
 TaijiNoYume: {
 	RecipeCondition: None
-	DisplayName: Taiji No Yume
+	DisplayName: Dream of the Fetus
 	Tooltip:
 		'''
 		"O fetus, why do you stir?
 		O fetus, why do you stir?
-		Is it the mother's heart you fear?"
+		Is it because you understand your mother's heart,
+		and that is why you are afraid...?"
 		'''
+}
+
+Eraser: {
+	DisplayName: Eraser
+	Tooltip: Erase everything you don't like
 }

@@ -2,6 +2,10 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
+using Terraria;
+using Terraria.ID;
+using Terraria.ModLoader;
+
 namespace MatterRecord.Contents.TheOldManAndTheSea;
 
 public class TheOldManAndTheSea : ModItem, IRecordBookItem
@@ -38,6 +42,23 @@ public class TheOldManAndTheSea : ModItem, IRecordBookItem
         lineColor = Color.Black;
     }
 
+    // ----- 右键激活功能（保持不变） -----
+    public override bool AltFunctionUse(Player player) => true;
+
+    public override bool CanUseItem(Player player)
+    {
+        if (player.altFunctionUse == 2) // 右键
+        {
+            var mp = player.GetModPlayer<TheOldManAndTheSeaPlayer>();
+            mp.ToggleActivation();
+            return false;
+        }
+        return base.CanUseItem(player);
+    }
+
+    // ====== 已移除 ModifyTooltips 方法，能量和激活状态现在由 UI 能量条展示 ======
+
+    // ----- 以下为原有绘制方法，不变 -----
     public override bool PreDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
     {
         Item.fishingPole = this.IsRecordUnlocked ? 75 : 0;

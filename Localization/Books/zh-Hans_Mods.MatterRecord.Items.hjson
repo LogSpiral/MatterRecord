@@ -25,8 +25,9 @@ TheAdventureofSherlockHolmes: {
 	DisplayName: 《福尔摩斯探案集》
 	Tooltip:
 		'''
-		在快捷栏内手持并打开大地图时
-		可右键地图消耗一金币咨询地图上27x27的位置
+		在快捷键内手持并打开大地图时
+		右键地图可消耗50银币推理地图上27×27的图格
+		为你提供对已解锁地图的图格咨询，你只需要将它带在身上
 		[c/66CCFF:“只是一些简单的推理罢了，华生医生”]
 		[c/FFAF00:事象记录]
 		'''
@@ -39,7 +40,7 @@ Faust: {
 		使用以获取记录提示
 
 		[c/FF0000:背包内右键]以激活/取消
-		激活后右键背包内物品，可使用其售价20倍购买
+		激活后右键背包内物品，可将其购买
 		每消费1铂金币降低0.01幸运
 		[c/66CCFF:"我签下契约，追寻那超越凡人的体验，]
 		[c/66CCFF:但谁来拯救我的灵魂？"]
@@ -84,6 +85,8 @@ TheOldManAndTheSea: {
 		'''
 		手持该鱼竿时，怪物生成速率大大提升
 		可以在熔岩中钓鱼
+		钓鱼时获得能量，右键激活后鱼钩可对敌怪造成等同于背包中武器的伤害以及1%最大生命值
+		不钓鱼与激活时能量会流失
 		[c/66CCFF:"破晓前天很冷，老头抵着木头取暖，他想鱼能支撑多久他就能支撑多久。]
 		[c/66CCFF:他用温柔的语调大声说:‘鱼啊，只要我不死就要同你周旋到底’"]
 		[c/FFAF00:事象记录]
@@ -94,11 +97,8 @@ DonQuijoteDeLaMancha: {
 	DisplayName: 《堂吉诃德》
 	Tooltip:
 		'''
-		右键召唤一座风车向其冲锋并免疫伤害
-		冲锋时根据距离计算伤害并必定暴击
-		冲锋后短时间内攻击转为突刺，按住up时突刺以获得小幅位移，右键取消该状态
-		突刺命中减少冲锋冷却时间
-		突刺时增加20%伤害减免
+		右键召唤一座风车向其冲锋并免疫伤害，如果按住down则不进行冲锋
+		根据冲锋距离计算伤害并必定暴击
 		持握时敌人更有可能以你为目标
 		[c/66CCFF:“堂吉诃德对他的侍从桑丘说:]
 		[c/66CCFF:‘我的朋友，前面出现了几十个巨人，]
@@ -112,6 +112,29 @@ DonQuijoteDeLaMancha: {
 	InheritedFrom: 目前属性继承自武器
 	SheepDamage: +500%对绵羊大军伤害
 	FindItemHint: 请[c/FF0000:背包内右键]激活后再[c/FF0000:右键某个近战武器]以继承属性
+	ReviveText: 复活！ +{0} HP
+	ShiftHint: 按住 Shift 显示成长效果
+	ProgressionTitle: 堂吉诃德强化解锁进度 [{0}/14]
+	ComboTitle: 连击加成
+	ComboHint: 按住 Shift 显示连击加成
+	Combo5: 5: 获得debuff时，降低其持续时间
+	Combo10: 10: 暴击率提高
+	Combo15: 15: 生命恢复低于0时，增加生命回复
+	Combo20: 20: 根据移速增加伤害，提升你的加速度
+	Tier1_Block: 持握时10%概率根据堂吉诃德攻击力格挡伤害
+	Tier2_StabAfterDash: 冲锋后进入突刺状态，可右键取消
+	Tier3_TauntOnHit: 受伤时风车嘲讽敌人3秒
+	Tier4_StabDRAndMove: 突刺时获得20%伤害减免，按住up可位移
+	Tier5_ComboSystem: 造成伤害获得连击，每1连击+1%攻速与10%堂吉诃德大小，上限10
+	Tier6_StabReduceCooldown: 突刺命中减少冲锋冷却
+	Tier7_HitRestoreWing: 挥砍与突刺命中恢复飞行时间
+	Tier8_SpearThrow: 按住up时挥砍改为投掷长矛，投掷时无法使用挥砍与冲锋（未实现）
+	Tier9_ComboDecayAndCap20: 连击衰减改为-5，上限提升至20
+	Tier10_WindmillErase: 风车摧毁接触的敌对弹幕
+	Tier11_DashEraseHealCombo: 冲锋摧毁弹幕并回血，且增加连击
+	Tier12_SpearUpgrade: 投掷长矛加强（未实现）
+	Tier13_Revive: 致命伤害时若连击>15则复活
+	Tier14_BlockBoostWithWindmill: 风车存在时格挡概率提升
 }
 
 EmeraldTablet: {
@@ -157,6 +180,7 @@ TheInterpretationOfDreams: {
 	NightmareHint: 捕获到了噩梦
 	NoDreamHint: 看来暂时不会做新的梦了
 	SpecialDreamHint: 一个特殊的梦境被捕获了
+	SoulUndertone: ~ Soul undertone
 	Locked: (未解锁)
 	Hint: （左键点击以激活/取消激活）
 	UnlockHint: 使用以解锁，通过梦的解析的面板进行控制
@@ -180,7 +204,7 @@ AliceInWonderlandWatch: {
 	DisplayName: 《爱丽丝漫游仙境》
 	Tooltip:
 		'''
-		装备后随机产生传送门，右键传送门即可传送
+		装备时可能会产生传送门，右键传送门即可传送
 		每天最多生成三个传送门，生成时散发粒子进行指引
 		优先传送至未被探索的区域
 
@@ -197,15 +221,29 @@ LordOfTheFlies: {
 		'''
 		根据装甲属性提升属性，暴击时造成额外伤害
 		右键进入审判模式，审判模式时源质无法自然恢复
-		审判模式下每次射击消耗5源质,获得100%暴击和20护甲穿透
-		长按右键消耗200源质储存源质堙灭弹，至多六枚
-		审判模式时长按瞄准以消耗32源质发射源质堙灭弹
-		源质堙灭弹附加5%最大生命值的伤害
+		审判模式下每次射击消耗5源质使子弹必定暴击
+		右键结束审判模式或源质耗尽自动结束
 		[c/66CCFF:“凡不长久的，多将以悲剧”]
 		[c/FFAF00:事象记录]
 		'''
 	Clatter: 咔哒
 	NoEnoughEnergy: 源质不足
+	ShiftHint: 按住 Shift 显示成长效果
+	ProgressionTitle: 蝇王强化解锁进度 [{0}/14]
+	Tier1_DefenseOnHit: 命中时提高防御，该防御视为护甲属性
+	Tier2_AnnihilationBullet: 背包内右键消耗全部源质装填湮灭弹，可在审判模式下长按右键消耗源质发射
+	Tier3_Penetration: 审判模式下子弹可穿透敌人，并且无视20护甲
+	Tier4_Beelzebub: 放置在物品栏不使用时，别西卜会协助战斗
+	Tier5_CritLifePercent: 暴击时的额外伤害附加敌怪生命值百分比
+	Tier6_AttackSpeed: 攻速也会随护甲属性提升
+	Tier7_Teleport: 双击up可消耗50源质传送至鼠标位置（未实现）
+	Tier8_JudgmentBlade: 审判模式下按住up+左键变为审判之刃，长按消耗源质发射审判之光（未实现）
+	Tier9_AnnihilationLifePercent: 湮灭弹额外造成敌怪5%生命值伤害，可穿透墙壁
+	Tier10_Explosion: 审判模式下发射子弹10%概率发生爆炸
+	Tier11_Homing: 别西卜协助战斗时，你的弹药获得追踪效果
+	Tier12_SourceFull: 如果源质充盈，发射弹药时自动消耗源质强化弹药
+	Tier13_Fusion: 有概率融合发射弹药栏中的其他火枪子弹类弹药
+	Tier14_NoConsume: 湮灭弹有概率不消耗存量，且抹杀普通敌人
 }
 
 TheTaleOfTheHeike: {
@@ -232,16 +270,16 @@ CompendiumOfMateriaMedica: {
 		饰品可见性开启时防止意外破坏环境
 		[c/66CCFF:“夫医之为道，君子用之以卫生，而推之以济世，故称仁术”]
 		[c/FFAF00:事象记录]
-		按住shift查看效果
 		'''
+	ShiftHint: 按住 Shift 显示草药效果
 	ShiftTooltip:
 		'''
-		闪耀根:+5%挖掘速度，+5%移动速度
+		闪耀根:+3%伤害减免，+5%移动速度
 		太阳花:+2防御，+0.5生命再生
 		死亡草:攻击时造成中毒，+4%伤害
 		火焰花:攻击时造成燃烧，+2%暴击率
 		月光草:+0.5魔力再生，+5%魔法伤害
-		寒颤棘:攻击时造成霜冻，放置速度提升
+		寒颤棘:攻击时造成霜冻，+20最大生命值
 		水叶草:+5鱼力，+0.01幸运
 		'''
 }

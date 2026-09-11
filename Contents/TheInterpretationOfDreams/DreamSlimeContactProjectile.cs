@@ -24,7 +24,7 @@ public class DreamSlimeContactProjectile : ModProjectile
         Projectile.hide = true;
         Projectile.aiStyle = -1;
         Projectile.usesLocalNPCImmunity = true;
-        Projectile.localNPCHitCooldown = 10;
+        Projectile.localNPCHitCooldown = 40;
         // 使用默认伤害类型，避免额外加成干扰
         Projectile.DamageType = DamageClass.Default;
     }
