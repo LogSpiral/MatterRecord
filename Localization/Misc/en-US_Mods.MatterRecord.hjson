@@ -11,7 +11,6 @@ Tiles: {
 Keybinds: {
 	TimeStop.DisplayName: Time Stop
 	CanHookPlatform.DisplayName: Can Hook Platform
-	// ResetRecorderTrigger.DisplayName: Reset Recorder Trigger
 }
 
 DamageClasses.RangedMagicDamage.DisplayName: Ranged Magic Damage
@@ -55,7 +54,7 @@ NPCs: {
 			DislikeBiome: It's so hot here my head spins; the dreadful imagery {BiomeName} brings pales in comparison
 			LoveNPC: I like {NPCName}. She's the only one I know who can wrap a bandage faster than she talks nonsense
 			LikeNPC: "{NPCName} always invites me to her parties"
-			HateNPC: "Whenever {NPCName} is around, my pistol keeps going off. Should I fire a round at him?"
+			HateNPC: Whenever {NPCName} is around, my pistol keeps going off. Should I fire a round at him?
 			LikeNPC_Princess: I like {NPCName}.
 			Princess_LovesNPC: I love being around {NPCName}—the sparkling stories she collects are as delightful as stars!
 		}
@@ -124,9 +123,7 @@ EasterEgg: {
 	TorchGodLine3: You know the rules by now
 }
 
-UI: {
-	SearchHint: Type the name of a tile to find
-}
+UI.SearchHint: Type the name of a tile to find
 
 RecipeGroups: {
 	SilverWatch: Silver Watch/Tungsten Watch

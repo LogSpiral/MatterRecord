@@ -73,7 +73,7 @@ TavernkeepDream: {
 WizardDream: {
 	RecipeCondition: Unlock Wizard
 	ReachedLimit: Has reached the maximum
-	UsedCount: "Used {0}/10 times"
+	UsedCount: Used {0}/10 times
 	DisplayName: Wizard's Dream
 	Tooltip:
 		'''
@@ -304,4 +304,9 @@ TaijiNoYume: {
 Eraser: {
 	DisplayName: Eraser
 	Tooltip: Erase everything you don't like
+}
+
+TheManInTheHighCastle: {
+	DisplayName: The Man In The High Castle
+	Tooltip: ""
 }

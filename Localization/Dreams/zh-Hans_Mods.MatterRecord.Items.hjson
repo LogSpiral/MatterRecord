@@ -73,7 +73,7 @@ TavernkeepDream: {
 WizardDream: {
 	RecipeCondition: 巫师可入住
 	ReachedLimit: 已达到上限
-	UsedCount: "已使用 {0}/10 次"
+	UsedCount: 已使用 {0}/10 次
 	DisplayName: 巫师之梦
 	Tooltip:
 		'''
@@ -304,4 +304,9 @@ TaijiNoYume: {
 Eraser: {
 	DisplayName: 橡皮擦
 	Tooltip: 擦去所有你不喜欢的东西
+}
+
+TheManInTheHighCastle: {
+	// DisplayName: The Man In The High Castle
+	// Tooltip: ""
 }

@@ -44,13 +44,18 @@ Holiday_War: {
 FragrantHerbs: {
 	DisplayName: Fragrant Herbs
 	Description: Thanks for nature's gifts
-	TipActive: "Active herb effects:"
+	TipActive: Active herb effects:
 	TipNone: No herb effects active
-	Blinkroot: "Blinkroot: +3% damage reduction, +5% movement speed"
-	Daybloom: "Daybloom: +2 defense, +0.5 life regeneration"
-	Deathweed: "Deathweed: +4% damage, hits inflict Poisoned"
-	Fireblossom: "Fireblossom: +2% critical strike chance, hits inflict On Fire"
-	Moonglow: "Moonglow: +0.5 mana regeneration, +5% magic damage"
-	Shiverthorn: "Shiverthorn: +20 max life, hits inflict Frostburn"
-	Waterleaf: "Waterleaf: +5 fishing power, +0.01 luck"
+	Blinkroot: Blinkroot: +3% damage reduction, +5% movement speed
+	Daybloom: Daybloom: +2 defense, +0.5 life regeneration
+	Deathweed: Deathweed: +4% damage, hits inflict Poisoned
+	Fireblossom: Fireblossom: +2% critical strike chance, hits inflict On Fire
+	Moonglow: Moonglow: +0.5 mana regeneration, +5% magic damage
+	Shiverthorn: Shiverthorn: +20 max life, hits inflict Frostburn
+	Waterleaf: Waterleaf: +5 fishing power, +0.01 luck
+}
+
+TheManInTheHighCastleBuff: {
+	DisplayName: The Man In The High Castle Buff
+	Description: Mods.MatterRecord.Buffs.TheManInTheHighCastleBuff.Description
 }

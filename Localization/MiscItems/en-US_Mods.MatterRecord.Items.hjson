@@ -37,7 +37,7 @@ TortoiseShell: {
 
 ZenithBoulder: {
 	DisplayName: Zenith Boulder
-	Tooltip: "I bet the Creator would love this"
+	Tooltip: I bet the Creator would love this
 	Sisyphus: Sisyphus
 }
 
@@ -145,9 +145,6 @@ ImperfectPage: {
 		'''
 	CurrentAmmo: Current recorded ammo: {0}
 	NoAmmo: No ammo
-	// StatusInactive: Mods.MatterRecord.Items.ImperfectPage.StatusInactive
-	// StatusActive: Mods.MatterRecord.Items.ImperfectPage.StatusActive
-	// FavoriteAmmo: Mods.MatterRecord.Items.ImperfectPage.FavoriteAmmo
 }
 
 SystemControlSword: {
@@ -169,10 +166,10 @@ TodaySword: {
 		"Today's free charges have been used up"
 		'''
 	AdUITitle:
-	'''
-	Today's Sword
-	Ad space for rent
-	'''
+		'''
+		Today's Sword
+		Ad space for rent
+		'''
 	CurrentSwordText: Currently mimicking: {0}
 	SwordNotSelectedText: Today's sword has not been chosen yet, waiting until 4:00 AM...
 	FreeChargesText: Free charges: {0}/{1}
@@ -201,4 +198,3 @@ HundredHerbsBrew: {
 		Must be drunk the right way to take effect
 		'''
 }
-

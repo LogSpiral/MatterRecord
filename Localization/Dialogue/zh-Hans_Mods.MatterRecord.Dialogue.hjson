@@ -13,7 +13,7 @@ Recorder: {
 	StandardDialogue2: 在天国尚未曾陨落的时候，人世间一切宝贵的智慧都能够在损失之前得以保存……在死之后
 	StandardDialogue3: 我曾在统辖局呆过一段时间，他们把我这种外派出差称为休假
 	StandardDialogue4: 我的工作是追寻那些散佚的事象记录，如果你找到它们的话记得来找我
-	// 持有特殊物品对话
+	// Dialogue when holding a special item
 	AliceInWonderlandUnlocked: 漫游仙境……现境我都没逛完过，旅途还未过半，现境就被重塑了
 	DonQuijoteDeLaManchaUnlocked: 多好的一个地方啊，巨人、军队、魔法师，甚至还有巨龙和公主，和幻想一样，不是吗
 	LittlePrinceUnlocked: 如果你驯服了我，我们就会彼此需要。不过我的驯服费很贵，大概591铂金吧
@@ -27,13 +27,13 @@ Recorder: {
 	LordOfTheFliesUnlocked: 蝇王前辈大概是对我复制抄本没什么意见的，他虽然没同意，但我也没让他知道
 	TheTaleOfTheHeikeUnlocked: 诸神们的事迹与这项记录别无二致，极尽辉煌之后，便是凝固、陨落与黄昏，最终……坠入深渊
 	CompendiumOfMateriaMedicaUnlocked: “不要踩坏我的药田”，城镇被攻入时，正在研究草药的{0}如是说
-	// 找到宠物史莱姆时的奖励对话
+	// Dialogue when the pet slime is found
 	PetFoundDialogue:
 		'''
 		感谢你把它带了回来，它老喜欢乱跑
 		作为谢礼，这把枪就送你，别担心，我还有很多
 		'''
-	// 持有未解锁物品对话
+	// Dialogue when holding an unlocked item
 	FaustUnlocking: 《浮士德》？看样子我们在别的地方已经见过面了
 	AliceInWonderlandUnlocking: 掉进兔子洞，喝下会变小的药水……一种相当低效的旅行方式
 	DonQuijoteDeLaManchaUnlocking: 我不得不提醒你，这家伙有着鼓动持有者挑战风车的……不良记录
@@ -45,11 +45,11 @@ Recorder: {
 	LordOfTheFliesUnlocking: 蝇王前辈大概是对我复制抄本没什么意见的，他虽然没同意，但我也没让他知道
 	TheTaleOfTheHeikeUnlocking: 盛者必衰，生者必灭……这份记录在诠释“衰亡”时格外……执着。
 	CompendiumOfMateriaMedicaUnlocking: 这大概是东夏某位青帝的心得，讲了两个小时的君臣佐使，七情和合，我从未复刻过如此无聊的事象记录
-	// 收集任务奖励
+	// Collection quest rewards
 	TheAdventureofSherlockHolmesUnlocking: 福尔摩斯先生能够帮你注意到一些被忽略的细节
 	TheoryofJusticeUnlocking: 我把无知之幕做成了斗篷，合身吗，不合身我也不会改的
 	EmeraldTabletUnlocking: 现世已经不需要太一了，不过作为炼金术入门还算不错
-	// 幸福度相关
+	// Happiness-related lines
 	Homeless: 有椅子和工作台就行，监狱也无所谓，我只是想有个地方能休息
 	FarfromHome: 好像走太远了……完全找不到回去的路
 	FewNeighbor: 这里安静得让人有点不自在，我建议搬几个邻居过来
@@ -60,7 +60,7 @@ Recorder: {
 	CloseToPartygirl: <派对女孩名称>总是邀请我参加她的派对,我该说蛋糕味道还不错吗？
 	CloseToAngler: 我喜欢海洋，但不喜欢鱼的味道，遗憾的是<渔夫名称>恰恰相反
 	NeutralHappiness: 这个地方还不错……如果忽略掉那些小麻烦的话
-	// NPC相关闲聊
+	// Idle chatter about other NPCs
 	GuideDialogue: "{0}似乎很可疑，你有想过为什么他懂的这么多吗？"
 	AnglerDialogue: 浓厚的鱼腥味...{0}又带了什么东西回来？
 	PirateDialogue:

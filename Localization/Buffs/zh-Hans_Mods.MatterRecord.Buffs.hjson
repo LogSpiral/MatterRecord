@@ -54,3 +54,8 @@ FragrantHerbs: {
 	Shiverthorn: 寒颤棘：+20 最大生命，命中附加霜冻
 	Waterleaf: 水叶草：+5 渔力，+0.01 幸运
 }
+
+TheManInTheHighCastleBuff: {
+	// DisplayName: The Man In The High Castle Buff
+	// Description: Mods.MatterRecord.Buffs.TheManInTheHighCastleBuff.Description
+}

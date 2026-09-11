@@ -145,9 +145,6 @@ ImperfectPage: {
 		'''
 	CurrentAmmo: 当前记录子弹：{0}
 	NoAmmo: 无子弹
-	// StatusInactive: Mods.MatterRecord.Items.ImperfectPage.StatusInactive
-	// StatusActive: Mods.MatterRecord.Items.ImperfectPage.StatusActive
-	// FavoriteAmmo: Mods.MatterRecord.Items.ImperfectPage.FavoriteAmmo
 }
 
 SystemControlSword: {
@@ -168,11 +165,11 @@ TodaySword: {
 		可消耗免费次数进行体验，右键观看广告以获取免费次数
 		“今日免费次数已用完”
 		'''
-	AdUITitle: 
-	'''
-	今日推剑
-	广告位招租
-	'''
+	AdUITitle:
+		'''
+		今日推剑
+		广告位招租
+		'''
 	CurrentSwordText: 当前模仿：{0}
 	SwordNotSelectedText: 今日的剑尚未选定，等待凌晨4:00...
 	FreeChargesText: 免费次数：{0}/{1}
@@ -201,4 +198,3 @@ HundredHerbsBrew: {
 		需要以正确的方式饮下才能生效
 		'''
 }
-
