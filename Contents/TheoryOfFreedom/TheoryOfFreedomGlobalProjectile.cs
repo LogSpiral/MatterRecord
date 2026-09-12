@@ -12,25 +12,26 @@ public class TheoryOfFreedomGlobalProjectile : GlobalProjectile
         var mplr = player.GetModPlayer<TheTheoryOfFreedomPlayer>();
         if (!mplr.EquippedTOF)
             return null;
-        if (!mplr.CanHookPlatform && Main.tileSolidTop[Framing.GetTileSafely(x, y).TileType])
-            return false;
+
+        // 1. 先判断是否是虚空钩爪目标
         var targets = mplr.TargetTileCoords;
-        bool flag = false;
-        HashSet<Point> points =
-            [new(x, y),
-             new(x+1, y),
-             new(x-1, y),
-             new(x, y+1),
-             new(x, y-1)];
+        HashSet<Point> points = [new(x, y), new(x + 1, y), new(x - 1, y), new(x, y + 1), new(x, y - 1)];
         foreach (var coord in targets)
         {
-            if (!points.Contains(coord))
-                continue;
-            flag = true;
-            break;
+            if (points.Contains(coord))
+            {
+                // 距离检查：避免贴脸时吸附（沿用原逻辑）
+                if (Vector2.Distance(player.Center, new Vector2(x, y) * 16) > new Vector2(projectile.width, projectile.height).Length() * 1.5f)
+                    return true;
+                else
+                    return null; // 距离太近，不吸附
+            }
         }
-        if (flag && Vector2.Distance(player.Center, new Vector2(x, y) * 16) > new Vector2(projectile.width, projectile.height).Length() * 1.5f)
-            return true;
+
+        // 2. 非虚空钩爪：处理平台穿透
+        if (!mplr.CanHookPlatform && Main.tileSolidTop[Framing.GetTileSafely(x, y).TileType])
+            return false;
+
         return null;
     }
 
