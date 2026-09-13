@@ -23,7 +23,7 @@ public class HundredHerbsBrew : ModItem
         Item.useTurn = true;
         Item.consumable = true;
         Item.maxStack = 9999;
-        Item.value = Item.buyPrice(silver: 50);
+        Item.value = Item.buyPrice(silver: 10);
         Item.rare = ItemRarityID.LightRed;
         Item.UseSound = SoundID.Item3;
 

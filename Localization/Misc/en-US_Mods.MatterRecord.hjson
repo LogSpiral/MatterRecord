@@ -13,6 +13,10 @@ Keybinds: {
 	CanHookPlatform.DisplayName: Can Hook Platform
 }
 
+BookmarkSlot: {
+	SlotName: Record Accessory Slot
+}
+
 DamageClasses.RangedMagicDamage.DisplayName: Ranged Magic Damage
 
 Sequence: {

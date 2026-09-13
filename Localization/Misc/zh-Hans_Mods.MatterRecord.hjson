@@ -13,6 +13,10 @@ Keybinds: {
 	CanHookPlatform.DisplayName: 可以钩至平台
 }
 
+BookmarkSlot: {
+	SlotName: 事象记录饰品栏
+}
+
 DamageClasses.RangedMagicDamage.DisplayName: 魔法-远程伤害
 
 Sequence: {

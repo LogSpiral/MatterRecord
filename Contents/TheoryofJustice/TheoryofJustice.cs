@@ -24,7 +24,7 @@ public class TheoryofJustice : ModItem, IRecordBookItem
     public override void UpdateAccessory(Player player, bool hideVisual)
     {
         BestiaryUnlockProgressReport bestiaryProgressReport = Main.GetBestiaryProgressReport();
-        float offsetEndurance = (1 - bestiaryProgressReport.CompletionPercent) * .25f;
+        float offsetEndurance = (1 - bestiaryProgressReport.CompletionPercent) * .15f;
         player.endurance += offsetEndurance;// * (Main.hardMode ? .5f : 1f);
         base.UpdateAccessory(player, hideVisual);
     }
@@ -32,7 +32,7 @@ public class TheoryofJustice : ModItem, IRecordBookItem
     public override void ModifyTooltips(List<TooltipLine> tooltips)
     {
         BestiaryUnlockProgressReport bestiaryProgressReport = Main.GetBestiaryProgressReport();
-        float offsetEndurance = (1 - bestiaryProgressReport.CompletionPercent) * .25f;
+        float offsetEndurance = (1 - bestiaryProgressReport.CompletionPercent) * .15f;
         tooltips.Add(new TooltipLine(Mod, "JusticeEndurance", this.GetLocalizedValue("Endurance") + $"{offsetEndurance * 100:0.00}%"));
         base.ModifyTooltips(tooltips);
     }

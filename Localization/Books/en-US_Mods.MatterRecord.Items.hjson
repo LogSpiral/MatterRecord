@@ -148,7 +148,7 @@ TheoryofJustice: {
 		'''
 		"Ignorance is justice."
 		Grants damage reduction based on undiscovered Bestiary entries
-		Up to 25% reduction
+		Up to 15% reduction
 		'''
 	Endurance: Now reduce damage by
 }

@@ -23,6 +23,24 @@ TurtleAmulet: {
 		'''
 }
 
+Bookmark: {
+	DisplayName: Bookmark
+	Tooltip:
+		'''
+		+3% movement speed
+		+5% damage
+		Grants a dedicated accessory slot for Record accessories
+		'''
+}
+
+EternalBookmark: {
+	DisplayName: Eternal Bookmark
+	Tooltip:
+		'''
+		Permanently unlocks a dedicated accessory slot for Record accessories
+		'''
+}
+
 TortoiseShell: {
 	DisplayName: Giant Tortoise Shell
 	Tooltip:
@@ -196,5 +214,41 @@ HundredHerbsBrew: {
 		'''
 		Grants Fragrant Herbs
 		Must be drunk the right way to take effect
+		'''
+}
+
+TheHitchhikersGuideToTerraria: {
+	DisplayName: The Hitchhiker's Guide to Terraria
+	Tooltip:
+		'''
+		Welcome to Terraria, and welcome to Matter Record!
+		Before we begin, please choose how to obtain Records of Events:
+		[c/66CCFF:For the mod's intended experience]: default config; Records of Events are obtained through various strange methods and collection rewards.
+		[c/66CCFF:To craft items directly]: change the config; after that, you can craft Records of Events with a Book and the corresponding item near a Bookcase.
+
+		Once you have a Record of Events, talk to the Recorder. She will turn it into various items, accessories, or weapons to aid your exploration.
+		(You can get some hints from Faust.)
+
+		How to use this item:
+		[c/66CCFF:Left click]: receive some small gifts, one time only.
+		[c/66CCFF:Right click]: toggle the Records of Events acquisition config.
+		[c/66CCFF:Right click in inventory]: view this mod's guide.
+
+		Now, off you go!
+		'''
+	ConfigOn: "Records of Events acquisition: craftable"
+	ConfigOff: "Records of Events acquisition: exploration only"
+	GiftClaimed: You have already claimed the gift.
+	GiftReceived: You received some small gifts.
+	GuideTitle: This Mod's Guide
+	ModGuide:
+		'''
+		Use / Left click: how most vanilla items are used; hold the item and left-click.
+		Right click / Use: how the Sniper Rifle and Grand Design are used; hold the item and right-click.
+		Right click in inventory: how boss Treasure Bags and Crates are used; right-click them in your inventory.
+		Up: your up key, often used to climb ropes.
+		Down: your down key, often used to drop through platforms.
+		Block: when taking damage, reduce the damage taken by the Block value; unaffected by difficulty.
+		[c/66CCFF:Right click in inventory]: switch to the original item tooltip.
 		'''
 }
