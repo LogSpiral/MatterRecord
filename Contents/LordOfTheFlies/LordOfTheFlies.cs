@@ -590,18 +590,18 @@ namespace MatterRecord.Contents.LordOfTheFlies
             // Boss → 面具 ID（组合 Boss 单独处理）
             var bossIconMap = new Dictionary<string, int>
     {
-        { "史莱姆王", 2493 },
-        { "克眼", 2112 },
-        { "蜂后", 2108 },
-        { "骷髅王", 1281 },
-        { "肉山", 2105 },
-        { "史莱姆皇后", 4959 },
-        { "世花", 2109 },
-        { "石巨人", 2110 },
-        { "猪鲨", 2588 },
-        { "光女", 4784 },
-        { "教徒", 3372 },
-        { "月总", 3373 },
+        { "史莱姆王", 7 },
+        { "克眼", 0 },
+        { "蜂后", 14 },
+        { "骷髅王", 19 },
+        { "肉山", 22 },
+        { "史莱姆皇后", 38 },
+        { "世花", 11 },
+        { "石巨人", 5 },
+        { "猪鲨", 4 },
+        { "光女", 37 },
+        { "教徒", 24 },
+        { "月总", 8 },
     };
 
             var progression = new (string name, bool unlocked, string bossName)[]
@@ -640,15 +640,15 @@ namespace MatterRecord.Contents.LordOfTheFlies
 
                 if (bossName == "世界吞噬者/克苏鲁之脑")
                 {
-                    iconStr = "[i:2111] [i:2104] ";
+                    iconStr = "[boss:2] [boss:23] ";
                 }
                 else if (bossName == "毁灭者/机械骷髅王/双子魔眼")
                 {
-                    iconStr = "[i:2113] [i:2107] [i:2106] ";
+                    iconStr = "[boss:25] [boss:18] [boss:16] [boss:21] ";
                 }
                 else if (bossIconMap.TryGetValue(bossName, out int itemId))
                 {
-                    iconStr = $"[i:{itemId}] ";
+                    iconStr = $"[boss:{itemId}] ";
                 }
 
                 string displayText = iconStr + this.GetLocalizedValue(nameKey);

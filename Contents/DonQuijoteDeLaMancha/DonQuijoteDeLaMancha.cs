@@ -366,18 +366,18 @@ public class DonQuijoteDeLaMancha : MeleeSequenceItem<DonQuijoteDeLaManchaProj>,
         // 按住 Shift：显示强化进度列表
         var bossIconMap = new Dictionary<string, string>
         {
-            { "史莱姆王", "[i:2493]" },
-            { "克眼", "[i:2112]" },
-            { "蜂后", "[i:2108]" },
-            { "骷髅王", "[i:1281]" },
-            { "肉山", "[i:2105]" },
-            { "史莱姆皇后", "[i:4959]" },
-            { "世花", "[i:2109]" },
-            { "石巨人", "[i:2110]" },
-            { "猪鲨", "[i:2588]" },
-            { "光女", "[i:4784]" },
-            { "教徒", "[i:3372]" },
-            { "月总", "[i:3373]" },
+            { "史莱姆王", "[boss:7]" },
+            { "克眼", "[boss:0]" },
+            { "蜂后", "[boss:14]" },
+            { "骷髅王", "[boss:19]" },
+            { "肉山", "[boss:22]" },
+            { "史莱姆皇后", "[boss:38]" },
+            { "世花", "[boss:11]" },
+            { "石巨人", "[boss:5]" },
+            { "猪鲨", "[boss:4]" },
+            { "光女", "[boss:37]" },
+            { "教徒", "[boss:24]" },
+            { "月总", "[boss:8]" },
         };
 
         var progression = new (string name, bool unlocked, string bossName)[]
@@ -416,11 +416,11 @@ public class DonQuijoteDeLaMancha : MeleeSequenceItem<DonQuijoteDeLaManchaProj>,
 
             if (bossName == "世界吞噬者/克脑")
             {
-                iconStr = "[i:2111] [i:2104] ";
+                iconStr = "[boss:2] [boss:23] ";
             }
             else if (bossName == "任意机械Boss")
             {
-                iconStr = "[i:2113] [i:2107] [i:2106] ";
+                iconStr = "[boss:25] [boss:18] [boss:16] [boss:21] ";
             }
             else if (bossIconMap.TryGetValue(bossName, out string iconTag))
             {
