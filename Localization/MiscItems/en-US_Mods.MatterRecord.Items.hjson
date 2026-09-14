@@ -35,10 +35,7 @@ Bookmark: {
 
 EternalBookmark: {
 	DisplayName: Eternal Bookmark
-	Tooltip:
-		'''
-		Permanently unlocks a dedicated accessory slot for Record accessories
-		'''
+	Tooltip: Permanently unlocks a dedicated accessory slot for Record accessories
 }
 
 TortoiseShell: {
@@ -66,11 +63,11 @@ EtherChest: {
 
 CosmosScissors: {
 	DisplayName: Scissors of Fate
-	Tooltip: 
-	'''
-	Throw scissors to attack enemies.
-	A thread of life appears above dying enemies; you can snip it.
-	'''
+	Tooltip:
+		'''
+		Throw scissors to attack enemies.
+		A thread of life appears above dying enemies; you can snip it.
+		'''
 }
 
 CantSeword: {
@@ -240,8 +237,8 @@ TheHitchhikersGuideToTerraria: {
 
 		Now, off you go!
 		'''
-	ConfigOn: "Records of Events acquisition: craftable"
-	ConfigOff: "Records of Events acquisition: exploration only"
+	ConfigOn: Records of Events acquisition: craftable
+	ConfigOff: Records of Events acquisition: exploration only
 	GiftClaimed: You have already claimed the gift.
 	GiftReceived: You received some small gifts.
 	GuideTitle: This Mod's Guide
