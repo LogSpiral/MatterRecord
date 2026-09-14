@@ -66,8 +66,12 @@ EtherChest: {
 }
 
 CosmosScissors: {
-	DisplayName: 鸿蒙剪刀
-	Tooltip: “裁剪空间...抱歉做不到”
+	DisplayName: 命运之剪
+	Tooltip: 
+	'''
+	投掷剪刀攻击敌人
+	垂死的敌人头顶会出现生命线，你可以剪断它
+	'''
 }
 
 CantSeword: {

@@ -65,8 +65,12 @@ EtherChest: {
 }
 
 CosmosScissors: {
-	DisplayName: Cosmos Scissors
-	Tooltip: To sever the fabric of space... Not really.
+	DisplayName: Scissors of Fate
+	Tooltip: 
+	'''
+	Throw scissors to attack enemies.
+	A thread of life appears above dying enemies; you can snip it.
+	'''
 }
 
 CantSeword: {
