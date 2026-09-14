@@ -1,4 +1,5 @@
-﻿using MatterRecord.Contents.Recorder;
+﻿using MatterRecord.Contents.Rarities;
+using MatterRecord.Contents.Recorder;
 using System;
 
 namespace MatterRecord.Contents.WarAndPeace;
@@ -10,7 +11,7 @@ public class WarAndPeace : ModItem, IRecordBookItem
     {
         Item.accessory = true;
         Item.value = Item.buyPrice(copper: 5);
-        Item.rare = ItemRarityID.Quest;
+        Item.rare = ModContent.RarityType<ImmutableQuest>();
         Item.width = Item.height = 32;
         base.SetDefaults();
     }

@@ -1,4 +1,5 @@
-﻿using MatterRecord.Contents.Recorder;
+﻿using MatterRecord.Contents.Rarities;
+using MatterRecord.Contents.Recorder;
 
 namespace MatterRecord.Contents.EmeraldTablet;
 
@@ -11,7 +12,7 @@ public class EmeraldTablet : ModItem, IRecordBookItem
         Item.width = 22;
         Item.height = 24;
         Item.value = Item.buyPrice(copper: 5);
-        Item.rare = ItemRarityID.Quest;
+        Item.rare = ModContent.RarityType<ImmutableQuest>();
         Item.useStyle = ItemUseStyleID.Swing;
         Item.useAnimation = 15;
         Item.useTime = 15;

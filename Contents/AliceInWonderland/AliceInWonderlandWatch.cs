@@ -1,4 +1,5 @@
-﻿using MatterRecord.Contents.Recorder;
+﻿using MatterRecord.Contents.Rarities;
+using MatterRecord.Contents.Recorder;
 using Microsoft.Xna.Framework;
 using System;
 
@@ -13,7 +14,7 @@ public class AliceInWonderlandWatch : ModItem,IRecordBookItem
         Item.CloneDefaults(ItemID.PlatinumWatch);
         Item.accessory = true;
         Item.value = Item.buyPrice(copper: 5);
-        Item.rare = ItemRarityID.Quest;
+        Item.rare = ModContent.RarityType<ImmutableQuest>();
         base.SetDefaults();
     }
 

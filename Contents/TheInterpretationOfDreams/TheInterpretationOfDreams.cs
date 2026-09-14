@@ -1,3 +1,4 @@
+using MatterRecord.Contents.Rarities;
 using MatterRecord.Contents.Recorder;
 using Microsoft.Xna.Framework;
 using System;
@@ -17,7 +18,7 @@ public class TheInterpretationOfDreams : ModItem,IRecordBookItem
     {
         Item.useStyle = ItemUseStyleID.Swing;
         Item.value = Item.buyPrice(copper: 5);
-        Item.rare = ItemRarityID.Quest;
+        Item.rare = ModContent.RarityType<ImmutableQuest>();
         Item.useTurn = true;
         Item.useTime = 18;
         Item.useAnimation = 18;

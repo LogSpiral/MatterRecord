@@ -3,6 +3,7 @@ using MatterRecord.Contents.DonQuijoteDeLaMancha.Core.BuiltInGroups;
 using MatterRecord.Contents.DonQuijoteDeLaMancha.Core.MeleeCore;
 using MatterRecord.Contents.DonQuijoteDeLaMancha.Core.StandardMelee;
 using MatterRecord.Contents.DonQuijoteDeLaMancha.Core.Visuals;
+using MatterRecord.Contents.EternalWine;
 using MatterRecord.Contents.Recorder;
 using MatterRecord.Contents.TortoiseShell;
 using Microsoft.Xna.Framework;
@@ -22,10 +23,10 @@ using Terraria.ModLoader.Default;
 using Terraria.ModLoader.IO;
 using Terraria.UI;
 using Terraria.UI.Chat;
-using MatterRecord.Contents.EternalWine;
 namespace MatterRecord.Contents.DonQuijoteDeLaMancha;
 
 using global::MatterRecord.Contents.EternalWine;
+using global::MatterRecord.Contents.Rarities;
 using System.Collections.ObjectModel;
 
 public class DonQuijoteDeLaMancha : MeleeSequenceItem<DonQuijoteDeLaManchaProj>, IRecordBookItem
@@ -40,7 +41,7 @@ public class DonQuijoteDeLaMancha : MeleeSequenceItem<DonQuijoteDeLaManchaProj>,
         base.SetDefaults();
         Item.width = 66;
         Item.height = 66;
-        Item.rare = ItemRarityID.Quest;
+        Item.rare = ModContent.RarityType<ImmutableQuest>();
         Item.UseSound = SoundID.Item71;
         Item.damage = 21;
         Item.useTime = 60;

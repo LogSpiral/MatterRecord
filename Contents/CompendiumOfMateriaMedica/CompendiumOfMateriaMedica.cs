@@ -1,4 +1,5 @@
-﻿using MatterRecord.Contents.Recorder;
+﻿using MatterRecord.Contents.Rarities;
+using MatterRecord.Contents.Recorder;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using MonoMod.Cil;
@@ -26,7 +27,7 @@ public class CompendiumOfMateriaMedica : ModItem, IRecordBookItem
         Item.height = 28;
         Item.accessory = true;
         Item.value = Item.buyPrice(copper: 5);
-        Item.rare = ItemRarityID.Quest;
+        Item.rare = ModContent.RarityType<ImmutableQuest>();
         Item.maxStack = 1;
     }
 

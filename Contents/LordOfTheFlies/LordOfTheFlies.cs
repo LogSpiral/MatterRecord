@@ -1,4 +1,5 @@
-﻿using MatterRecord.Contents.Recorder;
+﻿using MatterRecord.Contents.Rarities;
+using MatterRecord.Contents.Recorder;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using System;
@@ -19,9 +20,21 @@ namespace MatterRecord.Contents.LordOfTheFlies
     {
         ItemRecords IRecordBookItem.RecordType => ItemRecords.LordOfTheFlies;
 
+        /// <summary>
+        /// 占位基础伤害值。
+        /// <para>原版 <c>Item.Prefix(int)</c> 在应用前缀前会校验该前缀是否真实改变了数值：
+        /// 若 <c>Math.Round(Item.damage * 伤害倍率) == Item.damage</c>，该前缀会被判为无效并重新掷骰。
+        /// 基础伤害为 1 时，虚幻(1.15)、恶魔(1.15)、瞄准(1.1) 等一切带伤害倍率的前缀取整后都与原值相同，
+        /// 因此永远洗不出来。这里改用足够大的占位值（21 可覆盖 0.7~1.18 的全部倍率），
+        /// 真实的基础伤害在 <see cref="ModifyWeaponDamage"/> 中还原为 1。</para>
+        /// </summary>
+        private const float PlaceholderDamage = 21f;
+
         public override void SetDefaults()
         {
-            Item.damage = 1;
+            // 占位值而非真实伤害：仅为让原版前缀校验通过（详见 PlaceholderDamage 说明）
+            Item.damage = (int)PlaceholderDamage;
+            Item.knockBack = 1f;
             Item.useTime = Item.useAnimation = 15;
             Item.useStyle = ItemUseStyleID.Shoot;
             Item.useAmmo = AmmoID.Bullet;
@@ -29,7 +42,7 @@ namespace MatterRecord.Contents.LordOfTheFlies
             Item.shootSpeed = 16;
             Item.DamageType = DamageClass.Ranged;
             Item.value = Item.buyPrice(copper: 5);
-            Item.rare = ItemRarityID.Quest;
+            Item.rare = ModContent.RarityType<ImmutableQuest>();
             Item.holdStyle = ItemHoldStyleID.HoldHeavy;
             Item.noMelee = true;
             ItemID.Sets.ItemsThatAllowRepeatedRightClick[Type] = true;
@@ -460,6 +473,17 @@ namespace MatterRecord.Contents.LordOfTheFlies
 
         public override void ModifyWeaponDamage(Player player, ref StatModifier damage)
         {
+            // 反查当前前缀的伤害倍率（无前缀时 prefix 为 0，反查结果为 1）
+            float prefixMult = 1f;
+            if (Item.TryGetPrefixStatMultipliersForItem(Item.prefix, out float dmg, out _, out _, out _, out _, out _, out _))
+                prefixMult = dmg;
+
+            // 把占位基础值还原为设计值 1，同时保留前缀倍率。
+            // StatModifier.ApplyTo 的公式为 (baseValue + Base) * Additive * Multiplicative + Flat，
+            // 因此只要令 Item.damage + Base == prefixMult，最终基础伤害就等于「1 × 前缀倍率」：
+            // 既不会因占位值放大伤害，也让前缀的 +15% 等加成真实生效。
+            damage.Base = prefixMult - Item.damage;
+
             float rangeFactor = player.GetTotalDamage(DamageClass.Ranged).ApplyTo(1f);
             float genericFactor = player.GetTotalDamage(DamageClass.Generic).ApplyTo(1f);
             rangeFactor -= genericFactor;
@@ -524,7 +548,9 @@ namespace MatterRecord.Contents.LordOfTheFlies
                         player.MountedCenter,
                         Vector2.Zero,
                         summonType,
-                        Item.damage,
+                        // 占位 Item.damage 仅供前缀校验使用，不可外传；
+                        // 别西卜的伤害由 BeelzebubSummon.ComputeWeaponDamage 自行计算，此处固定传 1
+                        1,
                         Item.knockBack,
                         player.whoAmI
                     );

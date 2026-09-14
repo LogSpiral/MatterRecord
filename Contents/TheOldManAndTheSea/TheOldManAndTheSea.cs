@@ -1,4 +1,5 @@
-﻿using MatterRecord.Contents.Recorder;
+﻿using MatterRecord.Contents.Rarities;
+using MatterRecord.Contents.Recorder;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
@@ -25,7 +26,7 @@ public class TheOldManAndTheSea : ModItem, IRecordBookItem
     {
         Item.CloneDefaults(ItemID.WoodFishingPole);
         Item.value = Item.buyPrice(copper: 5);
-        Item.rare = ItemRarityID.Quest;
+        Item.rare = ModContent.RarityType<ImmutableQuest>();
         Item.fishingPole = 75;
         Item.shootSpeed = 12f;
         Item.shoot = ModContent.ProjectileType<TheOldManAndTheSeaBobber>();

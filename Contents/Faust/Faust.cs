@@ -1,4 +1,5 @@
-﻿using MatterRecord.Contents.Recorder;
+﻿using MatterRecord.Contents.Rarities;
+using MatterRecord.Contents.Recorder;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -25,7 +26,7 @@ public class Faust : ModItem, IRecordBookItem
     {
         Item.width = Item.height = 36;
         Item.value = Item.buyPrice(copper: 5);
-        Item.rare = ItemRarityID.Quest;
+        Item.rare = ModContent.RarityType<ImmutableQuest>();
         Item.useTime = Item.useAnimation = 60;
         Item.useStyle = ItemUseStyleID.HoldUp;
         Item.noUseGraphic = true;

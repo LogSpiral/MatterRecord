@@ -1,4 +1,5 @@
-﻿using MatterRecord.Contents.Recorder;
+﻿using MatterRecord.Contents.Rarities;
+using MatterRecord.Contents.Recorder;
 using System.Collections.Generic;
 
 namespace MatterRecord.Contents.TheTaleOfTheHeike;
@@ -13,7 +14,7 @@ public class TheTaleOfTheHeike : ModItem, IRecordBookItem
         Item.height = 30;
         Item.accessory = true;
         Item.value = Item.buyPrice(copper: 5);
-        Item.rare = ItemRarityID.Quest;
+        Item.rare = ModContent.RarityType<ImmutableQuest>();
     }
     public override void UpdateAccessory(Player player, bool hideVisual)
     {

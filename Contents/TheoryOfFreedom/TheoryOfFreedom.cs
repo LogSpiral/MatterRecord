@@ -1,4 +1,5 @@
-﻿using MatterRecord.Contents.Recorder;
+﻿using MatterRecord.Contents.Rarities;
+using MatterRecord.Contents.Recorder;
 using Microsoft.Xna.Framework;
 using MonoMod.Cil;
 using System;
@@ -57,7 +58,7 @@ public class TheoryOfFreedom : ModItem, IRecordBookItem
         Item.width = Item.height = 32;
         Item.accessory = true;
         Item.value = Item.buyPrice(copper: 5);
-        Item.rare = ItemRarityID.Quest;
+        Item.rare = ModContent.RarityType<ImmutableQuest>();
         base.SetDefaults();
     }
 

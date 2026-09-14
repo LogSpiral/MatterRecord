@@ -1,4 +1,5 @@
-﻿using MatterRecord.Contents.Recorder;
+﻿using MatterRecord.Contents.Rarities;
+using MatterRecord.Contents.Recorder;
 using System.Collections.Generic;
 using Terraria.GameContent.Bestiary;
 
@@ -14,7 +15,7 @@ public class TheoryofJustice : ModItem, IRecordBookItem
         Item.width = 26;
         Item.height = 30;
         Item.value = Item.buyPrice(copper: 5);
-        Item.rare = ItemRarityID.Quest;
+        Item.rare = ModContent.RarityType<ImmutableQuest>();
         base.SetDefaults();
     }
     public override void AddRecipes()

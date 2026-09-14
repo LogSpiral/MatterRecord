@@ -1,4 +1,5 @@
-﻿using MatterRecord.Contents.Recorder;
+﻿using MatterRecord.Contents.Rarities;
+using MatterRecord.Contents.Recorder;
 
 namespace MatterRecord.Contents.LittlePrince;
 
@@ -18,7 +19,7 @@ public class LittlePrince : ModItem,IRecordBookItem
         Item.width = 20;
         Item.height = 27;
         Item.value = Item.buyPrice(copper: 5);
-        Item.rare = ItemRarityID.Quest;
+        Item.rare = ModContent.RarityType<ImmutableQuest>();
         Item.accessory = true;
         base.SetDefaults();
     }

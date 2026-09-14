@@ -1,4 +1,5 @@
-﻿using MatterRecord.Contents.Recorder;
+﻿using MatterRecord.Contents.Rarities;
+using MatterRecord.Contents.Recorder;
 namespace MatterRecord.Contents.TheAdventureofSherlockHolmes;
 
 public class TheAdventureofSherlockHolmes : ModItem,IRecordBookItem
@@ -8,7 +9,7 @@ public class TheAdventureofSherlockHolmes : ModItem,IRecordBookItem
     {
         Item.width = Item.height = 48;
         Item.value = Item.buyPrice(copper: 5);
-        Item.rare = ItemRarityID.Quest;
+        Item.rare = ModContent.RarityType<ImmutableQuest>();
         base.SetDefaults();
     }
 
