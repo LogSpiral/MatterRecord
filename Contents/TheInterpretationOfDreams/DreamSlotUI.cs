@@ -167,12 +167,11 @@ public class DraggablePanel : UIPanel
 public class DreamItemSlot : UIPanel
 {
     public int index;
-    public Item BindItem => _item ??= Main.LocalPlayer.GetModPlayer<DreamPlayer>().dreamItemSlots[index];
-    private Item _item;
-
+    private Item BindItem => Main.LocalPlayer.GetModPlayer<DreamPlayer>().dreamItemSlots[index];
     public override void LeftClick(UIMouseEvent evt)
     {
         base.LeftClick(evt);
+        Item bindItem = BindItem;
         if (Main.mouseItem.type != ItemID.None)
         {
             int targetType = index switch
@@ -193,13 +192,13 @@ public class DreamItemSlot : UIPanel
             if (Main.mouseItem.type != targetType)
                 return;
 
-            if (BindItem.stack < Main.mouseItem.maxStack)
+            if (bindItem.stack < Main.mouseItem.maxStack)
             {
-                int origStack = BindItem.stack;
-                BindItem.SetDefaults(targetType);
+                int origStack = bindItem.stack;
+                bindItem.SetDefaults(targetType);
                 int delta = Math.Min(Main.mouseItem.stack, Main.mouseItem.maxStack - origStack);
 
-                BindItem.stack = origStack + delta;
+                bindItem.stack = origStack + delta;
 
                 Main.mouseItem.stack -= delta;
                 if (Main.mouseItem.stack <= 0)
@@ -208,37 +207,39 @@ public class DreamItemSlot : UIPanel
 
             return;
         }
-        if (BindItem.type == ItemID.None) return;
-        Main.mouseItem = BindItem.Clone();
-        BindItem.TurnToAir();
+        if (bindItem.type == ItemID.None) return;
+        Main.mouseItem = bindItem.Clone();
+        bindItem.TurnToAir();
     }
 
     public override void RightClick(UIMouseEvent evt)
     {
         base.RightClick(evt);
-        if (BindItem.type == ItemID.None) return;
-        if (Main.mouseItem.type == BindItem.type && Main.mouseItem.stack != Main.mouseItem.maxStack)
+        Item bindItem = BindItem;
+        if (bindItem.type == ItemID.None) return;
+        if (Main.mouseItem.type == bindItem.type && Main.mouseItem.stack != Main.mouseItem.maxStack)
         {
             Main.mouseItem.stack++;
             goto Label;
         }
         else if (Main.mouseItem.type == ItemID.None)
         {
-            Main.mouseItem = BindItem.Clone();
+            Main.mouseItem = bindItem.Clone();
             Main.mouseItem.stack = 1;
             goto Label;
         }
         return;
     Label:
-        BindItem.stack--;
-        if (BindItem.stack <= 0)
-            BindItem.TurnToAir();
+        bindItem.stack--;
+        if (bindItem.stack <= 0)
+            bindItem.TurnToAir();
     }
 
     public override void DrawSelf(SpriteBatch spriteBatch)
     {
         base.DrawSelf(spriteBatch);
         var position = GetDimensions().Center();
+        Item bindItem = BindItem;
 
         int type = index switch
         {
@@ -255,11 +256,11 @@ public class DreamItemSlot : UIPanel
             10 => ModContent.ItemType<CybrogDream>(),
             11 or _ => ModContent.ItemType<TaijiNoYume.TaijiNoYume>()
         };
-        var iconItem = new Item(type) { stack = BindItem.stack };
+        var iconItem = new Item(type) { stack = bindItem.stack };
 
         ItemSlot.DrawItemIcon(iconItem, 0, spriteBatch, position, 1f, 40, Color.White);
-        if (BindItem.stack > 1)
-            ChatManager.DrawColorCodedStringWithShadow(spriteBatch, FontAssets.MouseText.Value, BindItem.stack.ToString(), position, Color.White, 0, default, Vector2.One * .75f);
+        if (bindItem.stack > 1)
+            ChatManager.DrawColorCodedStringWithShadow(spriteBatch, FontAssets.MouseText.Value, bindItem.stack.ToString(), position, Color.White, 0, default, Vector2.One * .75f);
 
         if (IsMouseHovering)
         {
@@ -268,7 +269,7 @@ public class DreamItemSlot : UIPanel
             for (int n = 0; n < m; n++)
                 content += "\n" + iconItem.ToolTip.GetLine(n);
 
-            if (index != 11 || BindItem.stack > 1)
+            if (index != 11 || bindItem.stack > 1)
                 UICommon.TooltipMouseText(content);
         }
     }
