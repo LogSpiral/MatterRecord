@@ -253,3 +253,8 @@ TheHitchhikersGuideToTerraria: {
 		[c/66CCFF:Right click in inventory]: switch to the original item tooltip.
 		'''
 }
+
+EnAttendantGodot: {
+	DisplayName: En Attendant Godot
+	Tooltip: ""
+}

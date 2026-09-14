@@ -253,3 +253,8 @@ TheHitchhikersGuideToTerraria: {
 		[c/66CCFF:背包内右键]：切换为原物品提示
 		'''
 }
+
+EnAttendantGodot: {
+	// DisplayName: En Attendant Godot
+	// Tooltip: ""
+}
