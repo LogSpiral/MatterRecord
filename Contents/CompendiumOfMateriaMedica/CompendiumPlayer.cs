@@ -278,12 +278,12 @@ public class CompendiumPlayer : ModPlayer
     /// <summary>
     /// 根据最终生效的草药效果（药水触发 OR 附近图格触发），给玩家添加属性加成。
     /// 各草药效果说明：
-    /// - 闪耀根 (Blinkroot) ：+5% 挖掘速度，+5% 移动速度。
+    /// - 闪耀根 (Blinkroot) ：+3% 伤害减免，+5% 移动速度。
     /// - 太阳花 (Daybloom) ：+2 防御，+0.5 生命再生/秒。
     /// - 死亡草 (Deathweed)：+4% 所有伤害。
     /// - 火焰花 (Fireblossom)：+2% 暴击率。
     /// - 月光草 (Moonglow) ：+0.5 魔力再生/秒，+5% 魔法伤害。
-    /// - 寒颤棘 (Shiverthorn)：+10% 物块放置速度，+10% 墙壁放置速度。
+    /// - 寒颤棘 (Shiverthorn)：+20最大生命值。
     /// - 水叶草 (Waterleaf) ：+5 渔力，+0.01 幸运。
     /// </summary>
     private void ApplyStatBonuses()
@@ -323,7 +323,6 @@ public class CompendiumPlayer : ModPlayer
         if (finalShiverthorn)
         {
             Player.statLifeMax2 += 20;
-            Player.statLife += 20;// 增加 0.2 倍跳跃速度（原版默认约 6.5）
         }
         if (finalWaterleaf)
         {

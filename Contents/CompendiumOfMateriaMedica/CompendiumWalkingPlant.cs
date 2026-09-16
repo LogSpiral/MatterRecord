@@ -12,17 +12,20 @@ public class CompendiumWalkingPlant : ModPlayer
     // 下方物块类型 -> 草药样式映射表（仅这些物块可触发种植）
     private static readonly Dictionary<int, int> TileToHerb = [];
 
-    // 所有草药样式列表（用于种植盆随机生成）
-    private static readonly int[] AllHerbStyles =
-    [
-        0, // 太阳花
-        1, // 月光草
-        2, // 闪耀根
-        3, // 死亡草
-        4, // 水叶草
-        5, // 火焰花
-        6  // 寒颤棘
-    ];
+    // 种植盆图格样式 -> 草药样式映射表
+    // 草药样式：0太阳花 1月光草 2闪耀根 3死亡草 4水叶草 5火焰花 6寒颤棘
+    // 种植盆样式：0太阳花 1月光草 2死亡草 3死亡草 4闪耀根 5水叶草 6寒颤棘 7火焰花
+    private static readonly Dictionary<int, int> PlantPotStyleToHerb = new()
+    {
+        { 0, 0 }, // 太阳花种植盆  -> 太阳花
+        { 1, 1 }, // 月光草种植盆  -> 月光草
+        { 2, 3 }, // 死亡草种植盆  -> 死亡草
+        { 3, 3 }, // 死亡草种植盆  -> 死亡草
+        { 4, 2 }, // 闪耀根种植盆  -> 闪耀根
+        { 5, 4 }, // 水叶草种植盆  -> 水叶草
+        { 6, 6 }, // 寒颤棘种植盆  -> 寒颤棘
+        { 7, 5 }, // 火焰花种植盆  -> 火焰花
+    };
 
     static CompendiumWalkingPlant()
     {
@@ -66,44 +69,78 @@ public class CompendiumWalkingPlant : ModPlayer
         if (!HasAnyHerbSeed())
             return;
 
-        // 获取当前脚下方块和其下方方块
+        // 当前位置与下方位置
         Tile currentTile = Main.tile[x, y];
-        int belowX = x;
         int belowY = y + 1;
         if (belowY < 0 || belowY >= Main.maxTilesY)
             return;
+        Tile belowTile = Main.tile[x, belowY];
 
-        Tile belowTile = Main.tile[belowX, belowY];
         bool isCurrentEmpty = !currentTile.HasTile;
-        bool isBelowPlantPot = belowTile.HasTile && belowTile.TileType == 380; // 种植盆ID
+        // 图格 3 = 花 / 杂草（可被种植盆上的草药覆盖）
+        bool isCurrentFlower = currentTile.HasTile && currentTile.TileType == TileID.Plants;
 
-        // 可种植条件：当前位置为空，且（下方为种植盆 或 下方物块在映射表中）
-        bool isValidBelow = isBelowPlantPot || (belowTile.HasTile && TileToHerb.ContainsKey(belowTile.TileType));
-        if (!isCurrentEmpty || !isValidBelow)
+        bool isBelowPlantPot = belowTile.HasTile && belowTile.TileType == TileID.PlanterBox;
+
+        // 普通图格：必须是完整方块（非半砖、非斜坡），且在映射表中
+        bool isBelowFullBlock = !belowTile.IsHalfBlock && belowTile.Slope == 0;
+        bool isBelowValidBlock = belowTile.HasTile
+                                  && TileToHerb.ContainsKey(belowTile.TileType)
+                                  && isBelowFullBlock;
+
+        // 下方必须是种植盆或可种植物块
+        if (!isBelowPlantPot && !isBelowValidBlock)
             return;
+
+        // 当前格必须为空；或仅当在种植盆上时，允许覆盖花/杂草
+        if (!isCurrentEmpty)
+        {
+            if (!(isBelowPlantPot && isCurrentFlower))
+                return;
+        }
 
         // 确定种植概率：手持再生法杖(213)或草镐(5295)时100%，否则1/20
         bool forcePlant = Player.HeldItem.type == 213 || Player.HeldItem.type == 5295;
-        float chance = forcePlant ? 1f : 0.05f; // 1/20 = 0.05
+        float chance = forcePlant ? 1f : 0.05f;
         if (Main.rand.NextFloat() >= chance)
             return;
 
-        // 消耗任意一颗草药种子
-        if (ConsumeAnyHerbSeed())
+        // 先确定要种植的草药样式，确认可行后再消耗种子/摧毁花
+        int herbStyle;
+        if (isBelowPlantPot)
         {
-            if (isBelowPlantPot)
+            // 种植盆：家具图格样式使用 TileFrameY 计算
+            int potStyle = belowTile.TileFrameY / 18;
+            if (!PlantPotStyleToHerb.TryGetValue(potStyle, out herbStyle))
+                return;
+        }
+        else
+        {
+            herbStyle = TileToHerb[belowTile.TileType];
+        }
+
+        // 消耗任意一颗草药种子
+        if (!ConsumeAnyHerbSeed())
+            return;
+
+        // 若当前位置是花/杂草，先摧毁它
+        if (!isCurrentEmpty)
+        {
+            if (Main.netMode != NetmodeID.MultiplayerClient)
             {
-                // 种植盆：随机生成一种草药（生长期，TileID 82）
-                int randomStyle = AllHerbStyles[Main.rand.Next(AllHerbStyles.Length)];
-                PlaceHerb(x, y, 82, randomStyle);
+                WorldGen.KillTile(x, y, fail: false, effectOnly: false, noItem: true);
+                if (Main.netMode == NetmodeID.Server)
+                    NetMessage.SendTileSquare(-1, x, y, 1);
             }
             else
             {
-                // 特定物块：生成对应的草药（生长期，TileID 82）
-                int style = TileToHerb[belowTile.TileType];
-                PlaceHerb(x, y, 82, style);
+                // 客户端不修改世界，交由服务器处理
+                return;
             }
         }
+
+        // 放置对应草药（生长期，TileID 82）
+        PlaceHerb(x, y, 82, herbStyle);
     }
 
     /// <summary>
