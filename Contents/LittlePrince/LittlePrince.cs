@@ -5,7 +5,7 @@ namespace MatterRecord.Contents.LittlePrince;
 
 
 
-public class LittlePrince : ModItem,IRecordBookItem
+public class LittlePrince : ModItem, IRecordBookItem
 {
     ItemRecords IRecordBookItem.RecordType => ItemRecords.LittlePrince;
     public override void AddRecipes()
@@ -24,9 +24,15 @@ public class LittlePrince : ModItem,IRecordBookItem
         base.SetDefaults();
     }
 
-    public override void UpdateEquip(Player player)
+    /// <summary>
+    /// 装备状态与可见性标记。改用 <see cref="UpdateAccessory"/> 是因为它带 hideVisual 参数，
+    /// 可以拿到「饰品可见性是否被玩家关闭」。
+    /// </summary>
+    public override void UpdateAccessory(Player player, bool hideVisual)
     {
-        player.GetModPlayer<LittlePrincePlayer>().EquippedRose = true;
-        base.UpdateEquip(player);
+        var modPlayer = player.GetModPlayer<LittlePrincePlayer>();
+        modPlayer.EquippedRose = true;
+        modPlayer.EquippedRoseVisible = !hideVisual;
+        base.UpdateAccessory(player, hideVisual);
     }
 }

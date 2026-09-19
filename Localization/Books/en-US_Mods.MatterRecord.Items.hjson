@@ -72,7 +72,8 @@ LittlePrince: {
 		"It is like shedding old bark; there is nothing sad about old bark."
 		No tombstones on death
 		No coin loss on death
-		While your mana is below 50%, spending mana restores 1 mana
+		When you are about to die, knock back nearby enemies and generate a glass dome to protect you. This effect has a 5-minute cooldown.
+		The glass dome will not be generated when accessory visibility is turned off.
 		'''
 }
 

@@ -59,3 +59,12 @@ TheManInTheHighCastleBuff: {
 	// DisplayName: The Man In The High Castle Buff
 	// Description: Mods.MatterRecord.Buffs.TheManInTheHighCastleBuff.Description
 }
+
+LittlePrinceWitheredRose: {
+	DisplayName: 玫瑰
+	Description:
+		'''
+		“既然你决定要走，现在就走吧！”
+		免死冷却中
+		'''
+}

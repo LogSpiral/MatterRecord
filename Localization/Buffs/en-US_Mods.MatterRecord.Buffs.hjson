@@ -59,3 +59,12 @@ TheManInTheHighCastleBuff: {
 	DisplayName: The Man In The High Castle Buff
 	Description: Mods.MatterRecord.Buffs.TheManInTheHighCastleBuff.Description
 }
+
+LittlePrinceWitheredRose: {
+	DisplayName: Rose
+	Description:
+		'''
+		"You have decided to go away. Now go!"
+		Death Immunity on Cooldown
+		'''
+}
