@@ -68,3 +68,23 @@ LittlePrinceWitheredRose: {
 		免死冷却中
 		'''
 }
+
+HopeBuff: {
+	DisplayName: 希望
+	Description:
+		'''
+		“太阳将再次升起，我保证，一切都会有光明的未来。”
+		受到攻击时使伤害变为1并取消该状态，获得复仇
+		'''
+}
+
+
+RevengeBuff: {
+	DisplayName: 复仇
+	Description:
+		'''
+		“就当是为了我，对他使用炎拳吧”
+		伤害提高10%
+		'''
+}
+

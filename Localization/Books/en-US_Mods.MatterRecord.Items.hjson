@@ -59,6 +59,7 @@ Faust: {
 	TheoryOfFreedomHint: Destroy a delicate flower, and then face its essence
 	TheTaleOfTheHeikeHint: Wield the eerie blade and sever the withered bodies
 	CompendiumOfMateriaMedicaHint: Grasp the staff of life and gather nature's gifts among the herbs
+	TheCountOfMonteCristoHint: Return with nothing to seek the lost treasure or revenge
 	HintList: Hints of records:
 	HintNotFound: - {0}
 	HintFound: - {0} (Found, submit it to the Recorder)
@@ -271,5 +272,19 @@ CompendiumOfMateriaMedica: {
 		Moonglow: +0.5 mana regen, +5% magic damage
 		Shiverthorn: attacks inflict Frostburn, +20 max life
 		Waterleaf: +5 fishing power, +0.01 luck
+		'''
+}
+
+TheCountOfMonteCristo: {
+	DisplayName: The Count of Monte Cristo
+	Tooltip:
+		'''
+		While dead, hold right-click to prolong your respawn time
+		The prolonged time is recorded
+		Gain extra effects on respawn based on how long you extended it
+		5s: Teleport to your death point; during a multiplayer boss fight, teleport to the nearest teammate instead
+		10s: Gain the Hope buff on respawn, and share it when teleporting to a teammate
+		[c/66CCFF:"All human wisdom is contained in these two words: Wait and hope."]
+		[c/FFAF00:Record of Events]
 		'''
 }

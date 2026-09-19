@@ -27,6 +27,7 @@ Recorder: {
 	LordOfTheFliesUnlocked: Lord of the Flies probably doesn't mind me copying the transcript. He never agreed, but I never let him find out
 	TheTaleOfTheHeikeUnlocked: The deeds of the gods are no different from this record—after the utmost glory comes congealing, decline and dusk, and at last... a plunge into the abyss
 	CompendiumOfMateriaMedicaUnlocked: “Don't step on my herb garden,” said {0}, studying herbs while the town was under siege
+	TheCountOfMonteCristoUnlocked: Revenge had best come early — wait for your foes to die of old age, or for someone else to beat you to it, and it would be “beyond remedy.”
 	// Dialogue when the pet slime is found
 	PetFoundDialogue:
 		'''
@@ -45,6 +46,7 @@ Recorder: {
 	LordOfTheFliesUnlocking: Lord of the Flies probably doesn't mind me copying the transcript. He never agreed, but I never let him find out
 	TheTaleOfTheHeikeUnlocking: The prosperous must decline, the living must perish... This record dwells on “decline” with particular... obsession.
 	CompendiumOfMateriaMedicaUnlocking: This must be the notes of some Eastern sovereign of herbs—two hours on monarchs and ministers, on the harmony of the seven emotions. I've never transcribed a more tedious Record of Events
+	TheCountOfMonteCristoUnlocking: I'd say this is the peak of wit in a faked death. What do you think?
 	// Collection quest rewards
 	TheAdventureofSherlockHolmesUnlocking: Mr. Holmes can help you notice the details everyone else overlooks
 	TheoryofJusticeUnlocking: I've sewn the veil of ignorance into a cloak. Fits you? It won't be altered either way

@@ -16,5 +16,6 @@ public enum ItemRecords
     WarAndPeace,
     CompendiumOfMateriaMedica,
     TheTaleOfTheHeike,
+    TheCountOfMonteCristo,
     Count
 }

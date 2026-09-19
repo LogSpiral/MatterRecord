@@ -61,6 +61,7 @@ Faust: {
 	TheoryOfFreedomHint: 毁去一朵娇艳的花，而后直面它的本质
 	TheTaleOfTheHeikeHint: 挥动妖异之刀，斩断枯槁之躯
 	CompendiumOfMateriaMedicaHint: 执生机之杖，于百草间采撷自然的馈赠
+	TheCountOfMonteCristoHint: 一无所有的归来，寻找失落的财宝亦或复仇
 	HintList: 记录提示如下:
 	HintNotFound: - {0}
 	HintFound: - {0} (已获取, 请在记录员处提交)
@@ -282,5 +283,19 @@ CompendiumOfMateriaMedica: {
 		月光草:+0.5魔力再生，+5%魔法伤害
 		寒颤棘:攻击时造成霜冻，+20最大生命值
 		水叶草:+5鱼力，+0.01幸运
+		'''
+}
+
+TheCountOfMonteCristo: {
+	DisplayName: 《基督山伯爵》
+	Tooltip:
+		'''
+		死亡时，长按左键会延长复活时间
+		延长的复活时间会被记录
+		根据延长的时间，复活时获得额外效果
+		5s:复活后传送至死亡点，如果处于boss战，改为传送至最近的队友
+		10s:复活后获得希望buff，传送至队友时，将其分享
+		[c/66CCFF:“人类的全部智慧都包含在这两个词里：等待和希望。”]
+		[c/FFAF00:事象记录]
 		'''
 }

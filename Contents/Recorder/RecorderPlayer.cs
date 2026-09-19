@@ -29,7 +29,8 @@ public class RecorderPlayer : ModPlayer
         ItemRecords.TheInterpretationOfDreams,
         ItemRecords.TheoryOfFreedom,
         ItemRecords.TheTaleOfTheHeike,
-        ItemRecords.CompendiumOfMateriaMedica
+        ItemRecords.CompendiumOfMateriaMedica,
+        ItemRecords.TheCountOfMonteCristo,
     ];
     public static IReadOnlySet<ItemRecords> RecordsToHint { get; } = RecordsToHintInternal;
     public static List<(string, ItemRecords)> GetNotHintedRecords()
