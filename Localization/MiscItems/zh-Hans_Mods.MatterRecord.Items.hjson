@@ -257,3 +257,15 @@ TheHitchhikersGuideToTerraria: {
 		[c/66CCFF:背包内右键]：切换为原物品提示
 		'''
 }
+
+WanJianGuiZong: {
+	DisplayName: 万剑归宗
+	Tooltip:
+		'''
+		蓄力时，召唤背包中的剑作为飞剑战斗，松手时发射
+		伤害由剑的伤害决定
+		允许使用天顶剑与其包含的剑
+		“剑冲废穴，万气自生；归元武学，宗远功长。”
+		'''
+	AvailableSwords: 可用飞剑：{0} 把
+}

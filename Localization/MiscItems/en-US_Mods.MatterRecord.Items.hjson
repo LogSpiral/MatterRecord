@@ -256,3 +256,15 @@ TheHitchhikersGuideToTerraria: {
 		[c/66CCFF:Right click in inventory]: switch to the original item tooltip.
 		'''
 }
+
+WanJianGuiZong: {
+	DisplayName: Myriad Swords Return to the Origin
+	Tooltip:
+		'''
+		While charging, summons swords from your inventory to fight as flying swords; fires them upon release.
+		Damage is determined by the sword's damage.
+		Allows the use of the Zenith and the swords it contains.
+		"Swords surge through the dead acupoints, and myriad qi arises of itself; the martial art returns to the origin, its lineage reaching far and its power enduring."
+		'''
+	AvailableSwords: Available flying swords: {0}
+}
