@@ -209,6 +209,30 @@ public class BookmarkPlayer : ModPlayer
     {
         EternalBookmarkUnlocked = tag.ContainsKey("eternalBookmark");
     }
+
+    /// <summary>
+    /// 多人同步解锁状态。
+    /// <para>这个标记决定「事象记录」栏位是否启用（见 <see cref="BookmarkSlot.IsEnabled"/>），
+    /// 而栏位是否启用又决定栏位内饰品的 <c>UpdateAccessory</c> 跑不跑。
+    /// 不发给服务端和其他客户端的话，他们那边栏位是关着的：
+    /// 本草纲目拿不到 <c>CompendiumPlayer.hasCompendium</c>，同队共享与行走种植都会失效。</para>
+    /// </summary>
+    public override void SyncPlayer(int toWho, int fromWho, bool newPlayer)
+    {
+        BookmarkUnlockSync.Get(Player.whoAmI, EternalBookmarkUnlocked).Send(toWho, fromWho);
+    }
+
+    public override void CopyClientState(ModPlayer targetCopy)
+    {
+        ((BookmarkPlayer)targetCopy).EternalBookmarkUnlocked = EternalBookmarkUnlocked;
+    }
+
+    public override void SendClientChanges(ModPlayer clientPlayer)
+    {
+        // 玩家中途使用永恒书签解锁时，同样要让服务端和其他客户端知道
+        if (((BookmarkPlayer)clientPlayer).EternalBookmarkUnlocked != EternalBookmarkUnlocked)
+            SyncPlayer(toWho: -1, fromWho: Main.myPlayer, newPlayer: false);
+    }
 }
 
 /// <summary>

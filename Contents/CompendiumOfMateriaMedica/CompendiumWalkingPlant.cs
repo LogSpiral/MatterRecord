@@ -1,11 +1,18 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 namespace MatterRecord.Contents.CompendiumOfMateriaMedica;
 
 /// <summary>
-/// 行走种植功能：玩家装备本草纲目（或同队共享效果）且背包有草药种子时，
-/// 在行走过程中在脚下的可种植位置（下方为特定可种植物块或种植盆）种植对应草药，并消耗种子。
+/// 行走种植功能：玩家自己佩戴本草纲目且背包有草药种子时，
+/// 在行走过程中在脚下的可种植位置（下方为特定可种植物块或种植盆，
+/// 且该格为空或是可覆盖的杂草/藤蔓）种植对应草药，并消耗种子。
 /// 普通种植概率 1/20，手持再生法杖(213)或草镐(5295)时概率100%。
+/// <para>注意：</para>
+/// <list type="bullet">
+/// <item>同队共享的只有草药增益本身（药水触发、附近图格触发），行走种植不共享，只有佩戴者本人会种植。</item>
+/// <item>只有本机玩家参与判定：联机时客户端扣自己背包里的种子，再把落地请求（<see cref="WalkingPlantRequest"/>）
+/// 发给服务端；图格改动一律由服务端执行，否则会出现「扣了种子却种不出草」。</item>
+/// </list>
 /// </summary>
 public class CompendiumWalkingPlant : ModPlayer
 {
@@ -27,6 +34,31 @@ public class CompendiumWalkingPlant : ModPlayer
         { 7, 5 }, // 火焰花种植盆  -> 火焰花
     };
 
+    /// <summary>
+    /// 行走种植可以直接覆盖掉的杂草与藤蔓图格。
+    /// <para>故意不含 82/83/84（草药本身），否则会把已成株的草药铲掉重种。</para>
+    /// </summary>
+    private static readonly HashSet<int> OverwritablePlants =
+    [
+        TileID.Plants,          // 3   花 / 杂草
+        TileID.Plants2,         // 73  高杂草
+        TileID.CorruptPlants,   // 24  腐化杂草
+        TileID.JunglePlants,    // 61  丛林植物
+        TileID.JunglePlants2,   // 74  丛林高草
+        TileID.MushroomPlants,  // 71  蘑菇草
+        TileID.HallowedPlants,  // 110 神圣植物
+        TileID.HallowedPlants2, // 113 神圣高草
+        TileID.CrimsonPlants,   // 201 猩红杂草
+        TileID.AshPlants,       // 637 灰烬植物
+        TileID.Vines,           // 52  藤蔓
+        TileID.JungleVines,     // 62
+        TileID.HallowedVines,   // 115
+        TileID.CrimsonVines,    // 205
+        TileID.MushroomVines,   // 528
+        TileID.CorruptVines,    // 636
+        TileID.AshVines,        // 638
+    ];
+
     static CompendiumWalkingPlant()
     {
         // 初始化映射表：只有这些物块才允许种植，并指定对应的草药样式
@@ -41,12 +73,18 @@ public class CompendiumWalkingPlant : ModPlayer
 
     /// <summary>
     /// 每帧更新，在玩家移动时尝试种植。
+    /// <para>只有本机玩家参与判定：联机时客户端扣自己背包里的种子（客户端对自己背包有权威），
+    /// 再把落地请求发给服务端；图格改动一律由服务端执行。</para>
     /// </summary>
     public override void PostUpdate()
     {
-        // 只处理装备了本草纲目或同队有人装备的情况
+        // 只处理佩戴者本人（同队共享不包括种植，见类注释）
         var compPlayer = Player.GetModPlayer<CompendiumPlayer>();
-        if (!compPlayer.ShouldGainHerbEffects())
+        if (!compPlayer.hasCompendium)
+            return;
+
+        // 每个进程只判定本机玩家，避免服务端与客户端各摇一次：那样客户端会白扣种子
+        if (Player.whoAmI != Main.myPlayer)
             return;
 
         // 仅在移动时尝试种植（与花靴机制类似）
@@ -62,23 +100,64 @@ public class CompendiumWalkingPlant : ModPlayer
         // 获取玩家脚下的图格坐标
         int x = (int)(Player.Center.X / 16);
         int y = (int)((Player.position.Y + Player.height - 1f) / 16);
-        if (x < 0 || x >= Main.maxTilesX || y < 0 || y >= Main.maxTilesY)
-            return;
 
         // 检查背包是否有草药种子
         if (!HasAnyHerbSeed())
             return;
 
-        // 当前位置与下方位置
-        Tile currentTile = Main.tile[x, y];
+        // 位置能否种植、该种什么草药：客户端判定与服务端复核共用同一套规则
+        if (!TryGetPlantTarget(x, y, out int herbStyle, out bool needKillFlower))
+            return;
+
+        // 确定种植概率：手持再生法杖(213)或草镐(5295)时100%，否则1/20
+        bool forcePlant = Player.HeldItem.type == 213 || Player.HeldItem.type == 5295;
+        float chance = forcePlant ? 1f : 0.05f;
+        if (Main.rand.NextFloat() >= chance)
+            return;
+
+        // 先扣种子，扣不动就不种
+        if (!ConsumeAnyHerbSeed())
+            return;
+
+        if (Main.netMode == NetmodeID.MultiplayerClient)
+        {
+            // 客户端改图格不会被承认，落地交给服务端；
+            // 草药样式由服务端按下方物块重新推导，不采信客户端传来的值。
+            WalkingPlantRequest.Get(x, y).Send();
+            return;
+        }
+
+        ApplyPlant(x, y, herbStyle, needKillFlower);
+    }
+
+    /// <summary>
+    /// 判断 (x, y) 能否种植，并推导出要种下的草药样式。
+    /// <para>客户端判定与（服务端收到请求后的）复核共用这一套规则，草药样式一律由下方物块决定。</para>
+    /// </summary>
+    /// <param name="x">目标图格 X。</param>
+    /// <param name="y">目标图格 Y（玩家脚下那一格）。</param>
+    /// <param name="herbStyle">可种植时输出草药样式（0太阳花 … 6寒颤棘）。</param>
+    /// <param name="needKillFlower">可种植时输出是否需要先清掉当前格的杂草/藤蔓。</param>
+    /// <returns>可以种植返回 true。</returns>
+    internal static bool TryGetPlantTarget(int x, int y, out int herbStyle, out bool needKillFlower)
+    {
+        herbStyle = 0;
+        needKillFlower = false;
+
+        if (x < 0 || x >= Main.maxTilesX || y < 0 || y >= Main.maxTilesY)
+            return false;
+
         int belowY = y + 1;
         if (belowY < 0 || belowY >= Main.maxTilesY)
-            return;
+            return false;
+
+        // 当前位置与下方位置
+        Tile currentTile = Main.tile[x, y];
         Tile belowTile = Main.tile[x, belowY];
 
         bool isCurrentEmpty = !currentTile.HasTile;
-        // 图格 3 = 花 / 杂草（可被种植盆上的草药覆盖）
-        bool isCurrentFlower = currentTile.HasTile && currentTile.TileType == TileID.Plants;
+        // 当前格是杂草/藤蔓时可以直接覆盖（见 OverwritablePlants，草药本身不在表里）
+        bool isCurrentOverwritable = currentTile.HasTile && OverwritablePlants.Contains(currentTile.TileType);
 
         bool isBelowPlantPot = belowTile.HasTile && belowTile.TileType == TileID.PlanterBox;
 
@@ -90,57 +169,48 @@ public class CompendiumWalkingPlant : ModPlayer
 
         // 下方必须是种植盆或可种植物块
         if (!isBelowPlantPot && !isBelowValidBlock)
-            return;
+            return false;
 
-        // 当前格必须为空；或仅当在种植盆上时，允许覆盖花/杂草
-        if (!isCurrentEmpty)
-        {
-            if (!(isBelowPlantPot && isCurrentFlower))
-                return;
-        }
+        // 当前格必须为空，或是可以覆盖掉的杂草/藤蔓；种植盆与普通图格一视同仁
+        if (!isCurrentEmpty && !isCurrentOverwritable)
+            return false;
 
-        // 确定种植概率：手持再生法杖(213)或草镐(5295)时100%，否则1/20
-        bool forcePlant = Player.HeldItem.type == 213 || Player.HeldItem.type == 5295;
-        float chance = forcePlant ? 1f : 0.05f;
-        if (Main.rand.NextFloat() >= chance)
-            return;
+        needKillFlower = !isCurrentEmpty;
 
-        // 先确定要种植的草药样式，确认可行后再消耗种子/摧毁花
-        int herbStyle;
         if (isBelowPlantPot)
         {
             // 种植盆：家具图格样式使用 TileFrameY 计算
             int potStyle = belowTile.TileFrameY / 18;
-            if (!PlantPotStyleToHerb.TryGetValue(potStyle, out herbStyle))
-                return;
-        }
-        else
-        {
-            herbStyle = TileToHerb[belowTile.TileType];
+            return PlantPotStyleToHerb.TryGetValue(potStyle, out herbStyle);
         }
 
-        // 消耗任意一颗草药种子
-        if (!ConsumeAnyHerbSeed())
+        herbStyle = TileToHerb[belowTile.TileType];
+        return true;
+    }
+
+    /// <summary>
+    /// 在世界侧真正落地：必要时先清掉当前格的杂草/藤蔓，再放上生长期的草药图格。
+    /// <para>只允许单机 / 服务端执行，客户端调用直接返回（客户端改图格不会被承认）。</para>
+    /// </summary>
+    /// <param name="x">目标图格 X。</param>
+    /// <param name="y">目标图格 Y。</param>
+    /// <param name="herbStyle">草药样式。</param>
+    /// <param name="needKillFlower">是否需要先清掉当前格的杂草/藤蔓。</param>
+    internal static void ApplyPlant(int x, int y, int herbStyle, bool needKillFlower)
+    {
+        if (Main.netMode == NetmodeID.MultiplayerClient)
             return;
 
-        // 若当前位置是花/杂草，先摧毁它
-        if (!isCurrentEmpty)
+        // 若当前位置是杂草/藤蔓，先摧毁它
+        if (needKillFlower)
         {
-            if (Main.netMode != NetmodeID.MultiplayerClient)
-            {
-                WorldGen.KillTile(x, y, fail: false, effectOnly: false, noItem: true);
-                if (Main.netMode == NetmodeID.Server)
-                    NetMessage.SendTileSquare(-1, x, y, 1);
-            }
-            else
-            {
-                // 客户端不修改世界，交由服务器处理
-                return;
-            }
+            WorldGen.KillTile(x, y, fail: false, effectOnly: false, noItem: true);
+            if (Main.netMode == NetmodeID.Server)
+                NetMessage.SendTileSquare(-1, x, y, 1);
         }
 
-        // 放置对应草药（生长期，TileID 82）
-        PlaceHerb(x, y, 82, herbStyle);
+        // 放置对应草药（生长期）
+        PlaceHerb(x, y, TileID.ImmatureHerbs, herbStyle);
     }
 
     /// <summary>

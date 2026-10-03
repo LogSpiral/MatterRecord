@@ -1,4 +1,4 @@
-﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework;
 
 namespace MatterRecord.Contents.CompendiumOfMateriaMedica;
 
@@ -88,7 +88,10 @@ public class CompendiumPlayer : ModPlayer
     }
 
     /// <summary>
-    /// 每帧更新，处理所有与草药相关的逻辑。
+    /// 每帧更新，只处理草药扫描与效果过期。
+    /// 属性加成与草药保护不在这里结算——PostUpdate 晚于原版的 UpdateLifeRegen 与 ItemCheck，
+    /// 放在这里会导致寒颤棘的 +20 最大生命永远回不满、dontHurtNature 当帧拦不住手持工具，
+    /// 这两件事统一挪到 <see cref="PostUpdateEquips"/>。
     /// </summary>
     public override void PostUpdate()
     {
@@ -102,28 +105,36 @@ public class CompendiumPlayer : ModPlayer
         // 计算当前玩家是否应该获得草药效果
         bool canGain = ShouldGainHerbEffects();
 
-        // 附近草药扫描和计时器更新（仅当可以获得效果时）
+        // 附近草药扫描（仅当可以获得效果时，每秒一次）
         if (canGain)
         {
-            // 每秒扫描一次附近草药
             proximityScanCounter++;
             if (proximityScanCounter >= 60)
             {
                 proximityScanCounter = 0;
                 ScanNearbyHerbs();
             }
-            UpdateProximityTimers();
-
-            // 草药保护：仅当自己装备且饰品可见时启用原版环境保护机制
-            if (hasCompendium && showCompendiumVisual)
-            {
-                Player.dontHurtNature = true;
-            }
         }
-        else
+
+        // 无论是否可以获得新效果，都要更新计时器，让已有附近草药效果自然衰减
+        UpdateProximityTimers();
+    }
+
+    /// <summary>
+    /// 属性加成与草药保护统一在这里结算。
+    /// 时机：晚于 UpdateEquips（因此 hasCompendium / showCompendiumVisual 已是本帧的值），
+    /// 早于 UpdateLifeRegen、HorizontalMovement（割草）与 ItemCheck（挥砍 / 挖掘）。
+    /// - 寒颤棘的 +20 最大生命必须在 UpdateLifeRegen 之前生效：原版只按 statLifeMax2 回血、
+    ///   并把 statLife 夹到 statLifeMax2，若在 UpdateLifeRegen 之后才加大上限，多出来的 20 点回不满。
+    /// - dontHurtNature 必须在 ItemCheck 之前置位，否则手持工具当帧仍会破坏环境，
+    ///   只有之后更新的弹幕能被拦下。
+    /// </summary>
+    public override void PostUpdateEquips()
+    {
+        // 草药保护：仅当自己装备且饰品可见时启用原版环境保护机制
+        if (hasCompendium && showCompendiumVisual)
         {
-            // 无效果时，仍然需要更新计时器（让已有附近草药效果自然衰减）
-            UpdateProximityTimers();
+            Player.dontHurtNature = true;
         }
 
         // 无论是否可以获得新效果，只要已有的效果标志还在，就应用属性加成
