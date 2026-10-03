@@ -267,4 +267,18 @@ WanJianGuiZong: {
 		"Swords surge through the dead acupoints, and myriad qi arises of itself; the martial art returns to the origin, its lineage reaching far and its power enduring."
 		'''
 	AvailableSwords: Available flying swords: {0}
+	SwitchToTianJian: "Right click to switch to Heaven's Sword"
+	}
+
+TianJian: {
+	DisplayName: Heaven's Sword
+	Tooltip:
+		'''
+		Turn your body into a sword and fly toward the mouse
+		The farther the mouse is from the screen center, the faster you fly
+		As one with the sword, damage is that of the strongest sword weapon in your inventory
+		As one with the sword, the sprite is that of the first sword weapon in your inventory
+		"The sword is in the heart; then comes the union of heart and sword — you are the sword, and the sword is you."
+		'''
+	SwitchBack: "Right click to switch to Myriad Swords Return to the Origin"
 }

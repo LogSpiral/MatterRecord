@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using MatterRecord.Contents.TodaySword;
 using Microsoft.Xna.Framework;
+using Terraria.Audio;
 
 namespace MatterRecord.Contents.WanJianGuiZong;
 
@@ -62,6 +63,22 @@ public class WanJianGuiZong : ModItem
         return true;
     }
     public override bool AllowPrefix(int pre) => false;
+
+    /// <summary>背包内右键切换成「天剑」。</summary>
+    public override bool CanRightClick() => true;
+
+    /// <summary>切换状态不消耗物品本身（参考浮士德 / 蝇王的写法）。</summary>
+    public override bool ConsumeItem(Player player) => false;
+
+    /// <inheritdoc />
+    public override void RightClick(Player player)
+    {
+        // ChangeItemType 会保留收藏标记，比直接 SetDefaults 温和一点
+        Item.ChangeItemType(ModContent.ItemType<TianJian>());
+        SoundEngine.PlaySound(SoundID.Item4, player.Center);
+        base.RightClick(player);
+    }
+
     /// <inheritdoc />
     public override void ModifyTooltips(List<TooltipLine> tooltips)
     {
@@ -78,6 +95,11 @@ public class WanJianGuiZong : ModItem
             OverrideColor = Color.LightGreen
         };
         tooltips.Add(line);
+
+        tooltips.Add(new TooltipLine(Mod, "SwitchToTianJian", this.GetLocalization("SwitchToTianJian").Value)
+        {
+            OverrideColor = Color.LightGreen
+        });
     }
 
     /// <inheritdoc />

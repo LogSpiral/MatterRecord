@@ -266,6 +266,52 @@ public class WanJianGuiZongPlayer : ModPlayer
         return count;
     }
 
+    /// <summary>
+    /// 背包（含副背包）里第一把可用剑的物品类型，用来当「天剑」化身时的贴图与伤害。
+    /// 一把剑都没有时返回 <see cref="ItemID.None"/>。
+    /// </summary>
+    public static int FindFirstSwordType(Player player)
+    {
+        foreach (Item[] container in EnumerateContainers(player))
+        {
+            for (int i = 0; i < container.Length; i++)
+            {
+                Item item = container[i];
+                if (item == null || item.IsAir || !IsUsableSword(item))
+                    continue;
+
+                return item.type;
+            }
+        }
+
+        return ItemID.None;
+    }
+
+    /// <summary>
+    /// 背包（含副背包）里可用剑的最高伤害，用来当「天剑」化身的伤害。
+    /// <para>取的是物品实例上的 <c>damage</c>，所以带前缀的剑按加成后的数值算；
+    /// 一把剑都没有时返回 0（调用方再拿天剑自己的伤害兜底）。</para>
+    /// </summary>
+    public static int FindStrongestSwordDamage(Player player)
+    {
+        int best = 0;
+
+        foreach (Item[] container in EnumerateContainers(player))
+        {
+            for (int i = 0; i < container.Length; i++)
+            {
+                Item item = container[i];
+                if (item == null || item.IsAir || !IsUsableSword(item))
+                    continue;
+
+                if (item.damage > best)
+                    best = item.damage;
+            }
+        }
+
+        return best;
+    }
+
     /// <summary>可用飞剑 = 通用「剑」判定命中的物品，或保底剑池的根（天顶剑与它的合成材料）。</summary>
     private static bool IsUsableSword(Item item)
     {
