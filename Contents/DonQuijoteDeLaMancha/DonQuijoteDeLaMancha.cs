@@ -156,6 +156,22 @@ public class DonQuijoteDeLaMancha : MeleeSequenceItem<DonQuijoteDeLaManchaProj>,
         base.ModifyWeaponCrit(player, ref crit);
     }
 
+    // 连击的尺寸加成走「近战武器大小」这一条路：
+    // GetAdjustedItemScale 会带上这里的结果，武器绘制、挥砍判定、突刺光效都从同一个值里取，
+    // 弹幕不再单独吃 Item.scale，避免重复计入与采样时机不一致
+    public override void ModifyItemScale(Player player, ref float scale)
+    {
+        if (!DonQuijoteProgression.Tier5_ComboSystem)
+            return;
+
+        // 背包里有堂吉诃德，连击加成就对任意近战武器生效（不只是堂吉诃德自己）
+        var mplr = player.GetModPlayer<DonQuijoteDeLaManchaPlayer>();
+        if (!mplr.HasDonQuijoteInInventory)
+            return;
+
+        scale *= mplr.ComboSizeMultiplier;
+    }
+
     public override float UseTimeMultiplier(Player player)
     {
         var mplr = player.GetModPlayer<DonQuijoteDeLaManchaPlayer>();
@@ -550,22 +566,11 @@ public class DonQuijoteDeLaManchaProj : MeleeSequenceProj
 
     private class CustomSwooshInfo : SwooshInfo
     {
-        private float _initialSize;
         private bool _wingTimeRestored;
         private bool _comboAdded;
 
         public override void OnStartSingle()
         {
-            if (_initialSize == 0f)
-                _initialSize = ModifyData.Size;
-
-            float scale = (Owner as Player)?.HeldItem.scale ?? 1f;
-            var mplr = (Owner as Player)?.GetModPlayer<DonQuijoteDeLaManchaPlayer>();
-            float comboMult = mplr?.ComboSizeMultiplier ?? 1f;
-            var data = ModifyData;
-            data.Size = _initialSize * scale * comboMult;
-            ModifyData = data;
-
             _wingTimeRestored = false;
             _comboAdded = false;
             base.OnStartSingle();
@@ -597,7 +602,6 @@ public class DonQuijoteDeLaManchaProj : MeleeSequenceProj
         private Vector2 originVelocity;
         private WindMill windMill;
         private bool _noMovement;
-        private float _initialSize;
         private bool _wingTimeRestored;
         private bool _comboAdded;
 
@@ -672,9 +676,6 @@ public class DonQuijoteDeLaManchaProj : MeleeSequenceProj
 
         public override void OnStartSingle()
         {
-            if (_initialSize == 0f)
-                _initialSize = ModifyData.Size;
-
             _noMovement = false;
             KValue = 1f;
             _wingTimeRestored = false;
@@ -700,13 +701,6 @@ public class DonQuijoteDeLaManchaProj : MeleeSequenceProj
 
         public override void OnStartAttack()
         {
-            float scale = (Owner as Player)?.HeldItem.scale ?? 1f;
-            var mplr = (Owner as Player)?.GetModPlayer<DonQuijoteDeLaManchaPlayer>();
-            float comboMult = mplr?.ComboSizeMultiplier ?? 1f;
-            var data = ModifyData;
-            data.Size = _initialSize * scale * comboMult;
-            ModifyData = data;
-
             SoundEngine.PlaySound(SoundID.Item92, Owner.Center);
             originVelocity = Owner.velocity;
 
@@ -808,7 +802,6 @@ public class DonQuijoteDeLaManchaProj : MeleeSequenceProj
     private class DonQuijoteDeLaManchaStab : RapidlyStabInfo
     {
         private int hitCount = 0;
-        private float _initialSize;
         private bool _wingTimeRestored;
         private bool _comboAdded;
 
@@ -880,16 +873,6 @@ public class DonQuijoteDeLaManchaProj : MeleeSequenceProj
 
         public override void OnStartSingle()
         {
-            if (_initialSize == 0f)
-                _initialSize = ModifyData.Size;
-
-            float scale = (Owner as Player)?.HeldItem.scale ?? 1f;
-            var mplr = (Owner as Player)?.GetModPlayer<DonQuijoteDeLaManchaPlayer>();
-            float comboMult = mplr?.ComboSizeMultiplier ?? 1f;
-            var data = ModifyData;
-            data.Size = _initialSize * scale * comboMult;
-            ModifyData = data;
-
             hitCount = 0;
             _wingTimeRestored = false;
             _comboAdded = false;

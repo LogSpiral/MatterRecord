@@ -121,7 +121,7 @@ DonQuijoteDeLaMancha: {
 	Tier2_StabAfterDash: Enter stab state after dashing, right-click to cancel
 	Tier3_TauntOnHit: Taunt nearby enemies toward your windmill for 3 seconds when hurt
 	Tier4_StabDRAndMove: Gain 20% damage reduction while stabbing; hold UP to move
-	Tier5_ComboSystem: Dealing damage builds combos; each combo grants +1% attack speed and +10% Don Quijote size, up to 10
+	While Don Quixote is in your inventory, dealing melee damage grants a combo stack. Each stack grants +1% melee attack speed and +5% weapon size. Max 10 stacks.
 	Tier6_StabReduceCooldown: Stab hits reduce dash cooldown
 	Tier7_HitRestoreWing: Slash/stab hits restore flight time
 	Tier8_SpearThrow: Hold UP to throw a spear instead of slashing; slashing and charging are disabled while the spear is thrown (unimplemented)

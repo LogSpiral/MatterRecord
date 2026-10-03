@@ -127,7 +127,7 @@ DonQuijoteDeLaMancha: {
 	Tier2_StabAfterDash: 冲锋后进入突刺状态，可右键取消
 	Tier3_TauntOnHit: 受伤时风车嘲讽敌人3秒
 	Tier4_StabDRAndMove: 突刺时获得20%伤害减免，按住up可位移
-	Tier5_ComboSystem: 造成伤害获得连击，每1连击+1%攻速与10%堂吉诃德大小，上限10
+	Tier5_ComboSystem: 物品栏中存在堂吉诃德时，近战伤害可获得连击，每1连击+1%近战攻速与5%武器大小，上限10
 	Tier6_StabReduceCooldown: 突刺命中减少冲锋冷却
 	Tier7_HitRestoreWing: 挥砍与突刺命中恢复飞行时间
 	Tier8_SpearThrow: 按住up时挥砍改为投掷长矛，投掷时无法使用挥砍与冲锋（未实现）
