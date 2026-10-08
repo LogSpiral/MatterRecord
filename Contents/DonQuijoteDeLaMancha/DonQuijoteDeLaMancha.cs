@@ -1,4 +1,4 @@
-﻿using MatterRecord.Contents.DonQuijoteDeLaMancha.Core;
+using MatterRecord.Contents.DonQuijoteDeLaMancha.Core;
 using MatterRecord.Contents.DonQuijoteDeLaMancha.Core.BuiltInGroups;
 using MatterRecord.Contents.DonQuijoteDeLaMancha.Core.MeleeCore;
 using MatterRecord.Contents.DonQuijoteDeLaMancha.Core.StandardMelee;
@@ -154,6 +154,22 @@ public class DonQuijoteDeLaMancha : MeleeSequenceItem<DonQuijoteDeLaManchaProj>,
         if (item.crit == 0) return;
         crit += item.crit * .01f - .04f;
         base.ModifyWeaponCrit(player, ref crit);
+    }
+
+    // 连击的尺寸加成走「近战武器大小」这一条路：
+    // GetAdjustedItemScale 会带上这里的结果，武器绘制、挥砍判定、突刺光效都从同一个值里取，
+    // 弹幕不再单独吃 Item.scale，避免重复计入与采样时机不一致
+    public override void ModifyItemScale(Player player, ref float scale)
+    {
+        if (!DonQuijoteProgression.Tier5_ComboSystem)
+            return;
+
+        // 背包里有堂吉诃德，连击加成就对任意近战武器生效（不只是堂吉诃德自己）
+        var mplr = player.GetModPlayer<DonQuijoteDeLaManchaPlayer>();
+        if (!mplr.HasDonQuijoteInInventory)
+            return;
+
+        scale *= mplr.ComboSizeMultiplier;
     }
 
     public override float UseTimeMultiplier(Player player)
@@ -439,44 +455,73 @@ public class DonQuijoteDeLaMancha : MeleeSequenceItem<DonQuijoteDeLaManchaProj>,
     }
 }
 
+/// <summary>
+/// 堂吉诃德「风车嘲讽」的位置欺骗：敌怪 AI 期间把目标玩家临时挪到风车中心，
+/// 让敌怪对着风车打，AI 跑完立刻还原。
+/// <para>
+/// 还原必须满足两个前提，否则玩家会被真的传送到风车（视角、碰撞箱一起走，
+/// 而且本端下一帧会把风车坐标当真实位置发给服务器）：
+/// </para>
+/// <list type="number">
+/// <item>
+/// <b>认下标，不认 npc.target</b>：还原用的玩家下标必须是 <see cref="PreAI"/> 里登记的那一个。
+/// 这里的 <c>TargetClosest</c> 和原版 AI 自己都可能改写 <c>npc.target</c> ——
+/// 风车通常离玩家很远，嘲弄玩家的 <c>距离 - aggro</c> 会输给旁边更近的队友，
+/// 于是目标换成队友，旧写法回头读 <c>npc.target</c> 就还原了队友，
+/// 被嘲讽的玩家被永久留在风车坐标上。单人有唯一玩家时不会换目标，
+/// 所以这个 bug 只在多人出现。
+/// </item>
+/// <item>
+/// <b>帧末兜底</b>：万一某只敌怪的 <see cref="PostAI"/> 没走到，
+/// <see cref="DonQuijoteDecoyRestoreSystem"/> 会在本帧实体更新结束后把玩家拉回原位。
+/// </item>
+/// </list>
+/// </summary>
 public class DonQuijoteGlobalNPC : GlobalNPC
 {
     public override bool InstancePerEntity => true;
 
-    private static Vector2?[] _originalPositions = new Vector2?[Main.maxPlayers];
+    /// <summary>本帧被本敌怪挪走过的玩家下标；-1 表示本帧没动过任何人。</summary>
+    private int _decoyedPlayer = -1;
 
     public override bool PreAI(NPC npc)
     {
+        // 每帧先清空：槽位复用或上一帧没走完 PostAI 时，都不该沿用旧值
+        _decoyedPlayer = -1;
+
         int targetPlayer = npc.target;
-        if (targetPlayer >= 0 && targetPlayer < Main.maxPlayers)
+        if (targetPlayer < 0 || targetPlayer >= Main.maxPlayers)
+            return base.PreAI(npc);
+
+        var player = Main.player[targetPlayer];
+        if (player == null || !player.active || player.dead)
+            return base.PreAI(npc);
+
+        var mplr = player.GetModPlayer<DonQuijoteDeLaManchaPlayer>();
+        if (mplr.TauntTimer <= 0)
+            return base.PreAI(npc);
+
+        if (!DonQuijoteDeLaMancha.WindmillPositions.TryGetValue(targetPlayer, out Vector2 windmillPos))
+            return base.PreAI(npc);
+
+        if (DonQuijoteDecoy.Begin(targetPlayer, windmillPos))
         {
-            var player = Main.player[targetPlayer];
-            if (player != null && player.active && !player.dead)
-            {
-                var mplr = player.GetModPlayer<DonQuijoteDeLaManchaPlayer>();
-                if (mplr.TauntTimer > 0 && DonQuijoteDeLaMancha.WindmillPositions.TryGetValue(targetPlayer, out Vector2 windmillPos))
-                {
-                    if (!_originalPositions[targetPlayer].HasValue)
-                        _originalPositions[targetPlayer] = player.position;
-                    player.position = windmillPos - player.Size * 0.5f;
-                    npc.TargetClosest();
-                }
-            }
+            _decoyedPlayer = targetPlayer;
+            npc.TargetClosest();
         }
+
         return base.PreAI(npc);
     }
 
     public override void PostAI(NPC npc)
     {
-        int targetPlayer = npc.target;
-        if (targetPlayer >= 0 && targetPlayer < Main.maxPlayers)
+        // 只还原本敌怪这一帧动过的那名玩家，下标在 PreAI 里就定死了
+        if (_decoyedPlayer >= 0)
         {
-            if (_originalPositions[targetPlayer].HasValue)
-            {
-                Main.player[targetPlayer].position = _originalPositions[targetPlayer].Value;
-                _originalPositions[targetPlayer] = null;
-            }
+            DonQuijoteDecoy.Restore(_decoyedPlayer);
+            _decoyedPlayer = -1;
         }
+
         base.PostAI(npc);
     }
 }
@@ -521,22 +566,11 @@ public class DonQuijoteDeLaManchaProj : MeleeSequenceProj
 
     private class CustomSwooshInfo : SwooshInfo
     {
-        private float _initialSize;
         private bool _wingTimeRestored;
         private bool _comboAdded;
 
         public override void OnStartSingle()
         {
-            if (_initialSize == 0f)
-                _initialSize = ModifyData.Size;
-
-            float scale = (Owner as Player)?.HeldItem.scale ?? 1f;
-            var mplr = (Owner as Player)?.GetModPlayer<DonQuijoteDeLaManchaPlayer>();
-            float comboMult = mplr?.ComboSizeMultiplier ?? 1f;
-            var data = ModifyData;
-            data.Size = _initialSize * scale * comboMult;
-            ModifyData = data;
-
             _wingTimeRestored = false;
             _comboAdded = false;
             base.OnStartSingle();
@@ -568,7 +602,6 @@ public class DonQuijoteDeLaManchaProj : MeleeSequenceProj
         private Vector2 originVelocity;
         private WindMill windMill;
         private bool _noMovement;
-        private float _initialSize;
         private bool _wingTimeRestored;
         private bool _comboAdded;
 
@@ -643,9 +676,6 @@ public class DonQuijoteDeLaManchaProj : MeleeSequenceProj
 
         public override void OnStartSingle()
         {
-            if (_initialSize == 0f)
-                _initialSize = ModifyData.Size;
-
             _noMovement = false;
             KValue = 1f;
             _wingTimeRestored = false;
@@ -671,13 +701,6 @@ public class DonQuijoteDeLaManchaProj : MeleeSequenceProj
 
         public override void OnStartAttack()
         {
-            float scale = (Owner as Player)?.HeldItem.scale ?? 1f;
-            var mplr = (Owner as Player)?.GetModPlayer<DonQuijoteDeLaManchaPlayer>();
-            float comboMult = mplr?.ComboSizeMultiplier ?? 1f;
-            var data = ModifyData;
-            data.Size = _initialSize * scale * comboMult;
-            ModifyData = data;
-
             SoundEngine.PlaySound(SoundID.Item92, Owner.Center);
             originVelocity = Owner.velocity;
 
@@ -779,7 +802,6 @@ public class DonQuijoteDeLaManchaProj : MeleeSequenceProj
     private class DonQuijoteDeLaManchaStab : RapidlyStabInfo
     {
         private int hitCount = 0;
-        private float _initialSize;
         private bool _wingTimeRestored;
         private bool _comboAdded;
 
@@ -851,16 +873,6 @@ public class DonQuijoteDeLaManchaProj : MeleeSequenceProj
 
         public override void OnStartSingle()
         {
-            if (_initialSize == 0f)
-                _initialSize = ModifyData.Size;
-
-            float scale = (Owner as Player)?.HeldItem.scale ?? 1f;
-            var mplr = (Owner as Player)?.GetModPlayer<DonQuijoteDeLaManchaPlayer>();
-            float comboMult = mplr?.ComboSizeMultiplier ?? 1f;
-            var data = ModifyData;
-            data.Size = _initialSize * scale * comboMult;
-            ModifyData = data;
-
             hitCount = 0;
             _wingTimeRestored = false;
             _comboAdded = false;

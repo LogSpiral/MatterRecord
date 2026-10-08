@@ -1,4 +1,4 @@
-﻿using Terraria;
+using Terraria;
 
 namespace MatterRecord.Contents.DonQuijoteDeLaMancha;
 
@@ -20,7 +20,7 @@ public static class DonQuijoteProgression
     /// <summary>4. 突刺时获得20%伤害减免，按住↑可位移 —— 蜂后</summary>
     public static bool Tier4_StabDRAndMove => NPC.downedQueenBee;
 
-    /// <summary>5. 造成伤害获得连击，每连击+10%武器大小，上限10 —— 骷髅王</summary>
+    /// <summary>5. 造成伤害获得连击，每连击+5%近战武器大小（20连击封顶2倍），上限10 —— 骷髅王</summary>
     public static bool Tier5_ComboSystem => NPC.downedBoss3;
 
     /// <summary>6. 突刺命中减少冲锋冷却 —— 肉山（困难模式）</summary>

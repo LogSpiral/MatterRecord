@@ -59,3 +59,31 @@ TheManInTheHighCastleBuff: {
 	DisplayName: The Man In The High Castle Buff
 	Description: Mods.MatterRecord.Buffs.TheManInTheHighCastleBuff.Description
 }
+
+LittlePrinceWitheredRose: {
+	DisplayName: Rose
+	Description:
+		'''
+		"You have decided to go away. Now go!"
+		Death Immunity on Cooldown
+		'''
+}
+
+HopeBuff: {
+	DisplayName: Hope
+	Description:
+		'''
+		"The sun will rise again. I promise you¡ªeverything will have a bright future."
+		When attacked, damage is set to 1, this status is removed, and Revenge is gained.
+		'''
+}
+
+RevengeBuff: {
+	DisplayName: Revenge
+	Description:
+		'''
+		"For my sake, use Fire Punch on him."
+		Damage increased by 10%.
+		'''
+}
+

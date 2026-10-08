@@ -254,6 +254,32 @@ TheHitchhikersGuideToTerraria: {
 		'''
 }
 
+WanJianGuiZong: {
+	DisplayName: 万剑归宗
+	Tooltip:
+		'''
+		蓄力时，召唤背包中的剑作为飞剑战斗，松手时发射
+		伤害由剑的伤害决定
+		允许使用天顶剑与其包含的剑
+		“剑冲废穴，万气自生；归元武学，宗远功长。”
+		'''
+	AvailableSwords: 可用飞剑：{0} 把
+	SwitchToTianJian:右键切换为天剑
+}
+
+TianJian: {
+	DisplayName: 天剑
+	Tooltip:
+		'''
+		以身化剑，向鼠标方向飞行
+		鼠标距屏幕中心越远飞行速度越快
+		人剑合一伤害为背包中伤害最高的剑类武器
+		人剑合一贴图为背包中第一个剑类武器
+		“剑在心中，之后就是心剑合一，人就是剑，剑就是人”
+		'''
+	SwitchBack: 右键切换为万剑归宗
+}
+
 EnAttendantGodot: {
 	// DisplayName: En Attendant Godot
 	// Tooltip: ""

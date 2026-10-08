@@ -59,6 +59,7 @@ Faust: {
 	TheoryOfFreedomHint: Destroy a delicate flower, and then face its essence
 	TheTaleOfTheHeikeHint: Wield the eerie blade and sever the withered bodies
 	CompendiumOfMateriaMedicaHint: Grasp the staff of life and gather nature's gifts among the herbs
+	TheCountOfMonteCristoHint: Return with nothing to seek the lost treasure or revenge
 	HintList: Hints of records:
 	HintNotFound: - {0}
 	HintFound: - {0} (Found, submit it to the Recorder)
@@ -72,7 +73,8 @@ LittlePrince: {
 		"It is like shedding old bark; there is nothing sad about old bark."
 		No tombstones on death
 		No coin loss on death
-		While your mana is below 50%, spending mana restores 1 mana
+		When you are about to die, knock back nearby enemies and generate a glass dome to protect you. This effect has a 5-minute cooldown.
+		The glass dome will not be generated when accessory visibility is turned off.
 		'''
 }
 
@@ -119,7 +121,7 @@ DonQuijoteDeLaMancha: {
 	Tier2_StabAfterDash: Enter stab state after dashing, right-click to cancel
 	Tier3_TauntOnHit: Taunt nearby enemies toward your windmill for 3 seconds when hurt
 	Tier4_StabDRAndMove: Gain 20% damage reduction while stabbing; hold UP to move
-	Tier5_ComboSystem: Dealing damage builds combos; each combo grants +1% attack speed and +10% Don Quijote size, up to 10
+	Tier5_ComboSystem: While Don Quixote is in your inventory, dealing melee damage grants a combo stack. Each stack grants +1% melee attack speed and +5% weapon size. Max 10 stacks.
 	Tier6_StabReduceCooldown: Stab hits reduce dash cooldown
 	Tier7_HitRestoreWing: Slash/stab hits restore flight time
 	Tier8_SpearThrow: Hold UP to throw a spear instead of slashing; slashing and charging are disabled while the spear is thrown (unimplemented)
@@ -270,5 +272,19 @@ CompendiumOfMateriaMedica: {
 		Moonglow: +0.5 mana regen, +5% magic damage
 		Shiverthorn: attacks inflict Frostburn, +20 max life
 		Waterleaf: +5 fishing power, +0.01 luck
+		'''
+}
+
+TheCountOfMonteCristo: {
+	DisplayName: The Count of Monte Cristo
+	Tooltip:
+		'''
+		While dead, hold right-click to prolong your respawn time
+		The prolonged time is recorded
+		Gain extra effects on respawn based on how long you extended it
+		5s: Teleport to your death point; during a multiplayer boss fight, teleport to the nearest teammate instead
+		10s: Gain the Hope buff on respawn, and share it when teleporting to a teammate
+		[c/66CCFF:"All human wisdom is contained in these two words: Wait and hope."]
+		[c/FFAF00:Record of Events]
 		'''
 }

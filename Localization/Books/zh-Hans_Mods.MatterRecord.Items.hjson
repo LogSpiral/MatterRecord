@@ -61,6 +61,7 @@ Faust: {
 	TheoryOfFreedomHint: 毁去一朵娇艳的花，而后直面它的本质
 	TheTaleOfTheHeikeHint: 挥动妖异之刀，斩断枯槁之躯
 	CompendiumOfMateriaMedicaHint: 执生机之杖，于百草间采撷自然的馈赠
+	TheCountOfMonteCristoHint: 一无所有的归来，寻找失落的财宝亦或复仇
 	HintList: 记录提示如下:
 	HintNotFound: - {0}
 	HintFound: - {0} (已获取, 请在记录员处提交)
@@ -72,7 +73,8 @@ LittlePrince: {
 	Tooltip:
 		'''
 		你死亡时将不再生成墓石，也不再掉落钱币
-		如果魔力值低于50%，消耗魔力时回复1魔力
+		当你即将死亡时，击退周围敌怪并生成玻璃罩保护你，该效果有5分钟冷却
+		关闭饰品可见性时不会生成玻璃罩
 		[c/66CCFF:"但是，这就好像剥落的旧树皮一样，]
 		[c/66CCFF:旧树皮，并没什么可悲的。"]
 		[c/FFAF00:事象记录]
@@ -125,7 +127,7 @@ DonQuijoteDeLaMancha: {
 	Tier2_StabAfterDash: 冲锋后进入突刺状态，可右键取消
 	Tier3_TauntOnHit: 受伤时风车嘲讽敌人3秒
 	Tier4_StabDRAndMove: 突刺时获得20%伤害减免，按住up可位移
-	Tier5_ComboSystem: 造成伤害获得连击，每1连击+1%攻速与10%堂吉诃德大小，上限10
+	Tier5_ComboSystem: 物品栏中存在堂吉诃德时，近战伤害可获得连击，每1连击+1%近战攻速与5%武器大小，上限10
 	Tier6_StabReduceCooldown: 突刺命中减少冲锋冷却
 	Tier7_HitRestoreWing: 挥砍与突刺命中恢复飞行时间
 	Tier8_SpearThrow: 按住up时挥砍改为投掷长矛，投掷时无法使用挥砍与冲锋（未实现）
@@ -281,5 +283,19 @@ CompendiumOfMateriaMedica: {
 		月光草:+0.5魔力再生，+5%魔法伤害
 		寒颤棘:攻击时造成霜冻，+20最大生命值
 		水叶草:+5鱼力，+0.01幸运
+		'''
+}
+
+TheCountOfMonteCristo: {
+	DisplayName: 《基督山伯爵》
+	Tooltip:
+		'''
+		死亡时，长按左键会延长复活时间
+		延长的复活时间会被记录
+		根据延长的时间，复活时获得额外效果
+		5s:复活后传送至死亡点，如果处于boss战，改为传送至最近的队友
+		10s:复活后获得希望buff，传送至队友时，将其分享
+		[c/66CCFF:“人类的全部智慧都包含在这两个词里：等待和希望。”]
+		[c/FFAF00:事象记录]
 		'''
 }

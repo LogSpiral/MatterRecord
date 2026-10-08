@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
@@ -176,6 +176,16 @@ namespace MatterRecord.Contents.TortoiseAmulet
             if (!(npc.type == NPCID.GiantTortoise || npc.type == NPCID.IceTortoise))
                 return;
 
+            // 只接管本护身符自己召唤的复仇陆龟：SpawnSingleTortoise 会把它们标记成 ai[0] == -1f。
+            // 原版陆龟的 ai[0] 只会是 0/1/3/4/5/6（NPC.cs 的 aiStyle 39 分支），
+            // 且该分支完全不碰 localAI，所以这个标记不会被自然生成的陆龟撞上。
+            //
+            // 旧代码在这里对未标记的陆龟也强行写 ai[0] = -1f，等于把丛林里自然刷新的陆龟
+            // 全部当成召唤物接管：它们的 localAI 全是 0，于是被瞬移到 (0,0)，
+            // 600 帧后 active = false —— 表现就是「陆龟不刷新」。缺标记一律原样放行。
+            if (npc.ai[0] != -1f && npc.ai[0] != -2f)
+                return;
+
             if (!npc.active || npc.life <= 0)
             {
                 if (!npc.active && npc.life > 0)
@@ -186,11 +196,6 @@ namespace MatterRecord.Contents.TortoiseAmulet
 
             npc.noTileCollide = true;
             npc.knockBackResist = 0f;
-            if (npc.ai[0] != -1f && npc.ai[0] != -2f)
-            {
-                npc.ai[0] = -1f;
-                npc.netUpdate = true;
-            }
 
             if (npc.ai[0] == -1f)
             {

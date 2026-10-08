@@ -1,4 +1,4 @@
-﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using System;
@@ -39,7 +39,14 @@ public class DonQuijoteDeLaManchaPlayer : ModPlayer
     // ---- 复活系统 ----
     public int ReviveCooldownTimer = 0;
 
-    public float ComboSizeMultiplier => Math.Min(2f, 1f + ComboCount * 0.1f);
+    // 每连击 +5% 武器大小，20 连击（Tier9 后的上限）正好 2 倍
+    public float ComboSizeMultiplier => Math.Min(2f, 1f + ComboCount * 0.05f);
+
+    /// <summary>
+    /// 背包（0..57 格）里是否有堂吉诃德。连击系统的「持有凭证」，每次需要时现扫一遍。
+    /// </summary>
+    public bool HasDonQuijoteInInventory => Player.HasItem(ModContent.ItemType<DonQuijoteDeLaMancha>());
+
 
     // ---- UI 纹理 ----
     private static Texture2D _numberTex;
@@ -346,6 +353,22 @@ public class DonQuijoteDeLaManchaPlayer : ModPlayer
                 _lastBuffTime[i] = 0;
             }
         }
+    }
+
+    // ---- 背包内有堂吉诃德时，任意近战武器直接命中敌怪也能叠连击 ----
+    // 纯挥砍的武器不会走堂吉诃德那套弹幕，只会在 OnHitNPCWithItem 出现；
+    // 手持堂吉诃德时它自己会叠，这里跳过避免重复
+    public override void OnHitNPCWithItem(Item item, NPC target, NPC.HitInfo hit, int damageDone)
+    {
+        if (!DonQuijoteProgression.Tier5_ComboSystem)
+            return;
+        if (item.type == ModContent.ItemType<DonQuijoteDeLaMancha>())
+            return;
+        if (!HasDonQuijoteInInventory)
+            return;
+
+        // 一次挥砍命中多个敌怪时，ComboCooldown 会挡掉后续的重复累加
+        TryAddCombo();
     }
 
     // ---- 生命回复修正：连击 ≥15 且 lifeRegen < 0 时，加上连击数，最高为0 ----

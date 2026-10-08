@@ -180,17 +180,26 @@ public class DailySwordSystem : ModSystem
         for (int i = 0; i < ItemLoader.ItemCount; i++)
         {
             Item item = ContentSamples.ItemsByType[i];
-            if (item.damage > 0 &&
-                item.DamageType == DamageClass.Melee &&
-                item.useStyle == ItemUseStyleID.Swing &&
-                item.noMelee == false &&      // <--- 新增：排除本体不造成近战伤害的武器（如回旋镖、悠悠球等）
-                item.pick == 0 &&
-                item.axe == 0 &&
-                item.hammer == 0)
+            if (IsSword(item))
             {
                 SwordPool.Add(item.type);
             }
         }
+    }
+
+    /// <summary>
+    /// 判断一件物品是否算作「剑」（今日推剑的选剑判定，万剑归宗的飞剑判定也复用这一套）：
+    /// 有伤害、近战伤害类型、Swing 挥砍使用方式、本体造成近战伤害，且不是镐 / 斧 / 锤。
+    /// </summary>
+    public static bool IsSword(Item item)
+    {
+        return item.damage > 0 &&
+               item.DamageType == DamageClass.Melee &&
+               item.useStyle == ItemUseStyleID.Swing &&
+               item.noMelee == false &&
+               item.pick == 0 &&
+               item.axe == 0 &&
+               item.hammer == 0;
     }
 
     /// <inheritdoc />

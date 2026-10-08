@@ -1,4 +1,4 @@
-﻿using MatterRecord.Contents.DonQuijoteDeLaMancha.Core.Visuals;
+using MatterRecord.Contents.DonQuijoteDeLaMancha.Core.Visuals;
 using Microsoft.Xna.Framework;
 using System;
 using System.ComponentModel;
@@ -120,7 +120,10 @@ public class SwooshInfo : MeleeAction
                 SwooshMode.Chop => !Flip,
                 _ => Flip
             };
-            float size = verS.scaler * ModifyData.Size * OffsetSize;
+            // 弧光尺寸要跟武器顶点/挥砍判定用同一个大小倍率（GetAdjustedItemScale，
+            // 含饰品、前缀、连击加成），否则会出现「武器和判定变长了，弧光不变」
+            float itemScale = Owner is Player plr ? plr.GetAdjustedItemScale(plr.HeldItem) : 1f;
+            float size = verS.scaler * ModifyData.Size * OffsetSize * itemScale;
             var pair = StandardInfo.VertexStandard.swooshTexIndex;
             UltraSwoosh u;
             u = UltraSwoosh.NewUltraSwoosh(string.Empty, verS.timeLeft, size, Owner.Center, range);
