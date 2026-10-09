@@ -1,5 +1,6 @@
 ﻿using MatterRecord.Contents.Recorder;
 using Microsoft.Xna.Framework;
+using NetSimplified;
 using System;
 using Terraria.DataStructures;
 
@@ -7,6 +8,21 @@ namespace MatterRecord.Contents.TheAdventureofSherlockHolmes;
 
 public class TheAdventureofSherlockHolmesSystem : ModSystem
 {
+    public class RequestTASHPacket : NetModule
+    {
+        public static RequestTASHPacket Get()
+        {
+            return NetModuleLoader.Get<RequestTASHPacket>();
+        }
+        public override void Receive()
+        {
+            if (Main.netMode == NetmodeID.MultiplayerClient || !RecorderSystem.ShouldSpawnRecordItem<TheAdventureofSherlockHolmes>())
+                return;
+
+            Main.player[Sender].QuickSpawnItem(new EntitySource_Misc("MapPing"), ModContent.ItemType<TheAdventureofSherlockHolmes>());
+            RecorderSystem.SetCooldown<TheAdventureofSherlockHolmes>();
+        }
+    }
     private static int TASHPrice => Main.LocalPlayer.discountEquipped ? 4000 : 5000;
     public override void Load()
     {
@@ -18,11 +34,7 @@ public class TheAdventureofSherlockHolmesSystem : ModSystem
     private static void SpawnItemHook(On_Main.orig_TriggerPing orig, Vector2 position)
     {
         orig?.Invoke(position);
-        if (!Main.dedServ && RecorderSystem.ShouldSpawnRecordItem<TheAdventureofSherlockHolmes>()) 
-        {
-            Main.LocalPlayer.QuickSpawnItem(new EntitySource_Misc("MapPing"), ModContent.ItemType<TheAdventureofSherlockHolmes>());
-            RecorderSystem.SetCooldown<TheAdventureofSherlockHolmes>();
-        }
+        RequestTASHPacket.Get().Send(runLocally:true);
     }
 
     public override void Unload()
