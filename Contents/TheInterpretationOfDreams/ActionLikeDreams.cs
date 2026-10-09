@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using NetSimplified;
 using ReLogic.Content;
 using System;
 using System.Collections.Generic;
@@ -105,7 +106,19 @@ public class ZoologiseDream() : ActionLikeDreams(26, () => Main.GetBestiaryProgr
 
 public class GolferDream() : ActionLikeDreams(25, () => NPC.savedGolfer)
 {
-    public override void UseAction(Player player)
+    private class SyncSandstormPacket : NetModule
+    {
+        public static SyncSandstormPacket Get()
+        {
+            return NetModuleLoader.Get<SyncSandstormPacket>();
+        }
+        public override void Receive()
+        {
+            SwitchSandstorm();
+        }
+    }
+
+    private static void SwitchSandstorm()
     {
         if (Sandstorm.Happening)
             Sandstorm.StopSandstorm();
@@ -113,12 +126,32 @@ public class GolferDream() : ActionLikeDreams(25, () => NPC.savedGolfer)
             Sandstorm.StartSandstorm();
     }
 
+    public override void UseAction(Player player)
+    {
+        if (Main.netMode == NetmodeID.MultiplayerClient)
+            SyncSandstormPacket.Get().Send(-1, -1);
+        else
+            SwitchSandstorm();
+    }
+
     public override void ExtraIngredient(Recipe recipe) => recipe.AddIngredient(ItemID.GolfBall);
 }
 
 public class PirateDream() : ActionLikeDreams(19, () => NPC.downedPirates)
 {
-    public override void UseAction(Player player)
+    private class SyncRainPacket : NetModule
+    {
+        public static SyncRainPacket Get()
+        {
+            return NetModuleLoader.Get<SyncRainPacket>();
+        }
+        public override void Receive()
+        {
+            SwitchRain();
+        }
+    }
+
+    private static void SwitchRain()
     {
         if (Main.cloudAlpha <= 0.02f)
         {
@@ -130,6 +163,14 @@ public class PirateDream() : ActionLikeDreams(19, () => NPC.downedPirates)
             Main.StopRain();
             Main.cloudAlpha = Main.maxRaining = 0f;
         }
+    }
+
+    public override void UseAction(Player player)
+    {
+        if (Main.netMode == NetmodeID.MultiplayerClient)
+            SyncRainPacket.Get().Send(-1, -1);
+        else
+            SwitchRain();
     }
 
     public override void ExtraIngredient(Recipe recipe) => recipe.AddIngredient(ItemID.Cannonball);
