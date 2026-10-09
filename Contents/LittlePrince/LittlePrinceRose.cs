@@ -7,6 +7,7 @@ namespace MatterRecord.Contents.LittlePrince;
 
 public class LittlePrinceRose : ModTile
 {
+    public override bool IsLoadingEnabled(Mod mod) => false;
     public override void SetStaticDefaults()
     {
         Main.tileFrameImportant[Type] = true;

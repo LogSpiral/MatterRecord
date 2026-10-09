@@ -5,6 +5,8 @@ namespace MatterRecord.Contents.LittlePrince;
 
 public class LittlePrinceRoseSpawn : GlobalTile
 {
+    // 现改为由阿比盖尔的花掉落
+    public override bool IsLoadingEnabled(Mod mod) => false;
     private static bool HasValidGroundForAbigailsFlowerBelowSpot(int x, int y)
     {
         if (!WorldGen.InWorld(x, y, 2))
