@@ -489,7 +489,7 @@ public class DonQuijoteDeLaManchaProj : MeleeSequenceProj
             else if (item.useAnimation != 0)
                 timer = item.useAnimation;
         }
-        
+
         float attackSpeed = Player.GetAttackSpeed(DamageClass.Melee);
         int adjustedTimer = (int)Math.Round(timer / attackSpeed);
 
@@ -498,7 +498,7 @@ public class DonQuijoteDeLaManchaProj : MeleeSequenceProj
         {
             standardInfo.standardTimer = 10;
         }
-        else 
+        else
         {
             standardInfo.standardTimer = Math.Clamp(adjustedTimer, 1, 30);
         }
@@ -751,6 +751,7 @@ public class DonQuijoteDeLaManchaProj : MeleeSequenceProj
 
         public override void OnHitEntity(Entity victim, int damageDone, object[] context)
         {
+            base.OnHitEntity(victim, damageDone, context);
             if (Owner is Player player)
             {
                 damageDone /= Math.Clamp(player.GetWeaponDamage(player.HeldItem), 1, int.MaxValue);
@@ -913,7 +914,7 @@ public class DonQuijoteGBItem : GlobalItem
             mplr.SyncPlayer(-1, player.whoAmI, false);
         item.stack++;
         DonQuijoteDeLaMancha.Active = false;
-        Label:
+    Label:
         orig.Invoke(item, player);
     }
 
