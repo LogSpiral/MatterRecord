@@ -17,5 +17,6 @@ public enum ItemRecords
     CompendiumOfMateriaMedica,
     TheTaleOfTheHeike,
     TheCountOfMonteCristo,
+    EnAttendantGodot,
     Count
 }

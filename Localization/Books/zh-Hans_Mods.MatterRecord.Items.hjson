@@ -299,3 +299,18 @@ TheCountOfMonteCristo: {
 		[c/FFAF00:事象记录]
 		'''
 }
+
+EnAttendantGodot: {
+	DisplayName: 《等待戈多》
+	Tooltip:
+		'''
+		在背包内收藏敌怪旗帜可使它们不再生成
+		左键使用以显示当前禁用列表
+		[c/66CCFF:“戈多今天不来了”]
+		[c/FFAF00:事象记录]
+		'''
+	BannedList: 目前已经被禁用的NPC如下表：
+	NoBanned: 目前没有被禁用的NPC
+	ReEquipPlz: 请装备饰品以激活生成禁用
+	BannedListRefreshed: 已经刷新NPC禁用表
+}

@@ -1,11 +1,15 @@
-﻿namespace MatterRecord.Contents.EnAttendantGodot;
+﻿using MatterRecord.Contents.Rarities;
+using MatterRecord.Contents.Recorder;
+using Terraria.Localization;
 
-public class EnAttendantGodot : ModItem
+namespace MatterRecord.Contents.EnAttendantGodot;
+
+public class EnAttendantGodot : ModItem, IRecordBookItem
 {
     public override void SetDefaults()
     {
         Item.accessory = true;
-        Item.rare = ItemRarityID.Master;
+        Item.rare = ModContent.RarityType<ImmutableQuest>();
         Item.useTime = 15;
         Item.useAnimation = 15;
         Item.useStyle = ItemUseStyleID.HoldUp;
@@ -26,10 +30,12 @@ public class EnAttendantGodot : ModItem
         else
         {
             mplr.RebuildBannedList();
-            Main.NewText("已经刷新NPC禁用表");
+            Main.NewText(Language.GetTextValue("Mods.MatterRecord.Items.EnAttendantGodot.BannedListRefreshed"));
             mplr.PrintBannedList();
         }
         return null;
     }
     public override string Texture => $"Terraria/Images/Item_{ItemID.TopHat}";
+
+    public ItemRecords RecordType => ItemRecords.EnAttendantGodot;
 }

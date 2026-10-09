@@ -288,3 +288,18 @@ TheCountOfMonteCristo: {
 		[c/FFAF00:Record of Events]
 		'''
 }
+
+EnAttendantGodot: {
+	DisplayName: En Attendant Godot
+	Tooltip:
+		'''
+		Favorited Banners resists correspond npc spawn.
+		Left Click to show current banned list.
+		[c/66CCFF:"Godot isn't coming today"]
+		[c/FFAF00:Record of Events]
+		'''
+	BannedList: Currently Banned NPCs as followed:
+	NoBanned: No Banned NPC now.
+	ReEquipPlz: Please equip the accessory to enable the effect.
+	BannedListRefreshed: NPC Banned List refreshed.
+}

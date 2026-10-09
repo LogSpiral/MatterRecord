@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Terraria.Localization;
 
 namespace MatterRecord.Contents.EnAttendantGodot;
 
@@ -61,14 +62,18 @@ public class EnAttendantGodotPlayer : ModPlayer
     {
         if (BannedNPCType.Count > 0)
         {
-            Main.NewText("目前已经被禁用的NPC如下表：");
+            Main.NewText("");
+            Main.NewText(Language.GetTextValue("Mods.MatterRecord.Items.EnAttendantGodot.BannedList"));
+            Main.NewText("--------------------");
             foreach (var i in _bannedNPCType)
                 Main.NewText($"{ContentSamples.NpcsByNetId[i].FullName}, ID: {i}");
+            Main.NewText("--------------------");
+            Main.NewText("");
         }
         else
         {
-            Main.NewText("目前没有被禁用的NPC");
+            Main.NewText(Language.GetTextValue("Mods.MatterRecord.Items.EnAttendantGodot.NoBanned"));
         }
-        Main.NewText("请装备饰品以激活生成禁用");
+        Main.NewText(Language.GetTextValue("Mods.MatterRecord.Items.EnAttendantGodot.ReEquipPlz"));
     }
 }
