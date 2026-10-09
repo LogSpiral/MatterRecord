@@ -1,6 +1,9 @@
-using System;
+using MatterRecord.Contents.EnAttendantGodot;
 using Microsoft.Xna.Framework;
+using System;
+using System.Collections.Generic;
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -170,7 +173,22 @@ namespace MatterRecord.Contents.TortoiseAmulet
         private const float LandingCheckRadius = 160f;
 
 
+        private static bool _pendingRemoveTurtle;
+        public override void EditSpawnPool(IDictionary<int, float> pool, NPCSpawnInfo spawnInfo)
+        {
+            if (!spawnInfo.Player.TryGetModPlayer<TurtleAmuletPlayer>(out var mplr)
+                || !mplr.equipped) return;
+            _pendingRemoveTurtle = true;
+        }
 
+        public override void OnSpawn(NPC npc, IEntitySource source)
+        {
+            // 我草密码的史莱姆，我真服了
+            if (!_pendingRemoveTurtle || source is not EntitySource_SpawnNPC) return;
+            if (npc.type is NPCID.GiantTortoise or NPCID.IceTortoise)
+                npc.active = false;
+            _pendingRemoveTurtle = false;
+        }
         public override void PostAI(NPC npc)
         {
             if (!(npc.type == NPCID.GiantTortoise || npc.type == NPCID.IceTortoise))
