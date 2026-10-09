@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.Xna.Framework;
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using Terraria.DataStructures;
 namespace MatterRecord.Contents.EnAttendantGodot;
 
@@ -20,14 +23,15 @@ public class EnAttendantGodotGlobalNPC : GlobalNPC
 
     private void NetIdCheck(On_NPC.orig_SetDefaultsFromNetId orig, NPC self, int id, NPCSpawnParams spawnparams)
     {
-        if (_cachedPlayerInfo2 == null) 
+        if (_pendingSet2 == null)
         {
             orig?.Invoke(self, id, spawnparams);
             return;
         }
-        if (_cachedPlayerInfo2.BannedNPCType.Contains(id))
+        if (_pendingSet2.Contains(self.type)
+                || _pendingSet2.Contains(self.netID))
             self.active = false;
-        _cachedPlayerInfo2 = null;
+        _pendingSet2 = null;
     }
 
     public override void Unload()
@@ -36,41 +40,68 @@ public class EnAttendantGodotGlobalNPC : GlobalNPC
         On_NPC.SetDefaultsFromNetId -= NetIdCheck;
         base.Unload();
     }
-    private static EnAttendantGodotPlayer _cachedPlayerInfo;
-    private static EnAttendantGodotPlayer _cachedPlayerInfo2;
+    private static readonly Dictionary<int, HashSet<int>> _cachedBannedSet = [];
+
+    private static HashSet<int> _pendingSet1;
+    private static HashSet<int> _pendingSet2;
+    private static readonly Dictionary<int, int> _bannedListUpdateCounter = [];
     public override void EditSpawnPool(IDictionary<int, float> pool, NPCSpawnInfo spawnInfo)
     {
         // 我草密码的这东西怎么只对ModNPC有效的
-        if (!spawnInfo.Player.TryGetModPlayer<EnAttendantGodotPlayer>(out var mplr)
-            || !mplr.EnAttendantGodotEquipped) return;
-        foreach (var key in mplr.BannedNPCType)
-            pool.Remove(key);
-        _cachedPlayerInfo = mplr;
+
+        var position = spawnInfo.Player.position;
+        int index = spawnInfo.Player.whoAmI;
+        if (!_cachedBannedSet.TryGetValue(index, out var set))
+            set = _cachedBannedSet[index] = [];
+
+        if (!_bannedListUpdateCounter.TryGetValue(index, out var value))
+            _bannedListUpdateCounter[index] = 0;
+
+        if (value <= 0)
+        {
+            _bannedListUpdateCounter[index] = 5;
+            set.Clear();
+            foreach (var plr in Main.ActivePlayers)
+            {
+                if (Math.Abs(plr.position.X - position.X) >= 1000 || Math.Abs(plr.position.Y - position.Y) >= 1000) continue;
+                if (!plr.TryGetModPlayer<EnAttendantGodotPlayer>(out var mplr) || !mplr.EnAttendantGodotEquipped) continue;
+                set.UnionWith(mplr.BannedNPCType);
+
+            }
+        }
+        else
+        {
+            _bannedListUpdateCounter[index]--;
+        }
+        foreach (var ban in set)
+            pool.Remove(ban);
+
+        _pendingSet1 = set;
     }
 
     public override void OnSpawn(NPC npc, IEntitySource source)
     {
         // 我草密码的史莱姆，我真服了
-        if (_cachedPlayerInfo == null
+        if (_pendingSet1 == null
             || source is not EntitySource_SpawnNPC) return;
-        if (_cachedPlayerInfo.BannedNPCType.Contains(npc.type)
-            || _cachedPlayerInfo.BannedNPCType.Contains(npc.netID))
+        if (_pendingSet1.Contains(npc.type)
+            || _pendingSet1.Contains(npc.netID))
             npc.active = false;
-        _cachedPlayerInfo2 = _cachedPlayerInfo;
-        _cachedPlayerInfo = null;
+        _pendingSet2 = _pendingSet1;
+        _pendingSet1 = null;
     }
 
     public override void SetDefaults(NPC entity)
     {
-        if (_isInNewNPC) 
+        if (_isInNewNPC)
         {
             _isInNewNPC = false;
             return;
         }
-        if (_cachedPlayerInfo2 == null) return;
-        if (_cachedPlayerInfo2.BannedNPCType.Contains(entity.type)
-                || _cachedPlayerInfo2.BannedNPCType.Contains(entity.netID))
-             entity.active = false;
-        _cachedPlayerInfo2 = null;
+        if (_pendingSet2 == null) return;
+        if (_pendingSet2.Contains(entity.type)
+                || _pendingSet2.Contains(entity.netID))
+            entity.active = false;
+        _pendingSet2 = null;
     }
 }
