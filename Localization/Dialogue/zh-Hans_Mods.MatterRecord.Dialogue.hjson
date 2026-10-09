@@ -27,7 +27,7 @@ Recorder: {
 	LordOfTheFliesUnlocked: 蝇王前辈大概是对我复制抄本没什么意见的，他虽然没同意，但我也没让他知道
 	TheTaleOfTheHeikeUnlocked: 诸神们的事迹与这项记录别无二致，极尽辉煌之后，便是凝固、陨落与黄昏，最终……坠入深渊
 	CompendiumOfMateriaMedicaUnlocked: “不要踩坏我的药田”，城镇被攻入时，正在研究草药的{0}如是说
-	TheCountOfMonteCristoUnlocked:复仇果然还是要趁早，等仇人老死亦或被人捷足先登可就‘无以复加’了
+	TheCountOfMonteCristoUnlocked: 复仇果然还是要趁早，等仇人老死亦或被人捷足先登可就‘无以复加’了
 	// Dialogue when the pet slime is found
 	PetFoundDialogue:
 		'''

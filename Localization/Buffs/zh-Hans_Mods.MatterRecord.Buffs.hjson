@@ -78,7 +78,6 @@ HopeBuff: {
 		'''
 }
 
-
 RevengeBuff: {
 	DisplayName: 复仇
 	Description:
@@ -87,4 +86,3 @@ RevengeBuff: {
 		伤害提高10%
 		'''
 }
-

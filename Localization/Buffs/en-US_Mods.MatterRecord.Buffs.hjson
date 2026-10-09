@@ -73,7 +73,7 @@ HopeBuff: {
 	DisplayName: Hope
 	Description:
 		'''
-		"The sun will rise again. I promise you¡ªeverything will have a bright future."
+		"The sun will rise again. I promise youï¿½ï¿½everything will have a bright future."
 		When attacked, damage is set to 1, this status is removed, and Revenge is gained.
 		'''
 }
@@ -86,4 +86,3 @@ RevengeBuff: {
 		Damage increased by 10%.
 		'''
 }
-

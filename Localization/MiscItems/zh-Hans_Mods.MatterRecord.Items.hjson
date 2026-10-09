@@ -264,7 +264,7 @@ WanJianGuiZong: {
 		“剑冲废穴，万气自生；归元武学，宗远功长。”
 		'''
 	AvailableSwords: 可用飞剑：{0} 把
-	SwitchToTianJian:右键切换为天剑
+	SwitchToTianJian: 右键切换为天剑
 }
 
 TianJian: {
