@@ -32,8 +32,6 @@ using System.Collections.ObjectModel;
 public class DonQuijoteDeLaMancha : MeleeSequenceItem<DonQuijoteDeLaManchaProj>, IRecordBookItem
 {
     ItemRecords IRecordBookItem.RecordType => ItemRecords.DonQuijoteDeLaMancha;
-    public static bool SlashActive => MatterRecordConfig.Instance.DonQuijoteSlashActive;
-
     public static Dictionary<int, Vector2> WindmillPositions = new Dictionary<int, Vector2>();
 
     public override void SetDefaults()
@@ -49,56 +47,13 @@ public class DonQuijoteDeLaMancha : MeleeSequenceItem<DonQuijoteDeLaManchaProj>,
         Item.knockBack = 4f;
         Item.value = 5;
         Item.useTurn = true;
-        Item.noUseGraphic = false;
-        Item.noMelee = false;
-    }
-    public override bool CanShoot(Player player)
-    {
-        if (SlashActive)
-            return base.CanShoot(player);
-        bool flag = (player.altFunctionUse == 2 || player.GetModPlayer<DonQuijoteDeLaManchaPlayer>().StabTimeLeft > 0) && player.ownedProjectileCounts[ModContent.ProjectileType<DonQuijoteDeLaManchaProj>()] == 0;
-        if (flag)
-            return true;
-        Item.shoot = ProjectileID.None;
-        Item.noUseGraphic = false;
-        Item.noMelee = false;
-        Item.useStyle = ItemUseStyleID.Swing;
-        Item.channel = false;
-        return false;
+        Item.shoot = ModContent.ProjectileType<DonQuijoteDeLaManchaProj>();
+        Item.noUseGraphic = true;
+        Item.noMelee = true;
+        Item.useStyle = ItemUseStyleID.Shoot;
+        Item.channel = true;
     }
     public override bool EnableRightClick => true;
-    public override bool? UseItem(Player player)
-    {
-        if (SlashActive)
-        {
-            Item.shoot = ModContent.ProjectileType<DonQuijoteDeLaManchaProj>();
-            Item.noUseGraphic = true;
-            Item.noMelee = true;
-            Item.useStyle = ItemUseStyleID.Shoot;
-            Item.channel = true;
-            return base.UseItem(player);
-        }
-        if (player.whoAmI == Main.myPlayer)
-        {
-            if (player.altFunctionUse != 2 && player.GetModPlayer<DonQuijoteDeLaManchaPlayer>().StabTimeLeft <= 0)
-            {
-                Item.shoot = ProjectileID.None;
-                Item.noUseGraphic = false;
-                Item.noMelee = false;
-                Item.useStyle = ItemUseStyleID.Swing;
-                Item.channel = false;
-            }
-            else
-            {
-                Item.shoot = ModContent.ProjectileType<DonQuijoteDeLaManchaProj>();
-                Item.noUseGraphic = true;
-                Item.noMelee = true;
-                Item.useStyle = ItemUseStyleID.Shoot;
-                Item.channel = true;
-            }
-        }
-        return base.UseItem(player);
-    }
 
     public override void AddRecipes()
     {
@@ -198,25 +153,6 @@ public class DonQuijoteDeLaMancha : MeleeSequenceItem<DonQuijoteDeLaManchaProj>,
     {
         player.aggro += 400;
         var mplr = player.GetModPlayer<DonQuijoteDeLaManchaPlayer>();
-
-        if (player.altFunctionUse != 2 && player.GetModPlayer<DonQuijoteDeLaManchaPlayer>().StabTimeLeft <= 0 && !SlashActive)
-        {
-            Item.shoot = ProjectileID.None;
-            Item.noUseGraphic = false;
-            Item.noMelee = false;
-            Item.useStyle = ItemUseStyleID.Swing;
-            Item.channel = false;
-            if (player.itemAnimation == player.itemAnimationMax)
-                player.lastVisualizedSelectedItem = Item.Clone();
-        }
-        else
-        {
-            Item.shoot = ModContent.ProjectileType<DonQuijoteDeLaManchaProj>();
-            Item.noUseGraphic = true;
-            Item.noMelee = true;
-            Item.useStyle = ItemUseStyleID.Shoot;
-            Item.channel = true;
-        }
 
         mplr.HoldingDonQuijote = true;
 
@@ -553,15 +489,23 @@ public class DonQuijoteDeLaManchaProj : MeleeSequenceProj
             else if (item.useAnimation != 0)
                 timer = item.useAnimation;
         }
-
+        
         float attackSpeed = Player.GetAttackSpeed(DamageClass.Melee);
         int adjustedTimer = (int)Math.Round(timer / attackSpeed);
-        standardInfo.standardTimer = Player.controlUseItem && !Player.controlUseTile ? Math.Clamp(adjustedTimer, 1, 30) : 10;
 
+        if (Player.controlUseTile
+            && SequenceModel?.CurrentElement is null or DonQuijoteDeLaManchaDash)
+        {
+            standardInfo.standardTimer = 10;
+        }
+        else 
+        {
+            standardInfo.standardTimer = Math.Clamp(adjustedTimer, 1, 30);
+        }
         standardInfo.standardColor = Color.DarkRed * (Player.GetModPlayer<DonQuijoteDeLaManchaPlayer>().StabTimeLeft > 0 ? 0.3f : 0.1f);
         standardInfo.standardOrigin = Player.GetModPlayer<DonQuijoteDeLaManchaPlayer>().StabTimeLeft > 0 ? new Vector2(.3f, .7f) : new Vector2(.1f, .9f);
 
-        vertexStandard.scaler = DonQuijoteDeLaMancha.SlashActive || mplr.StabTimeLeft > 0 || mplr.Dashing ? 120 : 0;
+        vertexStandard.scaler = 120;
     }
 
     private class CustomSwooshInfo : SwooshInfo
@@ -896,18 +840,6 @@ public class DonQuijoteDeLaManchaProj : MeleeSequenceProj
         }
 
         private void HandleHit(Entity victim, int damageDone) { }
-    }
-
-    public override void AI()
-    {
-        var mplr = Player.GetModPlayer<DonQuijoteDeLaManchaPlayer>();
-        if (Player.controlUseItem && !Player.controlUseTile && mplr.StabTimeLeft <= 0 && CurrentElement is not DonQuijoteDeLaManchaDash && !MatterRecordConfig.Instance.DonQuijoteSlashActive)
-        {
-            Projectile.Kill();
-            return;
-        }
-
-        base.AI();
     }
 
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)

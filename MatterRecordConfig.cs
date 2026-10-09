@@ -19,7 +19,6 @@ public class MatterRecordConfig : ModConfig
 {
     public static MatterRecordConfig Instance => ModContent.GetInstance<MatterRecordConfig>();
     public override ConfigScope Mode => ConfigScope.ServerSide;
-    public bool DonQuijoteSlashActive = false;
 
     [DefaultValue(false)]
     public bool AllowingRecordRecipe = false;
