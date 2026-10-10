@@ -147,8 +147,16 @@ public class AdUIState : UIState
 /// 「今日推剑」每日选剑系统（纯本地，不保存数据，无网络同步）。
 /// 每个端本地跟踪昼夜，进入新的一天（凌晨 4:30 从夜晚翻转为白天的首次检测）时，
 /// 从近战剑池中随机一把作为「今日剑」并把本地免费次数补满。
-/// 写法参考 Fargowiltas 伐木工的本地昼夜跟踪：不做服务器广播，也就不会出现
-/// 服务器空转 / 空广播导致弹出 .NET 异常窗口吓到玩家的问题。
+/// <para>
+/// 跨天检测挂在 <see cref="PostUpdateTime"/> 而不是 <see cref="PostUpdateWorld"/>：
+/// 原版只在 <c>Main.netMode != NetmodeID.MultiplayerClient</c> 时才调用 <c>WorldGen.UpdateWorld()</c>，
+/// 而 <c>PostUpdateWorld</c> 是由它内部触发的，所以多人客户端上这个钩子根本不会执行，
+/// 跨天检测与补满次数会一起失效。PostUpdateTime 是无条件调用的，客户端同样会跑。
+/// </para>
+/// <para>
+/// 不做服务器广播，各端用各自的 Main.rand 独立抽取，因此多人下每个人的「今日剑」可以不同；
+/// 体验结算也只在本地端进行（<see cref="TodaySword.UseItem"/> 里有本地玩家判定），互不冲突。
+/// </para>
 /// </summary>
 public class DailySwordSystem : ModSystem
 {
@@ -203,8 +211,14 @@ public class DailySwordSystem : ModSystem
     }
 
     /// <inheritdoc />
-    public override void PostUpdateWorld()
+    public override void PostUpdateTime()
     {
+        // PostUpdateTime 在主菜单也会被调用（原版对它的调用早于 gameMenu 的提前返回），
+        // 而主菜单里的时间同样在流逝；不挡掉的话，在标题界面跨天会白占掉一次当日刷新，
+        // 进世界后当天就再也选不出剑了。
+        if (Main.gameMenu)
+            return;
+
         bool isDayTime = Main.dayTime;
 
         if (isDayTime && !_wasDayTime)

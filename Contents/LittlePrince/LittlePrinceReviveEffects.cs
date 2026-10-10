@@ -1,65 +1,65 @@
-﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 
 namespace MatterRecord.Contents.LittlePrince;
 
 /// <summary>
-/// 小王子死亡拦截触发瞬间的世界效果：推开周围敌怪、反弹敌对弹幕、在玩家周围立起临时玻璃罩。
+/// 小王子死亡拦截触发瞬间的世界效果：推开周围敌怪、反弹敌对弹幕。
 /// 只应由权威端调用（单人直接调用，多人由 <see cref="LittlePrinceReviveSync"/> 请求服务器执行），
 /// 世界状态的变更全部依靠原版同步链路（SyncNPC / SyncProjectile / 图格广播）下发到各客户端。
+/// <para>
+/// 这两个效果不是「放一次就完」：它们由 <see cref="LittlePrinceWallSystem"/> 在落罩前的
+/// <see cref="LittlePrinceWallSystem.WallSpawnDelayFrames"/> 帧里逐帧重复施加。
+/// 单次赋速度会被敌怪自身的 AI 在下一帧覆盖掉，只有逐帧重推才能保证罩子落下时范围内没有敌怪占位。
+/// </para>
 /// </summary>
 public static class LittlePrinceReviveEffects
 {
-    /// <summary>效果作用半径（像素）：敌怪击退与弹幕反弹的判定范围。</summary>
-    private const float EffectRadius = 160f;
+    /// <summary>
+    /// 效果判定范围相对罩子外沿额外外扩的像素数。
+    /// 判定用「罩子矩形 + 外扩」而不是「中心点距离 ≤ 半径」：体积大的敌怪即使中心点离得远，
+    /// 只要 Hitbox 已经伸进罩子范围就必须被推开，否则它压住的格子会砌不上玻璃。
+    /// </summary>
+    private const float EffectMargin = 48f;
 
     /// <summary>
-    /// 敌怪被推开时的速度大小（像素/帧）。参照 RedDoubleClickProj 的写法，
-    /// 方向取「玩家 → 敌怪」的归一化向量，因此这里是速度模长而非仅水平分量。
-    /// 取值偏大是为了让敌怪在围墙落下前飞得更远，彻底脱离围墙占位。
+    /// 敌怪被推开时的速度大小（像素/帧）。
+    /// 取值偏大是为了在落罩前把敌怪顶出去；因为每帧都会重新施加，不依赖单次滑行的距离。
     /// </summary>
     private const float KnockbackSpeed = 24f;
 
     /// <summary>
-    /// 依次执行复活瞬间的三段效果：推开敌怪 → 反弹敌弹 → 排队砌罩。
-    /// 砌罩本身由 <see cref="LittlePrinceWallSystem.ScheduleWall"/> 延迟若干帧执行，
-    /// 让击退先把敌怪推出去，避免罩子落下时和敌怪重叠（既保护玩家，也不会出现漏格）。
-    /// 若玩家关闭了饰品可见性，则跳过砌罩——击退与弹幕反弹仍然生效。
+    /// 注册一次复活效果：在 <see cref="LittlePrinceWallSystem.WallSpawnDelayFrames"/> 帧的窗口内
+    /// 逐帧推开范围内敌怪、反弹敌对弹幕，窗口结束时在玩家位置落罩。
     /// </summary>
     /// <param name="player">触发拦截的玩家（权威端本地玩家）。</param>
     /// <param name="buildWall">是否生成玻璃罩。由请求发起端携带——服务器端读不到远程玩家的饰品可见性设置。</param>
     public static void Apply(Player player, bool buildWall)
     {
-        // 矩形粗筛 + 距离精筛：先用外接正方形快速排除，再做圆形判定，避免逐实体开方
-        Rectangle range = Utils.CenteredRectangle(player.Center, new Vector2(EffectRadius * 2f));
-
-        // 先推怪：确保敌怪在罩子落下之前被推出
-        KnockbackEnemies(player, range);
-        ReflectHostileProjectiles(player, range);
-
-        // 只有饰品可见时才生成玻璃罩（可见性由请求端告知，权威端无法自行判断）
-        if (buildWall)
-            LittlePrinceWallSystem.ScheduleWall(player);
+        LittlePrinceWallSystem.ScheduleRevive(player, buildWall);
     }
 
     /// <summary>
-    /// 把范围内的敌怪沿「玩家 → 敌怪」方向推开。
-    /// 采用与 <c>RedDoubleClickProj</c> 相同的做法：临时把 <see cref="NPC.knockBackResist"/>
-    /// 压到 0.01f 以突破抗性，设置速度后立刻恢复原值，避免污染敌怪状态。
+    /// 把罩子范围内的敌怪沿「玩家 → 敌怪」方向推开。由
+    /// <see cref="LittlePrinceWallSystem"/> 在落罩前的窗口内逐帧调用。
+    /// <para>
+    /// 直接覆盖 <see cref="Entity.velocity"/> 而不走 <c>NPC.StrikeNPC</c>：后者会带上伤害数字、
+    /// 无敌帧与受击 AI 等副作用。代价是 <see cref="NPC.knockBackResist"/> 不参与计算，
+    /// 但这里本来就是全量覆盖速度，抗性不该影响结果。
+    /// </para>
     /// </summary>
     /// <param name="player">效果中心玩家。</param>
-    /// <param name="range">粗筛用的正方形范围。</param>
-    private static void KnockbackEnemies(Player player, Rectangle range)
+    public static void KnockbackEnemies(Player player)
     {
+        Rectangle range = LittlePrinceWallSystem.GetEffectBounds(player.Center, EffectMargin);
+
         for (int i = 0; i < Main.maxNPCs; i++)
         {
             NPC npc = Main.npc[i];
             if (!npc.active || npc.friendly || npc.townNPC || npc.dontTakeDamage)
                 continue;
             if (!range.Intersects(npc.Hitbox))
-                continue;
-            if (Vector2.DistanceSquared(player.Center, npc.Center) > EffectRadius * EffectRadius)
                 continue;
 
             // 与玩家完全重叠时无法归一化方向，退化为按玩家朝向水平推出
@@ -68,26 +68,20 @@ public static class LittlePrinceReviveEffects
                 ? new Vector2(player.direction, 0f)
                 : Vector2.Normalize(direction);
 
-            // 临时压低击退抗性 → 施加击退 → 立刻恢复（参照 RedDoubleClickProj）
-            float originalResist = npc.knockBackResist;
-            npc.knockBackResist = 0.01f;
-
             npc.velocity = direction * KnockbackSpeed;
-
-            npc.knockBackResist = originalResist;
-
             npc.netUpdate = true; // 服务器端置位后由引擎自动广播 SyncNPC
         }
     }
 
     /// <summary>
-    /// 把范围内的敌对弹幕沿「玩家 → 弹幕」的反方向弹出去（只改方向、不改速率），
-    /// 而不是直接销毁，使其原速飞离玩家。
+    /// 把罩子范围内的敌对弹幕沿「玩家 → 弹幕」方向弹出去（只改方向、不改速率），
+    /// 而不是直接销毁，使其原速飞离玩家。同样由 <see cref="LittlePrinceWallSystem"/> 逐帧调用。
     /// </summary>
     /// <param name="player">效果中心玩家。</param>
-    /// <param name="range">粗筛用的正方形范围。</param>
-    private static void ReflectHostileProjectiles(Player player, Rectangle range)
+    public static void ReflectHostileProjectiles(Player player)
     {
+        Rectangle range = LittlePrinceWallSystem.GetEffectBounds(player.Center, EffectMargin);
+
         for (int i = 0; i < Main.maxProjectiles; i++)
         {
             Projectile proj = Main.projectile[i];
@@ -98,8 +92,6 @@ public static class LittlePrinceReviveEffects
             if (Main.projPet[proj.type])
                 continue;
             if (!range.Intersects(proj.Hitbox))
-                continue;
-            if (Vector2.DistanceSquared(player.Center, proj.Center) > EffectRadius * EffectRadius)
                 continue;
 
             float speed = proj.velocity.Length();
