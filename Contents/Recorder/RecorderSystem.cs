@@ -1,4 +1,4 @@
-﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using NetSimplified;
 using NetSimplified.Syncing;
@@ -24,7 +24,10 @@ public class RecorderSystem : ModSystem
     {
         foreach (var pair in ContentSamples.ItemsByType)
             if (pair.Value.ModItem is IRecordBookItem book)
+            {
                 Instance.RecordToItemType[book.RecordType] = pair.Key;
+                Instance.ItemTypeToRecord[pair.Key] = book.RecordType;
+            }
     }
     public static Dictionary<int, ItemRecords> RewardDictionary { get; } = new(){
         { 2, ItemRecords.DonQuijoteDeLaMancha },
@@ -33,6 +36,7 @@ public class RecorderSystem : ModSystem
     };
     private Bits64 _itemLockRecords;
     public Dictionary<ItemRecords, int> RecordToItemType { get; } = [];
+    public Dictionary<int, ItemRecords> ItemTypeToRecord { get; } = [];
     public static void ClearRecord()
     {
         if (Instance is not { } instance) return;
@@ -132,6 +136,10 @@ public class RecorderSystem : ModSystem
         int recordType = ModContent.ItemType<T>();
 
         if (RecordSpawnCooldown.ContainsKey(recordType)) return false;
+
+        // 当前世界已解锁的记录不再由事件产出；解锁后仍可在记录者商店购回
+        if (Instance.ItemTypeToRecord.TryGetValue(recordType, out var record) && CheckUnlock(record))
+            return false;
 
         if (Main.dedServ)
         {
