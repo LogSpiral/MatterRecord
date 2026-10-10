@@ -294,12 +294,11 @@ EnAttendantGodot: {
 	Tooltip:
 		'''
 		Favorited Banners resists correspond npc spawn.
-		Left Click to show current banned list.
 		[c/66CCFF:"Godot isn't coming today"]
 		[c/FFAF00:Record of Events]
 		'''
-	BannedList: Currently Banned NPCs as followed:
-	NoBanned: No Banned NPC now.
+	FavoritedBanners: Favorited enemy banners:
+	NoFavoritedBanner: No favorited enemy banners
+	ShiftHint: Hold Shift to view favorited enemy banners
 	ReEquipPlz: Please equip the accessory to enable the effect.
-	BannedListRefreshed: NPC Banned List refreshed.
 }

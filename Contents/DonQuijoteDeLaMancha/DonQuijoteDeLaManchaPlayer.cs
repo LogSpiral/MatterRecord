@@ -39,6 +39,9 @@ public class DonQuijoteDeLaManchaPlayer : ModPlayer
     // ---- 复活系统 ----
     public int ReviveCooldownTimer = 0;
 
+    /// <summary>复活触发后给予的无敌帧：60 帧 = 1 秒，覆盖全部受伤冷却通道。</summary>
+    private const int ReviveImmuneFrames = 60;
+
     // 每连击 +5% 武器大小，20 连击（Tier9 后的上限）正好 2 倍
     public float ComboSizeMultiplier => Math.Min(2f, 1f + ComboCount * 0.05f);
 
@@ -161,30 +164,59 @@ public class DonQuijoteDeLaManchaPlayer : ModPlayer
     }
 
     // ---- 复活逻辑 ----
+    /// <summary>
+    /// 致命伤害拦截：连击 &gt; 15 且冷却就绪时按连击折算把血量补回来，本次死亡作废。
+    /// <para>
+    /// 只处理本地玩家（owner）：多人下服务端与旁观端收到 PlayerDeath 后也会替任意玩家重放一遍
+    /// <see cref="Player.KillMe"/>，而它们手里只有同步过来的连击值、冷却各自记一份，
+    /// 介入只会把「已经死掉的副本」改成活着，让服务端/队友那边血量与冷却对不上
+    /// （小王子那套拦截同理，见 <c>LittlePrincePlayer.PreKill</c>）。
+    /// </para>
+    /// <para>
+    /// 拦截成功后还必须把「我还活着、血是这么多」送回服务器：服务端那份副本吃到同一发致命伤
+    /// （客户端上报的 PlayerHurt 会在服务端重放一次，走 Player.Update 的接触伤害也各端各算），
+    /// 血量同样是 0，只有服务器修正后再广播，队友才不会继续把玩家按空血/已死处理。
+    /// 同步见 <see cref="DonQuijoteReviveSync"/>。
+    /// </para>
+    /// </summary>
     public override bool PreKill(double damage, int hitDirection, bool pvp, ref bool playSound, ref bool genGore, ref PlayerDeathReason damageSource)
     {
-        if (DonQuijoteProgression.Tier13_Revive && ComboCount > 15 && ReviveCooldownTimer <= 0)
-        {
-            int healAmount = (int)(ComboCount * 0.05f * Player.statLifeMax2);
-            Player.statLife += healAmount;
-            if (Player.statLife > Player.statLifeMax2)
-                Player.statLife = Player.statLifeMax2;
+        if (Player.whoAmI != Main.myPlayer)
+            return base.PreKill(damage, hitDirection, pvp, ref playSound, ref genGore, ref damageSource);
 
-            ComboTimer = 300;
-            ReviveCooldownTimer = 36000;
-
-            CombatText.NewText(Player.Hitbox, Color.Cyan, Language.GetTextValue("Mods.MatterRecord.Items.DonQuijoteDeLaMancha.ReviveText", healAmount));
-            SoundEngine.PlaySound(SoundID.Item4, Player.Center);
-            for (int i = 0; i < 30; i++)
-                Dust.NewDust(Player.Center, 10, 10, DustID.Shadowflame, Main.rand.NextFloat(-8f, 8f), Main.rand.NextFloat(-8f, 8f));
-
-            return false;
-        }
-        else
+        if (!DonQuijoteProgression.Tier13_Revive || ComboCount <= 15 || ReviveCooldownTimer > 0)
         {
             ReviveCooldownTimer = 0;
             return base.PreKill(damage, hitDirection, pvp, ref playSound, ref genGore, ref damageSource);
         }
+
+        int healAmount = (int)(ComboCount * 0.05f * Player.statLifeMax2);
+        if (healAmount < 1)
+            healAmount = 1;
+
+        // 绝对赋值而不是 +=：进到这里时 statLife 已经扣到 0（Rod of Discord 那类路径甚至可能是负数），
+        // 多人下负数会被 += 带进来，血量可能依旧 <= 0
+        Player.statLife = Math.Min(healAmount, Player.statLifeMax2);
+        if (Player.statLife < 1)
+            Player.statLife = 1;
+
+        // 无敌帧要盖住所有受伤冷却通道：只设 immune / immuneTime 挡不住走 hurtCooldowns 的
+        // 接触伤害与 Boss 伤害，复活瞬间再挨一发就会在 10 分钟冷却里直接死掉，等于复活没生效
+        Player.SetImmuneTimeForAllTypes(ReviveImmuneFrames);
+
+        ComboTimer = 300;
+        ReviveCooldownTimer = 36000;
+
+        CombatText.NewText(Player.Hitbox, Color.Cyan, Language.GetTextValue("Mods.MatterRecord.Items.DonQuijoteDeLaMancha.ReviveText", healAmount));
+        SoundEngine.PlaySound(SoundID.Item4, Player.Center);
+        for (int i = 0; i < 30; i++)
+            Dust.NewDust(Player.Center, 10, 10, DustID.Shadowflame, Main.rand.NextFloat(-8f, 8f), Main.rand.NextFloat(-8f, 8f));
+
+        // 多人：请服务器把它那份副本的血量与死亡标记拉到和我们一致，再广播给其它客户端
+        if (Main.netMode == NetmodeID.MultiplayerClient)
+            DonQuijoteReviveSync.Get(Player.whoAmI, Player.statLife).Send();
+
+        return false;
     }
 
     // ---- 每帧重置 ----
