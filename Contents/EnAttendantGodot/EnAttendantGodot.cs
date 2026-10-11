@@ -77,7 +77,5 @@ public class EnAttendantGodot : ModItem, IRecordBookItem
 
     private static bool ShiftHeld => Main.keyState.IsKeyDown(Keys.LeftShift) || Main.keyState.IsKeyDown(Keys.RightShift);
 
-    public override string Texture => "MatterRecord/Contents/EnAttendantGodot/EnAttendantGodot";
-
     public ItemRecords RecordType => ItemRecords.EnAttendantGodot;
 }
