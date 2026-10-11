@@ -14,9 +14,9 @@ namespace MatterRecord.Contents.LittlePrince;
 public class LittlePrincePlayer : ModPlayer
 {
     /// <summary>
-    /// 死亡拦截冷却时长（帧）：18000 帧 = 5 分钟。
+    /// 死亡拦截冷却时长（帧）：7200 帧 = 2 分钟。
     /// </summary>
-    public const int ReviveCooldownFrames = 18000;
+    public const int ReviveCooldownFrames = 7200;
 
     /// <summary>
     /// 拦截触发后给予的无敌帧时长：60 帧 = 1 秒。

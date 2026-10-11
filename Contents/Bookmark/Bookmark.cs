@@ -24,6 +24,7 @@ public class Bookmark : ModItem
         Item.accessory = true;
         Item.value = Item.buyPrice(silver: 65);
         Item.rare = ItemRarityID.Green;
+        Item.defense = 2; 
     }
 
     /// <summary>
