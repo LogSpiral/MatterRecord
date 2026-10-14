@@ -1,4 +1,4 @@
-﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using System;
@@ -44,7 +44,7 @@ namespace MatterRecord.Contents.TheCountOfMonteCristo
 
             int frames = modPlayer.CurrentDelayedFrames;
             float seconds = frames / 60f;
-            float progress = MathHelper.Clamp(seconds / 10f, 0f, 1f);
+            float progress = MathHelper.Clamp(seconds / 6f, 0f, 1f);
 
             Vector2 mousePos = new Vector2(Main.mouseX, Main.mouseY);
 
@@ -70,7 +70,7 @@ namespace MatterRecord.Contents.TheCountOfMonteCristo
 
             // ---------- 蜡烛两帧动画 ----------
             // 用游戏更新计数按固定间隔切换两帧，模拟烛火/蜡烛的闪动。
-            // 若想让帧率跟随蓄力变化（越接近 10 秒闪得越快），把 CandleFrameInterval
+            // 若想让帧率跟随蓄力变化（越接近 6 秒闪得越快），把 CandleFrameInterval
             // 换成动态计算即可，这里保持恒定。
             bool useSecondFrame = (Main.GameUpdateCount / CandleFrameInterval) % 2 == 1;
             Texture2D candleFrame = useSecondFrame ? _candleFrame2 : _candleFrame1;
@@ -91,7 +91,7 @@ namespace MatterRecord.Contents.TheCountOfMonteCristo
             // 火光统一缩放倍率：大于 1 放大，小于 1 缩小。
             const float LightScaleMultiplier = 4.5f;
 
-            // 基础尺寸随蓄力 0→10 秒线性增长，并叠加脉动
+            // 基础尺寸随蓄力 0→6 秒线性增长，并叠加脉动
             float baseScale = MathHelper.Lerp(1.0f, 2.0f, progress) * pulse * LightScaleMultiplier;
 
             // 分四层绘制，由外到内、由暗到亮

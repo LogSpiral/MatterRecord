@@ -11,7 +11,7 @@ namespace MatterRecord.Contents.TheInterpretationOfDreams
         public override void SetDefaults()
         {
             Item.CloneDefaults(ItemID.StylistKilLaKillScissorsIWish);
-            Item.damage = 200;
+            Item.damage = 60;
             Item.DamageType = DamageClass.Melee;
             Item.noMelee = true;
             Item.noUseGraphic = true;

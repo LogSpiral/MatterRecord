@@ -1,4 +1,4 @@
-﻿using MatterRecord.Contents.Recorder;
+using MatterRecord.Contents.Recorder;
 using System;
 using Terraria;
 using Terraria.ModLoader;
@@ -12,9 +12,9 @@ namespace MatterRecord.Contents.TheCountOfMonteCristo
 {
     public class MonteCristoPlayer : ModPlayer
     {
-        private const int MaxChargeFrames = 600;      // 10 秒蓄力上限
-        private const int TeleportThreshold = 300;    // 5 秒 -> 传送
-        private const int HopeThreshold = 600;        // 10 秒 -> 希望
+        private const int MaxChargeFrames = 360;      // 6 秒蓄力上限
+        private const int TeleportThreshold = 180;    // 3 秒 -> 传送
+        private const int HopeThreshold = 360;        // 6 秒 -> 希望
         private const int RevengeDurationFrames = 1200; // 复仇 20 秒
 
         private int delayedRespawnFrames = 0;
@@ -25,8 +25,8 @@ namespace MatterRecord.Contents.TheCountOfMonteCristo
         private bool hasMonteCristoEquippedCache = false;
 
         private bool _hopeBlockActive = false;
-        private bool _played5sSound = false;
-        private bool _played10sSound = false;
+        private bool _playedTeleportSound = false;
+        private bool _playedHopeSound = false;
 
         public int CurrentDelayedFrames => delayedRespawnFrames;
         public bool ShouldShowProgressBar => hasMonteCristoEquippedCache && Player.dead && Player.respawnTimer > 0;
@@ -143,14 +143,14 @@ namespace MatterRecord.Contents.TheCountOfMonteCristo
                 delayedRespawnFrames += 1;
 
                 // ---- 阶段音效提醒 ----
-                if (!_played5sSound && delayedRespawnFrames >= TeleportThreshold)
+                if (!_playedTeleportSound && delayedRespawnFrames >= TeleportThreshold)
                 {
-                    _played5sSound = true;
+                    _playedTeleportSound = true;
                     SoundEngine.PlaySound(SoundID.Item29, Player.Center);
                 }
-                if (!_played10sSound && delayedRespawnFrames >= HopeThreshold)
+                if (!_playedHopeSound && delayedRespawnFrames >= HopeThreshold)
                 {
-                    _played10sSound = true;
+                    _playedHopeSound = true;
                     SoundEngine.PlaySound(SoundID.Item4, Player.Center);
                 }
             }
@@ -214,8 +214,8 @@ namespace MatterRecord.Contents.TheCountOfMonteCristo
                 hasGivenBuffThisDeath = true;
                 hasDeathPosition = false;
 
-                _played5sSound = false;
-                _played10sSound = false;
+                _playedTeleportSound = false;
+                _playedHopeSound = false;
             }
             wasDead = isDead;
         }
@@ -234,8 +234,8 @@ namespace MatterRecord.Contents.TheCountOfMonteCristo
             // 兜底：即使 detour 因异常路径未走到，也要保证拾取累计从本次死亡重新开始
             NearbyPickedCoins = 0;
             hasMonteCristoEquippedCache = HasMonteCristoEquipped();
-            _played5sSound = false;
-            _played10sSound = false;
+            _playedTeleportSound = false;
+            _playedHopeSound = false;
         }
 
         public override void OnEnterWorld()
@@ -251,8 +251,8 @@ namespace MatterRecord.Contents.TheCountOfMonteCristo
             LastDeathDroppedCoins = 0;
             NearbyPickedCoins = 0;
             hasMonteCristoEquippedCache = HasMonteCristoEquipped();
-            _played5sSound = false;
-            _played10sSound = false;
+            _playedTeleportSound = false;
+            _playedHopeSound = false;
         }
 
         // ====================「讨回失落财宝」获取方式 ====================
