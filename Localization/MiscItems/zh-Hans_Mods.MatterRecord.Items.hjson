@@ -284,6 +284,10 @@ EnAttendantGodot: {
 }
 
 ZenithBoulderEx: {
-	// DisplayName: Zenith Boulder Ex
-	// Tooltip: ""
+	DisplayName: 天顶巨石Ex
+	Tooltip:
+		'''
+		天顶巨石变得更强大了，这都是天意啊
+		(W.I.P.)
+		'''
 }

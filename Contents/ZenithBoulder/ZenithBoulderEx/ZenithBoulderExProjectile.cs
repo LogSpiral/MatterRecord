@@ -3,12 +3,14 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using System;
 using Terraria.Audio;
+using Terraria.GameContent.Drawing;
+using Terraria.Graphics.Renderers;
 
 namespace MatterRecord.Contents.ZenithBoulder.ZenithBoulderEx;
 
 public class ZenithBoulderExProjectile : ModProjectile
 {
-    public override bool IsLoadingEnabled(Mod mod) => false;
+    public override bool IsLoadingEnabled(Mod mod) => true;
     public override string Texture => base.Texture.Replace("Projectile", "");
     private static Asset<Texture2D> Glow { get; set; }
     public override void Load()
@@ -18,6 +20,7 @@ public class ZenithBoulderExProjectile : ModProjectile
     }
     public override void SetDefaults()
     {
+        Projectile.damage = 30;
         Projectile.width = 31;
         Projectile.height = 31;
         Projectile.aiStyle = -1;
@@ -142,15 +145,52 @@ public class ZenithBoulderExProjectile : ModProjectile
         return base.PreDraw(ref lightColor);
     }
 
+    private static readonly ParticleOrchestraType[] ParticleTypes_HitEffects = 
+                                        [
+                                             ParticleOrchestraType.Excalibur,
+                                             ParticleOrchestraType.NightsEdge,
+                                             ParticleOrchestraType.TerraBlade,
+                                             ParticleOrchestraType.TrueExcalibur,
+                                             ParticleOrchestraType.TrueNightsEdge
+                                        ];
+    private static readonly ParticleOrchestraType[] ParticleTypes_CollideEffects = 
+                                        [
+                                             ParticleOrchestraType.BlackLightningHit,
+                                             ParticleOrchestraType.Excalibur,
+                                             ParticleOrchestraType.Keybrand,
+                                             ParticleOrchestraType.NightsEdge,
+                                             ParticleOrchestraType.PrincessWeapon,
+                                             ParticleOrchestraType.RainbowRodHit,
+                                             ParticleOrchestraType.StardustPunch,
+                                             ParticleOrchestraType.StellarTune,
+                                             ParticleOrchestraType.TerraBlade,
+                                             ParticleOrchestraType.TrueExcalibur,
+                                             ParticleOrchestraType.TrueNightsEdge
+                                        ];
+
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
     {
         float y = Projectile.Center.Y;
         int x = (int)Projectile.Center.X / 16;
-        while (y > Main.screenPosition.Y && WorldGen.InWorld(x, (int)y / 16) && !Framing.GetTileSafely(x, (int)y / 16).HasTile)
-            y -= 16;
+        //while (y > Main.screenPosition.Y && WorldGen.InWorld(x, (int)y / 16) && !Framing.GetTileSafely(x, (int)y / 16).HasTile)
+        //    y -= 16;
 
-        Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center with { Y = y }, Vector2.UnitY * 16, ProjectileID.Boulder, 70, 10f, Main.myPlayer);
-
+        Projectile.NewProjectile(
+            Projectile.GetSource_FromThis(),
+            Projectile.Center with { Y = y - 256 },
+            Vector2.UnitY * 16,
+            ModContent.ProjectileType<ZenithSubBoulder>(),
+            70, 30f, Main.myPlayer, target.whoAmI, 2, Main.rand.NextFloat(30, 60));
+        ParticleOrchestraSettings setting = new()
+        {
+            MovementVector = default,
+            PositionInWorld = target.Center
+        };
+        ParticleOrchestrator.SpawnParticlesDirect(Main.rand.Next(ParticleTypes_HitEffects), setting);
+        target.AddBuff(BuffID.OnFire, 300);
+        target.AddBuff(BuffID.Burning, 60);
+        target.AddBuff(BuffID.Webbed, 30);
+        target.AddBuff(BuffID.Slow, 180);
         base.OnHitNPC(target, hit, damageDone);
     }
 
@@ -158,10 +198,25 @@ public class ZenithBoulderExProjectile : ModProjectile
     {
         float y = Projectile.Center.Y;
         int x = (int)Projectile.Center.X / 16;
-        while (y > Main.screenPosition.Y && WorldGen.InWorld(x, (int)y / 16) && !Framing.GetTileSafely(x, (int)y / 16).HasTile)
-            y -= 16;
+        //while (y > Main.screenPosition.Y && WorldGen.InWorld(x, (int)y / 16) && !Framing.GetTileSafely(x, (int)y / 16).HasTile)
+        //    y -= 16;
 
-        Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center with { Y = y }, Vector2.UnitY * 16, ProjectileID.Boulder, 70, 10f, Main.myPlayer);
+        Projectile.NewProjectile(
+            Projectile.GetSource_FromThis(),
+            Projectile.Center with { Y = y - 256 },
+            Vector2.UnitY * 16,
+            ModContent.ProjectileType<ZenithSubBoulder>(),
+            70, 30f, Main.myPlayer, target.whoAmI, 1, Main.rand.NextFloat(30, 60));
+        ParticleOrchestraSettings setting = new()
+        {
+            MovementVector = default,
+            PositionInWorld = target.Center
+        };
+        ParticleOrchestrator.SpawnParticlesDirect(Main.rand.Next(ParticleTypes_HitEffects), setting);
+        target.AddBuff(BuffID.OnFire, 300);
+        target.AddBuff(BuffID.Burning, 60);
+        target.AddBuff(BuffID.Webbed, 30);
+        target.AddBuff(BuffID.Slow, 180);
 
         base.OnHitPlayer(target, info);
     }
@@ -205,11 +260,48 @@ public class ZenithBoulderExProjectile : ModProjectile
 
         if (flag12)
         {
+            ZenithBoulderExSystem.Instance.ScreenOffset += lastVelocity;
             Projectile.localAI[1] += 1f;
             Collision.HitTiles(Projectile.position, Projectile.velocity, Projectile.width, Projectile.height);
-            SoundEngine.PlaySound(SoundID.Dig, Projectile.position);
 
-            Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Vector2.Zero, ProjectileID.RollingCactus, 35, 10f, Main.myPlayer);
+            float pitch = MathHelper.Clamp(-Vector2.Distance(Projectile.Center, Main.LocalPlayer.Center) / 1200f, -2, 0);
+
+
+            SoundEngine.PlaySound(SoundID.DD2_BetsysWrathImpact with { Pitch = pitch, Volume = 2f }, Projectile.position);
+
+            for (int n = 0; n < 10; n++)
+            {
+                ParticleOrchestraSettings setting = new()
+                {
+                    MovementVector = Main.rand.NextVector2Unit() * Main.rand.NextFloat(0, 64) - lastVelocity * 4,
+                    PositionInWorld = Projectile.Center + Main.rand.NextVector2Unit() * Main.rand.NextFloat(0, 128)
+                };
+                ParticleOrchestrator.SpawnParticlesDirect(Main.rand.Next(ParticleTypes_CollideEffects), setting);
+            }
+
+            for (int n = 0; n < 5; n++) 
+            {
+                if (Main.rand.NextBool(20)) 
+                {
+                    Projectile.NewProjectile(
+                        Projectile.GetSource_FromThis(),
+                        Projectile.Center,
+                        -lastVelocity + Main.rand.NextVector2Unit() * Main.rand.NextFloat(1, 4),
+                        ModContent.ProjectileType<ZenithGhoulder>(),
+                        70,
+                        10,
+                        Projectile.owner);
+                    continue;
+                }
+                Projectile.NewProjectile(
+                    Projectile.GetSource_FromThis(),
+                    Projectile.Center,
+                    -lastVelocity + Main.rand.NextVector2Unit() * Main.rand.NextFloat(4, 16),
+                    ProjectileID.MiniBoulder,
+                    70,
+                    10,
+                    Projectile.owner);
+            }
         }
 
         if (Projectile.velocity.Length() < 0.1f && Projectile.localAI[0] > 50f)

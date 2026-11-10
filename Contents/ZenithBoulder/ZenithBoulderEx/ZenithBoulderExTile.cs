@@ -31,5 +31,5 @@ public class ZenithBoulderExTile : ModTile
 
     public override IEnumerable<Item> GetItemDrops(int i, int j) => null;
 
-    public override bool IsLoadingEnabled(Mod mod) => false;
+    public override bool IsLoadingEnabled(Mod mod) => true;
 }
