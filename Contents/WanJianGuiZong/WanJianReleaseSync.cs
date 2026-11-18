@@ -1,6 +1,7 @@
 using System.IO;
 using Microsoft.Xna.Framework;
 using NetSimplified;
+using NetSimplified.Syncing;
 
 namespace MatterRecord.Contents.WanJianGuiZong;
 
@@ -13,6 +14,7 @@ namespace MatterRecord.Contents.WanJianGuiZong;
 /// <para>所以放出这张牌改由持剑客户端发请求，服务器改自己那份副本、再显式广播 SyncProjectile，
 /// 这样所有客户端都能看到剑真正飞出去。</para>
 /// </summary>
+[AutoSync]
 internal class WanJianReleaseSync : NetModule
 {
     private byte _whoAmI;
@@ -27,22 +29,6 @@ internal class WanJianReleaseSync : NetModule
         packet._directionX = direction.X;
         packet._directionY = direction.Y;
         return packet;
-    }
-
-    public override void Send(ModPacket p)
-    {
-        p.Write(_whoAmI);
-        p.Write(_directionX);
-        p.Write(_directionY);
-        base.Send(p);
-    }
-
-    public override void Read(BinaryReader r)
-    {
-        _whoAmI = r.ReadByte();
-        _directionX = r.ReadSingle();
-        _directionY = r.ReadSingle();
-        base.Read(r);
     }
 
     public override void Receive()

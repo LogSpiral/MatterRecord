@@ -1,4 +1,5 @@
 using NetSimplified;
+using NetSimplified.Syncing;
 using System.IO;
 
 namespace MatterRecord.Contents.Eraser;
@@ -9,6 +10,7 @@ namespace MatterRecord.Contents.Eraser;
 /// 由服务器权威执行擦除并通过 SyncNPC / SyncProjectile 广播给所有玩家，
 /// 避免仅本地修改状态导致实体被服务器同步「复活」。
 /// </summary>
+[AutoSync]
 internal class EraserEraseSync : NetModule
 {
     /// <summary>实体类型：0 = NPC，1 = 弹幕。</summary>
@@ -28,18 +30,6 @@ internal class EraserEraseSync : NetModule
         packet._entityType = entityType;
         packet._entityIndex = (short)entityIndex;
         return packet;
-    }
-
-    public override void Send(ModPacket p)
-    {
-        p.Write(_entityType);
-        p.Write(_entityIndex);
-    }
-
-    public override void Read(BinaryReader r)
-    {
-        _entityType = r.ReadByte();
-        _entityIndex = r.ReadInt16();
     }
 
     public override void Receive()

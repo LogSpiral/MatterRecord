@@ -1,5 +1,6 @@
 using Microsoft.Xna.Framework;
 using NetSimplified;
+using NetSimplified.Syncing;
 using System.IO;
 
 namespace MatterRecord.Contents.TheHitchhikersGuideToTerraria;
@@ -14,6 +15,7 @@ namespace MatterRecord.Contents.TheHitchhikersGuideToTerraria;
 /// <c>ConfigScope.ServerSide</c> 配置，多人下客户端本地改值不会被服务端承认，
 /// 因此客户端只发请求，由服务端权威切换后再把结果广播给所有端镜像。</para>
 /// </summary>
+[AutoSync]
 internal class TheHitchhikersGuideSync : NetModule
 {
     /// <summary>操作码：客户端请求补发指南。</summary>
@@ -121,28 +123,6 @@ internal class TheHitchhikersGuideSync : NetModule
             Main.NewText(
                 TheHitchhikersGuideToTerraria.GetText(value ? "ConfigOn" : "ConfigOff"),
                 value ? new Color(120, 255, 120) : new Color(180, 200, 255));
-    }
-
-    /// <summary>
-    /// 写入网络包内容。
-    /// </summary>
-    /// <param name="p">待写入的网络包。</param>
-    public override void Send(ModPacket p)
-    {
-        p.Write(_op);
-        p.Write(_whoAmI);
-        p.Write(_configValue);
-    }
-
-    /// <summary>
-    /// 读取网络包内容。
-    /// </summary>
-    /// <param name="r">网络包读取器。</param>
-    public override void Read(BinaryReader r)
-    {
-        _op = r.ReadByte();
-        _whoAmI = r.ReadByte();
-        _configValue = r.ReadBoolean();
     }
 
     /// <summary>

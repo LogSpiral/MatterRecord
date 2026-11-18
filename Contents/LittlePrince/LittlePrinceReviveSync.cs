@@ -1,7 +1,5 @@
 ﻿using NetSimplified;
-using System.IO;
-using Terraria;
-using Terraria.ID;
+using NetSimplified.Syncing;
 
 namespace MatterRecord.Contents.LittlePrince;
 
@@ -12,6 +10,7 @@ namespace MatterRecord.Contents.LittlePrince;
 /// 因此客户端拦截成功后把「玩家索引 + 是否砌罩」发给服务器，由服务器权威执行。
 /// 世界状态本身沿原版链路（SyncNPC / SyncProjectile / 图格广播）下发，无需服务器再转发本包。
 /// </summary>
+[AutoSync]
 internal class LittlePrinceReviveSync : NetModule
 {
     /// <summary>触发拦截的玩家在 Main.player 数组中的索引。</summary>
@@ -35,26 +34,6 @@ internal class LittlePrinceReviveSync : NetModule
         packet._playerIndex = (short)playerIndex;
         packet._buildWall = buildWall;
         return packet;
-    }
-
-    /// <summary>
-    /// 写入请求数据：玩家索引 + 是否砌罩。
-    /// </summary>
-    /// <param name="p">待写入的数据包。</param>
-    public override void Send(ModPacket p)
-    {
-        p.Write(_playerIndex);
-        p.Write(_buildWall);
-    }
-
-    /// <summary>
-    /// 读取请求数据，字段顺序必须与 <see cref="Send"/> 保持一致。
-    /// </summary>
-    /// <param name="r">数据读取器。</param>
-    public override void Read(BinaryReader r)
-    {
-        _playerIndex = r.ReadInt16();
-        _buildWall = r.ReadBoolean();
     }
 
     /// <summary>

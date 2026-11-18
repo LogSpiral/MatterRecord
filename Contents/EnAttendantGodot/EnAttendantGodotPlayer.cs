@@ -53,6 +53,7 @@ public class EnAttendantGodotPlayer : ModPlayer
     }
     public void IncrementalUpdateBannedList(int[] array)
     {
+        if (array == null) return;
         foreach (var i in array)
         {
             if (i > 0)

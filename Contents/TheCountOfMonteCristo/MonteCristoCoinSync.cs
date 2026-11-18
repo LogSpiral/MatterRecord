@@ -1,7 +1,5 @@
 ﻿using NetSimplified;
-using System.IO;
-using Terraria;
-using Terraria.ID;
+using NetSimplified.Syncing;
 
 namespace MatterRecord.Contents.TheCountOfMonteCristo;
 
@@ -11,6 +9,7 @@ namespace MatterRecord.Contents.TheCountOfMonteCristo;
 /// 所有玩家看到（并正确走记录系统的「已持有 / 冷却」判定），因此客户端触发后把
 /// 玩家索引发给服务器，由服务器权威产出，产出结果沿原版物品同步链路下发。</para>
 /// </summary>
+[AutoSync]
 internal class MonteCristoCoinSync : NetModule
 {
     /// <summary>触发获取判定的玩家在 Main.player 数组中的索引。</summary>
@@ -26,24 +25,6 @@ internal class MonteCristoCoinSync : NetModule
         var packet = NetModuleLoader.Get<MonteCristoCoinSync>();
         packet._playerIndex = (short)playerIndex;
         return packet;
-    }
-
-    /// <summary>
-    /// 写入请求数据：玩家索引。
-    /// </summary>
-    /// <param name="p">待写入的数据包。</param>
-    public override void Send(ModPacket p)
-    {
-        p.Write(_playerIndex);
-    }
-
-    /// <summary>
-    /// 读取请求数据，字段顺序必须与 <see cref="Send"/> 保持一致。
-    /// </summary>
-    /// <param name="r">数据读取器。</param>
-    public override void Read(BinaryReader r)
-    {
-        _playerIndex = r.ReadInt16();
     }
 
     /// <summary>

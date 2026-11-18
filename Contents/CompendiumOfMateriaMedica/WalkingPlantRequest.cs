@@ -1,4 +1,5 @@
 using NetSimplified;
+using NetSimplified.Syncing;
 using System.IO;
 
 namespace MatterRecord.Contents.CompendiumOfMateriaMedica;
@@ -8,6 +9,7 @@ namespace MatterRecord.Contents.CompendiumOfMateriaMedica;
 /// <para>种子由客户端自己扣（客户端对自己背包有权威），图格改动交给服务端执行；
 /// 服务端只复核坐标与下方物块，草药样式由服务端重新推导，不采信客户端传来的值。</para>
 /// </summary>
+[AutoSync]
 internal class WalkingPlantRequest : NetModule
 {
     /// <summary>目标图格 X。</summary>
@@ -22,18 +24,6 @@ internal class WalkingPlantRequest : NetModule
         packet._tileX = (short)x;
         packet._tileY = (short)y;
         return packet;
-    }
-
-    public override void Send(ModPacket p)
-    {
-        p.Write(_tileX);
-        p.Write(_tileY);
-    }
-
-    public override void Read(BinaryReader r)
-    {
-        _tileX = r.ReadInt16();
-        _tileY = r.ReadInt16();
     }
 
     public override void Receive()

@@ -1,4 +1,5 @@
 using NetSimplified;
+using NetSimplified.Syncing;
 using System.IO;
 
 namespace MatterRecord.Contents.DonQuijoteDeLaMancha;
@@ -9,6 +10,7 @@ namespace MatterRecord.Contents.DonQuijoteDeLaMancha;
 /// 由服务器权威移除并通过 SyncProjectile 广播给所有玩家，
 /// 避免仅本地 Kill 导致弹幕被服务器同步「复活」。
 /// </summary>
+[AutoSync]
 internal class WindMillEraseSync : NetModule
 {
     /// <summary>弹幕在 Main.projectile 数组中的索引。</summary>
@@ -22,10 +24,6 @@ internal class WindMillEraseSync : NetModule
         packet._projIndex = (short)projIndex;
         return packet;
     }
-
-    public override void Send(ModPacket p) => p.Write(_projIndex);
-
-    public override void Read(BinaryReader r) => _projIndex = r.ReadInt16();
 
     public override void Receive()
     {

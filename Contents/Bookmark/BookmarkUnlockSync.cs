@@ -1,4 +1,5 @@
 using NetSimplified;
+using NetSimplified.Syncing;
 using System.IO;
 
 namespace MatterRecord.Contents.Bookmark;
@@ -9,6 +10,7 @@ namespace MatterRecord.Contents.Bookmark;
 /// 而 ModPlayer 的存档字段默认只存在于本机：服务端与其它客户端必须显式收到，
 /// 否则他们那边栏位是关闭的，栏位内饰品的 UpdateAccessory 不会执行。</para>
 /// </summary>
+[AutoSync]
 internal class BookmarkUnlockSync : NetModule
 {
     /// <summary>解锁状态所属的玩家索引。</summary>
@@ -23,18 +25,6 @@ internal class BookmarkUnlockSync : NetModule
         packet._whoAmI = (byte)whoAmI;
         packet._unlocked = unlocked;
         return packet;
-    }
-
-    public override void Send(ModPacket p)
-    {
-        p.Write(_whoAmI);
-        p.Write(_unlocked);
-    }
-
-    public override void Read(BinaryReader r)
-    {
-        _whoAmI = r.ReadByte();
-        _unlocked = r.ReadBoolean();
     }
 
     public override void Receive()
