@@ -16,7 +16,7 @@ public class ZenithBoulderExProjectile : ModProjectile
     public override void Load()
     {
         if (!Main.dedServ)
-            Glow = ModContent.Request<Texture2D>("MatterRecord/Contents/ZenithBoulder/ZenithBoulderEx/ZenithBoulderEx_Glow");
+            Glow = ModAsset.ZenithBoulderEx_Glow_Async;
     }
     public override void SetDefaults()
     {
@@ -260,7 +260,7 @@ public class ZenithBoulderExProjectile : ModProjectile
 
         if (flag12)
         {
-            ZenithBoulderExSystem.Instance.ScreenOffset += lastVelocity;
+            ScreenShakeSystem.Instance.ScreenOffset += lastVelocity;
             Projectile.localAI[1] += 1f;
             Collision.HitTiles(Projectile.position, Projectile.velocity, Projectile.width, Projectile.height);
 

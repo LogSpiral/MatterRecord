@@ -106,6 +106,13 @@ namespace MatterRecord.Contents.LordOfTheFlies
 
         private static SoundStyle SwitchModeSoundEffect { get; } = new SoundStyle("MatterRecord/Assets/Sounds/shotgun_reload_clip3");
 
+        public override bool ModifyItemDraw(ref PlayerDrawSet drawInfo, ref DrawData drawData, ref DrawData? coloredDrawData, ref DrawData? glowMaskDrawData)
+        {
+            if (drawInfo.drawPlayer.ownedProjectileCounts[ModContent.ProjectileType<LTFLaser>()] > 0)
+                drawData.texture = ModAsset.JudgmentBlade.Value;
+            return true;
+        }
+
         public override void UseStyle(Player player, Rectangle heldItemFrame)
         {
             var mplr = player.GetModPlayer<LordOfTheFliesPlayer>();
@@ -237,26 +244,41 @@ namespace MatterRecord.Contents.LordOfTheFlies
                     // 立即发射
                     if (player.whoAmI == Main.myPlayer)
                     {
-                        int Damage = player.GetWeaponDamage(Item);
-                        float KnockBack = Item.knockBack;
-                        int usedAmmoItemId = 0;
-                        int projToShoot = Item.shoot;
-                        float speed = Item.shootSpeed;
-                        int damage = Item.damage;
-                        bool canShoot = true;
-                        player.PickAmmo(Item, ref projToShoot, ref speed, ref canShoot, ref Damage, ref KnockBack, out usedAmmoItemId);
+                        if (player.controlUp && mplr.IsInTrialMode && player.ownedProjectileCounts[ModContent.ProjectileType<LTFLaser>()] == 0)
+                        {
+                            Projectile.NewProjectile(
+                                player.GetSource_ItemUse(Item),
+                                player.Center,
+                                default,
+                                ModContent.ProjectileType<LTFLaser>(),
+                                player.GetWeaponDamage(Item),
+                                player.GetWeaponKnockback(Item),
+                                player.whoAmI
+                             );
+                        }
+                        else
+                        {
+                            int Damage = player.GetWeaponDamage(Item);
+                            float KnockBack = Item.knockBack;
+                            int usedAmmoItemId = 0;
+                            int projToShoot = Item.shoot;
+                            float speed = Item.shootSpeed;
+                            int damage = Item.damage;
+                            bool canShoot = true;
+                            player.PickAmmo(Item, ref projToShoot, ref speed, ref canShoot, ref Damage, ref KnockBack, out usedAmmoItemId);
 
-                        Vector2 center = player.RotatedRelativePoint(player.MountedCenter) + new Vector2(0, -6);
-                        ManualShoot(
-                            player,
-                            (EntitySource_ItemUse_WithAmmo)player.GetSource_ItemUse_WithPotentialAmmo(Item, usedAmmoItemId),
-                            center,
-                            (Main.MouseWorld - center).SafeNormalize(default) * speed,
-                            projToShoot,
-                            Damage,
-                            KnockBack
-                            );
-                        _chargeTimer = 0;
+                            Vector2 center = player.RotatedRelativePoint(player.MountedCenter) + new Vector2(0, -6);
+                            ManualShoot(
+                                player,
+                                (EntitySource_ItemUse_WithAmmo)player.GetSource_ItemUse_WithPotentialAmmo(Item, usedAmmoItemId),
+                                center,
+                                (Main.MouseWorld - center).SafeNormalize(default) * speed,
+                                projToShoot,
+                                Damage,
+                                KnockBack
+                                );
+                            _chargeTimer = 0;
+                        }
                     }
                 }
                 else
@@ -305,9 +327,9 @@ namespace MatterRecord.Contents.LordOfTheFlies
 
             if (player.whoAmI != Main.myPlayer) return;
             if (LordOfTheFliesProgression.Tier7_Teleport &&
-                mplr.ChargingEnergy >= 30 && 
+                mplr.ChargingEnergy >= 30 &&
                 player.controlUp && _lastReleaseUp &&
-                player.doubleTapCardinalTimer[1] is > 0 and < 15) 
+                player.doubleTapCardinalTimer[1] is > 0 and < 15)
             {
 
                 var newPos = Main.MouseWorld;
@@ -497,7 +519,7 @@ namespace MatterRecord.Contents.LordOfTheFlies
             return false;
         }
 
-       
+
 
         public override void ModifyWeaponDamage(Player player, ref StatModifier damage)
         {

@@ -128,7 +128,7 @@ public class ZenithSubBoulder : ModProjectile
     public override void OnKill(int timeLeft)
     {
         var velocity = Projectile.oldPos[0] - Projectile.oldPos[1];
-        ZenithBoulderExSystem.Instance.ScreenOffset += velocity * .25f;
+        ScreenShakeSystem.Instance.ScreenOffset += velocity * .25f;
         SoundEngine.PlaySound(SoundID.DD2_ExplosiveTrapExplode, Projectile.Center);
         for (int n = 0; n < 30; n++)
         {

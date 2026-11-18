@@ -1,11 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
 
-namespace MatterRecord.Contents.ZenithBoulder.ZenithBoulderEx;
+namespace MatterRecord;
 
-public class ZenithBoulderExSystem : ModSystem
+public class ScreenShakeSystem : ModSystem
 {
 
-    public static ZenithBoulderExSystem Instance { get; private set; }
+    public static ScreenShakeSystem Instance { get; private set; }
     public override void Load()
     {
         Instance = this;
