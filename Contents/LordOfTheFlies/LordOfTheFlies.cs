@@ -285,6 +285,7 @@ namespace MatterRecord.Contents.LordOfTheFlies
 
         public override bool AltFunctionUse(Player player) => player.GetModPlayer<LordOfTheFliesPlayer>().RightCooldown <= 0;
 
+        private static bool _lastReleaseUp;
         public override void HoldStyle(Player player, Rectangle heldItemFrame)
         {
             var mplr = player.GetModPlayer<LordOfTheFliesPlayer>();
@@ -301,6 +302,33 @@ namespace MatterRecord.Contents.LordOfTheFlies
             {
                 Item.holdStyle = ItemHoldStyleID.None;
             }
+
+            if (player.whoAmI != Main.myPlayer) return;
+            if (LordOfTheFliesProgression.Tier7_Teleport &&
+                mplr.ChargingEnergy >= 30 && 
+                player.controlUp && _lastReleaseUp &&
+                player.doubleTapCardinalTimer[1] is > 0 and < 15) 
+            {
+
+                var newPos = Main.MouseWorld;
+                Point point = player.Center.ToTileCoordinates();
+                Point point2 = (newPos + player.Size / 2).ToTileCoordinates();
+                int num = (int)(newPos.X / 16f);
+                int num2 = (int)(newPos.Y / 16f);
+                if ((Main.tile[num, num2].wall == 87 && !NPC.downedPlantBoss && (Main.remixWorld || (double)num2 > Main.worldSurface)) || Collision.SolidCollision(newPos, player.width, player.height))
+                    return;
+                if (!CombinedHooks.CanBeTeleportedTo(player, newPos, num, num2, "LordOfTheFlies"))
+                    return;
+
+                const int style = LordOfTheFliesTeleportEffectPlayer.TeleportStyleID;
+                player.Teleport(newPos, style);
+                NetMessage.SendData(MessageID.TeleportEntity, -1, -1, null, 0, player.whoAmI, newPos.X, newPos.Y, style);
+                mplr.ChargingEnergy -= 30;
+                SoundEngine.PlaySound(SoundID.Item8, newPos);
+            }
+            _lastReleaseUp = player.releaseUp;
+
+
             base.HoldStyle(player, heldItemFrame);
         }
 
