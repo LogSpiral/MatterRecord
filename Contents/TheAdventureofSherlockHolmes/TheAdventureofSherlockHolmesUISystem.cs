@@ -1,9 +1,7 @@
-﻿using Microsoft.Xna.Framework;
+﻿using MatterRecord.Contents.Recorder;
+using Microsoft.Xna.Framework;
 using System.Linq;
-using Terraria;
-using Terraria.ModLoader;
 using Terraria.UI;
-using MatterRecord.Contents.Recorder;
 
 namespace MatterRecord.Contents.TheAdventureofSherlockHolmes
 {

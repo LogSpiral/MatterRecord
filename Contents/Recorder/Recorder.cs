@@ -130,7 +130,7 @@ public partial class Recorder : ModNPC
         if (NPC.lifeMax != newLifeMax)
         {
             NPC.lifeMax = newLifeMax;
-            if (increaseMode && !Main.dedServ) 
+            if (increaseMode && !Main.dedServ)
             {
                 SoundEngine.PlaySound(SoundID.Item29, NPC.Center);
                 CombatText.NewText(NPC.Hitbox, CombatText.HealLife, 20);

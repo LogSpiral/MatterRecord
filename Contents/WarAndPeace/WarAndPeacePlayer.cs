@@ -1,6 +1,5 @@
 ﻿using MatterRecord.Contents.WarAndPeace;
 using Microsoft.Xna.Framework;
-using Terraria.DataStructures;
 
 /// <summary>
 /// 《战争与和平》饰品的玩家侧逻辑。

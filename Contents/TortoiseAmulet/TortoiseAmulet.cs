@@ -1,11 +1,7 @@
-using MatterRecord.Contents.EnAttendantGodot;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
-using Terraria;
 using Terraria.DataStructures;
-using Terraria.ID;
-using Terraria.ModLoader;
 
 namespace MatterRecord.Contents.TortoiseAmulet
 {
@@ -89,7 +85,7 @@ namespace MatterRecord.Contents.TortoiseAmulet
             int minDist = 1024;
             int maxDist = 1600;
 
-  
+
             for (int attempt = 0; attempt < 30; attempt++)
             {
                 int side = Main.rand.NextBool() ? 1 : -1;

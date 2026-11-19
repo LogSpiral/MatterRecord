@@ -1,6 +1,6 @@
-using System.Collections.Generic;
 using MatterRecord.Contents.TodaySword;
 using Microsoft.Xna.Framework;
+using System.Collections.Generic;
 using Terraria.Audio;
 
 namespace MatterRecord.Contents.WanJianGuiZong;

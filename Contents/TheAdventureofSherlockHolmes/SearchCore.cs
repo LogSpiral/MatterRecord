@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
-using Terraria;
-using Terraria.Localization;
-using Terraria.ModLoader;
-using Terraria.ObjectData;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace MatterRecord.Contents.TheAdventureofSherlockHolmes
 {
@@ -341,7 +337,7 @@ namespace MatterRecord.Contents.TheAdventureofSherlockHolmes
                 if (uniqueNames.Count >= maxResults) break;
             }
 
-            done:
+        done:
             var list = uniqueNames.ToList();
             list.Sort((a, b) => a.Length.CompareTo(b.Length));
             return list;

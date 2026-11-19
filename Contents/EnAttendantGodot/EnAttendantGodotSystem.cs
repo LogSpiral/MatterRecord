@@ -10,7 +10,7 @@ public class EnAttendantGodotSystem : ModSystem
     public override void PostSetupContent()
     {
         _bannerItemType2NPCType.Clear();
-        for (int type = -10; type < NPCLoader.NPCCount; type++) 
+        for (int type = -10; type < NPCLoader.NPCCount; type++)
         {
             if (type == 0) continue;
             int bannerId = Item.NPCtoBanner(type);

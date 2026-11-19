@@ -1,11 +1,8 @@
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
-using Terraria;
 using Terraria.Audio;
-using Terraria.ID;
 using Terraria.Localization;
-using Terraria.ModLoader;
-using BookmarkItem = MatterRecord.Contents.Bookmark.Bookmark;   
+using BookmarkItem = MatterRecord.Contents.Bookmark.Bookmark;
 
 namespace MatterRecord.Contents.TheHitchhikersGuideToTerraria;
 
@@ -35,7 +32,7 @@ public class TheHitchhikersGuideToTerraria : ModItem
     /// </summary>
     public static readonly (int Type, int Stack)[] GiftItems =
     [
-        (ModContent.ItemType<BookmarkItem>(), 1),   
+        (ModContent.ItemType<BookmarkItem>(), 1),
         (ItemID.BugNet, 1),
         (ItemID.RecallPotion, 5),
         (ItemID.Book, 30),

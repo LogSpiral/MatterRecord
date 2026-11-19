@@ -1,6 +1,5 @@
 using NetSimplified;
 using NetSimplified.Syncing;
-using System.IO;
 
 namespace MatterRecord.Contents.Bookmark;
 

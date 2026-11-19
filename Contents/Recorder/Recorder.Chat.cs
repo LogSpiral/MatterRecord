@@ -1,9 +1,6 @@
-﻿using Microsoft.Xna.Framework;
-using MatterRecord.Contents.ImperfectPage;
+﻿using MatterRecord.Contents.Recorder.Dialogue;
 using MatterRecord.Contents.TheInterpretationOfDreams;
-using MatterRecord.Contents.Recorder.Dialogue;
 using System.Collections.Generic;
-using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.Localization;
 using Terraria.ModLoader.IO;

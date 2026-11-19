@@ -1,4 +1,3 @@
-using Microsoft.Xna.Framework;
 using Terraria.DataStructures;
 
 namespace MatterRecord.Contents.WanJianGuiZong;

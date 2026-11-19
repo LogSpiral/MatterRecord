@@ -1,5 +1,3 @@
-using Terraria;
-
 namespace MatterRecord.Contents.DonQuijoteDeLaMancha;
 
 /// <summary>

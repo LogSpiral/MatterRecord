@@ -6,7 +6,7 @@ namespace MatterRecord.Contents.SystemControlSword
     {
         public override void SetDefaults()
         {
-            
+
             Item.damage = 6;
             Item.DamageType = DamageClass.Melee;
             Item.width = 40;

@@ -1,10 +1,5 @@
-﻿using MatterRecord;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using System.Collections.Generic;
-using Terraria;
-using Terraria.DataStructures;
-using Terraria.ID;
-using Terraria.ModLoader;
 
 namespace MatterRecord.Contents.Eraser
 {

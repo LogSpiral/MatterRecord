@@ -135,7 +135,7 @@ public class SUIList : UIElement
         if (_draggingSlider)
         {
             float p = Main.MouseScreen.Y - _startPoint - (rect.Y + 4);
-            if (fullHeight != sliderHeight) 
+            if (fullHeight != sliderHeight)
             {
                 TargetScrollWheelValue = rest * MathHelper.Clamp(p / (fullHeight - sliderHeight), 0, 1);
                 CurrentScrollWheelValue = MathHelper.Lerp(CurrentScrollWheelValue, TargetScrollWheelValue, 0.3f);

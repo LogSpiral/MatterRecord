@@ -1,13 +1,10 @@
-﻿using Terraria;
-using Terraria.ModLoader;
-
-namespace MatterRecord.Contents.TheCountOfMonteCristo
+﻿namespace MatterRecord.Contents.TheCountOfMonteCristo
 {
     public class RevengeBuff : ModBuff
     {
         public override void SetStaticDefaults()
         {
-      
+
             Main.debuff[Type] = false;
             Main.buffNoTimeDisplay[Type] = false;
         }

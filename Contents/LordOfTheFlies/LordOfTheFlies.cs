@@ -5,13 +5,9 @@ using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.IO;
-using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent;
-using Terraria.ID;
-using Terraria.ModLoader;
 
 
 namespace MatterRecord.Contents.LordOfTheFlies
@@ -337,7 +333,7 @@ namespace MatterRecord.Contents.LordOfTheFlies
                 Point point2 = (newPos + player.Size / 2).ToTileCoordinates();
                 int num = (int)(newPos.X / 16f);
                 int num2 = (int)(newPos.Y / 16f);
-                if ((Main.tile[num, num2].wall == 87 && !NPC.downedPlantBoss && (Main.remixWorld || (double)num2 > Main.worldSurface)) || Collision.SolidCollision(newPos, player.width, player.height))
+                if ((Main.tile[num, num2].wall == 87 && !NPC.downedPlantBoss && (Main.remixWorld || num2 > Main.worldSurface)) || Collision.SolidCollision(newPos, player.width, player.height))
                     return;
                 if (!CombinedHooks.CanBeTeleportedTo(player, newPos, num, num2, "LordOfTheFlies"))
                     return;

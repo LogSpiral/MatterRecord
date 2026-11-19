@@ -4,7 +4,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using MonoMod.Cil;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using Terraria.DataStructures;
 using Terraria.Localization;
 

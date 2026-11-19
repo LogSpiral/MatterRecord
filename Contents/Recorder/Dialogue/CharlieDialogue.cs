@@ -1,8 +1,6 @@
-﻿using Microsoft.Xna.Framework;
-using Terraria;
-using Terraria.ModLoader;
+﻿using MatterRecord.Contents.LordOfTheFlies;
+using Microsoft.Xna.Framework;
 using Terraria.GameContent;
-using MatterRecord.Contents.LordOfTheFlies;
 using Terraria.Localization;
 
 namespace MatterRecord.Contents.Recorder.Dialogue

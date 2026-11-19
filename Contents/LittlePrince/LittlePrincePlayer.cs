@@ -1,10 +1,6 @@
 ﻿using MatterRecord.Contents.EternalWine;
-using Microsoft.Xna.Framework;
-using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
-using Terraria.ID;
-using Terraria.ModLoader;
 
 namespace MatterRecord.Contents.LittlePrince;
 

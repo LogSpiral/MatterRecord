@@ -110,7 +110,7 @@ public class DreamWorld : ModSystem
         mcst = (float)args[6];
         crt = (int)args[7];
 
-        float num = 1f * dmg * (2f - spd) * (2f - mcst) * size * kb * shtspd * (1f + (float)crt * 0.02f);
+        float num = 1f * dmg * (2f - spd) * (2f - mcst) * size * kb * shtspd * (1f + crt * 0.02f);
 
         if (prefix == 62 || prefix == 69 || prefix == 73 || prefix == 77)
             num *= 1.05f;

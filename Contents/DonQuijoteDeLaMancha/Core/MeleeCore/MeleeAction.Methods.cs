@@ -223,7 +223,7 @@ public partial class MeleeAction // : ModType
         Main.spriteBatch.End();
         Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, sampler, DepthStencilState.Default, RasterizerState.CullNone, null, trans);
         ItemEffect.Parameters["uTransform"].SetValue(result);
-        ItemEffect.Parameters["uTime"].SetValue((float)Main.GlobalTimeWrappedHourly % 1);
+        ItemEffect.Parameters["uTime"].SetValue(Main.GlobalTimeWrappedHourly % 1);
         ItemEffect.Parameters["uItemColor"].SetValue(Lighting.GetColor((Owner.Center + OffsetCenter).ToTileCoordinates()).ToVector4());
         ItemEffect.Parameters["uItemGlowColor"].SetValue(Vector4.One);
         if (StandardInfo.frame != null)

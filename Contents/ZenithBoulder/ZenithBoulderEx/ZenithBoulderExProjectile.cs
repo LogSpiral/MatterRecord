@@ -4,7 +4,6 @@ using ReLogic.Content;
 using System;
 using Terraria.Audio;
 using Terraria.GameContent.Drawing;
-using Terraria.Graphics.Renderers;
 
 namespace MatterRecord.Contents.ZenithBoulder.ZenithBoulderEx;
 
@@ -45,7 +44,7 @@ public class ZenithBoulderExProjectile : ModProjectile
             if (WorldGen.SolidTile(i2, num219) || WorldGen.SolidTile(i2, num219 + 1))
                 flag9 = true;
 
-            i2 = (int)((Projectile.position.X + (float)Projectile.width + 8f) / 16f);
+            i2 = (int)((Projectile.position.X + Projectile.width + 8f) / 16f);
             if (WorldGen.SolidTile(i2, num219) || WorldGen.SolidTile(i2, num219 + 1))
                 flag10 = true;
 
@@ -66,7 +65,7 @@ public class ZenithBoulderExProjectile : ModProjectile
                 if (WorldGen.SolidTile(i2, num219) || WorldGen.SolidTile(i2, num219 + 1))
                     flag9 = true;
 
-                i2 = (int)((Projectile.position.X + (float)Projectile.width + 8f + 16f) / 16f);
+                i2 = (int)((Projectile.position.X + Projectile.width + 8f + 16f) / 16f);
                 if (WorldGen.SolidTile(i2, num219) || WorldGen.SolidTile(i2, num219 + 1))
                     flag10 = true;
 
@@ -87,7 +86,7 @@ public class ZenithBoulderExProjectile : ModProjectile
                     if (WorldGen.SolidTile(i2, num219) || WorldGen.SolidTile(i2, num219 + 1))
                         flag9 = true;
 
-                    i2 = (int)((Projectile.position.X + (float)Projectile.width + 8f + 32f) / 16f);
+                    i2 = (int)((Projectile.position.X + Projectile.width + 8f + 32f) / 16f);
                     if (WorldGen.SolidTile(i2, num219) || WorldGen.SolidTile(i2, num219 + 1))
                         flag10 = true;
 
@@ -145,7 +144,7 @@ public class ZenithBoulderExProjectile : ModProjectile
         return base.PreDraw(ref lightColor);
     }
 
-    private static readonly ParticleOrchestraType[] ParticleTypes_HitEffects = 
+    private static readonly ParticleOrchestraType[] ParticleTypes_HitEffects =
                                         [
                                              ParticleOrchestraType.Excalibur,
                                              ParticleOrchestraType.NightsEdge,
@@ -153,7 +152,7 @@ public class ZenithBoulderExProjectile : ModProjectile
                                              ParticleOrchestraType.TrueExcalibur,
                                              ParticleOrchestraType.TrueNightsEdge
                                         ];
-    private static readonly ParticleOrchestraType[] ParticleTypes_CollideEffects = 
+    private static readonly ParticleOrchestraType[] ParticleTypes_CollideEffects =
                                         [
                                              ParticleOrchestraType.BlackLightningHit,
                                              ParticleOrchestraType.Excalibur,
@@ -279,9 +278,9 @@ public class ZenithBoulderExProjectile : ModProjectile
                 ParticleOrchestrator.SpawnParticlesDirect(Main.rand.Next(ParticleTypes_CollideEffects), setting);
             }
 
-            for (int n = 0; n < 5; n++) 
+            for (int n = 0; n < 5; n++)
             {
-                if (Main.rand.NextBool(20)) 
+                if (Main.rand.NextBool(20))
                 {
                     Projectile.NewProjectile(
                         Projectile.GetSource_FromThis(),

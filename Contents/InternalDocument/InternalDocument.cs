@@ -18,7 +18,7 @@ public class InternalDocument : ModItem
         Item.knockBack = 5f;
         Item.crit = 0;
 
-        Item.value =100;
+        Item.value = 100;
         Item.rare = ItemRarityID.White;
         Item.UseSound = SoundID.Item1;
     }

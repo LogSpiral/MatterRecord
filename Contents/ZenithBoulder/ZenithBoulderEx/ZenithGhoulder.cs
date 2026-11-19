@@ -268,7 +268,7 @@ public class ZenithGhoulder : ModProjectile
             0);
         var addColor = lightColor with { A = 0 };
 
-        for (int n = 0; n < 10; n++) 
+        for (int n = 0; n < 10; n++)
         {
             Main.EntitySpriteDraw(
                 asset.Value,
@@ -333,14 +333,14 @@ public class ZenithGhoulder : ModProjectile
 
     public override void OnKill(int timeLeft)
     {
-        for (int n = 0; n < 10; n++) 
+        for (int n = 0; n < 10; n++)
         {
             Dust.NewDustPerfect(
-                Projectile.Center, 
-                DustID.Stone, 
-                Main.rand.NextVector2Unit() * Main.rand.NextFloat(1, 4), 
+                Projectile.Center,
+                DustID.Stone,
+                Main.rand.NextVector2Unit() * Main.rand.NextFloat(1, 4),
                 0,
-                default, 
+                default,
                 Main.rand.NextFloat(0.5f, 2f));
         }
     }

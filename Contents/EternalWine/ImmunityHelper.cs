@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Reflection;
-using Terraria.ID;
 
-namespace MatterRecord.Contents.EternalWine   
+namespace MatterRecord.Contents.EternalWine
 {
     public static class ImmunityHelper
     {

@@ -3,7 +3,6 @@ using MatterRecord.Contents.DonQuijoteDeLaMancha.Core.BuiltInGroups;
 using MatterRecord.Contents.DonQuijoteDeLaMancha.Core.MeleeCore;
 using MatterRecord.Contents.DonQuijoteDeLaMancha.Core.StandardMelee;
 using MatterRecord.Contents.DonQuijoteDeLaMancha.Core.Visuals;
-using MatterRecord.Contents.EternalWine;
 using MatterRecord.Contents.Recorder;
 using MatterRecord.Contents.TortoiseShell;
 using Microsoft.Xna.Framework;
@@ -12,17 +11,11 @@ using Microsoft.Xna.Framework.Input;
 using ReLogic.Content;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Reflection;
 using Terraria.Audio;
-using Terraria.DataStructures;
 using Terraria.GameContent;
-using Terraria.Localization;
-using Terraria.ModLoader.Config;
 using Terraria.ModLoader.Default;
-using Terraria.ModLoader.IO;
 using Terraria.UI;
-using Terraria.UI.Chat;
 namespace MatterRecord.Contents.DonQuijoteDeLaMancha;
 
 using global::MatterRecord.Contents.EternalWine;
@@ -1058,7 +1051,7 @@ public class WindMill : ModProjectile
 
     public override bool PreDraw(ref Color lightColor)
     {
-        float progress = 1f - (float)Projectile.timeLeft / 600f;
+        float progress = 1f - Projectile.timeLeft / 600f;
         float alpha = 1f;
         if (progress < 0.1f)
             alpha = progress / 0.1f;

@@ -1,8 +1,4 @@
-﻿using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
-
-namespace MatterRecord.Contents.LittlePrince;
+﻿namespace MatterRecord.Contents.LittlePrince;
 
 /// <summary>
 /// 小王子死亡拦截的冷却提示 Buff。
@@ -24,7 +20,7 @@ public class LittlePrinceWitheredRose : ModBuff
         // 护士无法移除
         BuffID.Sets.NurseCannotRemoveDebuff[Type] = true;
 
-        
+
     }
 
     // 无任何 Update 逻辑：纯展示

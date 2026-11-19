@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using MatterRecord.Contents.TodaySword;
 
 namespace MatterRecord.Contents.WanJianGuiZong;
 

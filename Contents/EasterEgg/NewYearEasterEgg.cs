@@ -1,10 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
 using System.Globalization;
-using Terraria;
 using Terraria.DataStructures;
-using Terraria.ID;
-using Terraria.ModLoader;
 
 namespace MatterRecord.Contents.EasterEgg
 {
@@ -116,5 +113,5 @@ namespace MatterRecord.Contents.EasterEgg
         }
     }
 
-   
+
 }

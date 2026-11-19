@@ -24,7 +24,7 @@ public class UIItemSlot : UIElement
         _backgroundTexture = TextureAssets.InventoryBack9.Value;
     }
 
-    public Item Item 
+    public Item Item
     {
         get => _item;
         set => _item = value;

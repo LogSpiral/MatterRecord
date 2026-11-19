@@ -1,6 +1,4 @@
-﻿using Terraria;
-
-namespace MatterRecord.Contents.Recorder.Dialogue
+﻿namespace MatterRecord.Contents.Recorder.Dialogue
 {
     public abstract class DialogueModule
     {

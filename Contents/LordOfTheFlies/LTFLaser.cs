@@ -1,10 +1,7 @@
-﻿using MatterRecord.Contents.EmeraldTablet;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
-using System.Linq;
 using Terraria.Audio;
-using Terraria.DataStructures;
 using Terraria.GameContent;
 namespace MatterRecord.Contents.LordOfTheFlies;
 

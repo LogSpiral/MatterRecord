@@ -35,7 +35,7 @@ public abstract class JoustingLanceProjectileBase : ModProjectile
         int itemAnimation = player.itemAnimation;
         int num = Main.player[Projectile.owner].itemAnimationMax / 3;
         float num2 = MathHelper.Min(itemAnimation, num);
-        float num3 = (float)itemAnimation - num2;
+        float num3 = itemAnimation - num2;
         float num4 = 28f;
         float num5 = 0.4f;
         float num6 = 0.4f;
@@ -46,8 +46,8 @@ public abstract class JoustingLanceProjectileBase : ModProjectile
         if (Projectile.alpha < 0)
             Projectile.alpha = 0;
 
-        float num7 = (float)(itemAnimationMax - num) - num3;
-        float num8 = (float)num - num2;
+        float num7 = itemAnimationMax - num - num3;
+        float num8 = num - num2;
         float num9 = num4 + num5 * num7 - num6 * num8;
         Projectile.position += Projectile.velocity * num9;
 
@@ -57,7 +57,7 @@ public abstract class JoustingLanceProjectileBase : ModProjectile
         Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver4;
 
         Projectile.ai[0] += 1f;
-        bool flag3 = Projectile.ai[0] >= (float)itemAnimationMax;
+        bool flag3 = Projectile.ai[0] >= itemAnimationMax;
         if (flag2)
             flag3 &= !player.channel;
 
@@ -80,7 +80,7 @@ public abstract class JoustingLanceProjectileBase : ModProjectile
     }
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
     {
-        if (!target.friendly && target.life < 0 && RecorderSystem.ShouldSpawnRecordItem<DonQuijoteDeLaMancha.DonQuijoteDeLaMancha>()) 
+        if (!target.friendly && target.life < 0 && RecorderSystem.ShouldSpawnRecordItem<DonQuijoteDeLaMancha.DonQuijoteDeLaMancha>())
         {
             Main.LocalPlayer.QuickSpawnItem(target.GetItemSource_Loot(), ModContent.ItemType<DonQuijoteDeLaMancha.DonQuijoteDeLaMancha>());
             RecorderSystem.SetCooldown<DonQuijoteDeLaMancha.DonQuijoteDeLaMancha>();

@@ -21,7 +21,7 @@ public class TheOldManAndTheSeaRecordSpawnPlayer : ModPlayer
                 flag = false;
                 break;
             }
-            if (flag && RecorderSystem.ShouldSpawnRecordItem<TheOldManAndTheSea>()) 
+            if (flag && RecorderSystem.ShouldSpawnRecordItem<TheOldManAndTheSea>())
             {
                 Player.QuickSpawnItem(npc.GetItemSource_Loot(), ModContent.ItemType<TheOldManAndTheSea>());
                 RecorderSystem.SetCooldown<TheOldManAndTheSea>();

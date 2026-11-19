@@ -10,7 +10,7 @@ public class ZenithBoulderExTile : ModTile
 {
     public override void KillMultiTile(int i, int j, int frameX, int frameY)
     {
-        Projectile.NewProjectile(new EntitySource_TileBreak(i, j), (float)(i * 16) + 15.5f, j * 16 + 16, 0f, 0f, ModContent.ProjectileType<ZenithBoulderExProjectile>(), 30, 10f, Main.myPlayer);
+        Projectile.NewProjectile(new EntitySource_TileBreak(i, j), i * 16 + 15.5f, j * 16 + 16, 0f, 0f, ModContent.ProjectileType<ZenithBoulderExProjectile>(), 30, 10f, Main.myPlayer);
 
         base.KillMultiTile(i, j, frameX, frameY);
     }

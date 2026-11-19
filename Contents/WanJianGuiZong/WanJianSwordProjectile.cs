@@ -1,7 +1,7 @@
-using System;
-using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
+using System.Collections.Generic;
 using Terraria.GameContent;
 using Terraria.Utilities;
 
@@ -207,7 +207,7 @@ public class WanJianSwordProjectile : ModProjectile
             MathF.Cos(pitch));
 
         // 进动：轨道平面绕镜头轴慢慢转，剑的路线会缓缓漂移，不会一直贴着同一条圆
-        float precession = (float)Main.GlobalTimeWrappedHourly * (Hash01(id, 9) * 2f - 1f) * OrbitPrecessionSpeed;
+        float precession = Main.GlobalTimeWrappedHourly * (Hash01(id, 9) * 2f - 1f) * OrbitPrecessionSpeed;
         float precessionCos = MathF.Cos(precession);
         float precessionSin = MathF.Sin(precession);
         normal = new Vector3(
@@ -232,7 +232,7 @@ public class WanJianSwordProjectile : ModProjectile
         float direction = shell % 2 == 0 ? 1f : -1f;
         float angularSpeed = OrbitAngularSpeed * direction * (OrbitSpeedMin + Hash01(id, 5) * OrbitSpeedRange);
 
-        float time = (float)Main.GlobalTimeWrappedHourly;
+        float time = Main.GlobalTimeWrappedHourly;
 
         // 公转相位带上正弦脉动：角速度在 (1±OrbitPulseAmount) 倍之间来回，剑会时快时慢
         float phaseOffset = Hash01(id, 6) * MathHelper.TwoPi;

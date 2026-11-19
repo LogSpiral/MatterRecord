@@ -1,8 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Text.Json;
-using Terraria;
-using Terraria.ModLoader;
 
 namespace MatterRecord.Contents.EasterEgg
 {

@@ -2,12 +2,8 @@
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
-using Terraria;
 using Terraria.GameContent.Bestiary;
-using Terraria.ID;
 using Terraria.Localization;
-using Terraria.ModLoader;
-using MatterRecord.Contents.Recorder;
 using RecorderClass = MatterRecord.Contents.Recorder.Recorder;
 
 namespace MatterRecord.Contents.TheInterpretationOfDreams;

@@ -16,7 +16,7 @@ public class ExtraLifeSync : NetModule
     public override void Receive()
     {
         if (Main.netMode is NetmodeID.MultiplayerClient) return;
-        if (_extraLifeValue < RecorderSystem.RecorderExtraLifeData) 
+        if (_extraLifeValue < RecorderSystem.RecorderExtraLifeData)
         {
             ExtraLifeSyncFromServer.Get(false).Send(Sender);
             return;

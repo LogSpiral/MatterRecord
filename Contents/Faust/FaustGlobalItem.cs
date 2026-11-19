@@ -2,7 +2,6 @@
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using Terraria.Audio;
 using Terraria.Localization;
@@ -30,7 +29,7 @@ public class FaustGlobalItem : GlobalItem
         else
         {
             var text5 = "";
-            var num16 = (long)item.GetStoreValue() ;
+            var num16 = (long)item.GetStoreValue();
             var num12 = 0L;
             var num13 = 0L;
             var num14 = 0L;
@@ -67,7 +66,7 @@ public class FaustGlobalItem : GlobalItem
             if (num15 > 0)
                 text5 = text5 + num15 + " " + Lang.inter[18].Value + " ";
 
-            float num17 = (float)(int)Main.mouseTextColor / 255f;
+            float num17 = Main.mouseTextColor / 255f;
             var color2 = Color.White;
             if (num12 > 0)
                 color2 = new Color((byte)(220f * num17), (byte)(220f * num17), (byte)(198f * num17), Main.mouseTextColor);

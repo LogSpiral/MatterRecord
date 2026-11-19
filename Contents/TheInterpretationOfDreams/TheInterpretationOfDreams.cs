@@ -6,7 +6,7 @@ using Terraria.GameContent;
 
 namespace MatterRecord.Contents.TheInterpretationOfDreams;
 
-public class TheInterpretationOfDreams : ModItem,IRecordBookItem
+public class TheInterpretationOfDreams : ModItem, IRecordBookItem
 {
     ItemRecords IRecordBookItem.RecordType => ItemRecords.TheInterpretationOfDreams;
     public override void SetStaticDefaults()
@@ -41,7 +41,7 @@ public class TheInterpretationOfDreams : ModItem,IRecordBookItem
         if (RecorderSystem.ShouldSpawnRecordItem<TheInterpretationOfDreams>())
         {
             foreach (var item in player.inventory)
-                if (ItemID.Sets.CatchingTool[item.type]) 
+                if (ItemID.Sets.CatchingTool[item.type])
                 {
                     player.QuickSpawnItem(player.GetSource_Misc("Sleeping"), ModContent.ItemType<TheInterpretationOfDreams>());
                     RecorderSystem.SetCooldown<TheInterpretationOfDreams>();

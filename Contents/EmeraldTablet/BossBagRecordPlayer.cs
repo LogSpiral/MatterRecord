@@ -24,7 +24,7 @@ public class BossBagRecordPlayer : ModPlayer
         if (list != null)
             ExchangedBossBags = [.. list];
 
-        if(tag.TryGet<Item>("e",out var value))
+        if (tag.TryGet<Item>("e", out var value))
             ItemToExchange = value;
     }
 

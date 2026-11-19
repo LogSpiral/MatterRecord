@@ -34,7 +34,7 @@ public class TheAdventureofSherlockHolmesSystem : ModSystem
     private static void SpawnItemHook(On_Main.orig_TriggerPing orig, Vector2 position)
     {
         orig?.Invoke(position);
-        RequestTASHPacket.Get().Send(runLocally:true);
+        RequestTASHPacket.Get().Send(runLocally: true);
     }
 
     public override void Unload()

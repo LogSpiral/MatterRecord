@@ -1,8 +1,6 @@
 ﻿using MatterRecord.Contents.Recorder;
 using Microsoft.Xna.Framework;
-using System;
 using Terraria.DataStructures;
-using static Terraria.ModLoader.BackupIO;
 
 namespace MatterRecord.Contents.LittlePrince;
 

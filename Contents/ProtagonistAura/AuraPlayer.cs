@@ -22,10 +22,10 @@ public class AuraLayer : PlayerDrawLayer
 
         int offset = mplr.cDye switch
         {
-            1 => 0,   
-            17 => 1,   
-            54 => 2,   
-            29 => 4,  
+            1 => 0,
+            17 => 1,
+            54 => 2,
+            29 => 4,
             _ => -1
         };
         if (offset < 0) return;

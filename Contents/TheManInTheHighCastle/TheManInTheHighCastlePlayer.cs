@@ -1,7 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Terraria.Audio;
 using Terraria.DataStructures;
-using Terraria.ID;
 
 namespace MatterRecord.Contents.TheManInTheHighCastle;
 

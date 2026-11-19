@@ -1,5 +1,4 @@
-﻿using Terraria;
-using Terraria.Localization;
+﻿using Terraria.Localization;
 
 namespace MatterRecord.Contents.Recorder.Dialogue
 {

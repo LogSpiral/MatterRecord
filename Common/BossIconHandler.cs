@@ -11,7 +11,7 @@ public class BossIconHandler : ITagHandler, ILoadable
     public class BossIconHandlerSnippet() : TextSnippet()
     {
         public required Asset<Texture2D> Icon { get; init; }
-        public override bool UniqueDraw(bool justCheckingString, out Vector2 size, 
+        public override bool UniqueDraw(bool justCheckingString, out Vector2 size,
             SpriteBatch spriteBatch, Vector2 position = default, Color color = default, float scale = 1)
         {
             size = new Vector2(20 * scale);

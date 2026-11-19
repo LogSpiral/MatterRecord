@@ -1,8 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
-using Terraria;
 using Terraria.GameContent.UI;
-using Terraria.ID;
-using Terraria.ModLoader;
 
 namespace MatterRecord.Contents.Rarities
 {

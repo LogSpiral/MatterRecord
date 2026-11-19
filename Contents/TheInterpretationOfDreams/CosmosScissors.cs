@@ -1,8 +1,4 @@
-﻿using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
-
-namespace MatterRecord.Contents.TheInterpretationOfDreams
+﻿namespace MatterRecord.Contents.TheInterpretationOfDreams
 {
     public class CosmosScissors : ModItem
     {

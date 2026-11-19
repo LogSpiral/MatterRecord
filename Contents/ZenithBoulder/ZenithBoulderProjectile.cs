@@ -35,7 +35,7 @@ public class ZenithBoulderProjectile : ModProjectile
             if (WorldGen.SolidTile(i2, num219) || WorldGen.SolidTile(i2, num219 + 1))
                 flag9 = true;
 
-            i2 = (int)((Projectile.position.X + (float)Projectile.width + 8f) / 16f);
+            i2 = (int)((Projectile.position.X + Projectile.width + 8f) / 16f);
             if (WorldGen.SolidTile(i2, num219) || WorldGen.SolidTile(i2, num219 + 1))
                 flag10 = true;
 
@@ -56,7 +56,7 @@ public class ZenithBoulderProjectile : ModProjectile
                 if (WorldGen.SolidTile(i2, num219) || WorldGen.SolidTile(i2, num219 + 1))
                     flag9 = true;
 
-                i2 = (int)((Projectile.position.X + (float)Projectile.width + 8f + 16f) / 16f);
+                i2 = (int)((Projectile.position.X + Projectile.width + 8f + 16f) / 16f);
                 if (WorldGen.SolidTile(i2, num219) || WorldGen.SolidTile(i2, num219 + 1))
                     flag10 = true;
 
@@ -77,7 +77,7 @@ public class ZenithBoulderProjectile : ModProjectile
                     if (WorldGen.SolidTile(i2, num219) || WorldGen.SolidTile(i2, num219 + 1))
                         flag9 = true;
 
-                    i2 = (int)((Projectile.position.X + (float)Projectile.width + 8f + 32f) / 16f);
+                    i2 = (int)((Projectile.position.X + Projectile.width + 8f + 32f) / 16f);
                     if (WorldGen.SolidTile(i2, num219) || WorldGen.SolidTile(i2, num219 + 1))
                         flag10 = true;
 

@@ -1,8 +1,5 @@
 using MatterRecord.Contents.Rarities;
 using MatterRecord.Contents.Recorder;
-using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
 
 namespace MatterRecord.Contents.TheCountOfMonteCristo
 {

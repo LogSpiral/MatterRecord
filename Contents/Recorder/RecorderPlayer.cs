@@ -98,20 +98,20 @@ public class RecorderPlayer : ModPlayer
         _hintedRecords[index + 1] = stateValue % 2 == 1;
     }
 
-
-
     public override void LoadData(TagCompound tag)
     {
         tag.TryGet("Met", out MetWithRecorder);
         if (tag.TryGet("HR", out ulong value))
             _hintedRecords = value;
     }
+
     public override void SaveData(TagCompound tag)
     {
         if (MetWithRecorder)
             tag["Met"] = true;
         tag["HR"] = (ulong)_hintedRecords;
     }
+
     public override void OnEnterWorld()
     {
         RecorderSystem.RequestSyncingRecordData.Get().Send();

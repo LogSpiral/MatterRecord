@@ -5,7 +5,7 @@ using System;
 
 namespace MatterRecord.Contents.AliceInWonderland;
 
-public class AliceInWonderlandWatch : ModItem,IRecordBookItem
+public class AliceInWonderlandWatch : ModItem, IRecordBookItem
 {
     ItemRecords IRecordBookItem.RecordType => ItemRecords.AliceInWonderland;
 

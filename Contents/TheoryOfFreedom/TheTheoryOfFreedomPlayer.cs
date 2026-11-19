@@ -1,8 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
-using Terraria.GameInput;
-using Terraria.Localization;
 using Terraria.ModLoader.IO;
 
 namespace MatterRecord.Contents.TheoryOfFreedom;
@@ -60,7 +57,7 @@ public class TheTheoryOfFreedomPlayer : ModPlayer
         base.ProcessTriggers(triggersSet);
     }
 #endif
-    public void SetCanHookPlatform(bool value) 
+    public void SetCanHookPlatform(bool value)
     {
         if (value == CanHookPlatform)
             return;

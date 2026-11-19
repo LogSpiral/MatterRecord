@@ -1,10 +1,9 @@
-﻿using Microsoft.Xna.Framework;
+﻿using MatterRecord.Contents.Eraser;
+using Microsoft.Xna.Framework;
 using System.IO;
-using Terraria;
+using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.ModLoader.IO;
-using Terraria.Audio;
-using MatterRecord.Contents.Eraser;
 using EraserItem = MatterRecord.Contents.Eraser.Eraser;
 
 namespace MatterRecord.Contents.LordOfTheFlies

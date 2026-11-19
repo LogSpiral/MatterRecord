@@ -40,7 +40,7 @@ public class TortoiseShellPlayer : ModPlayer
 
     public override void ModifyDrawInfo(ref PlayerDrawSet drawInfo)
     {
-        if (TortoiseShellActive) 
+        if (TortoiseShellActive)
         {
             drawInfo.hideEntirePlayer = true;
             drawInfo.drawPlayer.invis = true;

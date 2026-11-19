@@ -1,5 +1,3 @@
-using Terraria;
-
 namespace MatterRecord.Contents.LordOfTheFlies;
 
 /// <summary>
