@@ -1,6 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Terraria.ModLoader.IO;
+using Terraria.UI;
 
 namespace MatterRecord.Contents.TheInterpretationOfDreams
 {
@@ -185,10 +186,67 @@ namespace MatterRecord.Contents.TheInterpretationOfDreams
         {
             DreamSlimeRequestPack.Get().Send();
         }
+
+        /// <summary>
+        /// 背包里悬停《梦的解析》时按中键，自动把身上的梦境物品收进梦匣。
+        /// <para>面板里也挂了一次（见 <see cref="DreamSlotUI"/>），两边都能用。</para>
+        /// </summary>
+        public override bool HoverSlot(Item[] inventory, int context, int slot)
+        {
+            if (context != ItemSlot.Context.InventoryItem)
+                return false;
+
+            if (inventory[slot].type != ModContent.ItemType<TheInterpretationOfDreams>())
+                return false;
+
+            if (DreamStorage.MiddlePressed())
+                DreamStorage.AutoStore(Player);
+
+            return false;
+        }
     }
 
     public static class DreamHelper
     {
+        private static int[] _slotItemTypes;
+
+        /// <summary>
+        /// 梦匣上排 12 格各自对应的物品类型，顺序和 <see cref="DreamSlotUI"/> 里的格位一致。
+        /// </summary>
+        public static int[] DreamItemTypes => _slotItemTypes ??=
+        [
+            ModContent.ItemType<BrokenDream>(),
+            ModContent.ItemType<WizardDream>(),
+            ModContent.ItemType<ZoologiseDream>(),
+            ModContent.ItemType<GolferDream>(),
+            ModContent.ItemType<PirateDream>(),
+            ModContent.ItemType<GuideDream>(),
+            ModContent.ItemType<TavernkeepDream>(),
+            ModContent.ItemType<ClothierDream>(),
+            ModContent.ItemType<StylistDream>(),
+            ModContent.ItemType<DyeTraderDream>(),
+            ModContent.ItemType<CybrogDream>(),
+            ModContent.ItemType<TaijiNoYume.TaijiNoYume>()
+        ];
+
+        /// <summary>某个格位对应的物品类型；越界返回 <see cref="ItemID.None"/>。</summary>
+        public static int DreamItemTypeForSlot(int index)
+            => (uint)index < (uint)DreamItemTypes.Length ? DreamItemTypes[index] : ItemID.None;
+
+        /// <summary>物品属于梦匣的哪一格；不是梦境物品时返回 -1。</summary>
+        public static int DreamSlotForItem(int itemType)
+        {
+            if (itemType == ItemID.None)
+                return -1;
+
+            int[] types = DreamItemTypes;
+            for (int i = 0; i < types.Length; i++)
+                if (types[i] == itemType)
+                    return i;
+
+            return -1;
+        }
+
         public static bool CheckDreamActive(this Player player, DreamState flag) => player.GetModPlayer<DreamPlayer>().CheckActive(flag);
     }
 }

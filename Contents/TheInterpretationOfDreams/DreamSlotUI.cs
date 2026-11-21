@@ -1,4 +1,4 @@
-﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
@@ -66,6 +66,8 @@ public class DreamSlotUI : UIState
             if (mainPanel.IsMouseHovering)
                 Main.LocalPlayer.mouseInterface = true;
         };
+        // 中键：和更好的体验里旗帜盒/药水袋一样，把这帧能收到的梦境物品一次性收进来
+        mainPanel.OnMiddleClick += (_, _) => DreamStorage.AutoStore(Main.LocalPlayer);
         Mask.Append(mainPanel);
 
         for (int n = 0; n < 12; n++)
@@ -174,21 +176,7 @@ public class DreamItemSlot : UIPanel
         Item bindItem = BindItem;
         if (Main.mouseItem.type != ItemID.None)
         {
-            int targetType = index switch
-            {
-                0 => ModContent.ItemType<BrokenDream>(),
-                1 => ModContent.ItemType<WizardDream>(),
-                2 => ModContent.ItemType<ZoologiseDream>(),
-                3 => ModContent.ItemType<GolferDream>(),
-                4 => ModContent.ItemType<PirateDream>(),
-                5 => ModContent.ItemType<GuideDream>(),
-                6 => ModContent.ItemType<TavernkeepDream>(),
-                7 => ModContent.ItemType<ClothierDream>(),
-                8 => ModContent.ItemType<StylistDream>(),
-                9 => ModContent.ItemType<DyeTraderDream>(),
-                10 => ModContent.ItemType<CybrogDream>(),
-                11 or _ => ModContent.ItemType<TaijiNoYume.TaijiNoYume>()
-            };
+            int targetType = DreamHelper.DreamItemTypeForSlot(index);
             if (Main.mouseItem.type != targetType)
                 return;
 
@@ -240,22 +228,7 @@ public class DreamItemSlot : UIPanel
         base.DrawSelf(spriteBatch);
         var position = GetDimensions().Center();
         Item bindItem = BindItem;
-
-        int type = index switch
-        {
-            0 => ModContent.ItemType<BrokenDream>(),
-            1 => ModContent.ItemType<WizardDream>(),
-            2 => ModContent.ItemType<ZoologiseDream>(),
-            3 => ModContent.ItemType<GolferDream>(),
-            4 => ModContent.ItemType<PirateDream>(),
-            5 => ModContent.ItemType<GuideDream>(),
-            6 => ModContent.ItemType<TavernkeepDream>(),
-            7 => ModContent.ItemType<ClothierDream>(),
-            8 => ModContent.ItemType<StylistDream>(),
-            9 => ModContent.ItemType<DyeTraderDream>(),
-            10 => ModContent.ItemType<CybrogDream>(),
-            11 or _ => ModContent.ItemType<TaijiNoYume.TaijiNoYume>()
-        };
+        int type = DreamHelper.DreamItemTypeForSlot(index);
         var iconItem = new Item(type) { stack = bindItem.stack };
 
         ItemSlot.DrawItemIcon(iconItem, 0, spriteBatch, position, 1f, 40, Color.White);

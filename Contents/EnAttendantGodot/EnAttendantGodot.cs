@@ -8,6 +8,12 @@ namespace MatterRecord.Contents.EnAttendantGodot;
 
 public class EnAttendantGodot : ModItem, IRecordBookItem
 {
+
+    public override void AddRecipes()
+    {
+       
+        this.RegisterBookRecipe(ItemID.TopHat);
+    }
     public override void SetDefaults()
     {
         Item.accessory = true;
