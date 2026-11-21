@@ -42,10 +42,11 @@ public partial class MeleeSequenceProj
             var offRot = Utils.AngleLerp(element.OffsetRotation, 0, factor);
             var dirRot = Utils.AngleLerp(element.Rotation, (towradsRight ? MathHelper.Pi / 16f : MathHelper.Pi * 15 / 16f) * Player.gravDir, factor);
             towradsRight ^= Player.gravDir < 0;
+            var pos = Player.MountedCenter + center;
             Main.spriteBatch.Draw(texture,
-                Player.MountedCenter + center - Main.screenPosition,
+                pos - Main.screenPosition,
                 StandardInfo.frame,
-                Color.White,
+                Lighting.GetColor(pos.ToTileCoordinates()),
                 -StandardInfo.standardRotation,
                 offRot,
                 dirRot,

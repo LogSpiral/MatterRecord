@@ -1,10 +1,7 @@
 using MatterRecord.Contents.DonQuijoteDeLaMancha.Core;
 using MatterRecord.Contents.DonQuijoteDeLaMancha.Core.BuiltInGroups;
 using MatterRecord.Contents.DonQuijoteDeLaMancha.Core.MeleeCore;
-using MatterRecord.Contents.DonQuijoteDeLaMancha.Core.StandardMelee;
-using MatterRecord.Contents.DonQuijoteDeLaMancha.Core.Visuals;
 using MatterRecord.Contents.Recorder;
-using MatterRecord.Contents.TortoiseShell;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -16,11 +13,11 @@ using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.ModLoader.Default;
 using Terraria.UI;
+using MatterRecord.Contents.Rarities;
+using System.Collections.ObjectModel;
 namespace MatterRecord.Contents.DonQuijoteDeLaMancha;
 
-using global::MatterRecord.Contents.EternalWine;
-using global::MatterRecord.Contents.Rarities;
-using System.Collections.ObjectModel;
+
 
 public class DonQuijoteDeLaMancha : MeleeSequenceItem<DonQuijoteDeLaManchaProj>, IRecordBookItem
 {
@@ -455,7 +452,7 @@ public class DonQuijoteGlobalNPC : GlobalNPC
     }
 }
 
-public class DonQuijoteDeLaManchaProj : MeleeSequenceProj
+public partial class DonQuijoteDeLaManchaProj : MeleeSequenceProj
 {
     public override bool LabeledAsCompleted => true;
 
@@ -491,6 +488,10 @@ public class DonQuijoteDeLaManchaProj : MeleeSequenceProj
         {
             standardInfo.standardTimer = 10;
         }
+        else if (Player.controlUp && Player.controlUseItem && SequenceModel?.CurrentElement is null or Throwing)
+        {
+            standardInfo.standardTimer = 165;
+        }
         else
         {
             standardInfo.standardTimer = Math.Clamp(adjustedTimer, 1, 30);
@@ -499,341 +500,6 @@ public class DonQuijoteDeLaManchaProj : MeleeSequenceProj
         standardInfo.standardOrigin = Player.GetModPlayer<DonQuijoteDeLaManchaPlayer>().StabTimeLeft > 0 ? new Vector2(.3f, .7f) : new Vector2(.1f, .9f);
 
         vertexStandard.scaler = 120;
-    }
-
-    private class CustomSwooshInfo : SwooshInfo
-    {
-        private bool _wingTimeRestored;
-        private bool _comboAdded;
-
-        public override void OnStartSingle()
-        {
-            _wingTimeRestored = false;
-            _comboAdded = false;
-            base.OnStartSingle();
-        }
-
-        public void HandleHit(Entity victim, int damageDone)
-        {
-            var player = Owner as Player;
-            if (player == null) return;
-            var mplr = player.GetModPlayer<DonQuijoteDeLaManchaPlayer>();
-
-            if (DonQuijoteProgression.Tier7_HitRestoreWing && !_wingTimeRestored && player.wingTimeMax > 0)
-            {
-                player.wingTime += 1f;
-                if (player.wingTime > player.wingTimeMax)
-                    player.wingTime = player.wingTimeMax;
-                _wingTimeRestored = true;
-            }
-
-            if (!_comboAdded && mplr.TryAddCombo())
-                _comboAdded = true;
-        }
-    }
-
-    private class DonQuijoteDeLaManchaDash : MeleeAction
-    {
-        public override bool Attacktive => Factor < .65f;
-
-        private Vector2 originVelocity;
-        private WindMill windMill;
-        private bool _noMovement;
-        private bool _wingTimeRestored;
-        private bool _comboAdded;
-
-        public override void OnEndAttack()
-        {
-            if (Projectile.owner != Main.myPlayer) return;
-
-            Player plr = Owner as Player;
-
-            if (!_noMovement)
-            {
-                Owner.velocity *= MathHelper.Clamp(.05f * (1 + MathF.Sqrt(originVelocity.Length())), 0, 1);
-                Owner.velocity += originVelocity * MathF.Pow(0.9f, originVelocity.Length());
-                if (plr != null)
-                {
-                    plr.fallStart = (int)(plr.position.Y / 16f);
-                }
-            }
-
-            if (plr != null)
-            {
-                var mplr = plr.GetModPlayer<DonQuijoteDeLaManchaPlayer>();
-                if (DonQuijoteProgression.Tier2_StabAfterDash)
-                {
-                    var maxT = 60;
-                    if (mplr.itemDefinition != null && mplr.itemDefinition.Type > 0)
-                        maxT = new Item(mplr.itemDefinition.Type).useAnimation;
-                    mplr.StabTimeLeft = Math.Max((maxT < 30 ? 6 * maxT + 300 : 12 * maxT + 120) * 3 / 4, 300);
-                }
-                else
-                {
-                    mplr.StabTimeLeft = 0;
-                }
-                mplr.NextHitImmune = false;
-                mplr.Dashing = false;
-                mplr.SendSyncAI();
-
-                if (!_noMovement && Main.netMode is NetmodeID.MultiplayerClient)
-                    VelocitySync.Get(plr.whoAmI, plr.velocity).Send();
-            }
-            base.OnEndAttack();
-        }
-
-        public override void OnAttack()
-        {
-            if (Owner is Player plr)
-            {
-                plr.GetModPlayer<MatterRecordPlayer>().strengthOfShake += 2f / (1f + TimerMax / 30f);
-                plr.GetModPlayer<MatterRecordPlayer>().ultraFallEnable = true;
-                plr.noKnockback = true;
-            }
-            var rand = Main.rand.NextFloat(0.25f, 0.5f);
-            for (int k = 0; k < 15; k++)
-            {
-                var vec = ((k * MathHelper.TwoPi / 15f).ToRotationVector2() * 6 * new Vector2(rand, 1)).RotatedBy(Rotation);
-            }
-            if (current != null)
-            {
-                current.timeLeft = (byte)MathHelper.Lerp(current.timeLeftMax, 0, Utils.GetLerpValue(0.25f, 1, Factor, true));
-                current.xScaler = 2 + Owner.velocity.Length() / 32;
-                current.scaler = StandardInfo.VertexStandard.scaler * ModifyData.Size * OffsetSize / 3 * 4f * current.xScaler;
-                current.center = Owner.Center - Rotation.ToRotationVector2() * current.scaler * .5f;
-                current.rotation = Rotation;
-                current.negativeDir = Flip;
-            }
-
-            // 冲锋碰撞弹幕摧毁 + 恢复生命 + 连击
-            EraseProjectilesAndHeal();
-
-            base.OnAttack();
-        }
-
-        public override void OnStartSingle()
-        {
-            _noMovement = false;
-            KValue = 1f;
-            _wingTimeRestored = false;
-            _comboAdded = false;
-
-            if (Owner is Player plr)
-            {
-                var mplr = plr.GetModPlayer<DonQuijoteDeLaManchaPlayer>();
-                if (mplr.DashCoolDown > 0)
-                {
-                    Projectile.Kill();
-                    return;
-                }
-                if (plr.whoAmI == Main.myPlayer)
-                {
-                    int windDamage = (int)(Projectile.damage * 0.2f);
-                    if (windDamage < 1) windDamage = 1;
-                    var proj = Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), Main.MouseWorld, default, ModContent.ProjectileType<WindMill>(), windDamage, Projectile.knockBack, Projectile.owner);
-                }
-            }
-            base.OnStartSingle();
-        }
-
-        public override void OnStartAttack()
-        {
-            SoundEngine.PlaySound(SoundID.Item92, Owner.Center);
-            originVelocity = Owner.velocity;
-
-            if (windMill != null)
-            {
-                windMill.Projectile.ai[0] = 10;
-                windMill.Projectile.netUpdate = true;
-                NetMessage.SendData(MessageID.SyncProjectile, -1, -1, null, windMill.Projectile.whoAmI);
-            }
-
-            if (Owner is Player plr && plr.whoAmI == Main.myPlayer)
-            {
-                var mplr2 = plr.GetModPlayer<DonQuijoteDeLaManchaPlayer>();
-
-                _noMovement = plr.controlDown;
-
-                if (!_noMovement)
-                {
-                    var adder = targetedVector.SafeNormalize(default) * (1200 / TimerMax + 45);
-                    Owner.velocity += adder;
-                    var scaler = ((Main.MouseWorld - plr.Center).Length()) / 1440 + 1 / 6f - .1f;
-                    Owner.velocity *= scaler;
-                    plr.fallStart = (int)(plr.position.Y / 16f);
-                    if (Main.netMode is NetmodeID.MultiplayerClient)
-                        VelocitySync.Get(plr.whoAmI, plr.velocity).Send();
-                }
-
-                mplr2.NextHitImmune = true;
-                mplr2.Dashing = true;
-
-                // ★ 设置全分组无敌
-                foreach (int cooldownID in ImmunityHelper.GetAllImmunityCooldownIDs())
-                {
-                    plr.AddImmuneTime(cooldownID, TimerMax + 5);
-                }
-                // 保留通用免疫（可选）
-                plr.immune = true;
-                plr.immuneTime = TimerMax + 5;
-
-                var maxT = 60;
-                if (mplr2.itemDefinition != null && mplr2.itemDefinition.Type > 0)
-                    maxT = new Item(mplr2.itemDefinition.Type).useAnimation;
-                mplr2.DashCoolDown = maxT < 30 ? 6 * maxT + 300 : 12 * maxT + 120;
-                mplr2.DashCoolDownMax = mplr2.DashCoolDown;
-                mplr2.startPoint = plr.Center;
-                mplr2.SendSyncAI();
-            }
-        }
-
-        public void HandleHit(Entity victim, int damageDone)
-        {
-            var player = Owner as Player;
-            if (player == null) return;
-            var mplr = player.GetModPlayer<DonQuijoteDeLaManchaPlayer>();
-
-            if (DonQuijoteProgression.Tier7_HitRestoreWing && !_wingTimeRestored && player.wingTimeMax > 0)
-            {
-                player.wingTime += 1f;
-                if (player.wingTime > player.wingTimeMax)
-                    player.wingTime = player.wingTimeMax;
-                _wingTimeRestored = true;
-            }
-
-            if (!_comboAdded && mplr.TryAddCombo())
-                _comboAdded = true;
-        }
-
-        private void EraseProjectilesAndHeal()
-        {
-            if (!DonQuijoteProgression.Tier11_DashEraseHealCombo)
-                return;
-
-            Player player = Owner as Player;
-            if (player == null) return;
-            var mplr = player.GetModPlayer<DonQuijoteDeLaManchaPlayer>();
-
-            for (int i = 0; i < Main.maxProjectiles; i++)
-            {
-                Projectile p = Main.projectile[i];
-                if (!p.active || p.friendly) continue;
-                if (!p.Hitbox.Intersects(player.Hitbox)) continue;
-
-                if (Main.netMode == NetmodeID.MultiplayerClient)
-                {
-                    WindMillEraseSync.Get(i).Send();
-                    p.Kill();
-                }
-                else
-                {
-                    WindMill.KillProjectile(p);
-                    player.Heal(5);
-                }
-            }
-        }
-
-        private UltraStab current;
-    }
-
-    private class DonQuijoteDeLaManchaStab : RapidlyStabInfo
-    {
-        private int hitCount = 0;
-        private bool _wingTimeRestored;
-        private bool _comboAdded;
-
-        public override void OnHitEntity(Entity victim, int damageDone, object[] context)
-        {
-            base.OnHitEntity(victim, damageDone, context);
-            if (Owner is Player player)
-            {
-                damageDone /= Math.Clamp(player.GetWeaponDamage(player.HeldItem), 1, int.MaxValue);
-                var mplr = player.GetModPlayer<DonQuijoteDeLaManchaPlayer>();
-                if (victim is NPC npc && npc.CanBeChasedBy())
-                {
-                    hitCount++;
-                    if (DonQuijoteProgression.Tier6_StabReduceCooldown)
-                    {
-                        mplr.DashCoolDown -= hitCount switch
-                        {
-                            1 => 10,
-                            2 => 5,
-                            3 => 3,
-                            4 => 1,
-                            5 => 1,
-                            _ => 0
-                        };
-                        if (mplr.DashCoolDown < 0)
-                            mplr.DashCoolDown = 0;
-                    }
-                }
-            }
-            float delta = Main.rand.NextFloat(0.85f, 1.15f) * damageDone;
-            for (int n = 0; n < 30 * delta * (StandardInfo.dustAmount + .2f); n++)
-                MiscMethods.FastDust(victim.Center + Main.rand.NextVector2Unit() * Main.rand.NextFloat(0, 16f), Main.rand.NextVector2Unit() * Main.rand.NextFloat(Main.rand.NextFloat(0, 8), 16), StandardInfo.standardColor);
-
-            if (Owner is Player player2 && DonQuijoteProgression.Tier7_HitRestoreWing && !_wingTimeRestored && player2.wingTimeMax > 0)
-            {
-                player2.wingTime += 1f;
-                if (player2.wingTime > player2.wingTimeMax)
-                    player2.wingTime = player2.wingTimeMax;
-                _wingTimeRestored = true;
-            }
-
-            if (Owner is Player player3 && !_comboAdded)
-            {
-                var mplr = player3.GetModPlayer<DonQuijoteDeLaManchaPlayer>();
-                if (mplr.TryAddCombo())
-                    _comboAdded = true;
-            }
-
-            HandleHit(victim, damageDone);
-        }
-
-        public override void OnEndSingle()
-        {
-            if (Projectile.owner != Main.myPlayer) return;
-            if (Owner is Player player && player.controlUp && DonQuijoteProgression.Tier4_StabDRAndMove)
-            {
-                Vector2 mouseDir = (Main.MouseWorld - player.Center).SafeNormalize(default);
-                if (mouseDir != Vector2.Zero)
-                {
-                    player.velocity += mouseDir * 9;
-                    if (player.velocity.Length() > 12)
-                        player.velocity = player.velocity.SafeNormalize(default) * 12;
-                    player.fallStart = (int)(player.position.Y / 16f);
-                    if (Main.netMode is NetmodeID.MultiplayerClient)
-                        VelocitySync.Get(player.whoAmI, player.velocity).Send();
-                }
-            }
-            base.OnEndSingle();
-        }
-
-        public override void OnStartSingle()
-        {
-            hitCount = 0;
-            _wingTimeRestored = false;
-            _comboAdded = false;
-            base.OnStartSingle();
-        }
-
-        public override void UpdateStatus(bool triggered)
-        {
-            base.UpdateStatus(triggered);
-            if (Owner is Player plr && DonQuijoteProgression.Tier4_StabDRAndMove)
-            {
-                var mplr = plr.GetModPlayer<DonQuijoteDeLaManchaPlayer>();
-                mplr.pendingEndurance = 5;
-            }
-        }
-
-        public override void OnEndAttack()
-        {
-            SoundEngine.PlaySound(SoundID.Item96 with { Volume = 0.5f * SoundID.Item96.Volume }, Owner.Center);
-            base.OnEndAttack();
-        }
-
-        private void HandleHit(Entity victim, int damageDone) { }
     }
 
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
@@ -852,14 +518,15 @@ public class DonQuijoteDeLaManchaProj : MeleeSequenceProj
             dash.HandleHit(target, damageDone);
     }
 
+    private static Condition ControlUp { get; set; }
     private static Condition MouseLeft { get; set; }
     private static Condition MouseRight { get; set; }
     private static Condition StabActive { get; set; }
     private static Condition Always { get; set; }
-
     public override void Load()
     {
         base.Load();
+        ControlUp = new("ControlUp", () => Main.LocalPlayer.controlUp);
         MouseLeft = new("MouseLeft", () => Main.LocalPlayer.controlUseItem && Main.LocalPlayer.altFunctionUse != 2);
         MouseRight = new("MouseRight", () => Main.LocalPlayer.controlUseTile || Main.LocalPlayer.altFunctionUse == 2);
         StabActive = new("StabActive", () => Main.LocalPlayer.GetModPlayer<DonQuijoteDeLaManchaPlayer>().StabTimeLeft > 0);
@@ -874,6 +541,10 @@ public class DonQuijoteDeLaManchaProj : MeleeSequenceProj
         var innerGroup = new ConditionalMultiGroup();
 
         innerGroup.DataList.Add(new() { Wrapper = new Wrapper(new DonQuijoteDeLaManchaStab() { givenCycle = 1, rangeOffsetMin = 0, rangeOffsetMax = 1, ModifyData = new(1.00f, .5f, .5f, 1.10f, 0, 1.00f) }), Argument = new(StabActive) });
+
+        if (DonQuijoteProgression.Tier8_SpearThrow)
+            innerGroup.DataList.Add(new() { Wrapper = new Wrapper(new Throwing() { ModifyData = new(1, 1, 2, 4f, 30, 1) }), Argument = new(ControlUp) });
+
         innerGroup.DataList.Add(new() { Wrapper = new Wrapper(new CustomSwooshInfo()), Argument = new(Always) });
         var innerSequence = new Sequence();
         innerSequence.Groups.Add(innerGroup);
